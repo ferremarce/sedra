@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Acceso al Sistema</title>
+        <h:outputStylesheet library="css" name="style.css"  />
+    </h:head>
+    <h:body>
+        <h:form>
+            <p:growl life="3000" globalOnly="true" id="messages"/>
+            <p:graphicImage value="/img/logo.png"/>
+            <p:panel style="width: 600px" header="Credenciales de Acceso">
+                <p:panelGrid columns="3"  styleClass="ui-panelgrid-blank">
+                    <p:outputLabel for="cuenta" value="Cuenta"/>
+                    <p:inputText id="cuenta" value="#{LoginManager.cuenta}" required="true" requiredMessage="#{bundle.Requerido}"/>
+                    <p:message for="cuenta"/>
+                    <p:outputLabel for="passwd" value="Clave"/>
+                    <p:password id="passwd" value="#{LoginManager.contrasenha}" required="true" requiredMessage="#{bundle.Requerido}"/>
+                    <p:message for="passwd"/>
+                </p:panelGrid>
+                <f:facet name="footer">
+                    <p:commandButton ajax="false" value="#{bundle.AccederBoton}" action="#{LoginManager.doLogin()}" icon="fa fa-sign-in"/>
+                </f:facet>
+            </p:panel>
+        </h:form>
+    </h:body>
+</html>
+
