@@ -110,11 +110,11 @@ public class LoginManager implements Serializable {
             Usuario user = usuarioFacade.getUsuario(cuenta);
             if (user != null) {
                 if (!user.getContrasenha().equals(contrasenha)) {
-                    JSFutil.addErrorMessage("Acceso incorrecto!... El password ingresado es incorrecto.");
+                    JSFutil.addMessage("Acceso incorrecto!... El password ingresado es incorrecto.",JSFutil.StatusMessage.ERROR);
                     auditaFacade.create(new Audita("LOGIN", "Acceso incorrecto!... El password ingresado es incorrecto.", JSFutil.getFechaHoraActual(), user.getCuenta() + "/" + contrasenha, null));
                     return null;
                 } else if (user.getActivo().compareTo("NO") == 0) {
-                    JSFutil.addErrorMessage("Acceso Incorrecto!... El usuario ha sido deshabilitado.");
+                    JSFutil.addMessage("Acceso Incorrecto!... El usuario ha sido deshabilitado.",JSFutil.StatusMessage.ERROR);
                     auditaFacade.create(new Audita("LOGIN", "Acceso Incorrecto!... El usuario ha sido deshabilitado.", JSFutil.getFechaHoraActual(), user.getCuenta() + "/" + contrasenha, null));
                     return null;
                 }
@@ -127,7 +127,7 @@ public class LoginManager implements Serializable {
                 return "/index";
 
             } else {
-                JSFutil.addErrorMessage("Login Fallido!... Usuario '" + cuenta + "' no existe.");
+                JSFutil.addMessage("Login Fallido!... Usuario '" + cuenta + "' no existe.",JSFutil.StatusMessage.ERROR);
                 auditaFacade.create(new Audita("LOGIN", "Acceso Incorrecto!... Usuario no existe.", JSFutil.getFechaHoraActual(), cuenta + "/" + contrasenha, null));
                 return null;
             }
@@ -167,11 +167,11 @@ public class LoginManager implements Serializable {
 
     public String doCambiarContrasenha() {
         if (this.getContrasenha().length() < 8) {
-            JSFutil.addErrorMessage("Contraseña insegura. Debe proporcionar una contraseña de al menos 8 letras/numeros");
+            JSFutil.addMessage("Contraseña insegura. Debe proporcionar una contraseña de al menos 8 letras/numeros",JSFutil.StatusMessage.ERROR);
             return "";
         }
         if (this.getContrasenha().compareTo(this.contrasenha2) != 0) {
-            JSFutil.addErrorMessage("Las contraseñas no coinciden. Por favor verifique y vuelva a intentar");
+            JSFutil.addMessage("Las contraseñas no coinciden. Por favor verifique y vuelva a intentar",JSFutil.StatusMessage.ERROR);
             return "";
         }
 
@@ -179,9 +179,9 @@ public class LoginManager implements Serializable {
             Usuario u = JSFutil.getUsuarioConectado();
             u.setContrasenha(JSFutil.getSecurePassword(this.contrasenha));
             usuarioFacade.edit(u);
-            JSFutil.addSuccessMessage("Contraseña cambiada exitosamente.");
+            JSFutil.addMessage("Contraseña cambiada exitosamente.",JSFutil.StatusMessage.INFORMATION);
         } catch (Exception e) {
-            JSFutil.addErrorMessage(e, "Ocurrió un error de persistencia.");
+            JSFutil.addMessage("Ocurrió un error de persistencia.",JSFutil.StatusMessage.FATAL);
         }
         return "";
     }

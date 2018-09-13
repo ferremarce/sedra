@@ -5,9 +5,11 @@
  */
 package sedra3.fachada;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import sedra3.modelo.Rol;
 
 /**
@@ -28,5 +30,17 @@ public class RolFacade extends AbstractFacade<Rol> {
     public RolFacade() {
         super(Rol.class);
     }
-    
+
+    public List<Rol> getAllRol(String criterio) {
+        Query q = em.createQuery("SELECT a FROM Rol a WHERE UPPER(a.descripcionRol) LIKE :xCriterio ORDER BY a.idRol");
+        if (criterio.compareTo("") != 0) {
+            q.setParameter("xCriterio", "%" + criterio.toUpperCase() + "%");
+        } else {
+            q.setParameter("xCriterio", "123456");
+        }
+        List<Rol> tr = q.getResultList();
+        return tr;
+
+    }
+
 }
