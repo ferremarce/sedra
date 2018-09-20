@@ -37,7 +37,7 @@ public class PermisoRol implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "idpermisorol_seq")
-    @SequenceGenerator(initialValue=200,allocationSize = 1, name = "idpermisorol_seq", sequenceName = "idpermisorol_seq")
+    @SequenceGenerator(initialValue = 200, allocationSize = 1, name = "idpermisorol_seq", sequenceName = "idpermisorol_seq")
     @Column(name = "id_permiso_rol")
     private Integer idPermisoRol;
     @Column(name = "fecha_asignacion")
@@ -124,5 +124,5 @@ public class PermisoRol implements Serializable {
     public String toString() {
         return "sedra3.modelo.PermisoRol[ idPermisoRol=" + idPermisoRol + " ]";
     }
-    
+
 }

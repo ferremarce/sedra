@@ -3,6 +3,8 @@
   <persistence-unit name="sedra3.org_sedra3_war_1.0-SNAPSHOTPU" transaction-type="JTA">
     <jta-data-source>java:app/jdbc/sedra</jta-data-source>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties/>
+    <properties>
+      <property name="eclipselink.cache.shared.default" value="false"/>
+    </properties>
   </persistence-unit>
 </persistence>

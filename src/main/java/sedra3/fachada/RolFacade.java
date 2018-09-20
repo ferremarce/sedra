@@ -10,6 +10,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import sedra3.modelo.Permiso;
 import sedra3.modelo.Rol;
 
 /**
@@ -40,7 +41,13 @@ public class RolFacade extends AbstractFacade<Rol> {
         }
         List<Rol> tr = q.getResultList();
         return tr;
+    }
 
+    public List<Permiso> getPermisoRol(Rol u) {
+        Query q = em.createQuery("SELECT a FROM Permiso a WHERE a.idPermiso IN (SELECT DISTINCT b.idPermiso.idPermiso FROM PermisoRol b WHERE b.idRol.idRol=:xIdRol) ORDER BY a.nivel");
+        q.setParameter("xIdRol", u.getIdRol());
+        List<Permiso> tr = q.getResultList();
+        return tr;
     }
 
 }

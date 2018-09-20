@@ -8,9 +8,15 @@ package sedra3.controller;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import org.primefaces.model.DualListModel;
+import sedra3.fachada.PermisoFacade;
+import sedra3.fachada.PermisoRolFacade;
 import sedra3.fachada.RolFacade;
+import sedra3.modelo.Permiso;
+import sedra3.modelo.PermisoRol;
 import sedra3.modelo.Rol;
 import sedra3.util.JSFutil;
 
@@ -24,15 +30,36 @@ public class RolController implements Serializable {
 
     @Inject
     RolFacade rolFacade;
+    @Inject
+    PermisoFacade permisoFacade;
+    @Inject
+    PermisoRolFacade permisoRolFacade;
 
     private Rol rol;
     private List<Rol> listaRol;
     private String criterio;
+    private Permiso[] arrayPermisos;
 
     /**
      * Creates a new instance of RolController
      */
     public RolController() {
+    }
+
+    public RolFacade getRolFacade() {
+        return rolFacade;
+    }
+
+    public void setRolFacade(RolFacade rolFacade) {
+        this.rolFacade = rolFacade;
+    }
+
+    public Permiso[] getArrayPermisos() {
+        return arrayPermisos;
+    }
+
+    public void setArrayPermisos(Permiso[] arrayPermisos) {
+        this.arrayPermisos = arrayPermisos;
     }
 
     public Rol getRol() {
@@ -59,6 +86,8 @@ public class RolController implements Serializable {
         this.criterio = criterio;
     }
 
+   
+
 ///---------------------METODOS---------------------///
     public String listRolSetup() {
         return "/rol/ListarRol";
@@ -74,6 +103,18 @@ public class RolController implements Serializable {
         return "/rol/CrearRol";
     }
 
+    public String editPermisoSetup(Integer idRol) {
+        this.rol = rolFacade.find(idRol);
+        this.arrayPermisos = new Permiso[this.rol.getPermisoRolList().size()];
+        int i = 0;
+        for (PermisoRol pr : this.rol.getPermisoRolList()) {
+            this.arrayPermisos[i] = pr.getIdPermiso();
+            i++;
+        }
+        return "/rol/EditarPermiso";
+    }
+
+    
     public String delete(Integer idRol) {
         try {
             Rol u = rolFacade.find(idRol);
@@ -118,6 +159,25 @@ public class RolController implements Serializable {
             JSFutil.addMessage(this.listaRol.size() + " registros recuperados", JSFutil.StatusMessage.INFORMATION);
         }
         return "";
+    }
+
+    public String updatePermiso() {
+        try {
+            for (PermisoRol pr : this.rol.getPermisoRolList()) {
+                permisoRolFacade.remove(pr);
+            }
+            for (Permiso arrayPermiso : this.arrayPermisos) {
+                PermisoRol pr = new PermisoRol();
+                pr.setFechaAsignacion(JSFutil.getFechaHoraActual());
+                pr.setIdPermiso(arrayPermiso);
+                pr.setIdRol(rol);
+                permisoRolFacade.create(pr);
+            }
+            JSFutil.addMessage("Permiso actualizado exitosamente.", JSFutil.StatusMessage.INFORMATION);
+        } catch (Exception e) {
+            JSFutil.addMessage("Ocurrió un error de persistencia." + e.getLocalizedMessage(), JSFutil.StatusMessage.ERROR);
+        }
+        return "/rol/ListarRol";
     }
 
     public String doRefrescar() {

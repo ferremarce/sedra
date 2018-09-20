@@ -137,7 +137,7 @@ public class Permiso implements Serializable {
 
     @Override
     public String toString() {
-        return "sedra3.modelo.Permiso[ idPermiso=" + idPermiso + " ]";
+        return this.nivel + ". " + this.descripcionPermiso;
     }
-    
+
 }

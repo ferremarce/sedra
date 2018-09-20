@@ -50,6 +50,9 @@
                         <p:menuitem ajax="false" onclick="if (!confirm('#{bundle.ConfirmacionMensaje}')) {
                                     return false;
                                 }" value="#{bundle.EliminarBoton}" action="#{RolController.delete(item.idRol)}" icon="fa fa-minus-square"/>
+                        <p:separator/>
+                        <p:menuitem ajax="false" value="#{bundle.PermisoBoton}" action="#{RolController.editPermisoSetup(item.idRol)}" icon="fa fa-unlock-alt"/>
+
                     </p:menuButton>
                 </p:column>
             </p:dataTable>
