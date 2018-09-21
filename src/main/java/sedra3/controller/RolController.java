@@ -8,10 +8,10 @@ package sedra3.controller;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
+import java.util.logging.Logger;
 import javax.inject.Inject;
-import org.primefaces.model.DualListModel;
 import sedra3.fachada.PermisoFacade;
 import sedra3.fachada.PermisoRolFacade;
 import sedra3.fachada.RolFacade;
@@ -28,12 +28,17 @@ import sedra3.util.JSFutil;
 @SessionScoped
 public class RolController implements Serializable {
 
+    private static final Logger LOG = Logger.getLogger(RolController.class.getName());
+    ResourceBundle bundle = ResourceBundle.getBundle("propiedades.bundle", JSFutil.getmyLocale());
+
     @Inject
     RolFacade rolFacade;
     @Inject
     PermisoFacade permisoFacade;
     @Inject
     PermisoRolFacade permisoRolFacade;
+    @Inject
+    CommonController commonController;
 
     private Rol rol;
     private List<Rol> listaRol;
@@ -86,8 +91,6 @@ public class RolController implements Serializable {
         this.criterio = criterio;
     }
 
-   
-
 ///---------------------METODOS---------------------///
     public String listRolSetup() {
         return "/rol/ListarRol";
@@ -114,7 +117,6 @@ public class RolController implements Serializable {
         return "/rol/EditarPermiso";
     }
 
-    
     public String delete(Integer idRol) {
         try {
             Rol u = rolFacade.find(idRol);
@@ -122,11 +124,8 @@ public class RolController implements Serializable {
             rolFacade.remove(u);
             this.doRefrescar();
             JSFutil.addMessage("El Rol #" + name + "# fue eliminado.", JSFutil.StatusMessage.INFORMATION);
-        } catch (NumberFormatException ne) {
-            JSFutil.addMessage(ne.getMessage(), JSFutil.StatusMessage.ERROR);
-        } catch (Exception e) {
-            JSFutil.addMessage(e.getMessage(), JSFutil.StatusMessage.ERROR);
-
+        } catch (Exception ex) {
+            this.commonController.doExcepcion(ex);
         }
         return "/rol/ListarRol";
     }
@@ -140,9 +139,8 @@ public class RolController implements Serializable {
             }
             this.doRefrescar();
             JSFutil.addMessage("Rol creado exitosamente. ", JSFutil.StatusMessage.INFORMATION);
-        } catch (Exception e) {
-            //e.printStackTrace();
-            JSFutil.addMessage("Ocurrió un error de persistencia.", JSFutil.StatusMessage.ERROR);
+        } catch (Exception ex) {
+            this.commonController.doExcepcion(ex);
         }
         return "/rol/ListarRol";
     }
@@ -174,8 +172,8 @@ public class RolController implements Serializable {
                 permisoRolFacade.create(pr);
             }
             JSFutil.addMessage("Permiso actualizado exitosamente.", JSFutil.StatusMessage.INFORMATION);
-        } catch (Exception e) {
-            JSFutil.addMessage("Ocurrió un error de persistencia." + e.getLocalizedMessage(), JSFutil.StatusMessage.ERROR);
+         } catch (Exception ex) {
+            this.commonController.doExcepcion(ex);
         }
         return "/rol/ListarRol";
     }

@@ -18,14 +18,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.eclipse.persistence.exceptions.DatabaseException;
 import org.mindrot.jbcrypt.BCrypt;
 import sedra3.modelo.Usuario;
 //import senado.gov.py.entity.Usuario;
@@ -36,6 +39,7 @@ import sedra3.modelo.Usuario;
  * @author jmferreira
  */
 public class JSFutil implements Serializable {
+    ResourceBundle bundle = ResourceBundle.getBundle("propiedades.bundle", JSFutil.getmyLocale());
 
     private Integer tiempoDespacho = 15;
     public static enum StatusMessage {
