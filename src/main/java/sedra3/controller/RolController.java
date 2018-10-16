@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import sedra3.fachada.PermisoFacade;
 import sedra3.fachada.PermisoRolFacade;
@@ -172,7 +173,7 @@ public class RolController implements Serializable {
                 permisoRolFacade.create(pr);
             }
             JSFutil.addMessage("Permiso actualizado exitosamente.", JSFutil.StatusMessage.INFORMATION);
-         } catch (Exception ex) {
+        } catch (Exception ex) {
             this.commonController.doExcepcion(ex);
         }
         return "/rol/ListarRol";
@@ -188,4 +189,7 @@ public class RolController implements Serializable {
         return "";
     }
 
+    public SelectItem[] getRolSet() {
+        return JSFutil.getSelectItems(rolFacade.findAll(), Boolean.TRUE);
+    }
 }

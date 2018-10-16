@@ -7,19 +7,19 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
     <ui:define name="title">
-        <h1>Listar Roles</h1>
+        <h1>Listar Usuarios</h1>
     </ui:define>
 
     <ui:define name="content">
         <h:form>
             <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
-                <p:inputText id="criterio" value="#{RolController.criterio}"/>
-                <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{RolController.doBuscar()}" update="@form"/>
-                <p:commandButton immediate="true" value="#{bundle.NuevoBoton}" icon="fa fa-plus" ajax="false" action="#{RolController.createSetup()}"/>
-                <p:commandButton immediate="true" value="#{bundle.ListarBoton}" icon="fa fa-th-list" ajax="false" action="#{RolController.doRefrescar()}"/>
+                <p:inputText id="criterio" value="#{UsuarioController.criterio}"/>
+                <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{UsuarioController.doBuscar()}" update="@form"/>
+                <p:commandButton immediate="true" value="#{bundle.NuevoBoton}" icon="fa fa-plus" ajax="false" action="#{UsuarioController.createSetup()}"/>
+                <p:commandButton immediate="true" value="#{bundle.ListarBoton}" icon="fa fa-th-list" ajax="false" action="#{UsuarioController.doRefrescar()}"/>
             </p:panelGrid>
             <p:watermark for="criterio" value="Buscar..."/>
-            <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{RolController.listaRol}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+            <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{UsuarioController.listaUsuario}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                          rows="50"
                          paginator="true"
                          filterEvent="enter"
@@ -33,26 +33,42 @@
                     <f:facet name="header">
                         <h:outputText value="Id"/>
                     </f:facet>
-                    <h:outputText value="#{item.idRol}"/>
+                    <h:outputText value="#{item.idUsuario}"/>
                 </p:column>
                 <p:column>
                     <f:facet name="header">
-                        <h:outputText value="DescripcionRol"/>
+                        <h:outputText value="Cuenta"/>
                     </f:facet>
-                    <h:outputText value="#{item.descripcionRol}"/>
+                    <h:outputText value="#{item.cuenta}"/>
                 </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Usuario"/>
+                    </f:facet>
+                    <h:outputText value="#{item.usuario}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Activo"/>
+                    </f:facet>
+                    <h:outputText value="#{item.activo}"/>
+                </p:column>
+                <p:column>
+                    <f:facet name="header">
+                        <h:outputText value="Rol"/>
+                    </f:facet>
+                    <h:outputText value="#{item.idRol.descripcionRol}"/>
+                </p:column>
+
                 <p:column width="200">
                     <f:facet name="header">
                         <h:outputText value="Acción"/>
                     </f:facet>
                     <p:menuButton value="Opciones">
-                        <p:menuitem ajax="false" value="#{bundle.EditarBoton}" action="#{RolController.editSetup(item.idRol)}" icon="fa fa-pencil-square"/>
+                        <p:menuitem ajax="false" value="#{bundle.EditarBoton}" action="#{UsuarioController.editSetup(item.idUsuario)}" icon="fa fa-pencil-square"/>
                         <p:menuitem ajax="false" onclick="if (!confirm('#{bundle.ConfirmacionMensaje}')) {
                                     return false;
-                                }" value="#{bundle.EliminarBoton}" action="#{RolController.delete(item.idRol)}" icon="fa fa-minus-square"/>
-                        <p:separator/>
-                        <p:menuitem ajax="false" value="#{bundle.PermisoBoton}" action="#{RolController.editPermisoSetup(item.idRol)}" icon="fa fa-unlock-alt"/>
-
+                                }" value="#{bundle.EliminarBoton}" action="#{UsuarioController.delete(item.idUsuario)}" icon="fa fa-minus-square"/>
                     </p:menuButton>
                 </p:column>
             </p:dataTable>

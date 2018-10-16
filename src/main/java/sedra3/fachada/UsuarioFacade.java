@@ -50,4 +50,15 @@ public class UsuarioFacade extends AbstractFacade<Usuario> {
         return tr;
     }
 
+    public List<Usuario> getAllUsuario(String criterio) {
+        Query q = em.createQuery("SELECT a FROM Usuario a WHERE UPPER(a.usuario) LIKE :xCriterio OR UPPER(a.cuenta) LIKE :xCriterio ORDER BY a.cuenta");
+        if (criterio.compareTo("") != 0) {
+            q.setParameter("xCriterio", "%" + criterio.toUpperCase() + "%");
+        } else {
+            q.setParameter("xCriterio", "123456");
+        }
+        List<Usuario> tr = q.getResultList();
+        return tr;
+    }
+
 }

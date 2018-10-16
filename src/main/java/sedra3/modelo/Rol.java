@@ -116,7 +116,7 @@ public class Rol implements Serializable {
 
     @Override
     public String toString() {
-        return "sedra3.modelo.Rol[ idRol=" + idRol + " ]";
+        return this.descripcionRol;
     }
     
 }
