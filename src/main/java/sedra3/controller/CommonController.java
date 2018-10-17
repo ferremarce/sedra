@@ -11,9 +11,11 @@ import java.io.Serializable;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import sedra3.util.JSFutil;
 
@@ -27,11 +29,27 @@ public class CommonController implements Serializable {
 
     private static final Logger LOG = Logger.getLogger(CommonController.class.getName());
     ResourceBundle bundle = ResourceBundle.getBundle("propiedades.bundle", JSFutil.getmyLocale());
+    private Integer tiempoSesionActiva;
 
     /**
      * Creates a new instance of CommonController
      */
     public CommonController() {
+    }
+
+    @PostConstruct
+    public void init() {
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        this.tiempoSesionActiva = session.getMaxInactiveInterval() * 1000;
+        System.out.println("Tiempo de sesión: " + tiempoSesionActiva);
+    }
+
+    public Integer getTiempoSesionActiva() {
+        return tiempoSesionActiva;
+    }
+
+    public void setTiempoSesionActiva(Integer tiempoSesionActiva) {
+        this.tiempoSesionActiva = tiempoSesionActiva;
     }
 
     public void initError() {

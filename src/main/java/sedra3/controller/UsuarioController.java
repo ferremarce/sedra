@@ -36,11 +36,29 @@ public class UsuarioController implements Serializable {
     private List<Usuario> listaUsuario;
     private String criterio;
     private boolean tmpActivo;
+    private String contrasenhaNueva;
+    private String contrasenhaRepetida;
 
     /**
      * Creates a new instance of UsuarioController
      */
     public UsuarioController() {
+    }
+
+    public String getContrasenhaNueva() {
+        return contrasenhaNueva;
+    }
+
+    public void setContrasenhaNueva(String contrasenhaNueva) {
+        this.contrasenhaNueva = contrasenhaNueva;
+    }
+
+    public String getContrasenhaRepetida() {
+        return contrasenhaRepetida;
+    }
+
+    public void setContrasenhaRepetida(String contrasenhaRepetida) {
+        this.contrasenhaRepetida = contrasenhaRepetida;
     }
 
     public UsuarioFacade getUsuarioFacade() {

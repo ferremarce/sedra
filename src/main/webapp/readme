@@ -1,0 +1,5 @@
+-- Base de datos --
+Tabla: Permiso -> tag_menu [Cambiar Contraseña: #{LoginManager.doCambiarContrasenhaForm}
+Tabla: Permiso -> tag_menu [Salir: #{LoginManager.doLogout}
+
+-- Codigo --

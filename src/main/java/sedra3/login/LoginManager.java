@@ -5,13 +5,14 @@
  */
 package sedra3.login;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.TimeZone;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import sedra3.fachada.AuditaFacade;
 import sedra3.fachada.UsuarioFacade;
@@ -43,8 +44,6 @@ public class LoginManager implements Serializable {
      */
     public LoginManager() {
     }
-
-    
 
     /**
      * getter Cuenta
@@ -110,11 +109,11 @@ public class LoginManager implements Serializable {
             Usuario user = usuarioFacade.getUsuario(cuenta);
             if (user != null) {
                 if (!user.getContrasenha().equals(contrasenha)) {
-                    JSFutil.addMessage("Acceso incorrecto!... El password ingresado es incorrecto.",JSFutil.StatusMessage.ERROR);
+                    JSFutil.addMessage("Acceso incorrecto!... El password ingresado es incorrecto.", JSFutil.StatusMessage.ERROR);
                     auditaFacade.create(new Audita("LOGIN", "Acceso incorrecto!... El password ingresado es incorrecto.", JSFutil.getFechaHoraActual(), user.getCuenta() + "/" + contrasenha, null));
                     return null;
                 } else if (user.getActivo().compareTo("NO") == 0) {
-                    JSFutil.addMessage("Acceso Incorrecto!... El usuario ha sido deshabilitado.",JSFutil.StatusMessage.ERROR);
+                    JSFutil.addMessage("Acceso Incorrecto!... El usuario ha sido deshabilitado.", JSFutil.StatusMessage.ERROR);
                     auditaFacade.create(new Audita("LOGIN", "Acceso Incorrecto!... El usuario ha sido deshabilitado.", JSFutil.getFechaHoraActual(), user.getCuenta() + "/" + contrasenha, null));
                     return null;
                 }
@@ -127,7 +126,7 @@ public class LoginManager implements Serializable {
                 return "/index";
 
             } else {
-                JSFutil.addMessage("Login Fallido!... Usuario '" + cuenta + "' no existe.",JSFutil.StatusMessage.ERROR);
+                JSFutil.addMessage("Login Fallido!... Usuario '" + cuenta + "' no existe.", JSFutil.StatusMessage.ERROR);
                 auditaFacade.create(new Audita("LOGIN", "Acceso Incorrecto!... Usuario no existe.", JSFutil.getFechaHoraActual(), cuenta + "/" + contrasenha, null));
                 return null;
             }
@@ -136,18 +135,22 @@ public class LoginManager implements Serializable {
         }
     }
 
-    
     /**
      * Invalidar la sesión y hacer logout
      *
-     * @return
+     * @throws java.io.IOException
      */
-    public String doLogout() {
+    public void doLogout() throws IOException {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        auditaFacade.create(new Audita("LOGIN", "Sesión terminada", JSFutil.getFechaHoraActual(), JSFutil.getUsuarioConectado().getCuenta(), null));
         if (session != null) {
             session.invalidate();
         }
-        return "/login";
+        
+        JSFutil.addMessage("Sesión expirada.", JSFutil.StatusMessage.WARNING);
+        ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+        context.redirect(context.getRequestContextPath() + "/faces/login.xhtml??faces-redirect=true");
+
     }
 
     /**
@@ -162,26 +165,27 @@ public class LoginManager implements Serializable {
     public String doCambiarContrasenhaForm() {
         this.contrasenha = "";
         this.contrasenha2 = "";
-        return "/pages/CambiarContrasenha";
+        return "/usuario/CambiarContrasenha";
     }
 
     public String doCambiarContrasenha() {
         if (this.getContrasenha().length() < 8) {
-            JSFutil.addMessage("Contraseña insegura. Debe proporcionar una contraseña de al menos 8 letras/numeros",JSFutil.StatusMessage.ERROR);
+            JSFutil.addMessage("Contraseña insegura. Debe proporcionar una contraseña de al menos 8 letras/numeros", JSFutil.StatusMessage.ERROR);
             return "";
         }
         if (this.getContrasenha().compareTo(this.contrasenha2) != 0) {
-            JSFutil.addMessage("Las contraseñas no coinciden. Por favor verifique y vuelva a intentar",JSFutil.StatusMessage.ERROR);
+            JSFutil.addMessage("Las contraseñas no coinciden. Por favor verifique y vuelva a intentar", JSFutil.StatusMessage.ERROR);
             return "";
         }
-
         try {
             Usuario u = JSFutil.getUsuarioConectado();
-            u.setContrasenha(JSFutil.getSecurePassword(this.contrasenha));
+            u.setContrasenha(this.contrasenha);
             usuarioFacade.edit(u);
-            JSFutil.addMessage("Contraseña cambiada exitosamente.",JSFutil.StatusMessage.INFORMATION);
+            this.contrasenha = "";
+            this.contrasenha2 = "";
+            JSFutil.addMessage("Contraseña cambiada exitosamente.", JSFutil.StatusMessage.INFORMATION);
         } catch (Exception e) {
-            JSFutil.addMessage("Ocurrió un error de persistencia.",JSFutil.StatusMessage.FATAL);
+            JSFutil.addMessage("Ocurrió un error de persistencia.", JSFutil.StatusMessage.FATAL);
         }
         return "";
     }
