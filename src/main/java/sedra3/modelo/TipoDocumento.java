@@ -93,7 +93,7 @@ public class TipoDocumento implements Serializable {
 
     @Override
     public String toString() {
-        return "sedra3.modelo.TipoDocumento[ idTipoDocumento=" + idTipoDocumento + " ]";
+        return this.descripcionTipoDocumento;
     }
     
 }

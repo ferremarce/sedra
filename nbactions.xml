@@ -28,7 +28,7 @@
             </goals>
             <properties>
                 <netbeans.deploy>true</netbeans.deploy>
-                <Env.MAVEN_OPS>-XXaltjvm=dcevm -javaagent:/home/jmferreira/apps/dcevm-hotswap/hotswap-agent-1.3.0.jar</Env.MAVEN_OPS>
+                
             </properties>
         </action>
     </actions>

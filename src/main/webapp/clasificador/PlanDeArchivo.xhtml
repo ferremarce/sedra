@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="title">
+        <h1>Plan de Archivos</h1>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            <p:growl life="3000" globalOnly="true" id="messages"/> 
+            <p:tree draggable="true" droppable="true" id="planArchivo" value="#{ClasificadorController.root}" var="node" dynamic="false" cache="false" selectionMode="single"  selection="#{ClasificadorController.selectedNode}">
+                <p:treeNode expandedIcon="fa fa-folder-open" collapsedIcon="fa fa-folder">  
+                    <h:outputText value="#{node}" />
+                </p:treeNode>  
+            </p:tree>  
+            <p:contextMenu for="planArchivo">
+                <p:menuitem value="Nueva Raiz" actionListener="#{ClasificadorController.doNuevoForm()}" update=":formDlg:panelClasi" oncomplete="PF('dlgUpdateTipo').show();" icon="fa fa-plus" />
+                <p:menuitem value="Nuevo Hijo" actionListener="#{ClasificadorController.doNuevoHijoForm()}" update=":formDlg:panelClasi" oncomplete="PF('dlgUpdateTipo').show();" icon="fa fa-share-alt" />
+                <p:menuitem value="Editar" actionListener="#{ClasificadorController.doEditarForm()}" update=":formDlg:panelClasi" oncomplete="PF('dlgUpdateTipo').show();" icon="fa fa-pencil"/>
+                <p:separator/>
+                <p:menuitem value="Copiar" actionListener="#{ClasificadorController.doEditarForm()}" update=":formDlg:panelClasi" oncomplete="PF('dlgUpdateTipo').show();" icon="fa fa-copy"/>
+                <p:menuitem value="Pegar" actionListener="#{ClasificadorController.doEditarForm()}" update=":formDlg:panelClasi" oncomplete="PF('dlgUpdateTipo').show();" icon="fa fa-paste"/>
+                <p:separator/>
+                <p:menuitem value="Eliminar" ajax="false"  action="#{ClasificadorController.doBorrarNodo()}" onclick="if (!confirm('#{bundle.ConfirmacionMensaje}')) {
+                            return false;
+                        }" icon="fa fa-minus">
+                </p:menuitem>
+            </p:contextMenu>
+        </h:form>
+        <h:form id="formDlg">
+            <p:dialog header="Actualizar Clasificador" widgetVar="dlgUpdateTipo" minHeight="40">
+                <p:panel header="Información del Clasificador">
+                    <h:panelGrid id="panelClasi" columns="2">
+                        <h:outputLabel for="idPadre" value="Padre:"/>
+                        <h:panelGrid columns="2">
+                            <h:outputText id="idPadre" value="#{ClasificadorController.clasificador.padre}"/>
+                        </h:panelGrid>
+                        <h:outputLabel for="descripcionClasificador" value="Clasificador:"/>
+                        <h:panelGrid columns="2">
+                            <p:inputText size="60" id="descripcionClasificador" value="#{ClasificadorController.clasificador.denominacionClasificador}" title="Descripción" required="true" requiredMessage="#{bundle.Requerido}" />
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <p:commandButton ajax="false" value="#{bundle.GuardarBoton}" action="#{ClasificadorController.doGuardarNodo()}" icon="ui-icon-disk"/>
+                </p:panel>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

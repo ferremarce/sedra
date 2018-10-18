@@ -9,6 +9,7 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -86,6 +87,10 @@ public class DocumentoController implements Serializable {
     public String createSetup() {
         this.documento = new Documento();
         this.adjuntoDocumento = new ArrayList<>();
+        this.documento.setFechaDocumento(JSFutil.getFechaHoraActual());
+        this.documento.setFechaIngreso(JSFutil.getFechaHoraActual());
+        this.documento.setFechaLimite(JSFutil.getFechaHoraActual());
+        this.documento.setAnho(Calendar.getInstance(JSFutil.getMyTimeZone()).get(Calendar.YEAR));
         return "/documento/CrearDocumento";
     }
 

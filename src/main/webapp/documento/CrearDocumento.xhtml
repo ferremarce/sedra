@@ -12,6 +12,7 @@
 
     <ui:define name="content">
         <h:form id="formMain">
+            <p:messages />
             <p:panel header="Información del Documento">
                 <p:panelGrid columns="1" styleClass="ui-panelgrid-blank" layout="grid">
                     <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-10">
@@ -20,30 +21,31 @@
                     </p:panelGrid>
                     <p:panelGrid columns="4" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
                         <p:outputLabel for="nroEntrada" value="Nro. de Entrada:"/>
-                        <p:inputText id="nroEntrada" value="#{DocumentoController.documento.nroEntrada}" title="Numero Entrada" required="true" requiredMessage="#{bundle.Requerido}" />
+                        <p:inputText id="nroEntrada" value="#{DocumentoController.documento.nroEntrada}" title="Numero Entrada" required="true" requiredMessage="Numero Entrada" />
                         <p:outputLabel for="anho" value="Año:"/>
                         <p:inputText id="anho" value="#{DocumentoController.documento.anho}" title="Año" required="true" requiredMessage="#{bundle.Requerido}" />
                         <p:outputLabel for="fechaDocumento" value="Fecha del Documento:"/>
-                        <p:calendar navigator="true" id="fechaDocumento" value="#{DocumentoController.documento.fechaDocumento}" pattern="dd/MM/yyyy" title="Fecha Documento" required="true" requiredMessage="#{bundle.Requerido}"/>
+                        <p:calendar navigator="true" id="fechaDocumento" value="#{DocumentoController.documento.fechaDocumento}" pattern="dd/MM/yyyy" title="Fecha Documento" required="true" requiredMessage="Fecha Documento"/>
                         <p:outputLabel for="fechaIngreso" styleClass="itemResaltado1"  value="(*) Fecha del Ingreso:"/>
-                        <p:calendar navigator="true" id="fechaIngreso" value="#{DocumentoController.documento.fechaIngreso}" pattern="dd/MM/yyyy" title="Fecha Ingreso" required="true" requiredMessage="#{bundle.Requerido}"/>
+                        <p:calendar navigator="true" id="fechaIngreso" value="#{DocumentoController.documento.fechaIngreso}" pattern="dd/MM/yyyy" title="Fecha Ingreso" required="true" requiredMessage="Fecha Ingreso"/>
                         <p:outputLabel for="fechaLimite" value="Fecha Límite:"/>
-                        <p:calendar navigator="true" id="fechaLimite" value="#{DocumentoController.documento.fechaLimite}" pattern="dd/MM/yyyy" title="Fecha Límite" required="true" requiredMessage="#{bundle.Requerido}"/>
+                        <p:calendar navigator="true" id="fechaLimite" value="#{DocumentoController.documento.fechaLimite}" pattern="dd/MM/yyyy" title="Fecha Límite" required="true" requiredMessage="Fecha Límite"/>
                     </p:panelGrid>
                     <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-10">
                         <p:outputLabel for="asunto" value="Asunto "/>
-                        <p:inputTextarea autoResize="true" id="asunto" value="#{DocumentoController.documento.asunto}" title="Asunto" required="true" requiredMessage="#{bundle.Requerido}" />
+                        <p:inputTextarea autoResize="true" id="asunto" value="#{DocumentoController.documento.asunto}" title="Asunto" required="true" requiredMessage="Asunto" />
                         <p:outputLabel for="referencia" value="Referencia"/>
-                        <p:inputText id="referencia" value="#{DocumentoController.documento.referencia}" title="Referencia" required="true" requiredMessage="#{bundle.Requerido}" />
+                        <p:inputText id="referencia" value="#{DocumentoController.documento.referencia}" title="Referencia" required="true" requiredMessage="Referencia" />
                         <p:outputLabel for="observaciones" value="Observaciones:"/>
                         <p:inputTextarea cols="60" id="observaciones" value="#{DocumentoController.documento.observacion}" title="Observaciones"  />
                         <p:outputLabel for="idTipoDocumento" value="Tipo Documento:"/>
-                        <p:selectOneMenu effect="fade" id="idTipoDocumento" value="#{DocumentoController.documento.idTipoDocumento}" required="true" requiredMessage="#{bundle.Requerido}">  
+                        <p:selectOneMenu effect="fade" id="idTipoDocumento" value="#{DocumentoController.documento.idTipoDocumento}" required="true" requiredMessage="Tipo Documento">  
                             <f:selectItems value="#{TipoDocumentoController.tipoDocumentoSet}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="Adjunto:"/>
                         <p:panel header="Haga click en #{bundle.SeleccionarBoton} o Arrastre hasta aquí los archivos">
-                            <p:fileUpload id="archivo" label="#{bundle.SeleccionarBoton}" cancelLabel="#{bundle.EliminarBoton}" uploadLabel="#{bundle.AgregarBoton}" 
+                            <p:fileUpload style="min-height: 200px"
+                                          id="archivo" label="#{bundle.SeleccionarBoton}" cancelLabel="#{bundle.EliminarBoton}" uploadLabel="#{bundle.AgregarBoton}" 
                                           fileUploadListener="#{DocumentoController.handleFileUpload}"
                                           mode="advanced"
                                           multiple="true"
@@ -53,12 +55,10 @@
                                 <p:column headerText="Archivo">
                                     <h:outputText value="#{index+1}. #{item.fileName}"/>
                                 </p:column>
-                                <p:column headerText="Acción">
-                                    <p:panelGrid columns="2">
-                                        <p:commandButton title="#{bundle.DescargarBoton}" value="#{bundle.DescargarBoton}" icon="fa fa-download" immediate="true" ajax="false">
-                                            <p:fileDownload value="#{CommonController.downloadAdjuntoTMP(item)}"/>
-                                        </p:commandButton>
-                                    </p:panelGrid>
+                                <p:column headerText="Acción" width="150">
+                                    <p:commandButton title="#{bundle.DescargarBoton}" value="#{bundle.DescargarBoton}" icon="fa fa-download" immediate="true" ajax="false">
+                                        <p:fileDownload value="#{CommonController.downloadAdjuntoTMP(item)}"/>
+                                    </p:commandButton>
                                 </p:column>
                             </p:dataTable>
                         </p:panel>

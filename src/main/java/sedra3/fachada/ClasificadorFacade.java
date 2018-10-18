@@ -5,9 +5,11 @@
  */
 package sedra3.fachada;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import sedra3.modelo.Clasificador;
 
 /**
@@ -28,5 +30,26 @@ public class ClasificadorFacade extends AbstractFacade<Clasificador> {
     public ClasificadorFacade() {
         super(Clasificador.class);
     }
-    
+
+    public List<Clasificador> getAllClasificador() {
+        Query q = em.createQuery("SELECT a FROM Clasificador a ORDER BY a.denominacionClasificador");
+        List<Clasificador> tr = q.getResultList();
+        return tr;
+
+    }
+
+    public List<Clasificador> getAllClasificadorPadres() {
+        Query q = em.createQuery("SELECT a FROM Clasificador a WHERE a.padre=0 ORDER BY a.denominacionClasificador");
+        List<Clasificador> tr = q.getResultList();
+        return tr;
+
+    }
+
+    public List<Clasificador> getHijos(Integer idCla) {
+        Query q = em.createQuery("SELECT a FROM Clasificador a WHERE a.padre=:xIdCla ORDER BY a.denominacionClasificador");
+        q.setParameter("xIdCla", idCla);
+        List<Clasificador> tr = q.getResultList();
+        return tr;
+    }
+
 }

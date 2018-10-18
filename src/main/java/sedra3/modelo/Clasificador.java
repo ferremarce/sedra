@@ -127,7 +127,7 @@ public class Clasificador implements Serializable {
 
     @Override
     public String toString() {
-        return "sedra3.modelo.Clasificador[ idClasificador=" + idClasificador + " ]";
+        return this.getDenominacionClasificador()+" [id="+this.getIdClasificador()+"]";
     }
     
 }

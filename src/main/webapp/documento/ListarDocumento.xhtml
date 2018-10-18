@@ -55,7 +55,7 @@
                     <f:facet name="header">
                         <h:outputText value="Acción"/>
                     </f:facet>
-                    <p:commandButton type="button" style="background-color: #ffcc99" rendered="#{item.cerrado==true}" onclick="return alert('El documento y sus anexos ya están archivados');" ajax="false" title="Documento llaveado" value="Llaveado" icon="fa fa-lock"/>
+                    <p:commandButton type="button" style="background: #fde5cd !important; color: black" rendered="#{item.cerrado==true}" onclick="return alert('El documento y sus anexos ya están archivados');" ajax="false" title="Documento llaveado" value="Llaveado" icon="fa fa-lock"/>
                     <p:menuButton rendered="#{item.cerrado==false}" value="Opciones">
                         <p:menuitem ajax="false" value="#{bundle.EditarBoton}" action="#{DocumentoController.editSetup(item.idDocumento)}" icon="fa fa-pencil-square"/>
                         <p:menuitem ajax="false" onclick="if (!confirm('#{bundle.ConfirmacionMensaje}')) {
