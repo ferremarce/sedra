@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="title">
+        <h1>Listar Documentos</h1>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
+                <p:inputText id="criterio" value="#{DocumentoController.criterio}"/>
+                <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{DocumentoController.doBuscar()}" update="@form messages"/>
+                <p:commandButton immediate="true" value="#{bundle.NuevoBoton}" icon="fa fa-plus" ajax="false" action="#{DocumentoController.createSetup()}"/>
+                <p:commandButton immediate="true" value="#{bundle.ListarBoton}" icon="fa fa-th-list" ajax="false" action="#{DocumentoController.doRefrescar()}"/>
+            </p:panelGrid>
+            <p:watermark for="criterio" value="Buscar..."/>
+            <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                         rows="50"
+                         paginator="true"
+                         filterEvent="enter"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,25,50,100"
+                         >
+                <f:facet name="header">
+                    Tabla de Datos
+                </f:facet>  
+                <p:column headerText="Nro. Ent." style="width:50px" >  
+                    <h:outputText value=" #{item.nroEntrada}"/>
+                </p:column>  
+                <p:column headerText="F. Doc." style="width:80px" >
+                    <h:outputText value="#{item.fechaDocumento}">
+                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Asunto">
+                    <i class="fa fa-folder-open"/>
+                    <h:outputText value=" #{ClasificadorController.obtenerRutaClasificador(item.idClasificador.idClasificador)}"/>
+                    <blockquote>
+                        <p:commandLink target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
+                            <h:outputText styleClass="Brown fontBold" value="#{item.asunto}"/>
+                        </p:commandLink>
+                    </blockquote>
+                </p:column>  
+                <p:column headerText="F. Ing." style="width:80px" >  
+                    <h:outputText value="#{item.fechaIngreso}">
+                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </p:column>  
+                <p:column width="130">
+                    <f:facet name="header">
+                        <h:outputText value="Acción"/>
+                    </f:facet>
+                    <p:commandButton type="button" style="background-color: #ffcc99" rendered="#{item.cerrado==true}" onclick="return alert('El documento y sus anexos ya están archivados');" ajax="false" title="Documento llaveado" value="Llaveado" icon="fa fa-lock"/>
+                    <p:menuButton rendered="#{item.cerrado==false}" value="Opciones">
+                        <p:menuitem ajax="false" value="#{bundle.EditarBoton}" action="#{DocumentoController.editSetup(item.idDocumento)}" icon="fa fa-pencil-square"/>
+                        <p:menuitem ajax="false" onclick="if (!confirm('#{bundle.ConfirmacionMensaje}')) {
+                                    return false;
+                                }" value="#{bundle.EliminarBoton}" action="#{DocumentoController.delete(item.idDocumento)}" icon="fa fa-minus-square"/>
+                    </p:menuButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

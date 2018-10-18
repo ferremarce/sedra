@@ -13,12 +13,6 @@
     </h:head>
 
     <h:body>
-        <p:idleMonitor timeout="#{CommonController.tiempoSesionActiva}" >
-            <p:ajax global="true" event="idle" listener="#{LoginManager.doLogout()}" oncomplete="alert('La sesión del usuario ha expirado. Para acceder nuevamente haga click en OK')"/>
-        </p:idleMonitor>
-        <p:panel widgetVar="statusDialog" id="panelLoad" style="position: fixed; left: 50%; top: 40px; z-index: 99;" >
-            <p:graphicImage value="/img/loading2.gif" height="50"/>
-        </p:panel>
         <div class="ui-fluid">
             <p:link style="text-decoration: none" href="/">
                 <p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
@@ -29,18 +23,8 @@
                     </p:outputPanel>
                 </p:panelGrid>
             </p:link>
-            <h:form>
-                <p:menubar model="#{MenuController.model}"/> 
-            </h:form>
             <ui:insert name="title">
             </ui:insert>
-            <ui:insert name="ajax">
-                <ui:include src="/ajax.xhtml"/>
-            </ui:insert>
-            <p:growl life="5000" globalOnly="true" showDetail="true" severity="info, warn" id="messages"/> 
-            <p:messages closable="true" showDetail="true" globalOnly="true" severity="error, fatal" >
-                <p:autoUpdate/>
-            </p:messages>
             <ui:insert name="content">
             </ui:insert>
             <footer>
@@ -54,9 +38,6 @@
                 </p:panel>
             </footer>
         </div>
-        <script>
-            document.getElementById('panelLoad').style.display = 'none';
-        </script>
     </h:body>
 
 </html>

@@ -10,7 +10,13 @@
     </h:head>
     <h:body>
         <h:form>
-            <p:graphicImage value="/img/logo.png"/>
+            <p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+                <p:graphicImage value="/img/logo-new.png" height="80"/>
+                <p:outputPanel>
+                    <h:outputText styleClass="tresD fontBold" style="font-size: xx-large"  value="SEDRA v.3"/><br/>
+                    <h:outputText value="#{bundle.TituloSistema}"/>
+                </p:outputPanel>
+            </p:panelGrid>
             <p:messages showDetail="true"/>
             <p:panel style="width: 600px" header="Credenciales de Acceso">
                 <p:panelGrid columns="3"  styleClass="ui-panelgrid-blank">

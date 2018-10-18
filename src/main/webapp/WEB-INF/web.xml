@@ -14,7 +14,7 @@
     </context-param>
     <context-param>
         <param-name>primefaces.THEME</param-name>
-        <param-value>aristo</param-value>
+        <param-value>cupertino</param-value>
     </context-param>
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
@@ -37,15 +37,14 @@
         <error-code>404</error-code>
         <location>/404.xhtml</location>
     </error-page>
-    <error-page>
+    <!--error-page>
         <exception-type>java.lang.Throwable</exception-type>
-        <location>/errorPage.xhtml</location>
-    </error-page>
-    <error-page>
-        <!-- Uncaught exception -->
+        <location>/general_error.xhtml</location>
+    </error-page-->
+    <!--error-page>
         <error-code>500</error-code>
         <location>/general_error.xhtml</location>
-    </error-page>
+    </error-page-->
     <error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
         <location>/index.xhtml</location>

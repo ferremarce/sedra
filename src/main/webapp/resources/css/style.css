@@ -1,3 +1,66 @@
 h1{
     font-family: Arial,sans-serif;
 }
+.tresD{
+    text-shadow: 0 1px 0 #ccc,
+        0 2px 0 #c9c9c9,
+        0 3px 0 #bbb,
+        0 4px 0 #b9b9b9,
+        0 5px 0 #aaa,
+        0 6px 1px rgba(0,0,0,.1),
+        0 0 5px rgba(0,0,0,.1),
+        0 1px 3px rgba(0,0,0,.3),
+        0 3px 5px rgba(0,0,0,.2),
+        0 5px 10px rgba(0,0,0,.25),
+        0 10px 10px rgba(0,0,0,.2),
+        0 20px 20px rgba(0,0,0,.15);
+}
+/* text colors */
+.Orange {
+    color: #EF6C00;
+}
+.Purple {
+    color: #7E57C2;
+}
+.Blue {
+    color: #0277BD;
+}
+.Red {
+    color: #E53935;
+}
+.Brown {
+    color: #6D4C41;
+}
+.Lime {
+    color: #AFB42B;
+}
+.TealGreen {
+    color: #0097A7;
+}
+.Green {
+    color: #43A047;
+}
+.DarkGreen {
+    color: #00897B;
+}
+.Leaden {
+    color: #444D58;
+}
+.Pink {
+    color: #EC407A;
+}
+.White {
+    color: #fff;
+}
+.font1x{
+    font-size: 1.1em !important;
+}
+.font2x{
+    font-size: 1.3em !important;
+}
+.font3x{
+    font-size: 1.5em !important;
+}
+.fontBold{
+    font-weight: bold;
+}

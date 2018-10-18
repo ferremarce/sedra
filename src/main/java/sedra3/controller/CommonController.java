@@ -5,6 +5,8 @@
  */
 package sedra3.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -17,6 +19,9 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.eclipse.persistence.exceptions.DatabaseException;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 import sedra3.util.JSFutil;
 
 /**
@@ -81,5 +86,16 @@ public class CommonController implements Serializable {
             JSFutil.addMessage(msg, JSFutil.StatusMessage.ERROR);
         }
         LOG.log(Level.SEVERE, null, e);
+    }
+
+    public StreamedContent downloadAdjuntoTMP(UploadedFile adjunto) throws IOException {
+        //System.out.println("Invocado...");
+        if (adjunto != null) {
+            InputStream stream = adjunto.getInputstream();
+            StreamedContent file = new DefaultStreamedContent(stream, adjunto.getContentType(), adjunto.getFileName());
+            return file;
+        } else {
+            return null;
+        }
     }
 }
