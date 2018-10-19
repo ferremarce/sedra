@@ -16,7 +16,7 @@
                 <p:inputText id="criterio" value="#{DocumentoController.criterio}"/>
                 <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{DocumentoController.doBuscar()}" update="@form messages"/>
                 <p:commandButton immediate="true" value="#{bundle.NuevoBoton}" icon="fa fa-plus" ajax="false" action="#{DocumentoController.createSetup()}"/>
-                <p:commandButton immediate="true" value="#{bundle.ListarBoton}" icon="fa fa-th-list" ajax="false" action="#{DocumentoController.doRefrescar()}"/>
+                <p:commandButton immediate="true" value="#{bundle.ListarBoton}" icon="fa fa-th-list" onclick="PF('statusDialog').show()" ajax="false" action="#{DocumentoController.doRefrescar()}"/>
             </p:panelGrid>
             <p:watermark for="criterio" value="Buscar..."/>
             <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
