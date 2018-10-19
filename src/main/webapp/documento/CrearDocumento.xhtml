@@ -28,7 +28,7 @@
                             <p:outputLabel for="idClasificador" value="Clasificador:"/>
                             <p:outputPanel id="panelClasificador">
                                 <p:autoComplete id="idClasificador" dropdown="false" value="#{DocumentoController.documento.idClasificador}" completeMethod="#{ClasificadorController.listaAutocompleteClasificador}"
-                                                var="clasifica" itemLabel="#{clasifica.toString()}" itemValue="#{clasifica}" forceSelection="true" required="true" requiredMessage="#{bundle.Requerido}"
+                                                var="clasifica" itemLabel="#{clasifica.toString()}" itemValue="#{clasifica}" forceSelection="true" required="true" requiredMessage="Clasificador"
                                                 >
                                     <p:ajax event="itemSelect" update="formMain:panelClasificador"/>
                                 </p:autoComplete>
@@ -89,12 +89,14 @@
                             <h:outputText value="#{expeAdj.toNameDownload()} [#{expeAdj.toTamanho()}]"/>
                         </p:column>
                         <p:column headerText="Acción" >
-                            <p:menuButton value="Opciones">
-                                <p:menuitem target="_blank" ajax="false" icon="fa fa-fw fa-download" value="#{bundle.DescargarBoton}" url="#{CommonController.serverURLDownload}/#{expeAdj.toURLDownload()}"/>
-                                <p:menuitem ajax="false" onclick="if (!confirm('#{bundle.ConfirmacionMensaje}')) {
+                            <p:panelGrid columns="2">
+                                <p:commandButton  title="Descargar" value="#{bundle.DescargarBoton}" icon="fa fa-download" ajax="false">
+                                    <p:fileDownload value="#{DownloadFile.downloadDocumentoAdjunto(expeAdj.idDocumentoAdjunto)}" />  
+                                </p:commandButton>
+                                <p:commandButton value="#{bundle.EliminarBoton}" icon="fa fa-minus-square" ajax="false" onclick="if (!confirm('#{bundle.ConfirmacionMensaje}')) {
                                             return false;
-                                        }" value="#{bundle.EliminarBoton}" action="#{DocumentoController.doBorrarAdjunto(expeAdj.idDocumentoAdjunto)}" icon="fa fa-minus-square"/>
-                            </p:menuButton>
+                                        }" action="#{DocumentoController.doBorrarAdjunto(expeAdj.idDocumentoAdjunto)}"/>
+                            </p:panelGrid>
                         </p:column>
                     </p:dataTable> 
                     <f:facet name="footer">

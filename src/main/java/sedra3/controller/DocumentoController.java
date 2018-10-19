@@ -274,7 +274,7 @@ public class DocumentoController implements Serializable {
 
     public String doVerForm(Integer idExpediente) {
         this.documento = documentoFacade.find(idExpediente);
-        return "/documento/VerDocumento";
+        return "/documento/VerDocumento?faces-redirect=true";
     }
 
     public void onNodeSelect(NodeSelectEvent event) {

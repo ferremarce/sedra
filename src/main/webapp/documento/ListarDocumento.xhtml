@@ -30,7 +30,10 @@
                     Tabla de Datos
                 </f:facet>  
                 <p:column headerText="Nro. Ent." style="width:50px" >  
-                    <h:outputText title="#{item.idDocumento}" value=" #{item.nroEntrada}"/>
+                    <p:commandLink rendered="#{item.cerrado==false}" title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
+                        <h:outputText title="#{item.idDocumento}" styleClass="fontBold" value=" #{item.nroEntrada}"/>
+                    </p:commandLink>
+                    <h:outputText rendered="#{item.cerrado==true}" title="#{item.idDocumento}" value=" #{item.nroEntrada}"/>
                 </p:column>  
                 <p:column headerText="F. Doc." style="width:80px" >
                     <h:outputText value="#{item.fechaDocumento}">
@@ -41,9 +44,7 @@
                     <i class="fa fa-folder-open"/>
                     <h:outputText value=" #{ClasificadorController.obtenerRutaClasificador(item.idClasificador.idClasificador)}"/>
                     <blockquote>
-                        <p:commandLink target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
-                            <h:outputText styleClass="Brown fontBold" value="#{item.asunto}"/>
-                        </p:commandLink>
+                        <h:outputText styleClass="Brown fontBold" value="#{item.asunto}"/>
                     </blockquote>
                 </p:column>  
                 <p:column headerText="F. Ing." style="width:80px" >  
