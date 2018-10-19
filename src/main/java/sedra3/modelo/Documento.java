@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,7 +25,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -105,6 +104,8 @@ public class Documento implements Serializable {
     private List<DetalleNotaSalida> detalleNotaSalidaList;
     @OneToMany(mappedBy = "idDocumento")
     private List<Tramitacion> tramitacionList;
+    @OneToMany(mappedBy = "idDocumento", cascade = CascadeType.REMOVE)
+    private List<DocumentoAdjunto> documentoAdjuntoList;
 
     public Documento() {
     }
@@ -297,6 +298,14 @@ public class Documento implements Serializable {
         this.tramitacionList = tramitacionList;
     }
 
+    public List<DocumentoAdjunto> getDocumentoAdjuntoList() {
+        return documentoAdjuntoList;
+    }
+
+    public void setDocumentoAdjuntoList(List<DocumentoAdjunto> documentoAdjuntoList) {
+        this.documentoAdjuntoList = documentoAdjuntoList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -321,5 +330,13 @@ public class Documento implements Serializable {
     public String toString() {
         return "sedra3.modelo.Documento[ idDocumento=" + idDocumento + " ]";
     }
-    
+
+    public String toAudita() {
+        return "[Id=" + this.idDocumento + "] "
+                + "[Nro.Entrada=" + this.nroEntrada + "] "
+                + "[Asunto=" + this.asunto + "] "
+                + "[CP=" + this.comprobantePago + "] "
+                + "[Referencia=" + this.referencia + "] "
+                + "[Archivo=" + this.nombreArchivo + "]";
+    }
 }

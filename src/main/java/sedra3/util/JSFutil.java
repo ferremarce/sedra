@@ -4,7 +4,6 @@
  */
 package sedra3.util;
 
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -39,9 +38,13 @@ import sedra3.modelo.Usuario;
  * @author jmferreira
  */
 public class JSFutil implements Serializable {
+
     ResourceBundle bundle = ResourceBundle.getBundle("propiedades.bundle", JSFutil.getmyLocale());
+    public static final String folderRoot = "/upload/";
+    public static String folderDocumento = folderRoot;
 
     private Integer tiempoDespacho = 15;
+
     public static enum StatusMessage {
         INFORMATION, WARNING, ERROR, FATAL
     }
@@ -75,7 +78,7 @@ public class JSFutil implements Serializable {
         return items;
     }
 
-     public static void addMessage(String msg, StatusMessage estado) {
+    public static void addMessage(String msg, StatusMessage estado) {
         FacesMessage facesMsg;
         switch (estado) {
             case INFORMATION:
@@ -95,6 +98,7 @@ public class JSFutil implements Serializable {
         }
         FacesContext.getCurrentInstance().addMessage(null, facesMsg);
     }
+
     /**
      * Recuperar un parametro de la sesión del usuario
      *
@@ -371,7 +375,7 @@ public class JSFutil implements Serializable {
     public static Integer fileToDisk(InputStream is2, String nombreArchivo) {
         File file;
         InputStream is = is2;
-        file = new File("/upload/images/" + nombreArchivo);
+        file = new File(nombreArchivo);
         //is = new ByteArrayInputStream(d.getArchivo());
         try {
             OutputStream out = new FileOutputStream(file);
@@ -463,6 +467,22 @@ public class JSFutil implements Serializable {
             return nombreArchivo.substring(0, i).toUpperCase();
         } else {
             return nombreArchivo;
+        }
+    }
+
+    public static String sanitizeFilename(String inputName) {
+        return inputName.replaceAll("[^a-zA-Z0-9-_\\.]", "_");
+    }
+
+    public static Boolean deleteFileFromDisk(String nombreArchivo) {
+        File file;
+        file = new File(nombreArchivo);
+        //is = new ByteArrayInputStream(d.getArchivo());
+        try {
+            return file.delete();
+        } catch (Exception ex) {
+            Logger.getLogger(JSFutil.class.getName()).log(Level.SEVERE, null, ex);
+            return Boolean.FALSE;
         }
     }
 }

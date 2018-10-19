@@ -38,6 +38,14 @@ public class ClasificadorFacade extends AbstractFacade<Clasificador> {
 
     }
 
+    public List<Clasificador> getAllClasificador(String valor) {
+        Query q = em.createQuery("SELECT a FROM Clasificador a WHERE CONCAT(a.idClasificador,'') LIKE :idStr ORDER BY a.idClasificador ");
+        q.setParameter("idStr", valor);
+        List<Clasificador> tr = q.getResultList();
+        return tr;
+
+    }
+
     public List<Clasificador> getAllClasificadorPadres() {
         Query q = em.createQuery("SELECT a FROM Clasificador a WHERE a.padre=0 ORDER BY a.denominacionClasificador");
         List<Clasificador> tr = q.getResultList();

@@ -12,65 +12,99 @@
 
     <ui:define name="content">
         <h:form id="formMain">
-            <p:messages />
-            <p:panel header="Información del Documento">
-                <p:panelGrid columns="1" styleClass="ui-panelgrid-blank" layout="grid">
-                    <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-10">
-                        <p:outputLabel for="clasificador" styleClass="itemResaltado1" value="Clasificador:"/>
-                        <p:inputText disabled="true" id="clasificador" value="#{DocumentoController.documento.idClasificador}" title="Clasificador" required="true" requiredMessage="#{bundle.Requerido}" />
+            <p:messages showDetail="true" />
+            <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-4,ui-grid-col-8">
+                <p:panel header="Clasificador">
+                    <p:tree draggable="true" droppable="true" id="planArchivo" value="#{ClasificadorController.root}" var="node" dynamic="false" cache="false" selectionMode="single"  selection="#{ClasificadorController.selectedNode}">
+                        <p:ajax event="select" update="formMain:panelClasificador" listener="#{DocumentoController.onNodeSelect}" /> 
+                        <p:treeNode expandedIcon="fa fa-folder-open" collapsedIcon="fa fa-folder">  
+                            <h:outputText value="#{node.toString()}" />
+                        </p:treeNode>  
+                    </p:tree> 
+                </p:panel>
+                <p:panel header="Información del Documento">
+                    <p:panelGrid columns="1" styleClass="ui-panelgrid-blank" layout="grid">
+                        <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-10">
+                            <p:outputLabel for="idClasificador" value="Clasificador:"/>
+                            <p:outputPanel id="panelClasificador">
+                                <p:autoComplete id="idClasificador" dropdown="false" value="#{DocumentoController.documento.idClasificador}" completeMethod="#{ClasificadorController.listaAutocompleteClasificador}"
+                                                var="clasifica" itemLabel="#{clasifica.toString()}" itemValue="#{clasifica}" forceSelection="true" required="true" requiredMessage="#{bundle.Requerido}"
+                                                >
+                                    <p:ajax event="itemSelect" update="formMain:panelClasificador"/>
+                                </p:autoComplete>
+                                <br/>
+                                <h:outputText rendered="#{DocumentoController.documento.idClasificador!=null}" styleClass="Purple" value="#{ClasificadorController.obtenerRutaClasificador(DocumentoController.documento.idClasificador.idClasificador)}" title="Clasificador" />
+                            </p:outputPanel>
+                        </p:panelGrid>
+                        <p:panelGrid columns="4" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
+                            <p:outputLabel for="nroEntrada" value="Nro. de Entrada:"/>
+                            <p:inputText id="nroEntrada" value="#{DocumentoController.documento.nroEntrada}" title="Numero Entrada" required="true" requiredMessage="Numero Entrada" />
+                            <p:outputLabel for="anho" value="Año:"/>
+                            <p:inputText id="anho" value="#{DocumentoController.documento.anho}" title="Año" required="true" requiredMessage="#{bundle.Requerido}" />
+                            <p:outputLabel for="fechaDocumento" value="Fecha del Documento:"/>
+                            <p:calendar navigator="true" id="fechaDocumento" value="#{DocumentoController.documento.fechaDocumento}" pattern="dd/MM/yyyy" title="Fecha Documento" required="true" requiredMessage="Fecha Documento"/>
+                            <p:outputLabel for="fechaIngreso" value="Fecha del Ingreso:"/>
+                            <p:calendar navigator="true" id="fechaIngreso" value="#{DocumentoController.documento.fechaIngreso}" pattern="dd/MM/yyyy" title="Fecha Ingreso" required="true" requiredMessage="Fecha Ingreso"/>
+                            <p:outputLabel for="fechaLimite" value="Fecha Límite:"/>
+                            <p:calendar navigator="true" id="fechaLimite" value="#{DocumentoController.documento.fechaLimite}" pattern="dd/MM/yyyy" title="Fecha Límite" required="true" requiredMessage="Fecha Límite"/>
+                        </p:panelGrid>
+                        <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-10">
+                            <p:outputLabel for="asunto" value="Asunto "/>
+                            <p:inputTextarea autoResize="true" id="asunto" value="#{DocumentoController.documento.asunto}" title="Asunto" required="true" requiredMessage="Asunto" />
+                            <p:outputLabel for="referencia" value="Referencia"/>
+                            <p:inputText id="referencia" value="#{DocumentoController.documento.referencia}" title="Referencia" required="true" requiredMessage="Referencia" />
+                            <p:outputLabel for="observaciones" value="Observaciones:"/>
+                            <p:inputTextarea cols="60" id="observaciones" value="#{DocumentoController.documento.observacion}" title="Observaciones"  />
+                            <p:outputLabel for="idTipoDocumento" value="Tipo Documento:"/>
+                            <p:selectOneMenu effect="fade" id="idTipoDocumento" value="#{DocumentoController.documento.idTipoDocumento}" required="true" requiredMessage="Tipo Documento">  
+                                <f:selectItems value="#{TipoDocumentoController.tipoDocumentoSet}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="Adjunto:"/>
+                            <p:panel header="Haga click en #{bundle.SeleccionarBoton} o Arrastre hasta aquí los archivos">
+                                <p:fileUpload style="min-height: 200px"
+                                              id="archivo" label="#{bundle.SeleccionarBoton}" cancelLabel="#{bundle.EliminarBoton}" uploadLabel="#{bundle.AgregarBoton}" 
+                                              fileUploadListener="#{DocumentoController.handleFileUpload}"
+                                              mode="advanced"
+                                              multiple="true"
+                                              update="dtAdjuntoDocumento">
+                                </p:fileUpload>
+                                <p:dataTable id="dtAdjuntoDocumento" value="#{DocumentoController.adjuntoDocumento}" rowIndexVar="index" var="item" emptyMessage="#{bundle.SinRegistrosMensaje}" >
+                                    <p:column headerText="Archivo">
+                                        <h:outputText value="#{index+1}. #{item.fileName}"/>
+                                    </p:column>
+                                    <p:column headerText="Acción" width="150">
+                                        <p:commandButton title="#{bundle.DescargarBoton}" value="#{bundle.DescargarBoton}" icon="fa fa-download" immediate="true" ajax="false">
+                                            <p:fileDownload value="#{CommonController.downloadAdjuntoTMP(item)}"/>
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panel>
+                        </p:panelGrid>
                     </p:panelGrid>
-                    <p:panelGrid columns="4" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
-                        <p:outputLabel for="nroEntrada" value="Nro. de Entrada:"/>
-                        <p:inputText id="nroEntrada" value="#{DocumentoController.documento.nroEntrada}" title="Numero Entrada" required="true" requiredMessage="Numero Entrada" />
-                        <p:outputLabel for="anho" value="Año:"/>
-                        <p:inputText id="anho" value="#{DocumentoController.documento.anho}" title="Año" required="true" requiredMessage="#{bundle.Requerido}" />
-                        <p:outputLabel for="fechaDocumento" value="Fecha del Documento:"/>
-                        <p:calendar navigator="true" id="fechaDocumento" value="#{DocumentoController.documento.fechaDocumento}" pattern="dd/MM/yyyy" title="Fecha Documento" required="true" requiredMessage="Fecha Documento"/>
-                        <p:outputLabel for="fechaIngreso" styleClass="itemResaltado1"  value="(*) Fecha del Ingreso:"/>
-                        <p:calendar navigator="true" id="fechaIngreso" value="#{DocumentoController.documento.fechaIngreso}" pattern="dd/MM/yyyy" title="Fecha Ingreso" required="true" requiredMessage="Fecha Ingreso"/>
-                        <p:outputLabel for="fechaLimite" value="Fecha Límite:"/>
-                        <p:calendar navigator="true" id="fechaLimite" value="#{DocumentoController.documento.fechaLimite}" pattern="dd/MM/yyyy" title="Fecha Límite" required="true" requiredMessage="Fecha Límite"/>
-                    </p:panelGrid>
-                    <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-10">
-                        <p:outputLabel for="asunto" value="Asunto "/>
-                        <p:inputTextarea autoResize="true" id="asunto" value="#{DocumentoController.documento.asunto}" title="Asunto" required="true" requiredMessage="Asunto" />
-                        <p:outputLabel for="referencia" value="Referencia"/>
-                        <p:inputText id="referencia" value="#{DocumentoController.documento.referencia}" title="Referencia" required="true" requiredMessage="Referencia" />
-                        <p:outputLabel for="observaciones" value="Observaciones:"/>
-                        <p:inputTextarea cols="60" id="observaciones" value="#{DocumentoController.documento.observacion}" title="Observaciones"  />
-                        <p:outputLabel for="idTipoDocumento" value="Tipo Documento:"/>
-                        <p:selectOneMenu effect="fade" id="idTipoDocumento" value="#{DocumentoController.documento.idTipoDocumento}" required="true" requiredMessage="Tipo Documento">  
-                            <f:selectItems value="#{TipoDocumentoController.tipoDocumentoSet}"/>
-                        </p:selectOneMenu>
-                        <p:outputLabel value="Adjunto:"/>
-                        <p:panel header="Haga click en #{bundle.SeleccionarBoton} o Arrastre hasta aquí los archivos">
-                            <p:fileUpload style="min-height: 200px"
-                                          id="archivo" label="#{bundle.SeleccionarBoton}" cancelLabel="#{bundle.EliminarBoton}" uploadLabel="#{bundle.AgregarBoton}" 
-                                          fileUploadListener="#{DocumentoController.handleFileUpload}"
-                                          mode="advanced"
-                                          multiple="true"
-                                          update="dtAdjuntoDocumento">
-                            </p:fileUpload>
-                            <p:dataTable id="dtAdjuntoDocumento" value="#{DocumentoController.adjuntoDocumento}" rowIndexVar="index" var="item" emptyMessage="#{bundle.SinRegistrosMensaje}" >
-                                <p:column headerText="Archivo">
-                                    <h:outputText value="#{index+1}. #{item.fileName}"/>
-                                </p:column>
-                                <p:column headerText="Acción" width="150">
-                                    <p:commandButton title="#{bundle.DescargarBoton}" value="#{bundle.DescargarBoton}" icon="fa fa-download" immediate="true" ajax="false">
-                                        <p:fileDownload value="#{CommonController.downloadAdjuntoTMP(item)}"/>
-                                    </p:commandButton>
-                                </p:column>
-                            </p:dataTable>
-                        </p:panel>
-                    </p:panelGrid>
-                </p:panelGrid>
-                <f:facet name="footer">
-                    <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" columnClasses="ui-grid-col-6,ui-grid-col-6">
-                        <p:commandButton ajax="false" icon="fa fa-save" value="#{bundle.GuardarBoton}" action="#{DocumentoController.create()}"/>
-                        <p:commandButton immediate="true" ajax="false" icon="fa fa-sign-out" value="#{bundle.RegresarBoton}" action="#{DocumentoController.listDocumentoSetup()}"/>
-                    </p:panelGrid>
-                </f:facet>   
-            </p:panel>
+                    <p:dataTable id="dataTableAdjunto" var="expeAdj" value="#{DocumentoController.documento.documentoAdjuntoList}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}">
+                        <f:facet name="header">
+                            <h:outputText styleClass="Purple" value="Archivos del Documento"/>
+                        </f:facet>
+                        <p:column headerText="Archivos" >
+                            <h:outputText value="#{expeAdj.toNameDownload()} [#{expeAdj.toTamanho()}]"/>
+                        </p:column>
+                        <p:column headerText="Acción" >
+                            <p:menuButton value="Opciones">
+                                <p:menuitem target="_blank" ajax="false" icon="fa fa-fw fa-download" value="#{bundle.DescargarBoton}" url="#{CommonController.serverURLDownload}/#{expeAdj.toURLDownload()}"/>
+                                <p:menuitem ajax="false" onclick="if (!confirm('#{bundle.ConfirmacionMensaje}')) {
+                                            return false;
+                                        }" value="#{bundle.EliminarBoton}" action="#{DocumentoController.doBorrarAdjunto(expeAdj.idDocumentoAdjunto)}" icon="fa fa-minus-square"/>
+                            </p:menuButton>
+                        </p:column>
+                    </p:dataTable> 
+                    <f:facet name="footer">
+                        <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" columnClasses="ui-grid-col-6,ui-grid-col-6">
+                            <p:commandButton ajax="false" icon="fa fa-save" value="#{bundle.GuardarBoton}" action="#{DocumentoController.create()}"/>
+                            <p:commandButton immediate="true" ajax="false" icon="fa fa-sign-out" value="#{bundle.RegresarBoton}" action="#{DocumentoController.listDocumentoSetup()}"/>
+                        </p:panelGrid>
+                    </f:facet>   
+                </p:panel>
+            </p:panelGrid>
         </h:form>
     </ui:define>
 

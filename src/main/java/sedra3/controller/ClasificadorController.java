@@ -10,16 +10,13 @@ import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJBException;
 import javax.inject.Inject;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import sedra3.fachada.ClasificadorFacade;
 import sedra3.modelo.Clasificador;
 import sedra3.util.JSFutil;
-import sedra3.util.MyTree;
 
 /**
  *
@@ -56,6 +53,14 @@ public class ClasificadorController implements Serializable {
 
     public void setSelectedNode(TreeNode selectedNode) {
         this.selectedNode = selectedNode;
+    }
+
+    public ClasificadorFacade getClasificadorFacade() {
+        return clasificadorFacade;
+    }
+
+    public void setClasificadorFacade(ClasificadorFacade clasificadorFacade) {
+        this.clasificadorFacade = clasificadorFacade;
     }
 
     public TreeNode getRoot() {
@@ -163,5 +168,9 @@ public class ClasificadorController implements Serializable {
         this.clasificador = new Clasificador();
         this.cargarTree();
         return "";
+    }
+
+    public List<Clasificador> listaAutocompleteClasificador(String valor) {
+        return clasificadorFacade.getAllClasificador(valor);
     }
 }

@@ -15,7 +15,7 @@
             <p:growl life="3000" globalOnly="true" id="messages"/> 
             <p:tree draggable="true" droppable="true" id="planArchivo" value="#{ClasificadorController.root}" var="node" dynamic="false" cache="false" selectionMode="single"  selection="#{ClasificadorController.selectedNode}">
                 <p:treeNode expandedIcon="fa fa-folder-open" collapsedIcon="fa fa-folder">  
-                    <h:outputText value="#{node}" />
+                    <h:outputText value="#{node.toString()}" />
                 </p:treeNode>  
             </p:tree>  
             <p:contextMenu for="planArchivo">
@@ -45,8 +45,13 @@
                             <p:inputText size="60" id="descripcionClasificador" value="#{ClasificadorController.clasificador.denominacionClasificador}" title="Descripción" required="true" requiredMessage="#{bundle.Requerido}" />
                         </h:panelGrid>
                     </h:panelGrid>
-                    <p:commandButton ajax="false" value="#{bundle.GuardarBoton}" action="#{ClasificadorController.doGuardarNodo()}" icon="ui-icon-disk"/>
+                    <f:facet name="footer">
+                        <p:panelGrid columns="1" styleClass="ui-panelgrid-blank" >
+                            <p:commandButton ajax="false" value="#{bundle.GuardarBoton}" action="#{ClasificadorController.doGuardarNodo()}" icon="ui-icon-disk"/>
+                        </p:panelGrid>
+                    </f:facet>
                 </p:panel>
+
             </p:dialog>
         </h:form>
     </ui:define>
