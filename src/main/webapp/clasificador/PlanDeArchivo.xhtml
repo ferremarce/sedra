@@ -11,20 +11,20 @@
     </ui:define>
 
     <ui:define name="content">
-        <h:form>
-            <p:growl life="3000" globalOnly="true" id="messages"/> 
-            <p:tree draggable="true" droppable="true" id="planArchivo" value="#{ClasificadorController.root}" var="node" dynamic="false" cache="false" selectionMode="single"  selection="#{ClasificadorController.selectedNode}">
+        <h:form id="formMain">
+            <p:tree draggable="true" droppable="true" dropCopyNode="true" id="planArchivo" value="#{ClasificadorController.root}" var="node" dynamic="false" cache="false" selectionMode="single"  selection="#{ClasificadorController.selectedNode}">
+                <p:ajax event="dragdrop" listener="#{ClasificadorController.onDragDrop}" update="planArchivo messages" />
                 <p:treeNode expandedIcon="fa fa-folder-open" collapsedIcon="fa fa-folder">  
                     <h:outputText value="#{node.toString()}" />
                 </p:treeNode>  
             </p:tree>  
-            <p:contextMenu for="planArchivo">
+            <p:contextMenu id="menuContext" for="planArchivo">
                 <p:menuitem value="Nueva Raiz" actionListener="#{ClasificadorController.doNuevoForm()}" update=":formDlg:panelClasi" oncomplete="PF('dlgUpdateTipo').show();" icon="fa fa-plus" />
                 <p:menuitem value="Nuevo Hijo" actionListener="#{ClasificadorController.doNuevoHijoForm()}" update=":formDlg:panelClasi" oncomplete="PF('dlgUpdateTipo').show();" icon="fa fa-share-alt" />
                 <p:menuitem value="Editar" actionListener="#{ClasificadorController.doEditarForm()}" update=":formDlg:panelClasi" oncomplete="PF('dlgUpdateTipo').show();" icon="fa fa-pencil"/>
                 <p:separator/>
-                <p:menuitem value="Copiar" actionListener="#{ClasificadorController.doEditarForm()}" update=":formDlg:panelClasi" oncomplete="PF('dlgUpdateTipo').show();" icon="fa fa-copy"/>
-                <p:menuitem value="Pegar" actionListener="#{ClasificadorController.doEditarForm()}" update=":formDlg:panelClasi" oncomplete="PF('dlgUpdateTipo').show();" icon="fa fa-paste"/>
+                <p:menuitem value="Copiar Estructura" actionListener="#{ClasificadorController.copyNode()}" update="messages menuContext" icon="fa fa-copy"/>
+                <p:menuitem value="Pegar Estructura" disabled="#{ClasificadorController.copyNode==null}" actionListener="#{ClasificadorController.pasteNode()}" update="planArchivo messages" icon="fa fa-paste"/>
                 <p:separator/>
                 <p:menuitem value="Eliminar" ajax="false"  action="#{ClasificadorController.doBorrarNodo()}" onclick="if (!confirm('#{bundle.ConfirmacionMensaje}')) {
                             return false;
@@ -47,7 +47,7 @@
                     </h:panelGrid>
                     <f:facet name="footer">
                         <p:panelGrid columns="1" styleClass="ui-panelgrid-blank" >
-                            <p:commandButton ajax="false" value="#{bundle.GuardarBoton}" action="#{ClasificadorController.doGuardarNodo()}" icon="ui-icon-disk"/>
+                            <p:commandButton ajax="false" value="#{bundle.GuardarBoton}" action="#{ClasificadorController.doGuardarNodo()}" icon="fa fa-save"/>
                         </p:panelGrid>
                     </f:facet>
                 </p:panel>
