@@ -161,12 +161,13 @@ public class ClasificadorController implements Serializable {
         try {
             Clasificador st = (Clasificador) this.selectedNode.getData();
             clasificadorFacade.remove(st);
-            //this.expandNode(root, this.selectedNode.getParent());
+            this.cargarTree();
+            this.expandNode(root, this.selectedNode.getParent());
             JSFutil.addMessage(this.bundle.getString("UpdateSuccess"), JSFutil.StatusMessage.INFORMATION);
         } catch (Exception ex) {
             this.commonController.doExcepcion(ex);
         }
-        this.cargarTree();
+        
     }
 
     public String doGuardarNodo() {

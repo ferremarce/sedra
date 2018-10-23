@@ -12,7 +12,7 @@
 
     <ui:define name="content">
         <h:form id="formMain">
-            <p:tree draggable="true" droppable="true" dropCopyNode="true" id="planArchivo" filterBy="#{node}" animate="true" value="#{ClasificadorController.root}" var="node" dynamic="false" cache="false" selectionMode="single"  selection="#{ClasificadorController.selectedNode}">
+            <p:tree draggable="true" droppable="true" dropCopyNode="true" id="planArchivo" filterBy="#{node}" filterMatchMode="contains" animate="true" value="#{ClasificadorController.root}" var="node" dynamic="false" cache="false" selectionMode="single"  selection="#{ClasificadorController.selectedNode}">
                 <p:ajax event="dragdrop" listener="#{ClasificadorController.onDragDrop}" update="planArchivo messages" />
                 <p:treeNode expandedIcon="fa fa-folder-open" collapsedIcon="fa fa-folder">  
                     <h:outputText value="#{node.toString()}" />

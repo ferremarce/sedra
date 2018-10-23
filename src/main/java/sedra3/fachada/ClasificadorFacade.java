@@ -60,4 +60,14 @@ public class ClasificadorFacade extends AbstractFacade<Clasificador> {
         return tr;
     }
 
+    public Clasificador getFirstClasificador() {
+        Query q = em.createQuery("SELECT a FROM Clasificador a WHERE a.padre=0 ORDER BY a.denominacionClasificador");
+        q.setMaxResults(1);
+        List<Clasificador> tr = q.getResultList();
+        if (tr.size() > 0) {
+            return tr.get(0);
+        } else {
+            return null;
+        }
+    }
 }

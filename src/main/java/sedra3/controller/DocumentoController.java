@@ -15,7 +15,10 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
+import javax.faces.context.FacesContext;
+import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.UploadedFile;
@@ -28,6 +31,9 @@ import sedra3.modelo.Clasificador;
 import sedra3.modelo.Documento;
 import sedra3.modelo.DocumentoAdjunto;
 import sedra3.modelo.EstadoTramitacion;
+import sedra3.modelo.NotaSalida;
+import sedra3.modelo.Rol;
+import sedra3.modelo.TipoDocumento;
 import sedra3.modelo.Tramitacion;
 import sedra3.util.JSFutil;
 
@@ -60,11 +66,21 @@ public class DocumentoController implements Serializable {
     private List<UploadedFile> adjuntoDocumento;
     private String criterio;
     private Integer idClasificadorTmp;
+    private Clasificador clasificadorSeleccionado;
+    private List<NotaSalida> listaNotaSalida;
 
     /**
      * Creates a new instance of DocumentoController
      */
     public DocumentoController() {
+    }
+
+    public Clasificador getClasificadorSeleccionado() {
+        return clasificadorSeleccionado;
+    }
+
+    public void setClasificadorSeleccionado(Clasificador clasificadorSeleccionado) {
+        this.clasificadorSeleccionado = clasificadorSeleccionado;
     }
 
     public Integer getIdClasificadorTmp() {
@@ -281,5 +297,88 @@ public class DocumentoController implements Serializable {
         Clasificador c = (Clasificador) event.getTreeNode().getData();
         System.out.println("Seleccionado: " + c.toString());
         this.documento.setIdClasificador(c);
+    }
+
+    public void verNodeSelect(NodeSelectEvent event) {
+        JSFutil.addMessage("Seleccionado: " + event.getTreeNode().toString(), JSFutil.StatusMessage.INFORMATION);
+        this.clasificadorSeleccionado = (Clasificador) event.getTreeNode().getData();
+        this.listaDocumento = documentoFacade.getAllDocumentoPlanArchivo(this.clasificadorSeleccionado.getIdClasificador());
+        //this.listaNotaSalida = new ListDataModel(notaSalidaDAO.getAllNotaSalidaPlanArchivo(this.clasificadorSeleccionado.getIdClasificador()));
+        this.listaNotaSalida = new ArrayList<>();
+        if (this.listaDocumento.isEmpty() && this.listaNotaSalida.isEmpty()) {
+            JSFutil.addMessage("No hay Entradas ni Salidas...", JSFutil.StatusMessage.WARNING);
+        } else {
+            JSFutil.addMessage(this.listaDocumento.size() + " Entradas y " + this.listaNotaSalida.size() + " Salidas", JSFutil.StatusMessage.INFORMATION);
+        }
+    }
+
+    public void insertarTramitacion(Integer idDocumento) {
+        try {
+            Documento d = documentoFacade.find(idDocumento);
+            Tramitacion tramitacion = new Tramitacion();
+            //tramitacion.setArchivo(d.getArchivo());
+            tramitacion.setTipoArchivo(d.getTipoArchivo());
+            tramitacion.setTamanhoArchivo(d.getTamanhoArchivo());
+            tramitacion.setNombreArchivo(d.getNombreArchivo());
+            tramitacion.setIdRol(new Rol(18));//Rol de Archivo
+            tramitacion.setProcesadoArchivo(false);
+            tramitacion.setIdDocumento(d);
+            tramitacion.setFechaDerivacion(JSFutil.getFechaHoraActual());
+            //tramitacion.setIdUsuario(user);
+            tramitacion.setIdUsuarioRemitente(JSFutil.getUsuarioConectado());
+            tramitacion.setIdEstado(new EstadoTramitacion(1));
+            tramitacionFacade.create(tramitacion);
+            this.listaDocumento = documentoFacade.getAllDocumentoPlanArchivo(this.clasificadorSeleccionado.getIdClasificador());
+            JSFutil.addMessage("Se ha enviado el documento a Archivo. ", JSFutil.StatusMessage.INFORMATION);
+        } catch (Exception ex) {
+            //e.printStackTrace();
+            this.commonController.doExcepcion(ex);
+        }
+        //this.tramitacion = new Tramitacion();
+        //return null;
+    }
+
+    public void handleDirectFileUpload(FileUploadEvent event) {
+        this.adjuntoDocumento = new ArrayList<>();
+        this.adjuntoDocumento.add(event.getFile());
+    }
+
+    public void save() {
+        for (UploadedFile adjunto : this.adjuntoDocumento) {
+            this.documento = new Documento();
+//        this.documento.setArchivo(this.adjunto.getContents());
+            this.documento.setCerrado(false);
+            this.documento.setFechaDocumento(JSFutil.getFechaHoraActual());
+            this.documento.setNroEntrada("xxxx");
+            this.documento.setAsunto("Documento suelto: " + adjunto.getFileName());
+            this.documento.setFechaRegistro(JSFutil.getFechaHoraActual());
+            this.documento.setHoraRegistro(JSFutil.getFechaHoraActual());
+            this.documento.setIdClasificador(clasificadorSeleccionado);
+            this.documento.setIdTipoDocumento(new TipoDocumento(4));
+            this.documento.setIdUsuario(JSFutil.getUsuarioConectado());
+
+            try {
+                documentoFacade.create(documento);
+                this.listaDocumento = documentoFacade.getAllDocumentoPlanArchivo(this.clasificadorSeleccionado.getIdClasificador());
+                JSFutil.addMessage("Documento creado exitosamente. ", JSFutil.StatusMessage.INFORMATION);
+
+                //Grabar el archivo a disco
+                DocumentoAdjunto ap = new DocumentoAdjunto();
+                ap.setTipoArchivoMime(adjunto.getContentType());
+                ap.setTamanhoArchivo(BigInteger.valueOf(adjunto.getSize()));
+                ap.setNombreArchivo(JSFutil.sanitizeFilename(adjunto.getFileName()));
+                ap.setIdDocumento(documento);
+                //ap.setTipoAdjunto("PROYECTO");
+                ap.setFechaRegistro(JSFutil.getFechaHoraActual());
+                documentoAdjuntoFacade.create(ap);
+                int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(adjunto.getContents()), JSFutil.folderDocumento + ap.getIdDocumentoAdjunto() + "-" + JSFutil.sanitizeFilename(adjunto.getFileName()));
+                if (resultado != 0) {
+                    JSFutil.addMessage("No se ha podido guardar el adjunto debido a un error interno en el procesamiento del archivo. Se deshace el guardado del archivo.", JSFutil.StatusMessage.ERROR);
+                    documentoAdjuntoFacade.remove(ap);
+                }
+            } catch (Exception ex) {
+                this.commonController.doExcepcion(ex);
+            }
+        }
     }
 }

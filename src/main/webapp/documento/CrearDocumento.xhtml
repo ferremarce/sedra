@@ -93,7 +93,7 @@
                                 <p:commandButton  title="Descargar" value="#{bundle.DescargarBoton}" icon="fa fa-download" ajax="false">
                                     <p:fileDownload value="#{DownloadFile.downloadDocumentoAdjunto(expeAdj.idDocumentoAdjunto)}" />  
                                 </p:commandButton>
-                                <p:commandButton value="#{bundle.EliminarBoton}" icon="fa fa-minus-square" ajax="false" onclick="if (!confirm('#{bundle.ConfirmacionMensaje}')) {
+                                <p:commandButton immediate="true" value="#{bundle.EliminarBoton}" icon="fa fa-minus-square" ajax="false" onclick="if (!confirm('#{bundle.ConfirmacionMensaje}')) {
                                             return false;
                                         }" action="#{DocumentoController.doBorrarAdjunto(expeAdj.idDocumentoAdjunto)}"/>
                             </p:panelGrid>

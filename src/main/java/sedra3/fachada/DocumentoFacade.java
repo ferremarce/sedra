@@ -61,4 +61,12 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
         }
     }
 
+    public List<Documento> getAllDocumentoPlanArchivo(Integer clasificador) {
+        Query q = em.createQuery("SELECT a FROM Documento a WHERE a.idClasificador.idClasificador=:xCriterio");
+        q.setParameter("xCriterio", clasificador);
+        List<Documento> tr = q.getResultList();
+        return tr;
+
+    }
+
 }
