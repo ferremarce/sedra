@@ -20,40 +20,40 @@ label{
 }
 /* text colors */
 .Orange {
-    color: #EF6C00;
+    color: #EF6C00 !important;
 }
 .Purple {
-    color: #7E57C2;
+    color: #7E57C2 !important;
 }
 .Blue {
-    color: #0277BD;
+    color: #0277BD !important;
 }
 .Red {
-    color: #E53935;
+    color: #E53935 !important;
 }
 .Brown {
-    color: #6D4C41;
+    color: #6D4C41 !important;
 }
 .Lime {
-    color: #AFB42B;
+    color: #AFB42B !important;
 }
 .TealGreen {
-    color: #0097A7;
+    color: #0097A7 !important;
 }
 .Green {
-    color: #43A047;
+    color: #43A047 !important;
 }
 .DarkGreen {
-    color: #00897B;
+    color: #00897B !important;
 }
 .Leaden {
-    color: #444D58;
+    color: #444D58 !important;
 }
 .Pink {
-    color: #EC407A;
+    color: #EC407A !important;
 }
 .White {
-    color: #fff;
+    color: #fff !important;
 }
 .font1x{
     font-size: 1.1em !important;

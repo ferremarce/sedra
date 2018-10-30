@@ -18,8 +18,10 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import sedra3.fachada.DocumentoAdjuntoFacade;
 import sedra3.fachada.DocumentoFacade;
+import sedra3.fachada.NotaSalidaFacade;
 import sedra3.modelo.Documento;
 import sedra3.modelo.DocumentoAdjunto;
+import sedra3.modelo.NotaSalida;
 
 /**
  *
@@ -35,6 +37,8 @@ public class DownloadFile implements Serializable {
     DocumentoFacade documentoFacade;
     @Inject
     DocumentoAdjuntoFacade documentoAdjuntoFacade;
+    @Inject
+    NotaSalidaFacade notaSalidaFacade;
 
     private String pagina;
     private Integer id;
@@ -83,6 +87,19 @@ public class DownloadFile implements Serializable {
             return file;
         } else {
             System.out.println("ARCHIVO_NO_ENCONTRADO: " + pa.getClass() + " con ID " + pa.getIdDocumento());
+            JSFutil.addMessage("No dispone de adjuntos para visualizar...", JSFutil.StatusMessage.WARNING);
+            String noContent = "<html><h1>Sin adjunto...</></html>";
+            return new DefaultStreamedContent(new ByteArrayInputStream(noContent.getBytes()), "text/html", "No existe Archivo");
+        }
+    }
+    public StreamedContent downloadNotaSalida(Integer id) throws FileNotFoundException {
+        NotaSalida pa = notaSalidaFacade.find(id);
+        File archivo = new File(JSFutil.folderDocumento + pa.getIdNota() + "-" + pa.getNombreArchivo());
+        if (archivo.exists()) {
+            StreamedContent file = new DefaultStreamedContent(new FileInputStream(archivo), pa.getTipoArchivo(), pa.getNombreArchivo());
+            return file;
+        } else {
+            System.out.println("ARCHIVO_NO_ENCONTRADO: " + pa.getClass() + " con ID " + pa.getIdNota());
             JSFutil.addMessage("No dispone de adjuntos para visualizar...", JSFutil.StatusMessage.WARNING);
             String noContent = "<html><h1>Sin adjunto...</></html>";
             return new DefaultStreamedContent(new ByteArrayInputStream(noContent.getBytes()), "text/html", "No existe Archivo");

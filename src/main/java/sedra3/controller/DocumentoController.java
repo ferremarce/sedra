@@ -15,16 +15,14 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
-import javax.faces.context.FacesContext;
-import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.UploadedFile;
 import sedra3.fachada.AuditaFacade;
 import sedra3.fachada.DocumentoAdjuntoFacade;
 import sedra3.fachada.DocumentoFacade;
+import sedra3.fachada.NotaSalidaFacade;
 import sedra3.fachada.TramitacionFacade;
 import sedra3.modelo.Audita;
 import sedra3.modelo.Clasificador;
@@ -60,6 +58,8 @@ public class DocumentoController implements Serializable {
     DocumentoAdjuntoFacade documentoAdjuntoFacade;
     @Inject
     TramitacionFacade tramitacionFacade;
+    @Inject
+    NotaSalidaFacade notaSalidaFacade;
 
     private Documento documento;
     private List<Documento> listaDocumento;
@@ -73,6 +73,14 @@ public class DocumentoController implements Serializable {
      * Creates a new instance of DocumentoController
      */
     public DocumentoController() {
+    }
+
+    public List<NotaSalida> getListaNotaSalida() {
+        return listaNotaSalida;
+    }
+
+    public void setListaNotaSalida(List<NotaSalida> listaNotaSalida) {
+        this.listaNotaSalida = listaNotaSalida;
     }
 
     public Clasificador getClasificadorSeleccionado() {
@@ -303,8 +311,7 @@ public class DocumentoController implements Serializable {
         JSFutil.addMessage("Seleccionado: " + event.getTreeNode().toString(), JSFutil.StatusMessage.INFORMATION);
         this.clasificadorSeleccionado = (Clasificador) event.getTreeNode().getData();
         this.listaDocumento = documentoFacade.getAllDocumentoPlanArchivo(this.clasificadorSeleccionado.getIdClasificador());
-        //this.listaNotaSalida = new ListDataModel(notaSalidaDAO.getAllNotaSalidaPlanArchivo(this.clasificadorSeleccionado.getIdClasificador()));
-        this.listaNotaSalida = new ArrayList<>();
+        this.listaNotaSalida =notaSalidaFacade.getAllNotaSalidaPlanArchivo(this.clasificadorSeleccionado.getIdClasificador());
         if (this.listaDocumento.isEmpty() && this.listaNotaSalida.isEmpty()) {
             JSFutil.addMessage("No hay Entradas ni Salidas...", JSFutil.StatusMessage.WARNING);
         } else {

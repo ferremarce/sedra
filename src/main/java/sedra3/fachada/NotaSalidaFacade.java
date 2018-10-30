@@ -5,9 +5,11 @@
  */
 package sedra3.fachada;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import sedra3.modelo.NotaSalida;
 
 /**
@@ -28,5 +30,13 @@ public class NotaSalidaFacade extends AbstractFacade<NotaSalida> {
     public NotaSalidaFacade() {
         super(NotaSalida.class);
     }
-    
+
+    public List<NotaSalida> getAllNotaSalidaPlanArchivo(Integer clasificador) {
+        Query q = em.createQuery("SELECT a FROM NotaSalida a WHERE a.idClasificador.idClasificador=:xCriterio");
+        q.setParameter("xCriterio", clasificador);
+        List<NotaSalida> tr = q.getResultList();
+        return tr;
+
+    }
+
 }

@@ -11,6 +11,11 @@
     </ui:define>
 
     <ui:define name="content">
+        <style>
+            .ui-fileupload-content{
+                min-height: 50px;
+            }
+        </style>
         <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-4,ui-grid-col-8">
             <h:form id="formTree">
                 <p:tree draggable="true" droppable="true" dropCopyNode="true" id="planArchivo" filterBy="#{node}" filterMatchMode="contains" animate="true" value="#{ClasificadorController.root}" var="node" dynamic="false" cache="false" selectionMode="single"  selection="#{ClasificadorController.selectedNode}">
@@ -28,6 +33,7 @@
                               oncomplete="rc()">
                 </p:fileUpload>
                 <p:remoteCommand name="rc" update="formMain messages messagesError" actionListener="#{DocumentoController.save()}" />
+                <h:outputText value="Carpeta: "/>
                 <h:outputText rendered="#{DocumentoController.clasificadorSeleccionado!=null}" styleClass="Purple fontBold" value="#{ClasificadorController.obtenerRutaClasificador(DocumentoController.clasificadorSeleccionado.idClasificador)}"/>
                 <p:tabView>
                     <p:tab title="Entrada">
@@ -52,50 +58,57 @@
                                 <h:outputText value="#{item.asunto}"/>
                             </p:column>  
                             <p:column headerText="Acción" style="width:120px">
-                                <p:commandButton rendered="#{item.nombreArchivo!=null}" title="Descargar" value="#{bundle.DescargarBoton}" icon="fa fa-download" ajax="false">
-                                    <p:fileDownload value="#{DownloadFile.downloadDocumento(item.idDocumento)}" />  
-                                </p:commandButton>
-                                <p:commandButton ajax="false" title="#{bundle.VerBoton}" icon="fa fa-search" action="#{DocumentoController.doVerForm(item.idDocumento)}"/>
-                                <p:commandButton rendered="#{item.tramitacionList.size()==0}" ajax="true" 
-                                                 title="#{bundle.ArchivarBoton}" value="#{bundle.ArchivarBoton}" 
-                                                 update="@form"
-                                                 actionListener="#{DocumentoController.insertarTramitacion(item.idDocumento)}"/>
+                                <p:menuButton value="Opciones">
+                                    <p:menuitem ajax="false" title="#{bundle.VerBoton}" target="_new" value="#{bundle.VerBoton}" icon="fa fa-search" action="#{DocumentoController.doVerForm(item.idDocumento)}"/>
+                                    <p:menuitem ajax="false" rendered="#{item.nombreArchivo!=null}" icon="fa fa-download" value="#{bundle.DescargarBoton}">
+                                        <p:fileDownload value="#{DownloadFile.downloadDocumento(item.idDocumento)}" />  
+                                    </p:menuitem>
+                                    <p:menuitem rendered="#{item.tramitacionList.size()==0}" ajax="true" icon="fa fa-briefcase" 
+                                                title="#{bundle.ArchivarBoton}" value="#{bundle.ArchivarBoton}" 
+                                                update="@form"
+                                                actionListener="#{DocumentoController.insertarTramitacion(item.idDocumento)}"/>
+                                </p:menuButton>
                             </p:column>  
                         </p:dataTable>
                     </p:tab>
-                    <p:tab rendered="false" title="Salida">
-                        <p:panel header="Información de las Notas .::#{ClasificadorController.obtenerRutaClasificador(DocumentoController.clasificadorSeleccionado.idClasificador)}::.">
-                            <p:dataTable rendered="#{DocumentoController.clasificadorSeleccionado!=null}" id="dataTableSalida" var="item" value="#{DocumentoController.modelSalida}" scrollable="true" resizableColumns="true"  emptyMessage="#{bundle.SinRegistrosMensaje}">
-                                <p:column headerText="No. Sal./STR" style="width:70px" >  
-                                    <h:outputText value="#{item.numeroSalida}"/>
-                                    <p:separator/>
-                                    <h:outputText value="#{item.numeroSTR}"/>
-                                </p:column> 
-                                <p:column headerText="Tipo" style="width: 70">
-                                    <h:outputText value="#{item.idTipoNota.descripcionTipoNota}"/>                                            
-                                </p:column>
-                                <p:column headerText="Referencia/Rubro" style="width:210px" >  
-                                    <h:outputText value="#{item.referencia}"/>
-                                    <p:separator/>
-                                    <h:outputText value="#{item.rubro}"/>
-                                </p:column>  
-                                <p:column headerText="Enlazado con" style="width:200px" > 
-                                    <p:dataList value="#{NotaSalidaController.enlaceEntrada(item)}" var="valor" itemType="circle"> 
-                                        <p:column>
-                                            <p:commandLink style="color: red; font-weight: bold" title="Ver Documento" value="[Entrada] #{valor.idDocumento.nroEntrada}" ajax="false" action="#{DocumentoController.verSetup(valor.idDocumento.idDocumento,'/tramitacion/CrearDocumentoFromClasificador')}"/>  
-                                            <p:separator/>
-                                        </p:column>
-                                        <h:outputText value="#{valor.idDocumento.asunto.length()>30 ? valor.idDocumento.asunto.substring(0, 29): valor.idDocumento.asunto}..." />  
-                                    </p:dataList>
-                                </p:column> 
-                                <p:column headerText="Acción" style="width:80px">  
-                                    <p:commandButton title="Descargar" image="download" ajax="false">
-                                        <p:fileDownload value="#{NotaSalidaController.download(item.idNota)}" />  
-                                    </p:commandButton>
-                                    <p:commandButton ajax="false" title="#{bundle.VerBoton}" image="ver" action="#{NotaSalidaController.verSetup(item.idNota, '/tramitacion/CrearDocumentoFromClasificador')}"/>
-                                </p:column>                             
-                            </p:dataTable>
-                        </p:panel>
+                    <p:tab title="Salida">
+                        <p:dataTable rowIndexVar="indexSal" rendered="#{DocumentoController.clasificadorSeleccionado!=null}" id="dataTableSalida" var="itemSal" value="#{DocumentoController.listaNotaSalida}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                                     rows="50"
+                                     paginator="true"
+                                     filterEvent="enter"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,25,50,100">
+                            <f:facet name="header">
+                                Información de notas
+                            </f:facet>
+                            <p:column headerText="No. Sal./STR" style="width: 40px" >  
+                                <h:outputText value="#{itemSal.numeroSalida}"/>
+                                <p:separator rendered="#{itemSal.numeroStr.length()>0}"/>
+                                <h:outputText value="#{itemSal.numeroStr}"/>
+                            </p:column> 
+                            <p:column headerText="Referencia/Rubro"> 
+                                <h:outputText value="#{itemSal.idTipoNota.descripcionTipoNota}"/>
+                                <blockquote>
+                                    <h:outputText value="#{itemSal.referencia}"/>
+                                    <p:separator rendered="#{itemSal.rubro!=null}"/>
+                                    <h:outputText value="#{itemSal.rubro}"/>
+                                </blockquote>
+                            </p:column>  
+                            <p:column headerText="Enlazado con" > 
+                                <p:repeat rendered="#{itemSal.detalleNotaSalidaList.size()>0}" value="#{itemSal.detalleNotaSalidaList}" var="valor" > 
+                                    <p:commandLink styleClass="Red fontBold" target="_new" title="Ver Documento" value="[Entrada] #{valor.idDocumento.nroEntrada}" ajax="false" action="#{DocumentoController.doVerForm(valor.idDocumento.idDocumento)}"/> <br/>
+                                    <h:outputText value="#{valor.idDocumento.asunto.length()>80 ? valor.idDocumento.asunto.substring(0, 79): valor.idDocumento.asunto}..." />  
+                                </p:repeat>
+                            </p:column> 
+                            <p:column headerText="Acción" style="width:120px">
+                                <p:menuButton value="Opciones">
+                                    <p:menuitem ajax="false" title="#{bundle.VerBoton}" target="_new" value="#{bundle.VerBoton}" icon="fa fa-search" action="#{NotaSalidaController.doVerForm(itemSal.idNota)}"/>
+                                    <p:menuitem ajax="false" rendered="#{itemSal.nombreArchivo!=null}" icon="fa fa-download" value="#{bundle.DescargarBoton}">
+                                        <p:fileDownload value="#{DownloadFile.downloadNotaSalida(itemSal.idNota)}" />  
+                                    </p:menuitem>
+                                </p:menuButton>
+                            </p:column>                             
+                        </p:dataTable>
                     </p:tab>
                 </p:tabView>
             </h:form>
