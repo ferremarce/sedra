@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="title">
+        <h1>Listar Documentos Pendientes</h1>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            <p:tabView>
+                <p:tab title="Pendiente de Confirmación">
+                    <p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+                        <p:inputText id="criterio" value="#{TramitacionController.criterioBusqueda}"/>
+                        <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{TramitacionController.buscarPendiente(1)}" update="@form messages"/>
+                    </p:panelGrid>
+                    <p:watermark for="criterio" value="Asunto, Nro. Entrada"/>
+                    <p:dataTable rowIndexVar="index" id="dataTablePendiente" var="item" value="#{TramitacionController.listaTramitacionPendiente}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                                 rows="50"
+                                 paginator="true"
+                                 filterEvent="enter"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,25,50,100"
+                                 >
+                        <f:facet name="header">
+                            Tabla de Datos
+                        </f:facet>  
+                        <p:column headerText="F. Deriv." style="width:10%" >
+                            <h:outputText value="#{item.fechaDerivacion}">
+                                <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Documento">  
+                            <h:outputText value="Nro. Entrada: #{item.idDocumento.nroEntrada}"/>
+                            <blockquote>
+                                <h:outputText styleClass="Brown fontBold" value="#{item.idDocumento.asunto}"/>
+                            </blockquote>
+                        </p:column>
+                        <p:column headerText="Dependencia" style="width:10%" >  
+                            <h:outputText value="#{item.remitidoA}"/><br/>
+                            <h:outputText styleClass="fontBold" value="[#{item.idRol.descripcionRol}]"/>
+                        </p:column>
+                        <p:column headerText="Observación" style="width: 20%" >  
+                            <h:outputText value="#{item.observacion}"/>
+                        </p:column>
+                        <p:column headerText="Adjunto" style="width: 10%">  
+                            <p:commandButton rendered="#{item.nombreArchivo!=null}" title="Descargar" icon="fa fa-download" ajax="false">
+                                <p:fileDownload value="#{DownloadFile.downloadDocumentoTramite(item.idTramitacion)}" />  
+                            </p:commandButton>
+                            <h:outputText value="#{item.nombreArchivo!=null ? item.nombreArchivo:'Sin archivo'}"/>
+                        </p:column>   
+                        <p:column width="130">
+                            <f:facet name="header">
+                                <h:outputText value="Acción"/>
+                            </f:facet>
+                            <p:menuButton value="Opciones">
+                                <p:menuitem ajax="false" title="#{bundle.RechazarBoton}" value="#{bundle.RechazarBoton}" icon="fa fa-remove" action="#{TramitacionController.rechazaSetup(item.idTramitacion)}"/>
+                                <p:menuitem ajax="false" title="#{bundle.ConfirmarBoton}" value="#{bundle.ConfirmarBoton}" icon="fa fa-check-square"  onclick="if (!confirm('#{bundle.ConfirmacionMensaje}')) {
+                                            return false;
+                                        }" action="#{TramitacionController.confirmaTramite(item.idTramitacion)}"/>
+                            </p:menuButton>
+                        </p:column>
+                    </p:dataTable>
+                </p:tab>
+                <p:tab title="Pendientes de Tramitación">
+
+                </p:tab>
+            </p:tabView>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

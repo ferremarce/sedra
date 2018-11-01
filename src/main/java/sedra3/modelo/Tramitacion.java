@@ -322,5 +322,16 @@ public class Tramitacion implements Serializable {
     public String toString() {
         return "sedra3.modelo.Tramitacion[ idTramitacion=" + idTramitacion + " ]";
     }
-    
+
+    public String toAudita() {
+        return "[Id=" + this.idTramitacion + "]"
+                + "[NombreArchivo=" + this.nombreArchivo + "]"
+                + "[Nota Breve=" + this.notaBreve + "]"
+                + "[RemitidoA=" + this.remitidoA + "]"
+                + "[RemitidoPor=" + this.remitidoPor + "]"
+                + "[DerivadoEl=" + this.fechaDerivacion + "]"
+                + "[Estado=" + this.idEstado + "]"
+                + "[Rol/Oficina=" + this.idRol + "]"
+                + "[Nro.Entrada=" + this.idDocumento.getIdDocumento() + "]";
+    }
 }

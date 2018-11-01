@@ -18,7 +18,7 @@
                 <p:commandButton immediate="true" value="#{bundle.NuevoBoton}" icon="fa fa-plus" ajax="false" action="#{DocumentoController.createSetup()}"/>
                 <p:commandButton immediate="true" value="#{bundle.ListarBoton}" icon="fa fa-th-list" onclick="PF('statusDialog').show()" ajax="false" action="#{DocumentoController.doRefrescar()}"/>
             </p:panelGrid>
-            <p:watermark for="criterio" value="Buscar..."/>
+            <p:watermark for="criterio" value="Asunto, Nro. Entrada"/>
             <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                          rows="50"
                          paginator="true"
@@ -29,13 +29,13 @@
                 <f:facet name="header">
                     Tabla de Datos
                 </f:facet>  
-                <p:column headerText="Nro. Ent." style="width:50px" >  
+                <p:column headerText="Nro. Ent." style="width:5%" >  
                     <p:commandLink rendered="#{item.cerrado==false}" title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
                         <h:outputText title="#{item.idDocumento}" styleClass="fontBold" value=" #{item.nroEntrada}"/>
                     </p:commandLink>
                     <h:outputText rendered="#{item.cerrado==true}" title="#{item.idDocumento}" value=" #{item.nroEntrada}"/>
                 </p:column>  
-                <p:column headerText="F. Doc." style="width:80px" >
+                <p:column headerText="F. Doc." style="width:10%" >
                     <h:outputText value="#{item.fechaDocumento}">
                         <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
                     </h:outputText>
@@ -47,7 +47,7 @@
                         <h:outputText styleClass="Brown fontBold" value="#{item.asunto}"/>
                     </blockquote>
                 </p:column>  
-                <p:column headerText="F. Ing." style="width:80px" >  
+                <p:column headerText="F. Ing." style="width:10%" >  
                     <h:outputText value="#{item.fechaIngreso}">
                         <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
                     </h:outputText>

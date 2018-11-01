@@ -5,9 +5,11 @@
  */
 package sedra3.fachada;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import sedra3.modelo.Tramitacion;
 
 /**
@@ -28,5 +30,20 @@ public class TramitacionFacade extends AbstractFacade<Tramitacion> {
     public TramitacionFacade() {
         super(Tramitacion.class);
     }
-    
+
+    public List<Tramitacion> getAllTramitacionPendientes(Integer idRol, String criterio, Integer estado) {
+        Query q = em.createQuery("SELECT a FROM Tramitacion a WHERE a.idRol.idRol=:xIdRol AND a.idEstado.idEstado=:xEstado AND a.idDocumento.cerrado=:xCerrado AND (UPPER(a.idDocumento.asunto) LIKE :xCriterio OR UPPER(a.idDocumento.nroEntrada) LIKE :xCriterio) ORDER BY a.idTramitacion");
+        q.setParameter("xIdRol", idRol);
+        q.setParameter("xCerrado", Boolean.FALSE);
+        q.setParameter("xEstado", estado);
+        //q.setMaxResults(100);
+        if (criterio.compareTo("") != 0) {
+            q.setParameter("xCriterio", "%" + criterio.toUpperCase() + "%");
+        } else {
+            q.setParameter("xCriterio", "123456");
+        }
+        List<Tramitacion> tr = q.getResultList();
+        return tr;
+
+    }
 }
