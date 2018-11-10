@@ -9,10 +9,16 @@
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <h:outputStylesheet library="css" name="style.css"  />
+        <h:outputScript library="js" name="primefaces.js" />
         <title>#{bundle.TituloSistema}</title>
     </h:head>
 
     <h:body>
+        <style>
+            .ui-clock{
+                border: none !important;
+            }
+        </style>
         <p:idleMonitor timeout="#{CommonController.tiempoSesionActiva}" >
             <p:ajax global="true" event="idle" listener="#{LoginManager.doLogout()}" oncomplete="alert('La sesión del usuario ha expirado. Para acceder nuevamente haga click en OK')"/>
         </p:idleMonitor>
@@ -31,6 +37,23 @@
             </p:link>
             <h:form>
                 <p:menubar model="#{MenuController.model}"/> 
+                <p:toolbar>  
+                    <f:facet name="left">
+                        <p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+                            <p:outputPanel>
+                                <h:outputText styleClass="Green" value="Usuario: #{LoginManager.usuarioLogeado.usuario}"/> 
+                                |
+                                <p:clock class="ui-panelgrid-blank" timeZone="#{LoginManager.myTimeZone}" pattern="EEEEE, dd/MMM/yyyy HH:mm:ss" mode="server" />
+                            </p:outputPanel>
+                        </p:panelGrid>
+                    </f:facet>
+                    <f:facet name="right">
+                        <p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+                            <p:commandButton ajax="false" icon="ui-icon ui-icon-tag"  value="Cambio de Contraseña" action="#{LoginManager.doCambiarContrasenhaForm()}"/>
+                            <p:commandButton ajax="false" icon="ui-icon ui-icon-closethick" value="Salir" action="#{LoginManager.doLogout()}"/>
+                        </p:panelGrid>
+                    </f:facet>
+                </p:toolbar>  
             </h:form>
             <ui:insert name="title">
             </ui:insert>
