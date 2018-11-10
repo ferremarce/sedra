@@ -5,13 +5,17 @@
  */
 package sedra3.controller;
 
+import java.io.ByteArrayInputStream;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import javax.inject.Inject;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 import sedra3.fachada.AuditaFacade;
 import sedra3.fachada.ClasificadorFacade;
 import sedra3.fachada.TramitacionFacade;
@@ -50,11 +54,37 @@ public class TramitacionController implements Serializable {
     private List<Tramitacion> listaTramitacionConfirmado;
     private String criterioBusqueda = "%";
     private Tramitacion[] selectedTramitacion;
+    private List<Tramitacion> listSelectedTramitacion;
+    private UploadedFile adjunto;
 
     /**
      * Creates a new instance of TramitacionController
      */
     public TramitacionController() {
+    }
+
+    public UploadedFile getAdjunto() {
+        return adjunto;
+    }
+
+    public void setAdjunto(UploadedFile adjunto) {
+        this.adjunto = adjunto;
+    }
+
+    public List<Tramitacion> getListSelectedTramitacion() {
+        return listSelectedTramitacion;
+    }
+
+    public void setListSelectedTramitacion(List<Tramitacion> listSelectedTramitacion) {
+        this.listSelectedTramitacion = listSelectedTramitacion;
+    }
+
+    public Tramitacion[] getSelectedTramitacion() {
+        return selectedTramitacion;
+    }
+
+    public void setSelectedTramitacion(Tramitacion[] selectedTramitacion) {
+        this.selectedTramitacion = selectedTramitacion;
     }
 
     public String getCriterioBusqueda() {
@@ -125,12 +155,16 @@ public class TramitacionController implements Serializable {
             }
         } else {
             this.listaTramitacionConfirmado = tramitacionFacade.getAllTramitacionPendientes(JSFutil.getUsuarioConectado().getIdRol().getIdRol(), this.criterioBusqueda, estado);
-            if (this.listaTramitacionPendiente.isEmpty()) {
+            if (this.listaTramitacionConfirmado.isEmpty()) {
                 JSFutil.addMessage("No hay resultados...", JSFutil.StatusMessage.WARNING);
             } else {
                 JSFutil.addMessage(this.listaTramitacionConfirmado.size() + " pendientes para tramitación", JSFutil.StatusMessage.INFORMATION);
             }
         }
+    }
+    public void buscarAllPendiente() {
+        this.buscarPendiente(1);
+        this.buscarPendiente(3);
     }
 
     public String rechazaSetup(Integer idTramitacion) {
@@ -191,6 +225,74 @@ public class TramitacionController implements Serializable {
             commonController.doExcepcion(ex);
         }
         this.buscarPendiente(1);
+        return "/tramitacion/ListarDocumentoPendiente";
+        //return null;
+    }
+
+    public String derivaMultipleSetup() {
+        if (this.selectedTramitacion.length == 0) {
+            JSFutil.addMessage("Debe seleccionar al menos un documento para tramitar", JSFutil.StatusMessage.WARNING);
+            return "";
+        }
+        this.listSelectedTramitacion = (List<Tramitacion>) JSFutil.arrayToList(this.selectedTramitacion);
+        this.tramitacion = new Tramitacion();
+        //this.tramitacion.setIdDocumento(tramitacionActual.getIdDocumento());
+        this.tramitacion.setFechaDerivacion(JSFutil.getFechaHoraActual());
+        return "/tramitacion/DerivarDocumento";
+    }
+
+    public void handleFileUpload(FileUploadEvent event) {
+        this.adjunto = event.getFile();
+    }
+
+    public String create() {
+        try {
+            Tramitacion tramTemp;
+            for (Tramitacion tram : this.selectedTramitacion) {
+                tramTemp = new Tramitacion();
+                if (this.adjunto != null) {
+                    //tramTemp.setArchivo(this.adjunto.getContents());
+                    tramTemp.setTipoArchivo(this.adjunto.getContentType());
+                    tramTemp.setTamanhoArchivo(BigInteger.valueOf(this.adjunto.getSize()));
+                    tramTemp.setNombreArchivo(this.adjunto.getFileName());
+                }
+                tram.setIdEstado(new EstadoTramitacion(100));
+                tram.setIdUsuario(JSFutil.getUsuarioConectado());
+                tram.setFechaSalida(JSFutil.getFechaHoraActual());
+                tram.setHoraSalida(JSFutil.getFechaHoraActual());
+                tramitacionFacade.edit(tram);
+
+                tramTemp.setFechaDerivacion(this.tramitacion.getFechaDerivacion());
+                tramTemp.setIdDocumento(tram.getIdDocumento());
+                tramTemp.setIdRol(this.tramitacion.getIdRol());
+                tramTemp.setNotaBreve(this.tramitacion.getNotaBreve());
+                tramTemp.setRemitidoA(this.tramitacion.getRemitidoA());
+                tramTemp.setObservacion(this.tramitacion.getObservacion());
+                tramTemp.setProcesadoArchivo(false);
+
+                tramTemp.setIdEstado(new EstadoTramitacion(1));
+                tramTemp.setRemitidoPor(JSFutil.getUsuarioConectado().getUsuario());
+                tramTemp.setIdUsuarioRemitente(JSFutil.getUsuarioConectado());
+                tramTemp.setFechaRegistro(JSFutil.getFechaHoraActual());
+                tramTemp.setHoraRegistro(JSFutil.getFechaHoraActual());
+
+                tramitacionFacade.create(tramTemp);
+                auditaFacade.create(new Audita("TRAMITACION", "Tramitacion creada exitosamente.", JSFutil.getFechaHoraActual(), tramTemp.toAudita(), JSFutil.getUsuarioConectado()));
+                //Grabar el archivo a disco
+                if (this.adjunto != null) {
+                    int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(this.adjunto.getContents()), JSFutil.folderDocumento + tramTemp.getIdTramitacion() + "-" + this.adjunto.getFileName());
+                    if (resultado != 0) {
+                        JSFutil.addMessage("No se ha podido guardar el adjunto debido a un error interno en el procesamiento del archivo. Se deshace el guardado del archivo.", JSFutil.StatusMessage.ERROR);
+                    }
+                }
+
+            }
+            this.selectedTramitacion = null;
+            JSFutil.addMessage("Tramitacion creada exitosamente. ",JSFutil.StatusMessage.INFORMATION);
+        } catch (Exception ex) {
+            commonController.doExcepcion(ex);
+        }
+        this.buscarPendiente(3);
         return "/tramitacion/ListarDocumentoPendiente";
         //return null;
     }

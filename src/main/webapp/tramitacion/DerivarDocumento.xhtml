@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="title">
+        <h1>Derivar Documento</h1>
+    </ui:define>
+
+    <ui:define name="content">
+         <style>
+            .ui-fileupload-content{
+                min-height: 50px;
+            }
+        </style>
+        <h:form id="formMain">
+            <p:messages showDetail="true" />
+            <p:dataList value="#{TramitacionController.listSelectedTramitacion}" var="item" type="ordered">  
+                <f:facet name="header">
+                    Documentos
+                </f:facet>
+                <h:outputText styleClass="Purple fontBold font1x" value="#{item.idDocumento.nroEntrada}, #{item.idDocumento.asunto}"/>
+                <h:outputText value=" Remitente: [#{item.idUsuarioRemitente.usuario}]"/>                  
+            </p:dataList> 
+            <p:panel header="Información de la Tramitación">
+                <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-4,ui-grid-col-8">
+                    <p:outputLabel for="fechaDerivacion" value="Fecha de Derivación:"/>
+                    <p:calendar navigator="true" id="fechaDerivacion" value="#{TramitacionController.tramitacion.fechaDerivacion}" pattern="dd/MM/yyyy" title="Fecha Derivación" required="true" requiredMessage="Fecha Derivación"/>
+                    <p:outputLabel for="idRol" value="Dependencia:"/>
+                    <p:selectManyMenu id="idRol" value="#{TramitacionController.tramitacion.idRol}" required="true" requiredMessage="Rol" filter="true" filterMatchMode="contains" showCheckbox="true" >
+                        <f:selectItems value="#{RolController.rolSetList}"/>
+                    </p:selectManyMenu>
+                    <p:outputLabel for="notaBreve" value="Nota Breve:"/>
+                    <p:inputText id="notaBreve" value="#{TramitacionController.tramitacion.notaBreve}" title="Nota Breve" />
+                    <p:outputLabel for="remitidoA" value="Remitido a:"/>
+                    <p:inputText id="remitidoA" value="#{TramitacionController.tramitacion.remitidoA}" title="RemitidoA" />
+                    <p:outputLabel for="observaciones"  value="Observaciones:"/>
+                    <p:inputTextarea rows="3"  id="observaciones" value="#{TramitacionController.tramitacion.observacion}" title="Observaciones" />
+                    <p:outputLabel for="downAdjunto" value="Adjunto:"/>
+                    <p:panelGrid id="downAdjunto" columns="1">
+                        <p:fileUpload id="adjunto" label="#{bundle.SeleccionarBoton}" cancelLabel="#{bundle.EliminarBoton}" uploadLabel="#{bundle.AgregarBoton}" 
+                                      fileUploadListener="#{TramitacionController.handleFileUpload}"
+                                      mode="advanced"
+                                      required="true"
+                                      requiredMessage="Adjunto"
+                                      update="downAdjunto"
+                                      />
+                        <h:outputText value="Archivo Adjuntado: #{TramitacionController.adjunto.fileName}  "/>
+                        <p:commandButton style="width: 40%" value="Ver Adjunto" immediate="true" rendered="#{TramitacionController.adjunto!=null}" title="Ver Adjunto" icon="fa fa-download"  ajax="false">
+                            <p:fileDownload value="#{CommonController.downloadAdjuntoTMP(TramitacionController.adjunto)}"/>  
+                        </p:commandButton>
+                    </p:panelGrid>
+                </p:panelGrid>
+                <f:facet name="footer">
+                    <p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+                        <p:commandButton icon="fa fa-save" action="#{TramitacionController.create()}" ajax="false"  value="#{bundle.DerivarBoton}" title="#{bundle.DerivarBoton}"/>  
+                        <p:commandButton immediate="true"  icon="fa fa-sign-out"  action="#{TramitacionController.listPendientesSetup()}" ajax="false"  value="#{bundle.CancelarBoton}" title="#{bundle.CancelarBoton}"/>  
+                    </p:panelGrid>
+                </f:facet>
+            </p:panel>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -484,5 +485,9 @@ public class JSFutil implements Serializable {
             Logger.getLogger(JSFutil.class.getName()).log(Level.SEVERE, null, ex);
             return Boolean.FALSE;
         }
+    }
+    public static List<?> arrayToList(Object[] list) {
+        List<Object> miLista = Arrays.asList(list);
+        return miLista;
     }
 }
