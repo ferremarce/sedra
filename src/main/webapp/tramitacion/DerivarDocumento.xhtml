@@ -30,7 +30,7 @@
                     <p:outputLabel for="fechaDerivacion" value="Fecha de Derivación:"/>
                     <p:calendar navigator="true" id="fechaDerivacion" value="#{TramitacionController.tramitacion.fechaDerivacion}" pattern="dd/MM/yyyy" title="Fecha Derivación" required="true" requiredMessage="Fecha Derivación"/>
                     <p:outputLabel for="idRol" value="Dependencia:"/>
-                    <p:selectManyMenu id="idRol" value="#{TramitacionController.tramitacion.idRol}" required="true" requiredMessage="Rol" filter="true" filterMatchMode="contains" showCheckbox="true" >
+                    <p:selectManyMenu id="idRol" value="#{TramitacionController.selectedRol}" required="true" requiredMessage="Rol" filter="true" filterMatchMode="contains" showCheckbox="true" >
                         <f:selectItems value="#{RolController.rolSetList}"/>
                     </p:selectManyMenu>
                     <p:outputLabel for="notaBreve" value="Nota Breve:"/>

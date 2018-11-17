@@ -21,6 +21,7 @@ import sedra3.fachada.ClasificadorFacade;
 import sedra3.fachada.TramitacionFacade;
 import sedra3.modelo.Audita;
 import sedra3.modelo.EstadoTramitacion;
+import sedra3.modelo.Rol;
 import sedra3.modelo.Tramitacion;
 import sedra3.util.JSFutil;
 
@@ -55,12 +56,21 @@ public class TramitacionController implements Serializable {
     private String criterioBusqueda = "%";
     private Tramitacion[] selectedTramitacion;
     private List<Tramitacion> listSelectedTramitacion;
+    private Rol[] selectedRol;
     private UploadedFile adjunto;
 
     /**
      * Creates a new instance of TramitacionController
      */
     public TramitacionController() {
+    }
+
+    public Rol[] getSelectedRol() {
+        return selectedRol;
+    }
+
+    public void setSelectedRol(Rol[] selectedRol) {
+        this.selectedRol = selectedRol;
     }
 
     public UploadedFile getAdjunto() {
@@ -162,6 +172,7 @@ public class TramitacionController implements Serializable {
             }
         }
     }
+
     public void buscarAllPendiente() {
         this.buscarPendiente(1);
         this.buscarPendiente(3);
@@ -236,6 +247,7 @@ public class TramitacionController implements Serializable {
         }
         this.listSelectedTramitacion = (List<Tramitacion>) JSFutil.arrayToList(this.selectedTramitacion);
         this.tramitacion = new Tramitacion();
+        this.selectedRol = new Rol[0];
         //this.tramitacion.setIdDocumento(tramitacionActual.getIdDocumento());
         this.tramitacion.setFechaDerivacion(JSFutil.getFechaHoraActual());
         return "/tramitacion/DerivarDocumento";
@@ -249,46 +261,48 @@ public class TramitacionController implements Serializable {
         try {
             Tramitacion tramTemp;
             for (Tramitacion tram : this.selectedTramitacion) {
-                tramTemp = new Tramitacion();
-                if (this.adjunto != null) {
-                    //tramTemp.setArchivo(this.adjunto.getContents());
-                    tramTemp.setTipoArchivo(this.adjunto.getContentType());
-                    tramTemp.setTamanhoArchivo(BigInteger.valueOf(this.adjunto.getSize()));
-                    tramTemp.setNombreArchivo(this.adjunto.getFileName());
-                }
+
                 tram.setIdEstado(new EstadoTramitacion(100));
                 tram.setIdUsuario(JSFutil.getUsuarioConectado());
                 tram.setFechaSalida(JSFutil.getFechaHoraActual());
                 tram.setHoraSalida(JSFutil.getFechaHoraActual());
                 tramitacionFacade.edit(tram);
 
-                tramTemp.setFechaDerivacion(this.tramitacion.getFechaDerivacion());
-                tramTemp.setIdDocumento(tram.getIdDocumento());
-                tramTemp.setIdRol(this.tramitacion.getIdRol());
-                tramTemp.setNotaBreve(this.tramitacion.getNotaBreve());
-                tramTemp.setRemitidoA(this.tramitacion.getRemitidoA());
-                tramTemp.setObservacion(this.tramitacion.getObservacion());
-                tramTemp.setProcesadoArchivo(false);
+                for (Rol rolDerivado : selectedRol) {
+                    tramTemp = new Tramitacion();
+                    if (this.adjunto != null) {
+                        //tramTemp.setArchivo(this.adjunto.getContents());
+                        tramTemp.setTipoArchivo(this.adjunto.getContentType());
+                        tramTemp.setTamanhoArchivo(BigInteger.valueOf(this.adjunto.getSize()));
+                        tramTemp.setNombreArchivo(this.adjunto.getFileName());
+                    }
+                    tramTemp.setFechaDerivacion(this.tramitacion.getFechaDerivacion());
+                    tramTemp.setIdDocumento(tram.getIdDocumento());
+                    tramTemp.setIdRol(rolDerivado);
+                    tramTemp.setNotaBreve(this.tramitacion.getNotaBreve());
+                    tramTemp.setRemitidoA(this.tramitacion.getRemitidoA());
+                    tramTemp.setObservacion(this.tramitacion.getObservacion());
+                    tramTemp.setProcesadoArchivo(false);
 
-                tramTemp.setIdEstado(new EstadoTramitacion(1));
-                tramTemp.setRemitidoPor(JSFutil.getUsuarioConectado().getUsuario());
-                tramTemp.setIdUsuarioRemitente(JSFutil.getUsuarioConectado());
-                tramTemp.setFechaRegistro(JSFutil.getFechaHoraActual());
-                tramTemp.setHoraRegistro(JSFutil.getFechaHoraActual());
+                    tramTemp.setIdEstado(new EstadoTramitacion(1));
+                    tramTemp.setRemitidoPor(JSFutil.getUsuarioConectado().getUsuario());
+                    tramTemp.setIdUsuarioRemitente(JSFutil.getUsuarioConectado());
+                    tramTemp.setFechaRegistro(JSFutil.getFechaHoraActual());
+                    tramTemp.setHoraRegistro(JSFutil.getFechaHoraActual());
 
-                tramitacionFacade.create(tramTemp);
-                auditaFacade.create(new Audita("TRAMITACION", "Tramitacion creada exitosamente.", JSFutil.getFechaHoraActual(), tramTemp.toAudita(), JSFutil.getUsuarioConectado()));
-                //Grabar el archivo a disco
-                if (this.adjunto != null) {
-                    int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(this.adjunto.getContents()), JSFutil.folderDocumento + tramTemp.getIdTramitacion() + "-" + this.adjunto.getFileName());
-                    if (resultado != 0) {
-                        JSFutil.addMessage("No se ha podido guardar el adjunto debido a un error interno en el procesamiento del archivo. Se deshace el guardado del archivo.", JSFutil.StatusMessage.ERROR);
+                    tramitacionFacade.create(tramTemp);
+                    auditaFacade.create(new Audita("TRAMITACION", "Tramitacion creada exitosamente.", JSFutil.getFechaHoraActual(), tramTemp.toAudita(), JSFutil.getUsuarioConectado()));
+                    //Grabar el archivo a disco
+                    if (this.adjunto != null) {
+                        int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(this.adjunto.getContents()), JSFutil.folderDocumento + tramTemp.getIdTramitacion() + "-" + this.adjunto.getFileName());
+                        if (resultado != 0) {
+                            JSFutil.addMessage("No se ha podido guardar el adjunto debido a un error interno en el procesamiento del archivo. Se deshace el guardado del archivo.", JSFutil.StatusMessage.ERROR);
+                        }
                     }
                 }
-
             }
             this.selectedTramitacion = null;
-            JSFutil.addMessage("Tramitacion creada exitosamente. ",JSFutil.StatusMessage.INFORMATION);
+            JSFutil.addMessage("Tramitacion creada exitosamente. ", JSFutil.StatusMessage.INFORMATION);
         } catch (Exception ex) {
             commonController.doExcepcion(ex);
         }
