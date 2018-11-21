@@ -140,7 +140,7 @@ public class TramitacionController implements Serializable {
     public String crearDocumentoFromClasificadorSetup() {
         this.documentoController.setClasificadorSeleccionado(clasificadorFacade.getFirstClasificador());
         this.clasificadorController.setSelectedNode(null);
-        this.clasificadorController.cargarTree();
+        this.clasificadorController.cargarTree(Boolean.FALSE);
         return "/tramitacion/CrearDocumentoFromClasificador";
     }
 
@@ -309,5 +309,17 @@ public class TramitacionController implements Serializable {
         this.buscarPendiente(3);
         return "/tramitacion/ListarDocumentoPendiente";
         //return null;
+    }
+    public String listSeguimientoSetup() {
+//        this.model = null;
+//        this.modelDocumento = null;
+        this.criterioBusqueda = "";
+        return "/tramitacion/ListarSeguimiento";
+    }
+    public String listDesbloqueoSetup() {
+//        this.model = null;
+//        this.modelDocumento = null;
+//        this.criterioBusqueda = "";
+        return "/tramitacion/ListarDesbloqueoDocumento";
     }
 }

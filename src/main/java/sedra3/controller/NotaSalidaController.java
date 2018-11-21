@@ -36,4 +36,11 @@ public class NotaSalidaController implements Serializable {
         //this.documento = documentoFacade.find(idExpediente);
         return "/documento/VerDocumento?faces-redirect=true";
     }
+    public String listNotaSalidaSetup() {
+//        if (this.tipoNota != null) {
+//            this.buscarNotaSalida();
+//        }
+//        this.tipoNota = new TipoNota(1);
+        return "/notasalida/ListarNotaSalida";
+    }
 }

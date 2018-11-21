@@ -144,14 +144,14 @@ public class DocumentoController implements Serializable {
         this.documento.setFechaIngreso(JSFutil.getFechaHoraActual());
         this.documento.setFechaLimite(JSFutil.getFechaHoraActual());
         this.documento.setAnho(Calendar.getInstance(JSFutil.getMyTimeZone()).get(Calendar.YEAR));
-        this.clasificadorController.cargarTree();
+        this.clasificadorController.cargarTree(Boolean.FALSE);
         return "/documento/CrearDocumento";
     }
 
     public String editSetup(Integer idDocumento) {
         this.documento = documentoFacade.find(idDocumento);
         this.adjuntoDocumento = new ArrayList<>();
-        this.clasificadorController.cargarTree();
+        this.clasificadorController.cargarTree(Boolean.FALSE);
         return "/documento/CrearDocumento";
     }
 
@@ -387,5 +387,17 @@ public class DocumentoController implements Serializable {
                 this.commonController.doExcepcion(ex);
             }
         }
+    }
+    public String listAdjuntaDocumentoSetup() {
+//        this.model = null;
+//        this.criterioBusqueda = "";
+        return "/tramitacion/ListarDocumentoAdjunto";
+    }
+    public String listLocalizarDocumentoSetup() {
+//        this.criterioBusqueda = "";
+//        this.model = null;
+//        this.tmpFechaDesde = new Date();
+//        this.tmpFechaHasta = new Date();
+        return "/documento/LocalizarDocumento";
     }
 }

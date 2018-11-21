@@ -28,19 +28,19 @@ import sedra3.util.JSFutil;
 @Named(value = "ClasificadorController")
 @SessionScoped
 public class ClasificadorController implements Serializable {
-
+    
     private static final Logger LOG = Logger.getLogger(DocumentoController.class.getName());
     ResourceBundle bundle = ResourceBundle.getBundle("propiedades.bundle", JSFutil.getmyLocale());
-
+    
     @Inject
     ClasificadorFacade clasificadorFacade;
     @Inject
     CommonController commonController;
-
+    
     private Clasificador clasificador;
     private List<Clasificador> listaClasificador;
     private String criterio;
-
+    
     private TreeNode selectedNode;
     private TreeNode root;
     private TreeNode copyNode;
@@ -50,47 +50,47 @@ public class ClasificadorController implements Serializable {
      */
     public ClasificadorController() {
     }
-
+    
     public TreeNode getCopyNode() {
         return copyNode;
     }
-
+    
     public void setCopyNode(TreeNode copyNode) {
         this.copyNode = copyNode;
     }
-
+    
     public TreeNode getSelectedNode() {
         return selectedNode;
     }
-
+    
     public void setSelectedNode(TreeNode selectedNode) {
         this.selectedNode = selectedNode;
     }
-
+    
     public ClasificadorFacade getClasificadorFacade() {
         return clasificadorFacade;
     }
-
+    
     public void setClasificadorFacade(ClasificadorFacade clasificadorFacade) {
         this.clasificadorFacade = clasificadorFacade;
     }
-
+    
     public TreeNode getRoot() {
         return root;
     }
-
+    
     public void setRoot(TreeNode root) {
         this.root = root;
     }
-
+    
     public Clasificador getClasificador() {
         return clasificador;
     }
-
+    
     public void setClasificador(Clasificador clasificador) {
         this.clasificador = clasificador;
     }
-
+    
     public String obtenerRutaClasificador(Integer idClasificador) {
         String cadena = "";
         Integer padre;
@@ -106,7 +106,7 @@ public class ClasificadorController implements Serializable {
         }
         return cadena;
     }
-
+    
     public Integer getPadre(Clasificador c) {
         for (Clasificador n : clasificadorFacade.findAll()) {
             if (n.getIdClasificador().compareTo(c.getIdClasificador()) == 0) {
@@ -115,24 +115,31 @@ public class ClasificadorController implements Serializable {
         }
         return 0;
     }
-
+    
     public String listPlanArchivoSetup() {
         this.selectedNode = null;
-        this.cargarTree();
+        this.cargarTree(Boolean.FALSE);
         return "/clasificador/PlanDeArchivo";
     }
-
-    public void cargarTree() {
-        this.root = new DefaultTreeNode("Root", null);
-        for (Clasificador st : clasificadorFacade.getAllClasificadorPadres()) {
-            TreeNode raiz = new DefaultTreeNode(st, root);
-            this.buildTree(st, raiz);
+    
+    public void cargarTree(Boolean forzar) {
+        if (forzar) {
+            this.root = new DefaultTreeNode("Root", null);
+            for (Clasificador st : clasificadorFacade.getAllClasificadorPadres()) {
+                TreeNode raiz = new DefaultTreeNode(st, root);
+                this.buildTree(st, raiz);
+            }
+        } else {
+            if (this.root == null) {
+                this.cargarTree(Boolean.TRUE);
+            }
         }
         if (selectedNode != null) {
             expandNode(root, selectedNode);
         }
+        
     }
-
+    
     public void buildTree(Clasificador cla, TreeNode raiz) {
         List<Clasificador> listaHijos = clasificadorFacade.getHijos(cla.getIdClasificador());
         for (Clasificador hijo : listaHijos) {
@@ -140,28 +147,28 @@ public class ClasificadorController implements Serializable {
             buildTree(hijo, nodeHijo);
         }
     }
-
+    
     public void doNuevoForm() {
         this.clasificador = new Clasificador();
         this.clasificador.setPadre(0);
     }
-
+    
     public void doNuevoHijoForm() {
         this.clasificador = new Clasificador();
         System.out.println((Clasificador) this.selectedNode.getData());
         Integer idPadre = ((Clasificador) this.selectedNode.getData()).getIdClasificador();
         this.clasificador.setPadre(idPadre);
     }
-
+    
     public void doEditarForm() {
         this.clasificador = (Clasificador) this.selectedNode.getData();
     }
-
+    
     public void doBorrarNodo() {
         try {
             Clasificador st = (Clasificador) this.selectedNode.getData();
             clasificadorFacade.remove(st);
-            this.cargarTree();
+            this.cargarTree(Boolean.TRUE);
             this.expandNode(root, this.selectedNode.getParent());
             JSFutil.addMessage(this.bundle.getString("UpdateSuccess"), JSFutil.StatusMessage.INFORMATION);
         } catch (Exception ex) {
@@ -169,7 +176,7 @@ public class ClasificadorController implements Serializable {
         }
         
     }
-
+    
     public String doGuardarNodo() {
         try {
             if (this.clasificador.getIdClasificador() == null) {
@@ -177,7 +184,7 @@ public class ClasificadorController implements Serializable {
             } else {
                 clasificadorFacade.edit(this.clasificador);
             }
-            this.cargarTree();
+            this.cargarTree(Boolean.TRUE);
             JSFutil.addMessage(this.bundle.getString("UpdateSuccess"), JSFutil.StatusMessage.INFORMATION);
         } catch (Exception ex) {
             this.commonController.doExcepcion(ex);
@@ -185,15 +192,15 @@ public class ClasificadorController implements Serializable {
         this.clasificador = new Clasificador();
         return "";
     }
-
+    
     public List<Clasificador> listaAutocompleteClasificador(String valor) {
         return clasificadorFacade.getAllClasificador(valor);
     }
-
+    
     public void onDragDrop(TreeDragDropEvent event) {
         TreeNode nodoDrag = event.getDragNode();
         TreeNode nodoDrop = event.getDropNode();
-
+        
         Clasificador cDrag = (Clasificador) nodoDrag.getData();
         Clasificador cDrop = (Clasificador) nodoDrop.getData();
         cDrag.setPadre(cDrop.getIdClasificador());
@@ -205,29 +212,29 @@ public class ClasificadorController implements Serializable {
             this.commonController.doExcepcion(ex);
         }
     }
-
+    
     public void copyNode() {
         this.copyNode = this.selectedNode;
         JSFutil.addMessage(this.copyNode + " copiado.", JSFutil.StatusMessage.INFORMATION);
     }
-
+    
     public void pasteNode() {
         try {
             Clasificador c = (Clasificador) this.selectedNode.getData();
             pegarNodo(this.copyNode, c.getIdClasificador());
-            this.cargarTree();
+            this.cargarTree(Boolean.TRUE);
             JSFutil.addMessage(this.copyNode + " pegado.", JSFutil.StatusMessage.INFORMATION);
             this.copyNode = null;
-
+            
         } catch (Exception e) {
             JSFutil.addMessage("Error al crear la estructura...", JSFutil.StatusMessage.ERROR);
         }
     }
-
+    
     public void expandNode() {
         this.expandNode(this.root, this.selectedNode);
     }
-
+    
     private void expandNode(TreeNode raiz, TreeNode t) {
         for (TreeNode n : raiz.getChildren()) {
             expandNode(n, t);
@@ -238,7 +245,7 @@ public class ClasificadorController implements Serializable {
             }
         }
     }
-
+    
     private void expandToRoot(TreeNode t) {
         if (t.getParent() == null) {
             t.setExpanded(true);
@@ -247,7 +254,7 @@ public class ClasificadorController implements Serializable {
             t.setExpanded(true);
         }
     }
-
+    
     private void pegarNodo(TreeNode t, Integer i) {
         for (TreeNode n : t.getChildren()) {
             Clasificador c = (Clasificador) n.getData();
