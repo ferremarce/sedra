@@ -11,10 +11,12 @@
     <h:body>
         <h:form>
             <p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
-                <p:graphicImage value="/img/logo-new.png" height="80"/>
+                <p:graphicImage value="#{MainController.serverURLDownload}/logoServlet" height="80" cache="false"/>
                 <p:outputPanel>
-                    <h:outputText styleClass="tresD fontBold" style="font-size: xx-large"  value="SEDRA v.3"/><br/>
-                    <h:outputText value="#{bundle.TituloSistema}"/>
+                    <h:outputText styleClass="tresD fontBold" style="font-size: xx-large"  value="SEDRA v.3"/>
+                    <p:separator/>
+                    <h:outputText styleClass="font1x fontBold" value="#{ConfiguracionController.configuracion.tituloSistema}"/><br/>
+                    <h:outputText styleClass="Gray" value="#{ConfiguracionController.configuracion.subTituloSistema}"/>
                 </p:outputPanel>
             </p:panelGrid>
             <p:messages showDetail="true"/>

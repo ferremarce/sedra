@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="title">
+        <h1>Configuraciones del Sistema</h1>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="formMain">
+            <p:tabView >
+                <p:tab title="Encabezado">
+                    <p:panel>
+                        <p:panelGrid columns="3" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-9,ui-grid-col-1">
+                            <p:outputLabel for="tituloSistema" value="Título del Sistema:"/>
+                            <p:inputText disabled="true" id="tituloSistema" value="#{ConfiguracionController.configuracion.tituloSistema}" title="Titulo del Sistema" required="true" requiredMessage="#{bundle.Requerido}" />
+                            <p:message for="tituloSistema"/>
+                            <p:outputLabel for="subTituloSistema" value="Subtítulo del Sistema:"/>
+                            <p:inputText id="subTituloSistema" value="#{ConfiguracionController.configuracion.subTituloSistema}" title="SubTitulo del Sistema" required="true" requiredMessage="#{bundle.Requerido}" />
+                            <p:message for="subTituloSistema"/>
+                            <p:outputLabel for="archivo" value="Logo:"/>
+                            <p:fileUpload id="archivo" label="#{bundle.SeleccionarBoton}" cancelLabel="#{bundle.EliminarBoton}" uploadLabel="#{bundle.AgregarBoton}" 
+                                          fileUploadListener="#{ConfiguracionController.handleFileUpload}"
+                                          mode="advanced"
+                                          multiple="false"
+                                          update="logoCargado"
+                                          sizeLimit="100000" invalidSizeMessage="El tamaño no puede ser superior a 100Kb"
+                                          allowTypes="/(\.|\/)(gif|jpe?g|png)$/" invalidFileMessage="Tipo de archivo no permitido (gif|jpe?g|png)"
+                                          />
+                            <p:outputPanel>
+                                <p:graphicImage id="logoCargado" value="#{MainController.serverURLDownload}/logoServlet" height="80" cache="false"/>
+                                <p:commandLink title="#{bundle.EliminarBoton}" rendered="#{ConfiguracionController.configuracion.archivoLogo!=null}" ajax="false" action="#{ConfiguracionController.removeLogo()}">
+                                    <i class="fa fa-window-close"/>
+                                </p:commandLink>
+                            </p:outputPanel>
+                        </p:panelGrid>
+                        <f:facet name="footer">
+                            <p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+                                <p:commandButton icon="fa fa-save" value="#{bundle.GuardarBoton}" update="messages messagesError" action="#{ConfiguracionController.edit()}"/>
+                            </p:panelGrid>
+                        </f:facet>
+                    </p:panel>
+                </p:tab>
+            </p:tabView>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

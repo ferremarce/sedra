@@ -98,4 +98,7 @@ public class CommonController implements Serializable {
             return null;
         }
     }
+    public String getServerURLDownload() {
+        return JSFutil.getAbsoluteApplicationUrl();
+    }
 }

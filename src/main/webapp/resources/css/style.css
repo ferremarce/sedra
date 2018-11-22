@@ -43,6 +43,9 @@ label{
 .Green {
     color: #43A047 !important;
 }
+.Gray{
+    color: gray;
+}
 .DarkGreen {
     color: #00897B !important;
 }

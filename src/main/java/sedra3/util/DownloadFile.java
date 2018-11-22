@@ -16,10 +16,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
+import sedra3.fachada.ConfiguracionFacade;
 import sedra3.fachada.DocumentoAdjuntoFacade;
 import sedra3.fachada.DocumentoFacade;
 import sedra3.fachada.NotaSalidaFacade;
 import sedra3.fachada.TramitacionFacade;
+import sedra3.modelo.Configuracion;
 import sedra3.modelo.Documento;
 import sedra3.modelo.DocumentoAdjunto;
 import sedra3.modelo.NotaSalida;
@@ -43,6 +45,8 @@ public class DownloadFile implements Serializable {
     NotaSalidaFacade notaSalidaFacade;
     @Inject
     TramitacionFacade tramitacionFacade;
+    @Inject
+    ConfiguracionFacade configuracionFacade;
 
     private String pagina;
     private Integer id;
@@ -122,6 +126,14 @@ public class DownloadFile implements Serializable {
             JSFutil.addMessage("No dispone de adjuntos para visualizar...", JSFutil.StatusMessage.WARNING);
             String noContent = "<html><h1>Sin adjunto...</></html>";
             return new DefaultStreamedContent(new ByteArrayInputStream(noContent.getBytes()), "text/html", "No existe Archivo");
+        }
+    }
+    public StreamedContent logoToDisplay(Integer id) {
+        Configuracion configuracion=configuracionFacade.find(id);
+        if (configuracion.getArchivoLogo() != null) {
+            return new DefaultStreamedContent(new ByteArrayInputStream(configuracion.getArchivoLogo()), configuracion.getLogoFileType(), configuracion.getLogoFileName());
+        } else {
+            return null;
         }
     }
 
