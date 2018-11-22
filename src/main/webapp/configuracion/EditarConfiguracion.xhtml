@@ -32,7 +32,7 @@
                                           allowTypes="/(\.|\/)(gif|jpe?g|png)$/" invalidFileMessage="Tipo de archivo no permitido (gif|jpe?g|png)"
                                           />
                             <p:outputPanel>
-                                <p:graphicImage id="logoCargado" value="#{MainController.serverURLDownload}/logoServlet" height="80" cache="false"/>
+                                <p:graphicImage id="logoCargado" value="#{ConfiguracionController.logoToDisplay()}" height="80" cache="false"/>
                                 <p:commandLink title="#{bundle.EliminarBoton}" rendered="#{ConfiguracionController.configuracion.archivoLogo!=null}" ajax="false" action="#{ConfiguracionController.removeLogo()}">
                                     <i class="fa fa-window-close"/>
                                 </p:commandLink>
