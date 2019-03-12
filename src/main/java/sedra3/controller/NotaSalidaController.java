@@ -25,6 +25,8 @@ public class NotaSalidaController implements Serializable {
 
     @Inject
     NotaSalidaFacade notaSalidaFacade;
+    
+    private NotaSalida notaSalida;
 
     /**
      * Creates a new instance of NotaSalidaController
@@ -32,9 +34,17 @@ public class NotaSalidaController implements Serializable {
     public NotaSalidaController() {
     }
 
+    public NotaSalida getNotaSalida() {
+        return notaSalida;
+    }
+
+    public void setNotaSalida(NotaSalida notaSalida) {
+        this.notaSalida = notaSalida;
+    }
+
     public String doVerForm(Integer idNota) {
-        //this.documento = documentoFacade.find(idExpediente);
-        return "/documento/VerDocumento?faces-redirect=true";
+        this.notaSalida = notaSalidaFacade.find(idNota);
+        return "/notasalida/VerNotaSalida?faces-redirect=true";
     }
     public String listNotaSalidaSetup() {
 //        if (this.tipoNota != null) {

@@ -22,7 +22,7 @@
                     <h:outputText id="rol" value="#{LoginManager.usuarioLogeado.idRol.descripcionRol}"/>  
                     <p:outputLabel for="password" value="Nueva Contraseña:"/>
                     <p:password promptLabel="Ingrese la contraseña" redisplay="true" feedback="true" weakLabel="Débil" goodLabel="Buena" strongLabel="Excelente" id="password" value="#{LoginManager.contrasenha}" title="Contraseña" required="true" requiredMessage="#{bundle.Requerido}" />
-                    <p:outputLabel for="passwordRepeat" value="Nueva Contraseña:"/>
+                    <p:outputLabel for="passwordRepeat" value="Repetir Contraseña:"/>
                     <p:password promptLabel="Ingrese la contraseña" redisplay="true" feedback="true" weakLabel="Débil" goodLabel="Buena" strongLabel="Excelente" id="passwordRepeat" value="#{LoginManager.contrasenha2}" title="Contraseña" required="true" requiredMessage="#{bundle.Requerido}" />
                 </p:panelGrid>
                 <f:facet name="footer">

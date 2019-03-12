@@ -93,7 +93,7 @@ public class TipoNota implements Serializable {
 
     @Override
     public String toString() {
-        return "sedra3.modelo.TipoNota[ idTipoNota=" + idTipoNota + " ]";
+        return this.getDescripcionTipoNota();
     }
     
 }

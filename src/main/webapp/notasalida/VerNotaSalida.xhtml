@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="title">
+        <h1>Nota de Salida o STR</h1>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="formMain">
+            <p:panel header="Información de la Nota">
+                <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-10">
+                    <p:outputLabel for="clasificador"  value="Clasificador:"/>
+                    <h:outputText id="clasificador" value="#{ClasificadorController.obtenerRutaClasificador(NotaSalidaController.notaSalida.idClasificador.idClasificador)}" title="Clasificador" />
+                    <p:outputLabel for="idTipoNota"  value="Tipo Nota:"/>
+                    <h:outputText id="idTipoNota" value="#{NotaSalidaController.notaSalida.idTipoNota}"/>  
+                    <p:outputLabel rendered="#{NotaSalidaController.notaSalida.idTipoNota.idTipoNota!=2}" for="nroSalida"  value=" Nro. de Salida:"/>
+                    <h:outputText rendered="#{NotaSalidaController.notaSalida.idTipoNota.idTipoNota!=2}" id="nroSalida" value="#{NotaSalidaController.notaSalida.numeroSalida}" title="Numero Salida"/>
+                    <p:outputLabel rendered="#{NotaSalidaController.notaSalida.idTipoNota.idTipoNota!=2}" for="referencia"  value=" Referencia:"/>
+                    <h:outputText rendered="#{NotaSalidaController.notaSalida.idTipoNota.idTipoNota!=2}" id="referencia" value="#{NotaSalidaController.notaSalida.referencia}" title="Referencia"/>
+                    <p:outputLabel rendered="#{NotaSalidaController.notaSalida.idTipoNota.idTipoNota==2}" for="nrostr"  value=" Nro. STR:"/>
+                    <h:outputText rendered="#{NotaSalidaController.notaSalida.idTipoNota.idTipoNota==2}" id="nrostr" value="#{NotaSalidaController.notaSalida.numeroStr}" title="Nro. STR"/>
+                    <p:outputLabel rendered="#{NotaSalidaController.notaSalida.idTipoNota.idTipoNota==2}" for="rubro"   value=" Rubro:"/>
+
+                    <h:outputText rendered="#{NotaSalidaController.notaSalida.idTipoNota.idTipoNota==2}" id="rubro" value="#{NotaSalidaController.notaSalida.rubro}" title="Rubro"/>
+                    <p:outputLabel rendered="#{NotaSalidaController.notaSalida.idTipoNota!=null}" for="downAdjunto"  value="Adjunto:"/>
+                    <p:outputPanel rendered="#{NotaSalidaController.notaSalida.idTipoNota!=null}" id="downAdjunto">
+                        <p:commandButton rendered="#{NotaSalidaController.notaSalida.nombreArchivo!=null}" style="width: 150px" title="Descargar" value="#{bundle.DescargarBoton}" icon="fa fa-download" ajax="false">
+                            <p:fileDownload value="#{DownloadFile.downloadNotaSalida(NotaSalidaController.notaSalida.idNota)}" />  
+                        </p:commandButton>
+                        <h:outputText value="#{NotaSalidaController.notaSalida.nombreArchivo}  "/>
+                    </p:outputPanel>
+                    <p:outputLabel for="listaNota" value="Enlazado a:"/>
+                    <p:dataList id="listaNota" value="#{NotaSalidaController.notaSalida.detalleNotaSalidaList}" var="nota" itemType="circle"> 
+                        <p:commandLink styleClass="fontBold Red" title="Ver Documento" value="[Entrada] #{nota.idDocumento.nroEntrada}" ajax="false" action="#{DocumentoController.doVerForm(nota.idDocumento.idDocumento)}"/>  
+                        <p:separator/>
+                        <h:outputText value="#{nota.idDocumento.asunto}" />  
+                    </p:dataList>
+                </p:panelGrid>              
+            </p:panel>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

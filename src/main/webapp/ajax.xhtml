@@ -13,9 +13,13 @@
                 </p:panel>
             </f:facet>
         </p:ajaxStatus>
-        <p:panel visible="false" widgetVar="errorPanel" header="Error..." styleClass="ui-panelgrid-blank" closable="true" style="position: fixed; left: 40%; top: 10px; z-index: 98;">
+        <p:panel visible="false" widgetVar="errorPanel" styleClass="ui-panelgrid-blank" closable="true" style="position: fixed; left: 40%; top: 10px; z-index: 98;">
+            <f:facet name="header">
+                <h:outputText styleClass="font2x fontBold Red" value="Error"/>
+            </f:facet>
+            
             <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-10">
-                <i class="fa fa-frown-o font3x"/>
+                <i class="fa fa-frown-o font3x Red fontBold"/>
                 <h:outputText escape="false" value="Ocurrió un error al procesar la consulta...&lt;br/&gt;Por favor intente más tarde."/>
             </p:panelGrid>
         </p:panel>

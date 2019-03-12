@@ -40,10 +40,23 @@
                     <h:outputText id="observaciones" value="#{DocumentoController.documento.observacion}" title="Observaciones"  />
                     <p:outputLabel for="idTipoDocumento" value="Tipo Documento:"/>
                     <h:outputText id="idTipoDocumento" value="#{DocumentoController.documento.idTipoDocumento.toString()}" />
-                    <p:separator/>
-                    <p:commandButton rendered="#{DocumentoController.documento.nombreArchivo!=null}" style="width: 150px" title="Descargar" value="#{bundle.DescargarBoton}" icon="fa fa-download" ajax="false">
+                    
+                    <p:outputLabel rendered="#{DocumentoController.documento.nombreArchivo!=null}" for="downAdjunto"  value="Adjunto:"/>
+                    <p:outputPanel rendered="#{DocumentoController.documento.nombreArchivo!=null}" id="downAdjunto">
+                    <p:commandButton  style="width: 150px" title="Descargar" value="#{bundle.DescargarBoton}" icon="fa fa-download" ajax="false">
                         <p:fileDownload value="#{DownloadFile.downloadDocumento(DocumentoController.documento.idDocumento)}" />  
                     </p:commandButton>
+                        <h:outputText value="#{DocumentoController.documento.nombreArchivo}"/>
+                    </p:outputPanel>
+                    <p:outputLabel for="asunto" value="Enlazado a:"/>
+                    <p:dataList value="#{DocumentoController.documento.detalleNotaSalidaList}" var="nota" emptyMessage="#{bundle.SinRegistrosMensaje}">  
+                        <h:outputText  value="[#{nota.idNota.idTipoNota.descripcionTipoNota}] " />  
+                        <p:commandLink styleClass="fontBold Red" rendered="#{nota.idNota.numeroSalida!=null}" title="Ver Nota" value="Nro. Salida: #{nota.idNota.numeroSalida}" ajax="false" action="#{NotaSalidaController.doVerForm(nota.idNota.idNota)}" />  
+                        <p:commandLink styleClass="fontBold Red" rendered="#{nota.idNota.numeroStr!=null}" title="Ver STR" value="Nro. STR: #{nota.idNota.numeroStr}" ajax="false" action="#{NotaSalidaController.doVerForm(nota.idNota.idNota)}" />   
+                        <p:separator/>
+                        <h:outputText value="#{nota.idNota.referencia}"/> 
+                        <h:outputText value="#{nota.idNota.rubro}" />  
+                    </p:dataList>
                 </p:panelGrid>
 
                 <p:dataTable id="dataTableAdjunto" var="expeAdj" value="#{DocumentoController.documento.documentoAdjuntoList}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}">

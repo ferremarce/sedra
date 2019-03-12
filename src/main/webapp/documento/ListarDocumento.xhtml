@@ -30,7 +30,7 @@
                     Tabla de Datos
                 </f:facet>  
                 <p:column headerText="Nro. Ent." style="width:5%" >  
-                    <p:commandLink rendered="#{item.cerrado==false}" title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
+                    <p:commandLink title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
                         <h:outputText title="#{item.idDocumento}" styleClass="fontBold" value=" #{item.nroEntrada}"/>
                     </p:commandLink>
                     <h:outputText rendered="#{item.cerrado==true}" title="#{item.idDocumento}" value=" #{item.nroEntrada}"/>
