@@ -48,7 +48,7 @@
                     </p:commandButton>
                         <h:outputText value="#{DocumentoController.documento.nombreArchivo}"/>
                     </p:outputPanel>
-                    <p:outputLabel for="asunto" value="Enlazado a:"/>
+                    <p:outputLabel value="Enlazado a:"/>
                     <p:dataList value="#{DocumentoController.documento.detalleNotaSalidaList}" var="nota" emptyMessage="#{bundle.SinRegistrosMensaje}">  
                         <h:outputText  value="[#{nota.idNota.idTipoNota.descripcionTipoNota}] " />  
                         <p:commandLink styleClass="fontBold Red" rendered="#{nota.idNota.numeroSalida!=null}" title="Ver Nota" value="Nro. Salida: #{nota.idNota.numeroSalida}" ajax="false" action="#{NotaSalidaController.doVerForm(nota.idNota.idNota)}" />  

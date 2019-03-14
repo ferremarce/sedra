@@ -333,4 +333,6 @@ public class TramitacionController implements Serializable {
 //        this.criterioBusqueda = "";
         return "/tramitacion/ListarDesbloqueoDocumento";
     }
+        
+
 }

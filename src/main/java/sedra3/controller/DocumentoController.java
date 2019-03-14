@@ -389,8 +389,7 @@ public class DocumentoController implements Serializable {
         }
     }
     public String listAdjuntaDocumentoSetup() {
-//        this.model = null;
-//        this.criterioBusqueda = "";
+        this.listaDocumento=new ArrayList<>();
         return "/tramitacion/ListarDocumentoAdjunto";
     }
     public String listLocalizarDocumentoSetup() {
@@ -400,4 +399,14 @@ public class DocumentoController implements Serializable {
 //        this.tmpFechaHasta = new Date();
         return "/documento/LocalizarDocumento";
     }
+    
+    public void buscarDocumentoParaArchivo() {
+        this.listaDocumento = documentoFacade.getAllDocumentoByExpediente(this.criterio);
+         if (this.listaDocumento.isEmpty()) {
+            JSFutil.addMessage("No hay resultados...", JSFutil.StatusMessage.WARNING);
+        } else {
+            JSFutil.addMessage(this.listaDocumento.size() + " registros recuperados", JSFutil.StatusMessage.INFORMATION);
+        }
+    }
+    
 }
