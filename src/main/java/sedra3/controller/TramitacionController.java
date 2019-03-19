@@ -18,8 +18,10 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 import sedra3.fachada.AuditaFacade;
 import sedra3.fachada.ClasificadorFacade;
+import sedra3.fachada.DocumentoFacade;
 import sedra3.fachada.TramitacionFacade;
 import sedra3.modelo.Audita;
+import sedra3.modelo.Documento;
 import sedra3.modelo.EstadoTramitacion;
 import sedra3.modelo.Rol;
 import sedra3.modelo.Tramitacion;
@@ -48,6 +50,8 @@ public class TramitacionController implements Serializable {
     CommonController commonController;
     @Inject
     AuditaFacade auditaFacade;
+    @Inject
+    DocumentoFacade documentoFacade;
 
     private Tramitacion tramitacion;
     private Tramitacion tramitacionRechazo;
@@ -59,6 +63,7 @@ public class TramitacionController implements Serializable {
     private Rol[] selectedRol;
     private Rol rolDerivado;
     private UploadedFile adjunto;
+    private Documento documento;
 
     /**
      * Creates a new instance of TramitacionController
@@ -144,6 +149,14 @@ public class TramitacionController implements Serializable {
 
     public void setListaTramitacionConfirmado(List<Tramitacion> listaTramitacionConfirmado) {
         this.listaTramitacionConfirmado = listaTramitacionConfirmado;
+    }
+
+    public Documento getDocumento() {
+        return documento;
+    }
+
+    public void setDocumento(Documento documento) {
+        this.documento = documento;
     }
 
     public String crearDocumentoFromClasificadorSetup() {
@@ -333,6 +346,25 @@ public class TramitacionController implements Serializable {
 //        this.criterioBusqueda = "";
         return "/tramitacion/ListarDesbloqueoDocumento";
     }
-        
+
+    public void updateCP() {
+        try {
+            if (this.documento.getComprobantePago().isEmpty()) {
+                JSFutil.addMessage("El comprobante de pago está vacío... Por favor, verifíquelo y vuelva a intentar", JSFutil.StatusMessage.ERROR);
+                return;
+            }
+            this.documento.setIdUsuario(JSFutil.getUsuarioConectado());
+            documentoFacade.edit(documento);
+            this.documento = documentoFacade.find(documento.getIdDocumento());
+            JSFutil.addMessage("Documento actualizado exitosamente.", JSFutil.StatusMessage.INFORMATION);
+        } catch (Exception e) {
+            this.commonController.doExcepcion(e);
+            JSFutil.addMessage("Ocurrió un error de persistencia.", JSFutil.StatusMessage.ERROR);
+        }
+    }
+    public String adjuntaSetup(Integer id) {
+        this.documento = documentoFacade.find(id);
+        return "/tramitacion/ArchivarDocumento";
+    }
 
 }

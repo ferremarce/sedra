@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="title">
+        <h1>Archivar Documento</h1>
+    </ui:define>
+    <ui:define name="content">
+        <style>
+            .ui-fileupload-content{
+                min-height: 50px;
+            }
+        </style>
+        <h:form id="formMain">
+            <p:messages showDetail="true" />
+            <p:panel header="Información del Documento">
+                <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-10">
+                    <p:outputLabel for="idClasificador" value="Clasificador:"/>
+                    <h:outputText id="idClasificador" rendered="#{TramitacionController.documento.idClasificador!=null}" value="#{ClasificadorController.obtenerRutaClasificador(TramitacionController.documento.idClasificador.idClasificador)}" title="Clasificador" />
+                    <p:outputLabel for="nroEntrada" value="Nro. de Entrada:"/>
+                    <h:outputText id="nroEntrada" value="#{TramitacionController.documento.nroEntrada}" title="Numero Entrada" />
+                    <p:outputLabel for="anho" value="Año:"/>
+                    <h:outputText id="anho" value="#{TramitacionController.documento.anho}" title="Año" />
+                    <p:outputLabel for="fechaDocumento" value="Fecha del Documento:"/>
+                    <h:outputText id="fechaDocumento" value="#{TramitacionController.documento.fechaDocumento}" title="Fecha Documento">
+                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                    <p:outputLabel for="fechaIngreso" value="Fecha del Ingreso:"/>
+                    <h:outputText id="fechaIngreso" value="#{TramitacionController.documento.fechaIngreso}" title="Fecha Ingreso">
+                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                    <p:outputLabel for="fechaLimite" value="Fecha Límite:"/>
+                    <h:outputText id="fechaLimite" value="#{TramitacionController.documento.fechaLimite}" title="Fecha Límite">
+                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                    <p:outputLabel for="asunto" value="Asunto "/>
+                    <h:outputText id="asunto" value="#{TramitacionController.documento.asunto}" title="Asunto"/>
+                    <p:outputLabel for="referencia" value="Referencia"/>
+                    <h:outputText id="referencia" value="#{TramitacionController.documento.referencia}" title="Referencia" />
+                    <p:outputLabel for="observaciones" value="Observaciones:"/>
+                    <h:outputText id="observaciones" value="#{TramitacionController.documento.observacion}" title="Observaciones"  />
+                    <p:outputLabel for="idTipoDocumento" value="Tipo Documento:"/>
+                    <h:outputText id="idTipoDocumento" value="#{TramitacionController.documento.idTipoDocumento.toString()}" />
+                    <p:outputLabel rendered="#{TramitacionController.documento.nombreArchivo!=null}" for="downAdjunto"  value="Adjunto:"/>
+                    <p:outputPanel rendered="#{TramitacionController.documento.nombreArchivo!=null}" id="downAdjunto">
+                        <p:commandButton  style="width: 150px" title="Descargar" value="#{bundle.DescargarBoton}" icon="fa fa-download" ajax="false">
+                            <p:fileDownload value="#{DownloadFile.downloadDocumento(TramitacionController.documento.idDocumento)}" />  
+                        </p:commandButton>
+                        <h:outputText value="#{TramitacionController.documento.nombreArchivo}"/>
+                    </p:outputPanel>
+                    <p:outputLabel for="comprobantePago" value="Comprob. Pago:"/>
+                    <p:panelGrid columns="2">
+                        <p:inputText size="20" id="comprobantePago" value="#{TramitacionController.documento.comprobantePago}" title="Comprobante de Pago"  />
+                        <p:commandButton action="#{TramitacionController.updateCP()}" ajax="true" update="@form" icon="fa fa-save"  value="#{bundle.ActualizarBoton}" title="#{bundle.ActualizarBoton}"/>  
+                    </p:panelGrid>
+                </p:panelGrid>
+            </p:panel>
+            
+        </h:form>
+    </ui:define>
+</ui:composition>
