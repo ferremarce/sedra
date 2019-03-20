@@ -93,7 +93,7 @@ public class EstadoTramitacion implements Serializable {
 
     @Override
     public String toString() {
-        return "sedra3.modelo.EstadoTramitacion[ idEstado=" + idEstado + " ]";
+        return this.getDescripcionEstado();
     }
     
 }

@@ -193,7 +193,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "sedra3.modelo.Usuario[ idUsuario=" + idUsuario + " ]";
+        return this.getCuenta();
     }
     
 }

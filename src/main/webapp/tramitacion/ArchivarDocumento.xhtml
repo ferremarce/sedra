@@ -16,7 +16,6 @@
             }
         </style>
         <h:form id="formMain">
-            <p:messages showDetail="true" />
             <p:panel header="Información del Documento">
                 <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-10">
                     <p:outputLabel for="idClasificador" value="Clasificador:"/>
@@ -59,7 +58,73 @@
                     </p:panelGrid>
                 </p:panelGrid>
             </p:panel>
-            
+            <p:panel header="Información de la Tramitación">
+                <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{TramitacionController.documento.tramitacionList}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                             rows="50"
+                             paginator="true"
+                             filterEvent="enter"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,25,50,100"
+                             >
+                    <p:column headerText="Acción" style="width:100px">
+                        <p:commandButton oncomplete="PF('anexo1').show();" update=":formDlg:panelAnexo" title="#{bundle.AgregarAnexoBoton}" value="#{bundle.AgregarAnexoBoton}" icon="fa fa-plus" actionListener="#{TramitacionController.tramitacionAnexo(item.idTramitacion)}" />
+                    </p:column>  
+                    <p:column headerText="F. Deriv." style="width:50px" >
+                        <h:outputText value="#{item.fechaDerivacion}">
+                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Remitido a" style="width:70px">
+                        <h:outputText value=" #{item.remitidoA}"/>
+                    </p:column>
+                    <p:column headerText="Nota Breve" style="width:150px">
+                        <h:outputText value=" #{item.notaBreve}"/>
+                    </p:column>
+                    <p:column headerText="Estado" style="width:50px">
+                        <h:outputText value=" #{item.idEstado.toString()}"/>
+                    </p:column>
+                    <p:column headerText="Usuario" style="width:50px">
+                        <h:outputText value=" #{item.idUsuario}"/>
+                    </p:column>
+                    <p:column headerText="Observaciones" style="width:150px">
+                        <h:outputText value=" #{item.observacion}"/>
+                    </p:column>
+                    <p:column headerText="Adjunto" style="width:50px">  
+                        <p:commandButton rendered="#{item.nombreArchivo!=null}" title="Descargar" icon="fa fa-download" ajax="false">
+                            <p:fileDownload value="#{DownloadFile.downloadDocumentoTramite(item.idTramitacion)}" />  
+                        </p:commandButton>
+                    </p:column>  
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+        <h:form id="formDlg">
+            <p:dialog modal="true" position="center top" header="#{bundle.AgregarAnexoBoton}" widgetVar="anexo1" >  
+                <p:panelGrid id="panelAnexo" columns="2">
+                    <h:outputLabel for="fderiv" value="Fecha Derivación:"/>
+                    <h:outputText id="fderiv" value="#{TramitacionController.tramitacion.fechaDerivacion}">
+                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                    <h:outputLabel for="notaB" value="Nota Breve:"/>
+                    <h:panelGrid columns="2">
+                        <h:outputText id="notaB" value="#{TramitacionController.tramitacion.notaBreve}" title="Nota Breve"/>
+                        <p:message for="notaB"/>
+                    </h:panelGrid>
+                    <h:outputLabel for="remA"  value="Remitido a:"/>
+                    <h:panelGrid columns="2">
+                        <h:outputText id="remA" value="#{TramitacionController.tramitacion.remitidoA}" title="Remitido a"/>
+                        <p:message for="remA"/>
+                    </h:panelGrid>
+                    <h:outputLabel for="adjunto"  value="Agregar Anexo:"/>
+                    <p:fileUpload id="adjunto" label="#{bundle.SeleccionarBoton}" cancelLabel="#{bundle.EliminarBoton}" uploadLabel="#{bundle.AgregarBoton}" 
+                                  fileUploadListener="#{TramitacionController.handleAnexoDocumento}"
+                                  mode="advanced"
+                                  required="true"
+                                  requiredMessage="#{bundle.Requerido}"
+                                  update="messages, :formMain:dataTable"
+                                  oncomplete="PF('anexo1').hide();"
+                                  />
+                </p:panelGrid>                        
+            </p:dialog> 
         </h:form>
     </ui:define>
 </ui:composition>

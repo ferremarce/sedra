@@ -362,9 +362,35 @@ public class TramitacionController implements Serializable {
             JSFutil.addMessage("Ocurrió un error de persistencia.", JSFutil.StatusMessage.ERROR);
         }
     }
+
     public String adjuntaSetup(Integer id) {
         this.documento = documentoFacade.find(id);
         return "/tramitacion/ArchivarDocumento";
     }
 
+    public void tramitacionAnexo(Integer idTramitacion) {
+        this.tramitacion = tramitacionFacade.find(idTramitacion);
+        JSFutil.addMessage("Tramitación recuperada para Anexo...", JSFutil.StatusMessage.INFORMATION);
+    }
+
+    public void handleAnexoDocumento(FileUploadEvent event) {
+        try {
+            //this.tramitacion.setArchivo(event.getFile().getContents());
+            this.tramitacion.setNombreArchivo(event.getFile().getFileName());
+            this.tramitacion.setTamanhoArchivo(BigInteger.valueOf(event.getFile().getSize()));
+            this.tramitacion.setTipoArchivo(event.getFile().getContentType());
+
+            tramitacionFacade.edit(tramitacion);
+            auditaFacade.create(new Audita("TRAMITACION", "Anexo agregado exitosamente para Archivo.", JSFutil.getFechaHoraActual(), "[Id=" + tramitacion.getIdTramitacion() + "] [NombreArchivo=" + tramitacion.getNombreArchivo() + "]", JSFutil.getUsuarioConectado()));
+            JSFutil.addMessage("El anexo se ha agregado exitosamente.", JSFutil.StatusMessage.INFORMATION);
+            //Grabar el archivo a disco
+            int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(event.getFile().getContents()), JSFutil.folderDocumento + tramitacion.getIdTramitacion() + "-" + event.getFile().getFileName());
+            if (resultado != 0) {
+                JSFutil.addMessage("Pero no se ha podido guardar el adjunto debido a un error interno en el procesamiento", JSFutil.StatusMessage.ERROR);
+            }
+            this.documento = documentoFacade.find(this.tramitacion.getIdDocumento().getIdDocumento());
+        } catch (Exception e) {
+            JSFutil.addMessage("Se ha producido un error inesperado al agregar el adjunto", JSFutil.StatusMessage.ERROR);
+        }
+    }
 }

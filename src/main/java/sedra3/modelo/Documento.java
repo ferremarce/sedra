@@ -21,6 +21,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -103,6 +104,7 @@ public class Documento implements Serializable {
     @OneToMany(mappedBy = "idDocumento")
     private List<DetalleNotaSalida> detalleNotaSalidaList;
     @OneToMany(mappedBy = "idDocumento")
+    @OrderBy("fechaDerivacion ASC, idTramitacion ASC")
     private List<Tramitacion> tramitacionList;
     @OneToMany(mappedBy = "idDocumento", cascade = CascadeType.REMOVE)
     private List<DocumentoAdjunto> documentoAdjuntoList;

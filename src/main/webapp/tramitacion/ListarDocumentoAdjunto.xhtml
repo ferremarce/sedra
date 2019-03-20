@@ -69,7 +69,7 @@
                         <h:outputText value="Acción"/>
                     </f:facet>
                     <p:commandButton type="button" style="background: #fde5cd !important; color: black" rendered="#{item.cerrado==true}" onclick="return alert('El documento y sus anexos ya están archivados');" ajax="false" title="Documento llaveado" value="Llaveado" icon="fa fa-lock"/>
-                    <p:commandButton rendered="#{item.cerrado==false}" ajax="false" icon="fa fa-archive" title="#{bundle.AgregarAnexoBoton}" value="#{bundle.ArchivarBoton}"  action="#{TramitacionController.adjuntaSetup(item.idDocumento)}"/>
+                    <p:commandButton rendered="#{item.cerrado==false}" ajax="false" icon="fa fa-archive" title="#{bundle.ArchivarBoton}" value="#{bundle.ArchivarBoton}"  action="#{TramitacionController.adjuntaSetup(item.idDocumento)}"/>
                 </p:column>
             </p:dataTable>
         </h:form>
