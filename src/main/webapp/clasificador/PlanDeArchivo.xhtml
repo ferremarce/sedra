@@ -28,23 +28,19 @@
                 <p:separator/>
                 <p:menuitem value="Eliminar" ajax="false"  action="#{ClasificadorController.doBorrarNodo()}" onclick="if (!confirm('#{bundle.ConfirmacionMensaje}')) {
                             return false;
-                        }" icon="fa fa-minus">
+                            }" icon="fa fa-minus">
                 </p:menuitem>
             </p:contextMenu>
         </h:form>
         <h:form id="formDlg">
-            <p:dialog header="Actualizar Clasificador" widgetVar="dlgUpdateTipo" minHeight="40">
+            <p:dialog modal="true" position="center top" resizable="false" header="Actualizar Clasificador" widgetVar="dlgUpdateTipo">
                 <p:panel header="Información del Clasificador">
-                    <h:panelGrid id="panelClasi" columns="2">
-                        <h:outputLabel for="idPadre" value="Padre:"/>
-                        <h:panelGrid columns="2">
-                            <h:outputText id="idPadre" value="#{ClasificadorController.clasificador.padre}"/>
-                        </h:panelGrid>
-                        <h:outputLabel for="descripcionClasificador" value="Clasificador:"/>
-                        <h:panelGrid columns="2">
-                            <p:inputText size="60" id="descripcionClasificador" value="#{ClasificadorController.clasificador.denominacionClasificador}" title="Descripción" required="true" requiredMessage="#{bundle.Requerido}" />
-                        </h:panelGrid>
-                    </h:panelGrid>
+                    <p:panelGrid id="panelClasi" columns="2" styleClass="ui-panelgrid-blank" >
+                        <p:outputLabel for="idPadre" value="Padre:"/>
+                        <h:outputText id="idPadre" value="#{ClasificadorController.clasificador.padre}"/>
+                        <p:outputLabel for="descripcionClasificador" value="Clasificador:"/>
+                        <p:inputText size="50" id="descripcionClasificador" value="#{ClasificadorController.clasificador.denominacionClasificador}" title="Descripción" required="true" requiredMessage="#{bundle.Requerido}" />
+                    </p:panelGrid>
                     <f:facet name="footer">
                         <p:panelGrid columns="1" styleClass="ui-panelgrid-blank" >
                             <p:commandButton ajax="false" value="#{bundle.GuardarBoton}" action="#{ClasificadorController.doGuardarNodo()}" icon="fa fa-save"/>

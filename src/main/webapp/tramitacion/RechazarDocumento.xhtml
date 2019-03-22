@@ -28,9 +28,9 @@
                 </p:panelGrid>
                 <p:separator/>
                 <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-10">
-                    <h:outputLabel for="retorno"  value="Retornar para:"/>
+                    <p:outputLabel for="retorno"  value="Retornar para:"/>
                     <h:outputText id="retorno" value="#{TramitacionController.tramitacion.idUsuarioRemitente.usuario} (#{TramitacionController.tramitacion.idUsuarioRemitente.cuenta})"/>
-                    <h:outputLabel for="observaciones"  value="Observaciones:"/>
+                    <p:outputLabel for="observaciones"  value="Observaciones:"/>
                     <p:inputTextarea rows="3" id="observaciones" value="#{TramitacionController.tramitacionRechazo.observacion}" title="Observaciones" required="true" requiredMessage="#{bundle.Requerido}" />
                 </p:panelGrid>
                 <f:facet name="footer">

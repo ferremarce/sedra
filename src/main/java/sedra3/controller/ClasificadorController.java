@@ -227,7 +227,8 @@ public class ClasificadorController implements Serializable {
             this.copyNode = null;
             
         } catch (Exception e) {
-            JSFutil.addMessage("Error al crear la estructura...", JSFutil.StatusMessage.ERROR);
+            this.commonController.doExcepcion(e);
+            //JSFutil.addMessage("Error al crear la estructura...", JSFutil.StatusMessage.ERROR);
         }
     }
     

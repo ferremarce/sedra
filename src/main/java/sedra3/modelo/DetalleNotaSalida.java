@@ -7,7 +7,6 @@ package sedra3.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +20,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -112,5 +110,12 @@ public class DetalleNotaSalida implements Serializable {
     public String toString() {
         return "sedra3.modelo.DetalleNotaSalida[ idDetalleNota=" + idDetalleNota + " ]";
     }
-    
+
+    public String toAudita() {
+        return "[Id=" + this.idDetalleNota + "]"
+                + "[FechaEnlace=" + this.fechaEnlace + "]"
+                + "[IdDoc/Entrada=" + this.idDocumento.getIdDocumento() + "/" + this.idDocumento.getNroEntrada() + "]"
+                + "[IdNota/Nro=" + this.idNota + "/" + this.idNota.getNumeroSalida() + "]";
+    }
+
 }

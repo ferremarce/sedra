@@ -54,7 +54,7 @@
                     <p:outputLabel for="comprobantePago" value="Comprob. Pago:"/>
                     <p:panelGrid columns="2">
                         <p:inputText size="20" id="comprobantePago" value="#{TramitacionController.documento.comprobantePago}" title="Comprobante de Pago"  />
-                        <p:commandButton action="#{TramitacionController.updateCP()}" ajax="true" update="@form" icon="fa fa-save"  value="#{bundle.ActualizarBoton}" title="#{bundle.ActualizarBoton}"/>  
+                        <p:commandButton action="#{TramitacionController.updateCP()}" ajax="true" update="@form messages messagesError" icon="fa fa-save"  value="#{bundle.ActualizarBoton}" title="#{bundle.ActualizarBoton}"/>  
                     </p:panelGrid>
                 </p:panelGrid>
             </p:panel>
@@ -95,26 +95,28 @@
                         </p:commandButton>
                     </p:column>  
                 </p:dataTable>
+                <f:facet name="footer">
+                    <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" >
+                        <p:commandButton icon="fa fa-stack-overflow" action="#{NotaSalidaController.createSetup(TramitacionController.documento)}" ajax="false"  value="#{bundle.ArchivarConNota}" title="#{bundle.ArchivarConNota}"/>  
+                        <p:commandButton icon="fa fa-square-o" action="#{TramitacionController.archivarSinNota()}" onclick="return confirm('#{bundle.ConfirmacionMensaje}');" ajax="false"  value="#{bundle.ArchivarSinNota}" title="#{bundle.ArchivarSinNota}"/>  
+                        <p:commandButton icon="fa fa-stack-exchange" ajax="true" oncomplete="PF('formNotaSalida').show()" update="formPanelNotaSalida" actionListener="#{NotaSalidaController.anexarDocAnotaExistente(TramitacionController.documento.idDocumento)}"  value="#{bundle.AnadirNota}" title="#{bundle.AnadirNota}"/>  
+                        <p:commandButton immediate="true" icon="fa fa-sign-out" action="/tramitacion/ListarDocumentoAdjunto" ajax="false"  value="#{bundle.RegresarBoton}" title="#{bundle.RegresarBoton}"/>  
+                    </p:panelGrid>
+                </f:facet>
             </p:panel>
         </h:form>
         <h:form id="formDlg">
             <p:dialog modal="true" position="center top" header="#{bundle.AgregarAnexoBoton}" widgetVar="anexo1" >  
-                <p:panelGrid id="panelAnexo" columns="2">
-                    <h:outputLabel for="fderiv" value="Fecha Derivación:"/>
+                <p:panelGrid id="panelAnexo" columns="2" styleClass="ui-panelgrid-blank">
+                    <p:outputLabel for="fderiv" value="Fecha Derivación:"/>
                     <h:outputText id="fderiv" value="#{TramitacionController.tramitacion.fechaDerivacion}">
                         <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
                     </h:outputText>
-                    <h:outputLabel for="notaB" value="Nota Breve:"/>
-                    <h:panelGrid columns="2">
+                    <p:outputLabel for="notaB" value="Nota Breve:"/>
                         <h:outputText id="notaB" value="#{TramitacionController.tramitacion.notaBreve}" title="Nota Breve"/>
-                        <p:message for="notaB"/>
-                    </h:panelGrid>
-                    <h:outputLabel for="remA"  value="Remitido a:"/>
-                    <h:panelGrid columns="2">
+                    <p:outputLabel for="remA"  value="Remitido a:"/>
                         <h:outputText id="remA" value="#{TramitacionController.tramitacion.remitidoA}" title="Remitido a"/>
-                        <p:message for="remA"/>
-                    </h:panelGrid>
-                    <h:outputLabel for="adjunto"  value="Agregar Anexo:"/>
+                    <p:outputLabel for="adjunto"  value="Agregar Anexo:"/>
                     <p:fileUpload id="adjunto" label="#{bundle.SeleccionarBoton}" cancelLabel="#{bundle.EliminarBoton}" uploadLabel="#{bundle.AgregarBoton}" 
                                   fileUploadListener="#{TramitacionController.handleAnexoDocumento}"
                                   mode="advanced"
@@ -125,6 +127,53 @@
                                   />
                 </p:panelGrid>                        
             </p:dialog> 
+        </h:form>
+        <h:form id="formPanelNotaSalida">
+            <p:dialog modal="true" position="center top" header="Nota de Salida/STR" widgetVar="formNotaSalida" height="450" width="90%">  
+                <p:panel id="panelNotaSalida" header="Documento">
+                    <p:panelGrid styleClass="ui-panelgrid-blank" columns="2">
+                        <p:outputLabel  for="txtNroEntrada" value="Entrada"/>
+                        <h:outputText id="txtNroEntrada" value="#{NotaSalidaController.documento.nroEntrada}"/>
+                        <p:outputLabel  for="txtAsunto" value="Asunto"/>
+                        <h:outputText id="txtAsunto" value="#{NotaSalidaController.documento.asunto}"/>
+                    </p:panelGrid>
+                </p:panel>
+                <p:outputLabel for="criterio" value="Criterio: "/>
+                <h:panelGrid columns="2">
+                    <p:inputText tabindex="0" size="50" id="criterio" value="#{NotaSalidaController.criterioBusqueda}" title="Búsqueda" />
+                    <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{NotaSalidaController.buscarAllNotaSalida()}" update="dataTableNota messages"/>
+                    <p:watermark for="criterio" value="Nro. Salida, STR" />                        
+                </h:panelGrid>
+                <p:dataTable rowIndexVar="index" id="dataTableNota" var="item" value="#{NotaSalidaController.listaNotaSalida}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                             rows="10"
+                             paginator="true"
+                             filterEvent="enter"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,25,50,100"
+                             >
+                    <f:facet name="header">
+                        Tabla de Datos
+                    </f:facet> 
+                    <p:column headerText="Acción" style="width:150px">
+                        <p:commandButton ajax="false" update="dataTable, messages" onclick="return confirm('#{bundle.ConfirmacionMensaje}');" title="#{bundle.EnlazarBoton}" value="#{bundle.EnlazarBoton}" icon="fa fa-link" action="#{TramitacionController.enlazarAnotaSalida(item.idNota)}"/>
+                    </p:column>  
+                    <p:column headerText="No. Sal./STR" style="width:150px" >  
+                        <h:outputText rendered="#{item.numeroSalida!=null}" value="Nro. Salida: #{item.numeroSalida}"/>
+                        <p:separator/>
+                        <h:outputText rendered="#{item.numeroStr!=null}" value="Nro. STR: #{item.numeroStr}"/>
+                    </p:column> 
+                    <p:column headerText="Referencia/Rubro" >  
+                        <h:outputText value="#{item.referencia}"/>
+                        <p:separator/>
+                        <h:outputText value="#{item.rubro}"/>
+                        <br/>
+                        <p:repeat rendered="#{item.detalleNotaSalidaList.size()>0}" value="#{item.detalleNotaSalidaList}" var="valor" > 
+                            <p:commandLink styleClass="Red fontBold" target="_new" title="Ver Documento" value="[Entrada] #{valor.idDocumento.nroEntrada} " ajax="false" action="#{DocumentoController.doVerForm(valor.idDocumento.idDocumento)}"/> 
+                            <h:outputText value="#{valor.idDocumento.asunto.length()>80 ? valor.idDocumento.asunto.substring(0, 79): valor.idDocumento.asunto}..." />  <br/>
+                        </p:repeat>
+                    </p:column>  
+                </p:dataTable>
+            </p:dialog>
         </h:form>
     </ui:define>
 </ui:composition>

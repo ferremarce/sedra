@@ -18,11 +18,15 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 import sedra3.fachada.AuditaFacade;
 import sedra3.fachada.ClasificadorFacade;
+import sedra3.fachada.DetalleNotaSalidaFacade;
 import sedra3.fachada.DocumentoFacade;
+import sedra3.fachada.NotaSalidaFacade;
 import sedra3.fachada.TramitacionFacade;
 import sedra3.modelo.Audita;
+import sedra3.modelo.DetalleNotaSalida;
 import sedra3.modelo.Documento;
 import sedra3.modelo.EstadoTramitacion;
+import sedra3.modelo.NotaSalida;
 import sedra3.modelo.Rol;
 import sedra3.modelo.Tramitacion;
 import sedra3.util.JSFutil;
@@ -52,6 +56,10 @@ public class TramitacionController implements Serializable {
     AuditaFacade auditaFacade;
     @Inject
     DocumentoFacade documentoFacade;
+    @Inject
+    NotaSalidaFacade notaSalidaFacade;
+    @Inject
+    DetalleNotaSalidaFacade detalleNotaSalidaFacade;
 
     private Tramitacion tramitacion;
     private Tramitacion tramitacionRechazo;
@@ -359,7 +367,7 @@ public class TramitacionController implements Serializable {
             JSFutil.addMessage("Documento actualizado exitosamente.", JSFutil.StatusMessage.INFORMATION);
         } catch (Exception e) {
             this.commonController.doExcepcion(e);
-            JSFutil.addMessage("Ocurrió un error de persistencia.", JSFutil.StatusMessage.ERROR);
+            //JSFutil.addMessage("Ocurrió un error de persistencia.", JSFutil.StatusMessage.ERROR);
         }
     }
 
@@ -390,7 +398,51 @@ public class TramitacionController implements Serializable {
             }
             this.documento = documentoFacade.find(this.tramitacion.getIdDocumento().getIdDocumento());
         } catch (Exception e) {
-            JSFutil.addMessage("Se ha producido un error inesperado al agregar el adjunto", JSFutil.StatusMessage.ERROR);
+            this.commonController.doExcepcion(e);
         }
+    }
+
+    public String archivarSinNota() {
+        try {
+            for (Tramitacion t : this.documento.getTramitacionList()) {
+                if (t.getIdEstado().getIdEstado() != 100) { //Existe todavia pendientes
+                    t.setFechaSalida(JSFutil.getFechaHoraActual());
+                    t.setHoraSalida(JSFutil.getFechaHoraActual());
+                    t.setIdEstado(new EstadoTramitacion(100));
+                    this.tramitacionFacade.edit(t);
+                }
+            }
+            this.documento.setCerrado(Boolean.TRUE);
+            documentoFacade.edit(this.documento);
+            this.documentoController.buscarDocumentoParaArchivo();
+            auditaFacade.create(new Audita("DOCUMENTO", "Documento archivado exitosamente.", JSFutil.getFechaHoraActual(), this.documento.toAudita(), JSFutil.getUsuarioConectado()));
+            JSFutil.addMessage("Documento archivado exitosamente.", JSFutil.StatusMessage.INFORMATION);
+        } catch (Exception e) {
+            this.commonController.doExcepcion(e);
+            //JSFutil.addMessage("Ocurrió un error de persistencia.", JSFutil.StatusMessage.ERROR);
+            return "";
+        }
+        return "/tramitacion/ListarDocumentoAdjunto";
+    }
+    public String enlazarAnotaSalida(Integer idNota) {
+        NotaSalida ns=notaSalidaFacade.find(idNota);
+        try {
+            DetalleNotaSalida dnt = new DetalleNotaSalida();
+            dnt.setIdNota(ns);
+            dnt.setIdDocumento(documento);
+            dnt.setFechaEnlace(JSFutil.getFechaHoraActual());
+            detalleNotaSalidaFacade.create(dnt);
+            if (ns.getCerrado()) {
+                this.archivarSinNota();
+            }
+            this.buscarAllPendiente();
+            auditaFacade.create(new Audita("DETALLE_NOTA_SALIDA", "Enlace creado exitosamente.", JSFutil.getFechaHoraActual(), dnt.toAudita(), JSFutil.getUsuarioConectado()));
+            JSFutil.addMessage("Enlace creado exitosamente. ",JSFutil.StatusMessage.INFORMATION);
+            return "/tramitacion/ListarDocumentoAdjunto";
+        } catch (Exception e) {
+            this.commonController.doExcepcion(e);
+            return "";
+        }
+
     }
 }

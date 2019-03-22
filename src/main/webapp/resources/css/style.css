@@ -1,3 +1,16 @@
+/*
+.ui-widget {
+    font-size: 1em !important;
+}
+.ui-widget .ui-widget {
+    font-size: 1em !important;
+}
+.ui-datatable,
+.ui-datatable .ui-datatable-tablewrapper table {
+    font-size: 1em !important;
+}
+*/
+
 h1{
     font-family: Arial,sans-serif;
 }
@@ -69,4 +82,7 @@ label{
 }
 .fontBold{
     font-weight: bold;
+}
+.top{
+    vertical-align: top !important;
 }
