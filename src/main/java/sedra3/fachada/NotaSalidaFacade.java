@@ -53,4 +53,18 @@ public class NotaSalidaFacade extends AbstractFacade<NotaSalida> {
         return tr;
     }
 
+    public List<NotaSalida> getAllNotaSalida(String criterio, Integer idTipo) {
+        Query q = em.createQuery("SELECT a FROM NotaSalida a WHERE (UPPER(a.numeroSalida) LIKE :xCriterio OR UPPER(a.numeroStr) LIKE :xCriterio) AND a.idTipoNota.idTipoNota=:xIdTipo ORDER BY a.numeroSalida,a.numeroStr");
+        if (criterio.compareTo("") != 0) {
+            q.setParameter("xCriterio", "%" + criterio.toUpperCase() + "%");
+            q.setParameter("xIdTipo", idTipo);
+        } else {
+            q.setParameter("xCriterio", "123456");
+            q.setParameter("xIdTipo", idTipo);
+        }
+        List<NotaSalida> tr = q.getResultList();
+        return tr;
+
+    }
+
 }

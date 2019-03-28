@@ -230,5 +230,16 @@ public class NotaSalida implements Serializable {
     public String toString() {
         return "sedra3.modelo.NotaSalida[ idNota=" + idNota + " ]";
     }
-    
+
+    public String toAudita() {
+        String cadena = "[Id=" + this.idNota + "]"
+                + "[NombreArchivo=" + this.nombreArchivo + "]"
+                + "[STR=" + this.numeroStr + "]"
+                + "[Nro.Sal/Memo=" + this.numeroSalida + "]"
+                + "[Referencia=" + this.referencia + "]"
+                + "[Anho=" + this.anho + "]"
+                + "[Rubro=" + this.rubro + "]"
+                + "[Clasificador=" + this.idClasificador + "]";
+        return cadena;
+    }
 }

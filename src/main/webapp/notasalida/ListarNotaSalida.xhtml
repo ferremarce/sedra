@@ -12,7 +12,61 @@
 
     <ui:define name="content">
         <h:form id="formMain">
-            <h:outputText styleClass="Orange font3x fontBold" value="En proceso de reingeniería"/>
+            <p:outputLabel for="options" value="Filtrar por: "/>
+            <p:selectOneRadio id="options" value="#{NotaSalidaController.tipoNota}">
+                <f:selectItems value="#{TipoNotaController.tipoNotaSet}"/>
+            </p:selectOneRadio>
+            <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
+                <p:inputText id="criterio" value="#{NotaSalidaController.criterioBusqueda}" placeholder="Nro. Salida, Referencia"/>
+                <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{NotaSalidaController.buscarAllNotaSalida()}" update="@form messages"/>
+                <p:commandButton immediate="true" value="#{bundle.NuevoBoton}" icon="fa fa-plus" ajax="false" action="#{NotaSalidaController.createSetup(null)}"/>
+                <p:commandButton immediate="true" value="#{bundle.ListarBoton}" icon="fa fa-th-list" onclick="PF('statusDialog').show()" ajax="false" action="#{DocumentoController.doRefrescar()}"/>
+            </p:panelGrid>
+            <h:outputText value="Puede realizar la búsqueda utilizando % como caracter o palabra comodín"/>
+
+            <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{NotaSalidaController.listaNotaSalida}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                         rows="50"
+                         paginator="true"
+                         filterEvent="enter"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,25,50,100"
+                         >
+                <f:facet name="header">
+                    Tabla de Datos
+                </f:facet>  
+                <p:column headerText="No. Sal./STR" width="10%"> 
+                    <p:commandLink title="#{bundle.VerBoton} detalle de la Nota de Salida" target="_new" ajax="false" action="#{NotaSalidaController.doVerForm(item.idNota)}">
+                        <h:outputText rendered="#{item.numeroSalida!=null}" styleClass="fontBold Blue" value="Salida #: #{item.numeroSalida}"/>
+                        <br/>
+                        <h:outputText rendered="#{item.numeroStr!=null}" styleClass="fontBold Blue" value="STR #: #{item.numeroStr}"/>
+                    </p:commandLink>
+                </p:column> 
+                <p:column headerText="Referencia/Rubro" >  
+                    <h:outputText rendered="#{item.referencia!=null}" value="Ref: #{item.referencia}"/>
+                    <br/>
+                    <h:outputText rendered="#{item.rubro!=null}" value="Rubro: #{item.rubro}"/>
+                </p:column>  
+                <p:column headerText="Enlazado con" > 
+                    <p:dataList rendered="#{item.detalleNotaSalidaList.size()>0}" value="#{item.detalleNotaSalidaList}" var="valor" itemType="circle"> 
+                        <p:commandLink styleClass="Red fontBold" title="Ver Documento" value="[Entrada] #{valor.idDocumento.nroEntrada}" target="_new" ajax="false" action="#{DocumentoController.doVerForm(valor.idDocumento.idDocumento)}"/>  
+                        <h:outputText value=" #{valor.idDocumento.asunto.length()>80 ? valor.idDocumento.asunto.substring(0, 79): valor.idDocumento.asunto}..." />  
+                    </p:dataList>
+                </p:column> 
+                <p:column headerText="Acción" width="115">
+                    <p:commandButton ajax="true" update="dataTable, messages" rendered="false" title="#{bundle.LlavearBoton}" value="#{bundle.LlavearBoton}" onclick="return confirm('Desea realmente bloquear el documento y todas sus tramitaciones?...');" icon="fa fa-unlock" actionListener="#{NotaSalidaController.llavear(item)}"/>
+                    <p:commandButton type="button" style="background: #fde5cd !important; color: black" rendered="#{item.cerrado==true}" onclick="return alert('El documento y sus anexos ya están archivados');" ajax="false" title="Documento llaveado" value="Llaveado" icon="fa fa-lock"/>
+                    <p:menuButton rendered="#{item.cerrado==false}" value="Opciones">
+                        <p:menuitem ajax="false" onclick="if (!confirm('Desea realmente bloquear el documento y todas sus tramitaciones?...')) {
+                                    return false;
+                                    }" value="#{bundle.LlavearBoton}" icon="fa fa-unlock" action="#{NotaSalidaController.llavear(item.idNota)}"/>
+                        <p:separator/>
+                        <p:menuitem ajax="false" value="#{bundle.EditarBoton}" action="#{NotaSalidaController.editSetup(item.idNota)}" icon="fa fa-pencil-square"/>
+                        <p:menuitem ajax="false" onclick="if (!confirm('#{bundle.ConfirmacionMensaje}')) {
+                                    return false;
+                                    }" value="#{bundle.EliminarBoton}" action="#{DocumentoController.delete(item.idDocumento)}" icon="fa fa-minus-square"/>
+                    </p:menuButton>  
+                </p:column>  
+            </p:dataTable>
         </h:form>
     </ui:define>
 
