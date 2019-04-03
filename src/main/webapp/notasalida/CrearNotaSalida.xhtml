@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="title">
+        <h1>Crear/Editar Nota de Salida o STR</h1>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="formMain">
+            <p:messages showDetail="true" />
+            <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-4,ui-grid-col-8">
+                <p:panel header="Clasificador">
+                    <p:tree draggable="true" droppable="true" id="planArchivo" value="#{ClasificadorController.root}" var="node" dynamic="false" cache="false" selectionMode="single"  selection="#{ClasificadorController.selectedNode}">
+                        <p:ajax event="select" update="formMain:panelClasificador" listener="#{NotaSalidaController.onNodeSelect}" /> 
+                        <p:treeNode expandedIcon="fa fa-folder-open" collapsedIcon="fa fa-folder">  
+                            <h:outputText value="#{node.toString()}" />
+                        </p:treeNode>  
+                    </p:tree> 
+                </p:panel>
+                <p:panel header="Información de la Nota">
+                    <p:panelGrid columns="1" styleClass="ui-panelgrid-blank" layout="grid">
+                        <p:panelGrid columns="3" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-10">
+                            <p:outputLabel for="idClasificador" value="Clasificador:"/>
+                            <p:outputPanel id="panelClasificador">
+                                <p:autoComplete id="idClasificador" dropdown="false" value="#{NotaSalidaController.notaSalida.idClasificador}" completeMethod="#{ClasificadorController.listaAutocompleteClasificador}"
+                                                var="clasifica" itemLabel="#{clasifica.toString()}" itemValue="#{clasifica}" forceSelection="true" required="true" requiredMessage="Clasificador"
+                                                >
+                                    <p:ajax event="itemSelect" update="formMain:panelClasificador"/>
+                                </p:autoComplete>
+                                <br/>
+                                <h:outputText rendered="#{DocumentoController.documento.idClasificador!=null}" styleClass="Purple" value="#{ClasificadorController.obtenerRutaClasificador(DocumentoController.documento.idClasificador.idClasificador)}" title="Clasificador" />
+                            </p:outputPanel>
+                            <p:message for="idClasificador"/>
+                        </p:panelGrid>
+                        <p:panelGrid id="panelNota" columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-10">
+                            <p:outputLabel for="idTipoNota" value="Tipo Nota:"/>
+                            <p:selectOneRadio id="idTipoNota" value="#{NotaSalidaController.notaSalida.idTipoNota}" required="true" requiredMessage="#{bundle.Requerido}">  
+                                <f:selectItems value="#{TipoNotaController.tipoNotaSet}"/>
+                                <p:ajax event="change" update="panelNota"/>
+                            </p:selectOneRadio>
+                            <p:outputLabel rendered="#{NotaSalidaController.notaSalida.idTipoNota.idTipoNota!=2}" for="nroSalida" value="Nro. Nota:"/>
+                            <p:inputText rendered="#{NotaSalidaController.notaSalida.idTipoNota.idTipoNota!=2}" id="nroSalida" value="#{NotaSalidaController.notaSalida.numeroSalida}" title="Nro. Nota" required="true" requiredMessage="#{bundle.Requerido}" />
+                            <p:outputLabel rendered="#{NotaSalidaController.notaSalida.idTipoNota.idTipoNota!=2}" for="referencia" value="Referencia:"/>
+                            <p:inputText rendered="#{NotaSalidaController.notaSalida.idTipoNota.idTipoNota!=2}" id="referencia" value="#{NotaSalidaController.notaSalida.referencia}" title="Referencia" required="true" requiredMessage="#{bundle.Requerido}" />
+                            <p:outputLabel rendered="#{NotaSalidaController.notaSalida.idTipoNota.idTipoNota==2}" for="nrostr" value="Nro. STR:"/>
+                            <p:inputText rendered="#{NotaSalidaController.notaSalida.idTipoNota.idTipoNota==2}" id="nrostr" value="#{NotaSalidaController.notaSalida.numeroStr}" title="Nro. STR" required="true" requiredMessage="#{bundle.Requerido}" />
+                            <p:outputLabel rendered="#{NotaSalidaController.notaSalida.idTipoNota.idTipoNota==2}" for="rubro" value="Rubro:"/>
+                            <p:inputText rendered="#{NotaSalidaController.notaSalida.idTipoNota.idTipoNota==2}" id="rubro" value="#{NotaSalidaController.notaSalida.rubro}" title="Rubro" required="true" requiredMessage="#{bundle.Requerido}" />
+                            <p:outputLabel rendered="#{NotaSalidaController.notaSalida.idTipoNota.idTipoNota==2}" for="ff" value="Fuente Financ."/>
+                            <p:inputText rendered="#{NotaSalidaController.notaSalida.idTipoNota.idTipoNota==2}" id="ff" value="#{NotaSalidaController.notaSalida.fuenteFinanciamiento}" title="Fuente de Financiamiento" required="true" requiredMessage="#{bundle.Requerido}" />
+                            <p:outputLabel rendered="#{NotaSalidaController.notaSalida.idTipoNota.idTipoNota!=null}" for="anho" value="Año"/>
+                            <p:inputText rendered="#{NotaSalidaController.notaSalida.idTipoNota.idTipoNota!=null}"  id="anho" value="#{NotaSalidaController.notaSalida.anho}" title="Año" required="true" requiredMessage="#{bundle.Requerido}" />
+                            <p:outputLabel rendered="#{NotaSalidaController.notaSalida.idTipoNota!=null}" for="downAdjunto" value="Adjunto:"/>
+                            <p:panelGrid  rendered="#{NotaSalidaController.notaSalida.idTipoNota!=null}" id="downAdjunto" columns="2">
+                                <p:fileUpload id="adjunto" label="#{bundle.SeleccionarBoton}" cancelLabel="#{bundle.EliminarBoton}" uploadLabel="#{bundle.AgregarBoton}" 
+                                              fileUploadListener="#{NotaSalidaController.handleFileUpload}"
+                                              mode="advanced"
+                                              update="downAdjunto"
+                                              />
+                                <p:message for="adjunto"/>
+                                <p:commandButton style="width: 150px" rendered="#{NotaSalidaController.adjunto!=null}" title="#{bundle.DescargarBoton}" value="#{bundle.DescargarBoton}" icon="fa fa-download" immediate="true" ajax="false">
+                                    <h:outputText value="Adjunto: #{NotaSalidaController.adjunto.fileName} "/>
+                                    <p:fileDownload value="#{CommonController.downloadAdjuntoTMP(NotaSalidaController.adjunto)}"/>
+                                </p:commandButton>
+                            </p:panelGrid>
+                            <p:separator/><p:separator/>
+                            <h:outputLabel for="enlace" value="Enlazado a:"/>
+                            <p:panelGrid id="panelEnlace" columns="3">
+                                <p:inputText size="10" id="enlace" value="#{NotaSalidaController.nroEntrada}" title="Nro. Entrada" />
+                                <p:commandButton icon="fa fa-plus" ajax="true" action="#{NotaSalidaController.obtenerDocumentoByNroEntrada()}" update=":formMain:panelEnlace messages" />
+                                <p:dataList id="dataListDoc" rendered="#{NotaSalidaController.selectedDocumentos.size()>0}" value="#{NotaSalidaController.selectedDocumentos}" var="valor" itemType="circle">  
+                                    #{valor}  
+                                </p:dataList>
+                            </p:panelGrid>
+                        </p:panelGrid>
+                    </p:panelGrid>
+                    <f:facet name="footer">
+                        <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" columnClasses="ui-grid-col-6,ui-grid-col-6">
+                            <p:commandButton icon="fa fa-save" action="#{NotaSalidaController.create()}" ajax="false"  value="#{bundle.GuardarBoton}" title="#{bundle.GuardarBoton}"/>  
+                            <p:commandButton immediate="true" icon="fa fa-sign-out" action="#{NotaSalidaController.listNotaSalidaSetup()}" ajax="false"  value="#{bundle.CancelarBoton}" title="#{bundle.CancelarBoton}"/> 
+                        </p:panelGrid>
+                    </f:facet>
+                </p:panel>
+            </p:panelGrid>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

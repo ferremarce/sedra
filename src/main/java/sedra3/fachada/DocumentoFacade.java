@@ -82,5 +82,16 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
         return tr;
 
     }
+    public List<Documento> getDocumentoByNroEntrada(String criterio) {
+        Query q = em.createQuery("SELECT a FROM Documento a WHERE UPPER(a.nroEntrada) LIKE :xCriterio ORDER BY a.idDocumento");
+        if (criterio.compareTo("") != 0) {
+            q.setParameter("xCriterio", criterio.toUpperCase());
+        } else {
+            q.setParameter("xCriterio", "123456");
+        }
+        List<Documento> tr = q.getResultList();
+
+        return tr;
+    }
 
 }

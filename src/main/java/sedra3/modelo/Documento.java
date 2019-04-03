@@ -330,7 +330,7 @@ public class Documento implements Serializable {
 
     @Override
     public String toString() {
-        return "sedra3.modelo.Documento[ idDocumento=" + idDocumento + " ]";
+          return "[" + this.nroEntrada + "] " + this.asunto;
     }
 
     public String toAudita() {
