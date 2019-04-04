@@ -40,7 +40,7 @@ import sedra3.util.JSFutil;
 @Named(value = "NotaSalidaController")
 @SessionScoped
 public class NotaSalidaController implements Serializable {
-
+    
     @Inject
     NotaSalidaFacade notaSalidaFacade;
     @Inject
@@ -57,7 +57,7 @@ public class NotaSalidaController implements Serializable {
     ClasificadorController clasificadorController;
     @Inject
     TipoNotaFacade tipoNotaFacade;
-
+    
     private NotaSalida notaSalida;
     private Documento documento;
     private String criterioBusqueda = "";
@@ -72,91 +72,91 @@ public class NotaSalidaController implements Serializable {
      */
     public NotaSalidaController() {
     }
-
+    
     public NotaSalida getNotaSalida() {
         return notaSalida;
     }
-
+    
     public void setNotaSalida(NotaSalida notaSalida) {
         this.notaSalida = notaSalida;
     }
-
+    
     public Documento getDocumento() {
         return documento;
     }
-
+    
     public void setDocumento(Documento documento) {
         this.documento = documento;
     }
-
+    
     public String getCriterioBusqueda() {
         return criterioBusqueda;
     }
-
+    
     public void setCriterioBusqueda(String criterioBusqueda) {
         this.criterioBusqueda = criterioBusqueda;
     }
-
+    
     public List<NotaSalida> getListaNotaSalida() {
         return listaNotaSalida;
     }
-
+    
     public void setListaNotaSalida(List<NotaSalida> listaNotaSalida) {
         this.listaNotaSalida = listaNotaSalida;
     }
-
+    
     public TipoNota getTipoNota() {
         return tipoNota;
     }
-
+    
     public void setTipoNota(TipoNota tipoNota) {
         this.tipoNota = tipoNota;
     }
-
+    
     public UploadedFile getAdjunto() {
         return adjunto;
     }
-
+    
     public void setAdjunto(UploadedFile adjunto) {
         this.adjunto = adjunto;
     }
-
+    
     public String getNroEntrada() {
         return nroEntrada;
     }
-
+    
     public void setNroEntrada(String nroEntrada) {
         this.nroEntrada = nroEntrada;
     }
-
+    
     public List<Documento> getSelectedDocumentos() {
         return selectedDocumentos;
     }
-
+    
     public void setSelectedDocumentos(List<Documento> selectedDocumentos) {
         this.selectedDocumentos = selectedDocumentos;
     }
-
+    
     public String doVerForm(Integer idNota) {
         this.notaSalida = notaSalidaFacade.find(idNota);
         return "/notasalida/VerNotaSalida?faces-redirect=true";
     }
-
+    
     public String listNotaSalidaSetup() {
         if (this.tipoNota == null) {
             //por defecto es el tipo Nota Salida
             this.tipoNota = tipoNotaFacade.find(1);
         }
-
+        
         return "/notasalida/ListarNotaSalida";
     }
-
+    
     public void anexarDocAnotaExistente(Integer idDoc) {
         this.documento = documentoFacade.find(idDoc);
         this.listaNotaSalida = new ArrayList<>();
         this.criterioBusqueda = "";
     }
-
+    
     public void buscarAllNotaSalida() {
         this.listaNotaSalida = notaSalidaFacade.getAllNotaSalida(criterioBusqueda, tipoNota.getIdTipoNota());
         if (this.listaNotaSalida.isEmpty()) {
@@ -165,7 +165,7 @@ public class NotaSalidaController implements Serializable {
             JSFutil.addMessage(this.listaNotaSalida.size() + " registros recuperados", JSFutil.StatusMessage.INFORMATION);
         }
     }
-
+    
     public String createSetup(Integer idDoc) {
         Calendar c = Calendar.getInstance();
         c.setTime(JSFutil.getFechaHoraActual());
@@ -182,15 +182,18 @@ public class NotaSalidaController implements Serializable {
         this.clasificadorController.cargarTree(Boolean.FALSE);
         return "/notasalida/CrearNotaSalida";
     }
-
+    
     public String editSetup(Integer idNotaSalida) {
-        //int id = Integer.parseInt(idNotaSalida);
         this.notaSalida = notaSalidaFacade.find(idNotaSalida);
         this.adjunto = null;
         this.selectedDocumentos = new ArrayList<>();
+        for (DetalleNotaSalida dns : this.notaSalida.getDetalleNotaSalidaList()) {
+            this.selectedDocumentos.add(dns.getIdDocumento());
+        }
+        this.clasificadorController.cargarTree(Boolean.FALSE);
         return "/notasalida/CrearNotaSalida";
     }
-
+    
     public String delete(Integer idNotaSalida) {
         try {
             NotaSalida u = notaSalidaFacade.find(idNotaSalida);
@@ -209,7 +212,7 @@ public class NotaSalidaController implements Serializable {
         this.buscarAllNotaSalida();
         return "/notasalida/ListarNotaSalida";
     }
-
+    
     public void llavear(Integer idNota) {
         NotaSalida ns = notaSalidaFacade.find(idNota);
         NotaSalida tmpNota = ns;
@@ -238,24 +241,24 @@ public class NotaSalidaController implements Serializable {
         this.buscarAllNotaSalida();
         //return "/notaSalida/ListarNotaSalida";
     }
-
+    
     public void onNodeSelect(NodeSelectEvent event) {
         Clasificador c = (Clasificador) event.getTreeNode().getData();
         System.out.println("Seleccionado: " + c.toString());
         this.notaSalida.setIdClasificador(c);
     }
-
+    
     public void handleFileUpload(FileUploadEvent event) {
         this.adjunto = event.getFile();
     }
-
+    
     public void obtenerDocumentoByNroEntrada() {
         if (!this.nroEntrada.isEmpty()) {
             List<Documento> lista = documentoFacade.getDocumentoByNroEntrada(this.nroEntrada);
             if (!lista.isEmpty()) {
                 for (Documento d : lista) {
                     if (d.getCerrado()) {
-                        JSFutil.addMessage("El documento con entrada: " + this.nroEntrada + " ya se encuentra llaveado", JSFutil.StatusMessage.WARNING);
+                        JSFutil.addMessage("El documento con entrada: " + this.nroEntrada +" del año "+d.getAnho()+ " ya se encuentra llaveado", JSFutil.StatusMessage.WARNING);
                     } else {
                         this.selectedDocumentos.add(d);
                         this.nroEntrada = "";
@@ -269,41 +272,75 @@ public class NotaSalidaController implements Serializable {
             JSFutil.addMessage("No es posible localizar el documento con entrada: " + this.nroEntrada, JSFutil.StatusMessage.WARNING);
         }
     }
-
-    public String create() {
+    
+    public String doGuardar() {
         try {
-            if (this.adjunto != null) {
-                notaSalida.setTipoArchivo(this.adjunto.getContentType());
-                notaSalida.setTamanhoArchivo(BigInteger.valueOf(this.adjunto.getSize()));
-                notaSalida.setNombreArchivo(this.adjunto.getFileName());
-            }
-            notaSalida.setCerrado(Boolean.FALSE);
-            notaSalidaFacade.create(notaSalida);
-
-            String doc = "[Entradas=";
-            if (!this.selectedDocumentos.isEmpty()) {
-                //notaSalidaFacade.deleteAllDetalle(notaSalida);
-                DetalleNotaSalida dtn;
-                for (Documento d : this.selectedDocumentos) {
-                    dtn = new DetalleNotaSalida();
-                    dtn.setIdDocumento(d);
-                    dtn.setIdNota(notaSalida);
-                    dtn.setFechaEnlace(JSFutil.getFechaHoraActual());
-                    detalleNotaSalidaFacade.create(dtn);
-                    doc += d.getNroEntrada() + " ";
+            //Nuevo
+            if (notaSalida.getIdNota() == null) {
+                if (this.adjunto != null) {
+                    notaSalida.setTipoArchivo(this.adjunto.getContentType());
+                    notaSalida.setTamanhoArchivo(BigInteger.valueOf(this.adjunto.getSize()));
+                    notaSalida.setNombreArchivo(this.adjunto.getFileName());
+                }
+                notaSalida.setCerrado(Boolean.FALSE);
+                notaSalidaFacade.create(notaSalida);
+                
+                String doc = "[Entradas=";
+                if (!this.selectedDocumentos.isEmpty()) {
+                    DetalleNotaSalida dtn;
+                    for (Documento d : this.selectedDocumentos) {
+                        dtn = new DetalleNotaSalida();
+                        dtn.setIdDocumento(d);
+                        dtn.setIdNota(notaSalida);
+                        dtn.setFechaEnlace(JSFutil.getFechaHoraActual());
+                        detalleNotaSalidaFacade.create(dtn);
+                        doc += d.getNroEntrada() + " ";
+                    }
+                }
+                this.criterioBusqueda = notaSalida.getNumeroSalida() == null ? notaSalida.getNumeroStr() : notaSalida.getNumeroSalida();
+                auditaFacade.create(new Audita("NOTA_SALIDA", "NotaSalida creado exitosamente.", JSFutil.getFechaHoraActual(), notaSalida.toAudita() + doc + "]", JSFutil.getUsuarioConectado()));
+                JSFutil.addMessage("NotaSalida creado exitosamente. ", JSFutil.StatusMessage.INFORMATION);
+                //Grabar el archivo a disco
+                if (this.adjunto != null) {
+                    int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(this.adjunto.getContents()), JSFutil.folderDocumento + notaSalida.getIdNota() + "-" + this.adjunto.getFileName());
+                    if (resultado != 0) {
+                        JSFutil.addMessage("Pero no se ha podido guardar el adjunto debido a un error interno en el procesamiento", JSFutil.StatusMessage.ERROR);
+                    }
+                }
+            } else {
+                if (this.adjunto != null) {
+                    notaSalida.setTipoArchivo(this.adjunto.getContentType());
+                    notaSalida.setTamanhoArchivo(BigInteger.valueOf(this.adjunto.getSize()));
+                    notaSalida.setNombreArchivo(this.adjunto.getFileName());
+                }
+                notaSalidaFacade.edit(notaSalida);
+                for (DetalleNotaSalida dns : notaSalida.getDetalleNotaSalidaList()) {
+                    detalleNotaSalidaFacade.remove(dns);
+                }
+                String doc = "[Entradas=";
+                if (!this.selectedDocumentos.isEmpty()) {
+                    DetalleNotaSalida dtn;
+                    for (Documento d : this.selectedDocumentos) {
+                        dtn = new DetalleNotaSalida();
+                        dtn.setIdDocumento(d);
+                        dtn.setIdNota(notaSalida);
+                        dtn.setFechaEnlace(JSFutil.getFechaHoraActual());
+                        detalleNotaSalidaFacade.create(dtn);
+                        doc += d.getNroEntrada() + " ";
+                    }
+                }
+                this.criterioBusqueda = notaSalida.getNumeroSalida() == null ? notaSalida.getNumeroStr() : notaSalida.getNumeroSalida();
+                auditaFacade.create(new Audita("NOTA_SALIDA", "NotaSalida actualizado exitosamente.", JSFutil.getFechaHoraActual(), notaSalida.toAudita() + doc + "]", JSFutil.getUsuarioConectado()));
+                JSFutil.addMessage("NotaSalida actualizado exitosamente. ", JSFutil.StatusMessage.INFORMATION);
+                //Grabar el archivo a disco
+                if (this.adjunto != null) {
+                    int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(this.adjunto.getContents()), JSFutil.folderDocumento + notaSalida.getIdNota() + "-" + this.adjunto.getFileName());
+                    if (resultado != 0) {
+                        JSFutil.addMessage("Pero no se ha podido guardar el adjunto debido a un error interno en el procesamiento", JSFutil.StatusMessage.ERROR);
+                    }
                 }
             }
-            this.criterioBusqueda = notaSalida.getNumeroSalida() == null ? notaSalida.getNumeroStr() : notaSalida.getNumeroSalida();
-            auditaFacade.create(new Audita("NOTA_SALIDA", "NotaSalida creado exitosamente.", JSFutil.getFechaHoraActual(), notaSalida.toAudita() + doc + "]", JSFutil.getUsuarioConectado()));
-            JSFutil.addMessage("NotaSalida creado exitosamente. ", JSFutil.StatusMessage.INFORMATION);
-            //Grabar el archivo a disco
-            if (this.adjunto != null) {
-                int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(this.adjunto.getContents()), JSFutil.folderDocumento + notaSalida.getIdNota() + "-" + this.adjunto.getFileName());
-                if (resultado != 0) {
-                    JSFutil.addMessage("Pero no se ha podido guardar el adjunto debido a un error interno en el procesamiento", JSFutil.StatusMessage.ERROR);
-                }
-            }
-
+            
         } catch (Exception e) {
             this.commonController.doExcepcion(e);
         }
@@ -311,5 +348,12 @@ public class NotaSalidaController implements Serializable {
         this.buscarAllNotaSalida();
         return "/notasalida/ListarNotaSalida";
         //return null;
+    }
+    
+    public void doSacarDocumento(Documento d) {
+        this.selectedDocumentos.remove(d);
+        if (this.selectedDocumentos.isEmpty()) {
+            this.selectedDocumentos = new ArrayList<>();
+        }
     }
 }

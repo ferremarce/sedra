@@ -63,7 +63,7 @@
                         <p:menuitem ajax="false" value="#{bundle.EditarBoton}" action="#{NotaSalidaController.editSetup(item.idNota)}" icon="fa fa-pencil-square"/>
                         <p:menuitem ajax="false" onclick="if (!confirm('#{bundle.ConfirmacionMensaje}')) {
                                     return false;
-                                    }" value="#{bundle.EliminarBoton}" action="#{DocumentoController.delete(item.idDocumento)}" icon="fa fa-minus-square"/>
+                                    }" value="#{bundle.EliminarBoton}" action="#{NotaSalidaController.delete(item.idNota)}" icon="fa fa-minus-square"/>
                     </p:menuButton>  
                 </p:column>  
             </p:dataTable>
