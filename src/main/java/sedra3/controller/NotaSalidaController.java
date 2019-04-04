@@ -40,7 +40,7 @@ import sedra3.util.JSFutil;
 @Named(value = "NotaSalidaController")
 @SessionScoped
 public class NotaSalidaController implements Serializable {
-    
+
     @Inject
     NotaSalidaFacade notaSalidaFacade;
     @Inject
@@ -57,7 +57,7 @@ public class NotaSalidaController implements Serializable {
     ClasificadorController clasificadorController;
     @Inject
     TipoNotaFacade tipoNotaFacade;
-    
+
     private NotaSalida notaSalida;
     private Documento documento;
     private String criterioBusqueda = "";
@@ -72,91 +72,91 @@ public class NotaSalidaController implements Serializable {
      */
     public NotaSalidaController() {
     }
-    
+
     public NotaSalida getNotaSalida() {
         return notaSalida;
     }
-    
+
     public void setNotaSalida(NotaSalida notaSalida) {
         this.notaSalida = notaSalida;
     }
-    
+
     public Documento getDocumento() {
         return documento;
     }
-    
+
     public void setDocumento(Documento documento) {
         this.documento = documento;
     }
-    
+
     public String getCriterioBusqueda() {
         return criterioBusqueda;
     }
-    
+
     public void setCriterioBusqueda(String criterioBusqueda) {
         this.criterioBusqueda = criterioBusqueda;
     }
-    
+
     public List<NotaSalida> getListaNotaSalida() {
         return listaNotaSalida;
     }
-    
+
     public void setListaNotaSalida(List<NotaSalida> listaNotaSalida) {
         this.listaNotaSalida = listaNotaSalida;
     }
-    
+
     public TipoNota getTipoNota() {
         return tipoNota;
     }
-    
+
     public void setTipoNota(TipoNota tipoNota) {
         this.tipoNota = tipoNota;
     }
-    
+
     public UploadedFile getAdjunto() {
         return adjunto;
     }
-    
+
     public void setAdjunto(UploadedFile adjunto) {
         this.adjunto = adjunto;
     }
-    
+
     public String getNroEntrada() {
         return nroEntrada;
     }
-    
+
     public void setNroEntrada(String nroEntrada) {
         this.nroEntrada = nroEntrada;
     }
-    
+
     public List<Documento> getSelectedDocumentos() {
         return selectedDocumentos;
     }
-    
+
     public void setSelectedDocumentos(List<Documento> selectedDocumentos) {
         this.selectedDocumentos = selectedDocumentos;
     }
-    
+
     public String doVerForm(Integer idNota) {
         this.notaSalida = notaSalidaFacade.find(idNota);
         return "/notasalida/VerNotaSalida?faces-redirect=true";
     }
-    
+
     public String listNotaSalidaSetup() {
         if (this.tipoNota == null) {
             //por defecto es el tipo Nota Salida
             this.tipoNota = tipoNotaFacade.find(1);
         }
-        
+
         return "/notasalida/ListarNotaSalida";
     }
-    
+
     public void anexarDocAnotaExistente(Integer idDoc) {
         this.documento = documentoFacade.find(idDoc);
         this.listaNotaSalida = new ArrayList<>();
         this.criterioBusqueda = "";
     }
-    
+
     public void buscarAllNotaSalida() {
         this.listaNotaSalida = notaSalidaFacade.getAllNotaSalida(criterioBusqueda, tipoNota.getIdTipoNota());
         if (this.listaNotaSalida.isEmpty()) {
@@ -165,7 +165,7 @@ public class NotaSalidaController implements Serializable {
             JSFutil.addMessage(this.listaNotaSalida.size() + " registros recuperados", JSFutil.StatusMessage.INFORMATION);
         }
     }
-    
+
     public String createSetup(Integer idDoc) {
         Calendar c = Calendar.getInstance();
         c.setTime(JSFutil.getFechaHoraActual());
@@ -182,7 +182,7 @@ public class NotaSalidaController implements Serializable {
         this.clasificadorController.cargarTree(Boolean.FALSE);
         return "/notasalida/CrearNotaSalida";
     }
-    
+
     public String editSetup(Integer idNotaSalida) {
         this.notaSalida = notaSalidaFacade.find(idNotaSalida);
         this.adjunto = null;
@@ -193,7 +193,7 @@ public class NotaSalidaController implements Serializable {
         this.clasificadorController.cargarTree(Boolean.FALSE);
         return "/notasalida/CrearNotaSalida";
     }
-    
+
     public String delete(Integer idNotaSalida) {
         try {
             NotaSalida u = notaSalidaFacade.find(idNotaSalida);
@@ -212,7 +212,7 @@ public class NotaSalidaController implements Serializable {
         this.buscarAllNotaSalida();
         return "/notasalida/ListarNotaSalida";
     }
-    
+
     public void llavear(Integer idNota) {
         NotaSalida ns = notaSalidaFacade.find(idNota);
         NotaSalida tmpNota = ns;
@@ -241,24 +241,24 @@ public class NotaSalidaController implements Serializable {
         this.buscarAllNotaSalida();
         //return "/notaSalida/ListarNotaSalida";
     }
-    
+
     public void onNodeSelect(NodeSelectEvent event) {
         Clasificador c = (Clasificador) event.getTreeNode().getData();
         System.out.println("Seleccionado: " + c.toString());
         this.notaSalida.setIdClasificador(c);
     }
-    
+
     public void handleFileUpload(FileUploadEvent event) {
         this.adjunto = event.getFile();
     }
-    
+
     public void obtenerDocumentoByNroEntrada() {
         if (!this.nroEntrada.isEmpty()) {
             List<Documento> lista = documentoFacade.getDocumentoByNroEntrada(this.nroEntrada);
             if (!lista.isEmpty()) {
                 for (Documento d : lista) {
                     if (d.getCerrado()) {
-                        JSFutil.addMessage("El documento con entrada: " + this.nroEntrada +" del año "+d.getAnho()+ " ya se encuentra llaveado", JSFutil.StatusMessage.WARNING);
+                        JSFutil.addMessage("El documento con entrada: " + this.nroEntrada + " del año " + d.getAnho() + " ya se encuentra llaveado", JSFutil.StatusMessage.WARNING);
                     } else {
                         this.selectedDocumentos.add(d);
                         this.nroEntrada = "";
@@ -272,7 +272,7 @@ public class NotaSalidaController implements Serializable {
             JSFutil.addMessage("No es posible localizar el documento con entrada: " + this.nroEntrada, JSFutil.StatusMessage.WARNING);
         }
     }
-    
+
     public String doGuardar() {
         try {
             //Nuevo
@@ -284,7 +284,7 @@ public class NotaSalidaController implements Serializable {
                 }
                 notaSalida.setCerrado(Boolean.FALSE);
                 notaSalidaFacade.create(notaSalida);
-                
+
                 String doc = "[Entradas=";
                 if (!this.selectedDocumentos.isEmpty()) {
                     DetalleNotaSalida dtn;
@@ -340,7 +340,7 @@ public class NotaSalidaController implements Serializable {
                     }
                 }
             }
-            
+
         } catch (Exception e) {
             this.commonController.doExcepcion(e);
         }
@@ -349,11 +349,21 @@ public class NotaSalidaController implements Serializable {
         return "/notasalida/ListarNotaSalida";
         //return null;
     }
-    
+
     public void doSacarDocumento(Documento d) {
         this.selectedDocumentos.remove(d);
         if (this.selectedDocumentos.isEmpty()) {
             this.selectedDocumentos = new ArrayList<>();
         }
+    }
+
+    public String doRefrescar() {
+        this.listaNotaSalida = notaSalidaFacade.getAllNotaSalida("%");
+        if (this.listaNotaSalida.isEmpty()) {
+            JSFutil.addMessage("No hay resultados...", JSFutil.StatusMessage.WARNING);
+        } else {
+            JSFutil.addMessage(this.listaNotaSalida.size() + " registros recuperados", JSFutil.StatusMessage.INFORMATION);
+        }
+        return "";
     }
 }

@@ -20,7 +20,7 @@
                 <p:inputText id="criterio" value="#{NotaSalidaController.criterioBusqueda}" placeholder="Nro. Salida, Referencia"/>
                 <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{NotaSalidaController.buscarAllNotaSalida()}" update="@form messages"/>
                 <p:commandButton immediate="true" value="#{bundle.NuevoBoton}" icon="fa fa-plus" ajax="false" action="#{NotaSalidaController.createSetup(null)}"/>
-                <p:commandButton immediate="true" value="#{bundle.ListarBoton}" icon="fa fa-th-list" onclick="PF('statusDialog').show()" ajax="false" action="#{DocumentoController.doRefrescar()}"/>
+                <p:commandButton immediate="true" value="#{bundle.ListarBoton}" icon="fa fa-th-list" onclick="PF('statusDialog').show()" ajax="false" action="#{NotaSalidaController.doRefrescar()}"/>
             </p:panelGrid>
             <h:outputText value="Puede realizar la búsqueda utilizando % como caracter o palabra comodín"/>
 
@@ -34,6 +34,9 @@
                 <f:facet name="header">
                     Tabla de Datos
                 </f:facet>  
+                <p:column headerText="#" style="width: 40px">
+                    <h:outputText value="#{index+1}"/>
+                </p:column>
                 <p:column headerText="No. Sal./STR" width="10%"> 
                     <p:commandLink title="#{bundle.VerBoton} detalle de la Nota de Salida" target="_new" ajax="false" action="#{NotaSalidaController.doVerForm(item.idNota)}">
                         <h:outputText rendered="#{item.numeroSalida!=null}" styleClass="fontBold Blue" value="Salida #: #{item.numeroSalida}"/>
