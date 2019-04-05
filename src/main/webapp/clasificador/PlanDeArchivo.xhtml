@@ -13,7 +13,7 @@
     <ui:define name="content">
         <h:form id="formMain">
             <p:tree draggable="true" droppable="true" dropCopyNode="true" id="planArchivo" filterBy="#{node}" filterMatchMode="contains" animate="true" value="#{ClasificadorController.root}" var="node" dynamic="false" cache="false" selectionMode="single"  selection="#{ClasificadorController.selectedNode}">
-                <p:ajax event="dragdrop" listener="#{ClasificadorController.onDragDrop}" update="planArchivo messages" />
+                <p:ajax event="dragdrop" listener="#{ClasificadorController.onDragDrop}" update="planArchivo, messages" />
                 <p:treeNode expandedIcon="fa fa-folder-open" collapsedIcon="fa fa-folder">  
                     <h:outputText value="#{node.toString()}" />
                 </p:treeNode>  
@@ -23,8 +23,8 @@
                 <p:menuitem value="Nuevo Hijo" actionListener="#{ClasificadorController.doNuevoHijoForm()}" update=":formDlg:panelClasi" oncomplete="PF('dlgUpdateTipo').show();" icon="fa fa-share-alt" />
                 <p:menuitem value="Editar" actionListener="#{ClasificadorController.doEditarForm()}" update=":formDlg:panelClasi" oncomplete="PF('dlgUpdateTipo').show();" icon="fa fa-pencil"/>
                 <p:separator/>
-                <p:menuitem value="Copiar Estructura" actionListener="#{ClasificadorController.copyNode()}" update="messages menuContext" icon="fa fa-copy"/>
-                <p:menuitem value="Pegar Estructura" disabled="#{ClasificadorController.copyNode==null}" actionListener="#{ClasificadorController.pasteNode()}" update="planArchivo messages" icon="fa fa-paste"/>
+                <p:menuitem value="Copiar Estructura" actionListener="#{ClasificadorController.copyNode()}" update="messages, menuContext" icon="fa fa-copy"/>
+                <p:menuitem value="Pegar Estructura" disabled="#{ClasificadorController.copyNode==null}" actionListener="#{ClasificadorController.pasteNode()}" update="planArchivo, messages" icon="fa fa-paste"/>
                 <p:separator/>
                 <p:menuitem value="Eliminar" ajax="false"  action="#{ClasificadorController.doBorrarNodo()}" onclick="if (!confirm('#{bundle.ConfirmacionMensaje}')) {
                             return false;

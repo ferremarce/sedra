@@ -12,13 +12,12 @@
 
     <ui:define name="content">
         <h:form>
-            <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
-                <p:inputText id="criterio" value="#{DocumentoController.criterio}"/>
-                <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{DocumentoController.doBuscar()}" update="@form messages"/>
+            <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2">
+                <p:inputText id="criterio" value="#{DocumentoController.criterio}" placeholder="Asunto, Nro. Entrada"/>
+                <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{DocumentoController.doBuscar()}" update="@form, messages"/>
                 <p:commandButton immediate="true" value="#{bundle.NuevoBoton}" icon="fa fa-plus" ajax="false" action="#{DocumentoController.createSetup()}"/>
                 <p:commandButton immediate="true" value="#{bundle.ListarBoton}" icon="fa fa-th-list" onclick="PF('statusDialog').show()" ajax="false" action="#{DocumentoController.doRefrescar()}"/>
             </p:panelGrid>
-            <p:watermark for="criterio" value="Asunto, Nro. Entrada"/>
             <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                          rows="50"
                          paginator="true"

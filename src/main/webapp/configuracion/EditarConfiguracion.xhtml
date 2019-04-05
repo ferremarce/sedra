@@ -40,7 +40,7 @@
                         </p:panelGrid>
                         <f:facet name="footer">
                             <p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
-                                <p:commandButton icon="fa fa-save" value="#{bundle.GuardarBoton}" update="messages messagesError" action="#{ConfiguracionController.edit()}"/>
+                                <p:commandButton icon="fa fa-save" value="#{bundle.GuardarBoton}" update="messages, messagesError" action="#{ConfiguracionController.edit()}"/>
                             </p:panelGrid>
                         </f:facet>
                     </p:panel>

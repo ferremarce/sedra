@@ -263,6 +263,20 @@ public class DocumentoController implements Serializable {
         return "";
     }
 
+    public String doBuscarSeguimiento() {
+        if (this.criterio.isEmpty()) {
+            JSFutil.addMessage("No hay criterios para buscar...", JSFutil.StatusMessage.WARNING);
+            return "";
+        }
+        this.listaDocumento = documentoFacade.getAllDocumentoParaSeguimiento(this.criterio);
+        if (this.listaDocumento.isEmpty()) {
+            JSFutil.addMessage("No hay resultados...", JSFutil.StatusMessage.WARNING);
+        } else {
+            JSFutil.addMessage(this.listaDocumento.size() + " registros recuperados", JSFutil.StatusMessage.INFORMATION);
+        }
+        return "";
+    }
+
     public String doRefrescar() {
         this.listaDocumento = documentoFacade.getAllDocumento("%");
         if (this.listaDocumento.isEmpty()) {
@@ -311,7 +325,7 @@ public class DocumentoController implements Serializable {
         JSFutil.addMessage("Seleccionado: " + event.getTreeNode().toString(), JSFutil.StatusMessage.INFORMATION);
         this.clasificadorSeleccionado = (Clasificador) event.getTreeNode().getData();
         this.listaDocumento = documentoFacade.getAllDocumentoPlanArchivo(this.clasificadorSeleccionado.getIdClasificador());
-        this.listaNotaSalida =notaSalidaFacade.getAllNotaSalidaPlanArchivo(this.clasificadorSeleccionado.getIdClasificador());
+        this.listaNotaSalida = notaSalidaFacade.getAllNotaSalidaPlanArchivo(this.clasificadorSeleccionado.getIdClasificador());
         if (this.listaDocumento.isEmpty() && this.listaNotaSalida.isEmpty()) {
             JSFutil.addMessage("No hay Entradas ni Salidas...", JSFutil.StatusMessage.WARNING);
         } else {
@@ -388,10 +402,12 @@ public class DocumentoController implements Serializable {
             }
         }
     }
+
     public String listAdjuntaDocumentoSetup() {
-        this.listaDocumento=new ArrayList<>();
+        this.listaDocumento = new ArrayList<>();
         return "/tramitacion/ListarDocumentoAdjunto";
     }
+
     public String listLocalizarDocumentoSetup() {
 //        this.criterioBusqueda = "";
 //        this.model = null;
@@ -399,14 +415,14 @@ public class DocumentoController implements Serializable {
 //        this.tmpFechaHasta = new Date();
         return "/documento/LocalizarDocumento";
     }
-    
+
     public void buscarDocumentoParaArchivo() {
         this.listaDocumento = documentoFacade.getAllDocumentoByExpediente(this.criterio);
-         if (this.listaDocumento.isEmpty()) {
+        if (this.listaDocumento.isEmpty()) {
             JSFutil.addMessage("No hay resultados...", JSFutil.StatusMessage.WARNING);
         } else {
             JSFutil.addMessage(this.listaDocumento.size() + " registros recuperados", JSFutil.StatusMessage.INFORMATION);
         }
     }
-    
+
 }

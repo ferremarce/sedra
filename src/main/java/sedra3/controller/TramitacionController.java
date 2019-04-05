@@ -38,10 +38,10 @@ import sedra3.util.JSFutil;
 @Named(value = "TramitacionController")
 @SessionScoped
 public class TramitacionController implements Serializable {
-
+    
     private static final Logger LOG = Logger.getLogger(TramitacionController.class.getName());
     ResourceBundle bundle = ResourceBundle.getBundle("propiedades.bundle", JSFutil.getmyLocale());
-
+    
     @Inject
     ClasificadorController clasificadorController;
     @Inject
@@ -60,7 +60,7 @@ public class TramitacionController implements Serializable {
     NotaSalidaFacade notaSalidaFacade;
     @Inject
     DetalleNotaSalidaFacade detalleNotaSalidaFacade;
-
+    
     private Tramitacion tramitacion;
     private Tramitacion tramitacionRechazo;
     private List<Tramitacion> listaTramitacionPendiente;
@@ -78,102 +78,102 @@ public class TramitacionController implements Serializable {
      */
     public TramitacionController() {
     }
-
+    
     public Rol getRolDerivado() {
         return rolDerivado;
     }
-
+    
     public void setRolDerivado(Rol rolDerivado) {
         this.rolDerivado = rolDerivado;
     }
-
+    
     public Rol[] getSelectedRol() {
         return selectedRol;
     }
-
+    
     public void setSelectedRol(Rol[] selectedRol) {
         this.selectedRol = selectedRol;
     }
-
+    
     public UploadedFile getAdjunto() {
         return adjunto;
     }
-
+    
     public void setAdjunto(UploadedFile adjunto) {
         this.adjunto = adjunto;
     }
-
+    
     public List<Tramitacion> getListSelectedTramitacion() {
         return listSelectedTramitacion;
     }
-
+    
     public void setListSelectedTramitacion(List<Tramitacion> listSelectedTramitacion) {
         this.listSelectedTramitacion = listSelectedTramitacion;
     }
-
+    
     public Tramitacion[] getSelectedTramitacion() {
         return selectedTramitacion;
     }
-
+    
     public void setSelectedTramitacion(Tramitacion[] selectedTramitacion) {
         this.selectedTramitacion = selectedTramitacion;
     }
-
+    
     public String getCriterioBusqueda() {
         return criterioBusqueda;
     }
-
+    
     public void setCriterioBusqueda(String criterioBusqueda) {
         this.criterioBusqueda = criterioBusqueda;
     }
-
+    
     public Tramitacion getTramitacion() {
         return tramitacion;
     }
-
+    
     public void setTramitacion(Tramitacion tramitacion) {
         this.tramitacion = tramitacion;
     }
-
+    
     public Tramitacion getTramitacionRechazo() {
         return tramitacionRechazo;
     }
-
+    
     public void setTramitacionRechazo(Tramitacion tramitacionRechazo) {
         this.tramitacionRechazo = tramitacionRechazo;
     }
-
+    
     public List<Tramitacion> getListaTramitacionPendiente() {
         return listaTramitacionPendiente;
     }
-
+    
     public void setListaTramitacionPendiente(List<Tramitacion> listaTramitacionPendiente) {
         this.listaTramitacionPendiente = listaTramitacionPendiente;
     }
-
+    
     public List<Tramitacion> getListaTramitacionConfirmado() {
         return listaTramitacionConfirmado;
     }
-
+    
     public void setListaTramitacionConfirmado(List<Tramitacion> listaTramitacionConfirmado) {
         this.listaTramitacionConfirmado = listaTramitacionConfirmado;
     }
-
+    
     public Documento getDocumento() {
         return documento;
     }
-
+    
     public void setDocumento(Documento documento) {
         this.documento = documento;
     }
-
+    
     public String crearDocumentoFromClasificadorSetup() {
         this.documentoController.setClasificadorSeleccionado(clasificadorFacade.getFirstClasificador());
         this.clasificadorController.setSelectedNode(null);
         this.clasificadorController.cargarTree(Boolean.FALSE);
         return "/tramitacion/CrearDocumentoFromClasificador";
     }
-
+    
     public String listPendientesSetup() {
         //this.criterioBusqueda = "";
         if (this.listaTramitacionPendiente == null) {
@@ -184,7 +184,7 @@ public class TramitacionController implements Serializable {
         }
         return "/tramitacion/ListarDocumentoPendiente";
     }
-
+    
     public void buscarPendiente(Integer estado) {
         if (estado.compareTo(1) == 0) {
             this.listaTramitacionPendiente = tramitacionFacade.getAllTramitacionPendientes(JSFutil.getUsuarioConectado().getIdRol().getIdRol(), this.criterioBusqueda, estado);
@@ -202,18 +202,18 @@ public class TramitacionController implements Serializable {
             }
         }
     }
-
+    
     public void buscarAllPendiente() {
         this.buscarPendiente(1);
         this.buscarPendiente(3);
     }
-
+    
     public String rechazaSetup(Integer idTramitacion) {
         this.tramitacion = tramitacionFacade.find(idTramitacion);
         this.tramitacionRechazo = new Tramitacion();
         return "/tramitacion/RechazarDocumento";
     }
-
+    
     public String confirmaTramite(Integer idTramitacion) {
         try {
             this.tramitacion = tramitacionFacade.find(idTramitacion);
@@ -229,17 +229,17 @@ public class TramitacionController implements Serializable {
         }
         return "";
     }
-
+    
     public String rechazar() {
         try {
-
+            
             this.tramitacionRechazo.setFechaDerivacion(JSFutil.getFechaHoraActual());
             this.tramitacionRechazo.setIdDocumento(this.tramitacion.getIdDocumento());
             this.tramitacionRechazo.setIdRol(this.tramitacion.getIdUsuarioRemitente().getIdRol());
             this.tramitacionRechazo.setNotaBreve("Rechazado según observaciones ");
             this.tramitacionRechazo.setRemitidoA(this.tramitacion.getIdUsuarioRemitente().getUsuario());
             this.tramitacionRechazo.setObservacion(this.tramitacion.getObservacion());
-
+            
             this.tramitacionRechazo.setRemitidoPor(JSFutil.getUsuarioConectado().getUsuario());
             this.tramitacionRechazo.setFechaRegistro(JSFutil.getFechaHoraActual());
             this.tramitacionRechazo.setHoraRegistro(JSFutil.getFechaHoraActual());
@@ -249,7 +249,7 @@ public class TramitacionController implements Serializable {
             this.tramitacionRechazo.setFechaConfirmacion(JSFutil.getFechaHoraActual());
             this.tramitacionRechazo.setHoraConfirmacion(JSFutil.getFechaHoraActual());
             this.tramitacionRechazo.setIdUsuarioConfirmacion(JSFutil.getUsuarioConectado());
-
+            
             tramitacionFacade.create(this.tramitacionRechazo);
             auditaFacade.create(new Audita("TRAMITACION", "Tramitacion creada exitosamente.", JSFutil.getFechaHoraActual(), this.tramitacionRechazo.toAudita(), JSFutil.getUsuarioConectado()));
             this.selectedTramitacion = null;
@@ -260,7 +260,7 @@ public class TramitacionController implements Serializable {
             this.tramitacion.setFechaSalida(JSFutil.getFechaHoraActual());
             this.tramitacion.setHoraSalida(JSFutil.getFechaHoraActual());
             tramitacionFacade.edit(this.tramitacion);
-
+            
             JSFutil.addMessage("Tramitacion creada exitosamente. ", JSFutil.StatusMessage.INFORMATION);
         } catch (Exception ex) {
             commonController.doExcepcion(ex);
@@ -269,7 +269,7 @@ public class TramitacionController implements Serializable {
         return "/tramitacion/ListarDocumentoPendiente";
         //return null;
     }
-
+    
     public String derivaMultipleSetup() {
         if (this.selectedTramitacion.length == 0) {
             JSFutil.addMessage("Debe seleccionar al menos un documento para tramitar", JSFutil.StatusMessage.WARNING);
@@ -282,16 +282,16 @@ public class TramitacionController implements Serializable {
         this.tramitacion.setFechaDerivacion(JSFutil.getFechaHoraActual());
         return "/tramitacion/DerivarDocumento";
     }
-
+    
     public void handleFileUpload(FileUploadEvent event) {
         this.adjunto = event.getFile();
     }
-
+    
     public String create() {
         try {
             Tramitacion tramTemp;
             for (Tramitacion tram : this.selectedTramitacion) {
-
+                
                 tram.setIdEstado(new EstadoTramitacion(100));
                 tram.setIdUsuario(JSFutil.getUsuarioConectado());
                 tram.setFechaSalida(JSFutil.getFechaHoraActual());
@@ -313,13 +313,13 @@ public class TramitacionController implements Serializable {
                 tramTemp.setRemitidoA(this.tramitacion.getRemitidoA());
                 tramTemp.setObservacion(this.tramitacion.getObservacion());
                 tramTemp.setProcesadoArchivo(false);
-
+                
                 tramTemp.setIdEstado(new EstadoTramitacion(1));
                 tramTemp.setRemitidoPor(JSFutil.getUsuarioConectado().getUsuario());
                 tramTemp.setIdUsuarioRemitente(JSFutil.getUsuarioConectado());
                 tramTemp.setFechaRegistro(JSFutil.getFechaHoraActual());
                 tramTemp.setHoraRegistro(JSFutil.getFechaHoraActual());
-
+                
                 tramitacionFacade.create(tramTemp);
                 auditaFacade.create(new Audita("TRAMITACION", "Tramitacion creada exitosamente.", JSFutil.getFechaHoraActual(), tramTemp.toAudita(), JSFutil.getUsuarioConectado()));
                 //Grabar el archivo a disco
@@ -340,21 +340,21 @@ public class TramitacionController implements Serializable {
         return "/tramitacion/ListarDocumentoPendiente";
         //return null;
     }
-
+    
     public String listSeguimientoSetup() {
 //        this.model = null;
 //        this.modelDocumento = null;
         this.criterioBusqueda = "";
         return "/tramitacion/ListarSeguimiento";
     }
-
+    
     public String listDesbloqueoSetup() {
 //        this.model = null;
 //        this.modelDocumento = null;
 //        this.criterioBusqueda = "";
         return "/tramitacion/ListarDesbloqueoDocumento";
     }
-
+    
     public void updateCP() {
         try {
             if (this.documento.getComprobantePago().isEmpty()) {
@@ -370,24 +370,24 @@ public class TramitacionController implements Serializable {
             //JSFutil.addMessage("Ocurrió un error de persistencia.", JSFutil.StatusMessage.ERROR);
         }
     }
-
+    
     public String adjuntaSetup(Integer id) {
         this.documento = documentoFacade.find(id);
         return "/tramitacion/ArchivarDocumento";
     }
-
+    
     public void tramitacionAnexo(Integer idTramitacion) {
         this.tramitacion = tramitacionFacade.find(idTramitacion);
         JSFutil.addMessage("Tramitación recuperada para Anexo...", JSFutil.StatusMessage.INFORMATION);
     }
-
+    
     public void handleAnexoDocumento(FileUploadEvent event) {
         try {
             //this.tramitacion.setArchivo(event.getFile().getContents());
             this.tramitacion.setNombreArchivo(event.getFile().getFileName());
             this.tramitacion.setTamanhoArchivo(BigInteger.valueOf(event.getFile().getSize()));
             this.tramitacion.setTipoArchivo(event.getFile().getContentType());
-
+            
             tramitacionFacade.edit(tramitacion);
             auditaFacade.create(new Audita("TRAMITACION", "Anexo agregado exitosamente para Archivo.", JSFutil.getFechaHoraActual(), "[Id=" + tramitacion.getIdTramitacion() + "] [NombreArchivo=" + tramitacion.getNombreArchivo() + "]", JSFutil.getUsuarioConectado()));
             JSFutil.addMessage("El anexo se ha agregado exitosamente.", JSFutil.StatusMessage.INFORMATION);
@@ -401,7 +401,7 @@ public class TramitacionController implements Serializable {
             this.commonController.doExcepcion(e);
         }
     }
-
+    
     public String archivarSinNota() {
         try {
             for (Tramitacion t : this.documento.getTramitacionList()) {
@@ -424,8 +424,9 @@ public class TramitacionController implements Serializable {
         }
         return "/tramitacion/ListarDocumentoAdjunto";
     }
+
     public String enlazarAnotaSalida(Integer idNota) {
-        NotaSalida ns=notaSalidaFacade.find(idNota);
+        NotaSalida ns = notaSalidaFacade.find(idNota);
         try {
             DetalleNotaSalida dnt = new DetalleNotaSalida();
             dnt.setIdNota(ns);
@@ -437,12 +438,16 @@ public class TramitacionController implements Serializable {
             }
             this.buscarAllPendiente();
             auditaFacade.create(new Audita("DETALLE_NOTA_SALIDA", "Enlace creado exitosamente.", JSFutil.getFechaHoraActual(), dnt.toAudita(), JSFutil.getUsuarioConectado()));
-            JSFutil.addMessage("Enlace creado exitosamente. ",JSFutil.StatusMessage.INFORMATION);
+            JSFutil.addMessage("Enlace creado exitosamente. ", JSFutil.StatusMessage.INFORMATION);
             return "/tramitacion/ListarDocumentoAdjunto";
         } catch (Exception e) {
             this.commonController.doExcepcion(e);
             return "";
         }
+    }
 
+    public String seguirSetup(Integer id) {
+        this.documento = documentoFacade.find(id);
+        return "/tramitacion/SeguirDocumento";
     }
 }

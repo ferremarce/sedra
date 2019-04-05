@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="title">
+        <h1>Seguimiento de Documentos</h1>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="formMain">
+            <p:panel header="Información del Documento">
+                <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-10">
+                    <p:outputLabel for="idClasificador" value="Clasificador:"/>
+                    <h:outputText id="idClasificador" rendered="#{TramitacionController.documento.idClasificador!=null}" value="#{ClasificadorController.obtenerRutaClasificador(TramitacionController.documento.idClasificador.idClasificador)}" title="Clasificador" />
+                    <p:outputLabel for="nroEntrada" value="Nro. de Entrada:"/>
+                    <h:outputText id="nroEntrada" value="#{TramitacionController.documento.nroEntrada}" title="Numero Entrada" />
+                    <p:outputLabel for="anho" value="Año:"/>
+                    <h:outputText id="anho" value="#{TramitacionController.documento.anho}" title="Año" />
+                    <p:outputLabel for="fechaDocumento" value="Fecha del Documento:"/>
+                    <h:outputText id="fechaDocumento" value="#{TramitacionController.documento.fechaDocumento}" title="Fecha Documento">
+                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                    <p:outputLabel for="fechaIngreso" value="Fecha del Ingreso:"/>
+                    <h:outputText id="fechaIngreso" value="#{TramitacionController.documento.fechaIngreso}" title="Fecha Ingreso">
+                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                    <p:outputLabel for="fechaLimite" value="Fecha Límite:"/>
+                    <h:outputText id="fechaLimite" value="#{TramitacionController.documento.fechaLimite}" title="Fecha Límite">
+                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                    <p:outputLabel for="asunto" value="Asunto "/>
+                    <h:outputText id="asunto" value="#{TramitacionController.documento.asunto}" title="Asunto"/>
+                    <p:outputLabel for="referencia" value="Referencia"/>
+                    <h:outputText id="referencia" value="#{TramitacionController.documento.referencia}" title="Referencia" />
+                    <p:outputLabel for="observaciones" value="Observaciones:"/>
+                    <h:outputText id="observaciones" value="#{TramitacionController.documento.observacion}" title="Observaciones"  />
+                    <p:outputLabel for="idTipoDocumento" value="Tipo Documento:"/>
+                    <h:outputText id="idTipoDocumento" value="#{TramitacionController.documento.idTipoDocumento.toString()}" />
+                    <p:outputLabel rendered="#{TramitacionController.documento.nombreArchivo!=null}" for="downAdjunto"  value="Adjunto:"/>
+                    <p:outputPanel rendered="#{TramitacionController.documento.nombreArchivo!=null}" id="downAdjunto">
+                        <p:commandButton  style="width: 150px" title="Descargar" value="#{bundle.DescargarBoton}" icon="fa fa-download" ajax="false">
+                            <p:fileDownload value="#{DownloadFile.downloadDocumento(TramitacionController.documento.idDocumento)}" />  
+                        </p:commandButton>
+                        <h:outputText value="#{TramitacionController.documento.nombreArchivo}"/>
+                    </p:outputPanel>
+                    <p:outputLabel value="Enlazado a:"/>
+                    <p:dataList value="#{TramitacionController.documento.detalleNotaSalidaList}" var="nota" emptyMessage="#{bundle.SinRegistrosMensaje}">  
+                        <h:outputText  value="[#{nota.idNota.idTipoNota.descripcionTipoNota}] " />  
+                        <p:commandLink styleClass="fontBold Red" rendered="#{nota.idNota.numeroSalida!=null}" title="Ver Nota" value="Nro. Salida: #{nota.idNota.numeroSalida}" ajax="false" action="#{NotaSalidaController.doVerForm(nota.idNota.idNota)}" />  
+                        <p:commandLink styleClass="fontBold Red" rendered="#{nota.idNota.numeroStr!=null}" title="Ver STR" value="Nro. STR: #{nota.idNota.numeroStr}" ajax="false" action="#{NotaSalidaController.doVerForm(nota.idNota.idNota)}" />   
+                        <p:separator/>
+                        <h:outputText value="#{nota.idNota.referencia}"/> 
+                        <h:outputText value="#{nota.idNota.rubro}" />  
+                    </p:dataList>
+                </p:panelGrid>
+            </p:panel>
+            <p:panel header="Información de la Tramitación">
+                <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{TramitacionController.documento.tramitacionList}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                             rows="50"
+                             paginator="true"
+                             filterEvent="enter"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,25,50,100"                         
+                             >
+                    <f:facet name="header">
+                        Tabla de Datos
+                    </f:facet> 
+                    <p:column headerText="#" style="width: 40px">
+                        <h:outputText value="#{index+1}"/>
+                    </p:column>
+                    <p:column headerText="F. Deriv.">
+                        <h:outputText value="#{item.fechaDerivacion}">
+                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Recibido">
+                        <h:outputText value="#{item.fechaRegistro}">
+                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                        <h:outputText value=" "/>
+                        <h:outputText value="#{item.horaRegistro}">
+                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="HH:mm" />
+                        </h:outputText>
+                    </p:column><p:column headerText="Confirmado">
+                        <h:outputText value="#{item.fechaConfirmacion}">
+                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                        <h:outputText value=" "/>
+                        <h:outputText value="#{item.horaConfirmacion}">
+                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="HH:mm" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Procesado">
+                        <h:outputText value="#{item.fechaSalida}">
+                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                        <h:outputText value=" "/>
+                        <h:outputText value="#{item.horaSalida}">
+                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="HH:mm" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Despacho">
+                        <h:outputText value="#{JSFutil.diferenciaTime(item.fechaRegistro, item.horaRegistro, item.fechaSalida, item.horaSalida)} "/>
+                    </p:column>
+                    <p:column headerText="Remitido a">
+                        <p:inputText title="Remitido a" value="#{item.remitidoA}"/>
+                        <p:selectOneMenu id="idRol" value="#{item.idRol}" required="true" requiredMessage="#{bundle.Requerido}" >
+                            <f:selectItems value="#{RolController.rolSet}"/>
+                        </p:selectOneMenu>
+                    </p:column>
+                    <p:column headerText="Nota Breve">
+                        <h:outputText value=" #{item.notaBreve}"/>
+                    </p:column>
+                    <p:column headerText="Estado">
+                        <p:selectOneMenu id="idEstado" value="#{item.idEstado}" required="true" requiredMessage="#{bundle.Requerido}" >
+                            <f:selectItems value="#{EstadoTramitacionController.estadoTramitacionSet}"/>
+                        </p:selectOneMenu>
+                    </p:column>
+                    <p:column headerText="Usuario">
+                        <h:outputText value=" #{item.idUsuario}"/>
+                    </p:column>
+                    <p:column headerText="Observaciones">
+                        <p:inputTextarea rows="3"  cols="20" id="observaciones" value="#{item.observacion}" title="Observaciones" />
+                    </p:column>
+                    <p:column headerText="Adjunto">  
+                        <p:commandButton title="Descargar" image="download" ajax="false">
+                            <p:fileDownload value="#{TramitacionController.download(item.idTramitacion)}" />  
+                        </p:commandButton>
+                    </p:column>  
+                </p:dataTable>
+            </p:panel>
+            <p:panel>
+                <p:commandButton image="update" action="#{TramitacionController.updateAll()}" ajax="false"  value="#{bundle.ActualizarBoton}" title="#{bundle.ActualizarBoton}"/>
+                <p:commandButton immediate="true" image="xcancel" action="/tramitacion/ListarSeguimiento" ajax="false"  value="#{bundle.CancelarBoton}" title="#{bundle.CancelarBoton}"/>  
+            </p:panel>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

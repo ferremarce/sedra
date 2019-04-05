@@ -54,7 +54,7 @@
                     <p:outputLabel for="comprobantePago" value="Comprob. Pago:"/>
                     <p:panelGrid columns="2">
                         <p:inputText size="20" id="comprobantePago" value="#{TramitacionController.documento.comprobantePago}" title="Comprobante de Pago"  />
-                        <p:commandButton action="#{TramitacionController.updateCP()}" ajax="true" update="@form messages messagesError" icon="fa fa-save"  value="#{bundle.ActualizarBoton}" title="#{bundle.ActualizarBoton}"/>  
+                        <p:commandButton action="#{TramitacionController.updateCP()}" ajax="true" update="@form, messages, messagesError" icon="fa fa-save"  value="#{bundle.ActualizarBoton}" title="#{bundle.ActualizarBoton}"/>  
                     </p:panelGrid>
                 </p:panelGrid>
             </p:panel>
@@ -97,7 +97,7 @@
                 </p:dataTable>
                 <f:facet name="footer">
                     <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" >
-                        <p:commandButton icon="fa fa-stack-overflow" action="#{NotaSalidaController.createSetup(TramitacionController.documento)}" ajax="false"  value="#{bundle.ArchivarConNota}" title="#{bundle.ArchivarConNota}"/>  
+                        <p:commandButton icon="fa fa-stack-overflow" action="#{NotaSalidaController.createSetup(TramitacionController.documento.idDocumento)}" ajax="false"  value="#{bundle.ArchivarConNota}" title="#{bundle.ArchivarConNota}"/>  
                         <p:commandButton icon="fa fa-square-o" action="#{TramitacionController.archivarSinNota()}" onclick="return confirm('#{bundle.ConfirmacionMensaje}');" ajax="false"  value="#{bundle.ArchivarSinNota}" title="#{bundle.ArchivarSinNota}"/>  
                         <p:commandButton icon="fa fa-stack-exchange" ajax="true" oncomplete="PF('formNotaSalida').show()" update="formPanelNotaSalida" actionListener="#{NotaSalidaController.anexarDocAnotaExistente(TramitacionController.documento.idDocumento)}"  value="#{bundle.AnadirNota}" title="#{bundle.AnadirNota}"/>  
                         <p:commandButton immediate="true" icon="fa fa-sign-out" action="/tramitacion/ListarDocumentoAdjunto" ajax="false"  value="#{bundle.RegresarBoton}" title="#{bundle.RegresarBoton}"/>  
@@ -141,7 +141,7 @@
                 <p:outputLabel for="criterio" value="Criterio: "/>
                 <h:panelGrid columns="2">
                     <p:inputText tabindex="0" size="50" id="criterio" value="#{NotaSalidaController.criterioBusqueda}" title="Búsqueda" />
-                    <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{NotaSalidaController.buscarAllNotaSalida()}" update="dataTableNota messages"/>
+                    <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{NotaSalidaController.buscarAllNotaSalida()}" update="dataTableNota, messages"/>
                     <p:watermark for="criterio" value="Nro. Salida, STR" />                        
                 </h:panelGrid>
                 <p:dataTable rowIndexVar="index" id="dataTableNota" var="item" value="#{NotaSalidaController.listaNotaSalida}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
