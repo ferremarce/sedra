@@ -59,7 +59,7 @@
                 </p:panelGrid>
             </p:panel>
             <p:panel header="Información de la Tramitación">
-                <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{TramitacionController.documento.tramitacionList}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{TramitacionController.listaTramitacionSeguimiento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                              rows="50"
                              paginator="true"
                              filterEvent="enter"
@@ -164,8 +164,8 @@
                     </p:column>  
                 </p:dataTable>
                 <f:facet name="footer">
-                    <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" columnClasses="ui-grid-col-6,ui-grid-col-6">
-                        <p:commandButton ajax="false" icon="fa fa-save" value="#{bundle.GuardarBoton}" action="#{TramitacionController.updateAll()}"/>
+                    <p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+                        <p:commandButton rendered="#{!TramitacionController.documento.cerrado}" ajax="false" icon="fa fa-save" value="#{bundle.GuardarBoton}" action="#{TramitacionController.updateAll()}"/>
                         <p:commandButton immediate="true" ajax="false" icon="fa fa-sign-out" value="#{bundle.RegresarBoton}" action="/tramitacion/ListarSeguimiento"/>
                     </p:panelGrid>
                 </f:facet>   
