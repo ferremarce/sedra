@@ -83,6 +83,9 @@ label{
 .fontBold{
     font-weight: bold;
 }
+.fontItalic{
+    font-style: italic;
+}
 .top{
     vertical-align: top !important;
 }

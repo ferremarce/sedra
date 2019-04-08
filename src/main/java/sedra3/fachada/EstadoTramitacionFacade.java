@@ -5,9 +5,11 @@
  */
 package sedra3.fachada;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import sedra3.modelo.EstadoTramitacion;
 
 /**
@@ -28,5 +30,10 @@ public class EstadoTramitacionFacade extends AbstractFacade<EstadoTramitacion> {
     public EstadoTramitacionFacade() {
         super(EstadoTramitacion.class);
     }
-    
+    public List<EstadoTramitacion> getAllEstadoTramitacionNoTemporal() {
+        Query q = em.createQuery("SELECT a FROM EstadoTramitacion a WHERE a.idEstado in (1,2,4,100) ORDER BY a.idEstado");
+        List<EstadoTramitacion> tr = q.getResultList();
+        return tr;
+
+    }
 }

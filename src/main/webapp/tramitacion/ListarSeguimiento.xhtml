@@ -67,7 +67,7 @@
                     <f:facet name="header">
                         <h:outputText value="Acción"/>
                     </f:facet>
-                    <p:commandButton type="button" style="background: #fde5cd !important; color: black" rendered="#{item.cerrado==true}" ajax="false" title="Ver Seguimiento" value="#{bundle.VerBoton} Seguimiento" icon="fa fa-lock"/>
+                    <p:commandButton style="background: #fde5cd !important; color: black" rendered="#{item.cerrado==true}" ajax="false" title="Ver Seguimiento" value="#{bundle.VerBoton} Seguimiento" icon="fa fa-lock" action="#{TramitacionController.seguirSetup(item.idDocumento)}"/>
                     <p:commandButton rendered="#{item.cerrado==false}" ajax="false" icon="fa fa-toggle-right" title="#{bundle.SeguirBoton}" value="#{bundle.SeguirBoton}"  action="#{TramitacionController.seguirSetup(item.idDocumento)}"/>
                 </p:column>
             </p:dataTable>

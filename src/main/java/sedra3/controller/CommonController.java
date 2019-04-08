@@ -10,6 +10,7 @@ import java.io.InputStream;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -98,7 +99,12 @@ public class CommonController implements Serializable {
             return null;
         }
     }
+
     public String getServerURLDownload() {
         return JSFutil.getAbsoluteApplicationUrl();
+    }
+
+    public String doDiferenciaTiempo(Date finicio, Date hinicio, Date ffin, Date hfin) {
+        return JSFutil.diferenciaTime(finicio, hinicio, ffin, hfin);
     }
 }

@@ -69,73 +69,106 @@
                     <f:facet name="header">
                         Tabla de Datos
                     </f:facet> 
-                    <p:column headerText="#" style="width: 40px">
-                        <h:outputText value="#{index+1}"/>
+                    <p:column headerText="#" width="20" rendered="#{TramitacionController.documento.cerrado}">
+                        <h:outputText style="display: inline" value="#{index+1}"/>
                     </p:column>
-                    <p:column headerText="F. Deriv.">
+                    <p:column headerText="Derivado" width="110" rendered="#{TramitacionController.documento.cerrado}">
                         <h:outputText value="#{item.fechaDerivacion}">
                             <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="Recibido">
-                        <h:outputText value="#{item.fechaRegistro}">
-                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                        </h:outputText>
-                        <h:outputText value=" "/>
-                        <h:outputText value="#{item.horaRegistro}">
-                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="HH:mm" />
-                        </h:outputText>
-                    </p:column><p:column headerText="Confirmado">
-                        <h:outputText value="#{item.fechaConfirmacion}">
-                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                        </h:outputText>
-                        <h:outputText value=" "/>
-                        <h:outputText value="#{item.horaConfirmacion}">
-                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="HH:mm" />
-                        </h:outputText>
+                    <p:column headerText="Remitido a" rendered="#{TramitacionController.documento.cerrado}">
+                        <h:outputText value="#{item.remitidoA}"/>
+                        <p:separator/>
+                        <h:outputText value="#{item.idUsuario}"/>
                     </p:column>
-                    <p:column headerText="Procesado">
-                        <h:outputText value="#{item.fechaSalida}">
-                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                        </h:outputText>
-                        <h:outputText value=" "/>
-                        <h:outputText value="#{item.horaSalida}">
-                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="HH:mm" />
-                        </h:outputText>
+                    <p:column headerText="Nota breve" rendered="#{TramitacionController.documento.cerrado}">
+                        <h:outputText value="#{item.notaBreve}"/>
                     </p:column>
-                    <p:column headerText="Despacho">
-                        <h:outputText value="#{JSFutil.diferenciaTime(item.fechaRegistro, item.horaRegistro, item.fechaSalida, item.horaSalida)} "/>
+                    <p:column headerText="Estado" width="100" rendered="#{TramitacionController.documento.cerrado}">
+                        <h:outputText value="#{item.idEstado.toString()}"/>
                     </p:column>
-                    <p:column headerText="Remitido a">
+                    <p:column headerText="Observaciones" rendered="#{TramitacionController.documento.cerrado}">
+                        <h:outputText value="#{item.observacion}"/>
+                    </p:column>
+                    <!-- CUANDO ES EDICION -->
+                    <p:column headerText="#" style="width: 40px" rendered="#{!TramitacionController.documento.cerrado}">
+                        <h:outputText style="display: inline" value="#{index+1}"/>
+                        <p:rowToggler/>
+                    </p:column>
+                    <p:rowExpansion>
+                        <p:panelGrid columns="2" style="width: 400px" >
+                            <p:outputLabel value="Derivado: "/>
+                            <h:outputText value="#{item.fechaDerivacion}">
+                                <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                            <p:outputLabel value="Recibido: "/>
+                            <p:outputPanel>
+                                <h:outputText value="#{item.fechaRegistro}">
+                                    <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                                <p:spacer width="10px"/>
+                                <h:outputText value="#{item.horaRegistro}">
+                                    <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="HH:mm" />
+                                </h:outputText>
+                            </p:outputPanel>
+                            <p:outputLabel value="Confirmado: "/>
+                            <p:outputPanel>
+                                <h:outputText value="#{item.fechaConfirmacion}">
+                                    <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                                <p:spacer width="10px"/>
+                                <h:outputText value="#{item.horaConfirmacion}">
+                                    <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="HH:mm" />
+                                </h:outputText>
+                            </p:outputPanel>
+                            <p:outputLabel value="Procesado: "/>
+                            <p:outputPanel>
+                                <h:outputText value="#{item.fechaSalida}">
+                                    <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                                <p:spacer width="10px"/>
+                                <h:outputText value="#{item.horaSalida}">
+                                    <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="HH:mm" />
+                                </h:outputText>
+                            </p:outputPanel>
+                        </p:panelGrid>
+                    </p:rowExpansion>
+                    <p:column headerText="Despacho" width="100" rendered="#{!TramitacionController.documento.cerrado}">
+                        <h:outputText value="#{CommonController.doDiferenciaTiempo(item.fechaRegistro, item.horaRegistro, item.fechaSalida, item.horaSalida)} "/>
+                    </p:column>
+                    <p:column headerText="Remitido a" rendered="#{!TramitacionController.documento.cerrado}">
+                        <h:outputText styleClass="fontItalic" value="Usuario: #{item.idUsuario}"/>
+                        <p/>
                         <p:inputText title="Remitido a" value="#{item.remitidoA}"/>
-                        <p:selectOneMenu id="idRol" value="#{item.idRol}" required="true" requiredMessage="#{bundle.Requerido}" >
+                        <p:selectOneMenu style="width: 100%"  id="idRol" value="#{item.idRol}" required="true" requiredMessage="#{bundle.Requerido}" >
                             <f:selectItems value="#{RolController.rolSet}"/>
                         </p:selectOneMenu>
                     </p:column>
-                    <p:column headerText="Nota Breve">
+                    <p:column headerText="Nota Breve" width="130" rendered="#{!TramitacionController.documento.cerrado}">
                         <h:outputText value=" #{item.notaBreve}"/>
                     </p:column>
-                    <p:column headerText="Estado">
+                    <p:column headerText="Estado" width="130" rendered="#{!TramitacionController.documento.cerrado}">
                         <p:selectOneMenu id="idEstado" value="#{item.idEstado}" required="true" requiredMessage="#{bundle.Requerido}" >
                             <f:selectItems value="#{EstadoTramitacionController.estadoTramitacionSet}"/>
                         </p:selectOneMenu>
                     </p:column>
-                    <p:column headerText="Usuario">
-                        <h:outputText value=" #{item.idUsuario}"/>
-                    </p:column>
-                    <p:column headerText="Observaciones">
+                    <p:column headerText="Observaciones" rendered="#{!TramitacionController.documento.cerrado}">
                         <p:inputTextarea rows="3"  cols="20" id="observaciones" value="#{item.observacion}" title="Observaciones" />
                     </p:column>
-                    <p:column headerText="Adjunto">  
-                        <p:commandButton title="Descargar" image="download" ajax="false">
-                            <p:fileDownload value="#{TramitacionController.download(item.idTramitacion)}" />  
+                    <p:column headerText="Adjunto" width="115">  
+                        <p:commandButton rendered="#{item.nombreArchivo!=null}" title="Descargar" icon="fa fa-download" ajax="false">
+                            <p:fileDownload value="#{DownloadFile.downloadDocumentoTramite(item.idTramitacion)}" />  
                         </p:commandButton>
+                        <h:outputText value="#{item.nombreArchivo!=null ? item.nombreArchivo:'Sin archivo'}"/>
                     </p:column>  
                 </p:dataTable>
-            </p:panel>
-            <p:panel>
-                <p:commandButton image="update" action="#{TramitacionController.updateAll()}" ajax="false"  value="#{bundle.ActualizarBoton}" title="#{bundle.ActualizarBoton}"/>
-                <p:commandButton immediate="true" image="xcancel" action="/tramitacion/ListarSeguimiento" ajax="false"  value="#{bundle.CancelarBoton}" title="#{bundle.CancelarBoton}"/>  
+                <f:facet name="footer">
+                    <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" columnClasses="ui-grid-col-6,ui-grid-col-6">
+                        <p:commandButton ajax="false" icon="fa fa-save" value="#{bundle.GuardarBoton}" action="#{TramitacionController.updateAll()}"/>
+                        <p:commandButton immediate="true" ajax="false" icon="fa fa-sign-out" value="#{bundle.RegresarBoton}" action="/tramitacion/ListarSeguimiento"/>
+                    </p:panelGrid>
+                </f:facet>   
             </p:panel>
         </h:form>
     </ui:define>
