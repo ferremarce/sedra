@@ -12,7 +12,65 @@
 
     <ui:define name="content">
         <h:form id="formMain">
-            <h:outputText styleClass="Orange font3x fontBold" value="En proceso de reingeniería"/>
+            <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2">
+                <p:inputText id="criterio" value="#{DocumentoController.criterio}" placeholder="Nro. Salida, STR, asunto, Nro. Entrada"/>
+                <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{DocumentoController.doBuscarSeguimiento()}" update="@form, messages"/>
+            </p:panelGrid>
+            <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                         rows="10"
+                         paginator="true"
+                         filterEvent="enter"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,25,50,100">
+                <f:facet name="header">
+                    Tabla de Datos
+                </f:facet> 
+                <p:column headerText="#" width="30">
+                    <h:outputText value="#{index+1}"/>
+                </p:column>
+                <p:column headerText="Nro. Ent." style="width:50px" > 
+                    <p:commandLink title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
+                        <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value=" #{item.nroEntrada}"/>
+                    </p:commandLink>
+                </p:column>  
+                <p:column headerText="Fechas" width="150" >
+                    <h:outputText value="F. Doc: "/>
+                    <h:outputText value="#{item.fechaDocumento}">
+                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                    <p/>
+                    <h:outputText value="F. Ing: "/>
+                    <h:outputText value="#{item.fechaIngreso}">
+                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Asunto" >  
+                    <i class="fa fa-folder-open"/>
+                    <h:outputText value=" #{ClasificadorController.obtenerRutaClasificador(item.idClasificador.idClasificador)}"/>
+                    <blockquote>
+                        <h:outputText styleClass="Brown fontBold" value="#{item.asunto}"/>
+                    </blockquote>
+                    <h:outputText value="Referencia: #{item.referencia}"/>
+                    <br/>
+                    <p:outputLabel rendered="#{item.detalleNotaSalidaList.size()>0}" value="Enlazado a:"/>
+                    <p:dataList rendered="#{item.detalleNotaSalidaList.size()>0}" value="#{item.detalleNotaSalidaList}" var="nota" emptyMessage="#{bundle.SinRegistrosMensaje}">  
+                        <h:outputText  value="[#{nota.idNota.idTipoNota.descripcionTipoNota}] " />  
+                        <p:commandLink styleClass="fontBold Red" rendered="#{nota.idNota.numeroSalida!=null}" title="Ver Nota" value="Nro. Salida: #{nota.idNota.numeroSalida}" ajax="false" action="#{NotaSalidaController.doVerForm(nota.idNota.idNota)}" />  
+                        <p:commandLink styleClass="fontBold Red" rendered="#{nota.idNota.numeroStr!=null}" title="Ver STR" value="Nro. STR: #{nota.idNota.numeroStr}" ajax="false" action="#{NotaSalidaController.doVerForm(nota.idNota.idNota)}" />   
+                        <p:separator/>
+                        <h:outputText value="#{nota.idNota.referencia}"/> 
+                        <h:outputText value="#{nota.idNota.rubro}" />  
+                    </p:dataList>
+                </p:column>  
+                <p:column width="130">
+                    <f:facet name="header">
+                        <h:outputText value="Acción"/>
+                    </f:facet>
+                    <p:commandLink ajax="false" target="_new" action="#{ReporteController.generarReporte(item.idDocumento)}">
+                        <p:commandButton type="button" icon="fa fa-print" title="#{bundle.ImprimirBoton}" value="#{bundle.ImprimirBoton}"/>
+                    </p:commandLink>
+                </p:column>
+            </p:dataTable>
         </h:form>
     </ui:define>
 

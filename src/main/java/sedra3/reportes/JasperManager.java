@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
@@ -24,14 +25,13 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import sedra3.util.JSFutil;
 
-
-
 /**
  *
  * @author jm_acer
  */
 public class JasperManager {
 
+    ResourceBundle bundle = ResourceBundle.getBundle("propiedades.bundle", JSFutil.getmyLocale());
     String userHome;
     private String pathweb;
     private final HttpServletResponse response;
@@ -40,18 +40,18 @@ public class JasperManager {
     //private InputStream stream;
     private final ServletContext servletContext;
     //private HttpServletRequest request;
-    private final String tituloReporte = "Parroquia Santuario Nuestra Señora del Rosario";
-    private final String subTituloReporte = "Pastoral de Catequesis";
+    private final String tituloReporte = bundle.getString("TituloSistema");
+    private final String subTituloReporte = "--";
     Map<String, Object> params;
 
     public JasperManager() {
         this.context = FacesContext.getCurrentInstance();
         this.response = (HttpServletResponse) context.getExternalContext().getResponse();
         servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
-        userHome = System.getProperty("user.home");
+        //userHome = System.getProperty("user.home");
         pathweb = servletContext.getRealPath("/");
         pathweb = pathweb.replace('\\', '/');
-        String imagenSource = pathweb + "img/logo.jpg";
+        String imagenSource = pathweb + "img/logoreporte.png";
         params = new HashMap<>();
         params.put("imagenPath", imagenSource);
         params.put("tituloReporte", this.tituloReporte);

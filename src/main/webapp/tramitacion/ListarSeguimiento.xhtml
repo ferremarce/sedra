@@ -16,7 +16,7 @@
                 <p:inputText id="criterio" value="#{DocumentoController.criterio}" placeholder="Nro. Salida, STR, asunto, Nro. Entrada"/>
                 <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{DocumentoController.doBuscarSeguimiento()}" update="@form, messages"/>
             </p:panelGrid>
-           <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+            <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                          rows="10"
                          paginator="true"
                          filterEvent="enter"
@@ -34,15 +34,15 @@
                     </p:commandLink>
                 </p:column>  
                 <p:column headerText="Fechas" width="150" >
-                        <h:outputText value="F. Doc: "/>
-                        <h:outputText value="#{item.fechaDocumento}">
-                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                        </h:outputText>
-                        <p/>
-                        <h:outputText value="F. Ing: "/>
-                        <h:outputText value="#{item.fechaIngreso}">
-                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                        </h:outputText>
+                    <h:outputText value="F. Doc: "/>
+                    <h:outputText value="#{item.fechaDocumento}">
+                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                    <p/>
+                    <h:outputText value="F. Ing: "/>
+                    <h:outputText value="#{item.fechaIngreso}">
+                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                    </h:outputText>
                 </p:column>
                 <p:column headerText="Asunto" >  
                     <i class="fa fa-folder-open"/>
@@ -62,7 +62,7 @@
                         <h:outputText value="#{nota.idNota.rubro}" />  
                     </p:dataList>
                 </p:column>  
-                
+
                 <p:column width="130">
                     <f:facet name="header">
                         <h:outputText value="Acción"/>

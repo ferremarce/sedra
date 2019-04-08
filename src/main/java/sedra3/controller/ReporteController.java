@@ -25,21 +25,24 @@ import sedra3.util.JSFutil;
 @Named(value = "ReporteController")
 @SessionScoped
 public class ReporteController implements Serializable {
-
+    
     @Inject
     DocumentoFacade documentoFacade;
+    @Inject
+    DocumentoController documentoController;
 
     /**
      * Creates a new instance of ReporteController
      */
     public ReporteController() {
     }
-
+    
     public String imprimirDelantalSetup() {
-        //this.model = null;
+        this.documentoController.setCriterio("");
+        this.documentoController.setListaDocumento(new ArrayList<Documento>());
         return "/reportes/rptDelantal";
     }
-
+    
     public String listTramitacionOficinaSetup() {
 //        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 //        Usuario user = (Usuario) session.getAttribute("user");
@@ -51,7 +54,7 @@ public class ReporteController implements Serializable {
 //        }
         return "/reportes/ListadoTramitacionOficina";
     }
-
+    
     public void generarReporte(Integer id) throws IOException {
         JasperManager jm = new JasperManager();
         List<Documento> lista = new ArrayList<>();
@@ -60,14 +63,14 @@ public class ReporteController implements Serializable {
         } else {
             lista.add(documentoFacade.find(id));
         }
-
+        
         String tipoReporte = "PDF";
         String idFuenteReporte = "1";
         FuenteReporte fr = new FuenteReporte(Integer.valueOf(idFuenteReporte));
         String reportSource = jm.getPathweb() + "reportes/template/" + fr.getNombreReporte();
         jm.generarReporte(reportSource, tipoReporte, lista);
     }
-
+    
     public void generarReporteFicha(List<?> dataList) {
         JasperManager jm = new JasperManager();
         String tipoReporte = "PDF";
@@ -79,6 +82,6 @@ public class ReporteController implements Serializable {
         } else {
             JSFutil.addMessage("No hay datos para generar el reporte", JSFutil.StatusMessage.ERROR);
         }
-
+        
     }
 }
