@@ -11,7 +11,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
 import javax.activation.MimetypesFileTypeMap;
 import javax.inject.Inject;
 import javax.servlet.ServletException;

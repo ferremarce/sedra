@@ -30,11 +30,23 @@ public class ReporteController implements Serializable {
     DocumentoFacade documentoFacade;
     @Inject
     DocumentoController documentoController;
+    @Inject
+    CommonController commonController;
+    
+    private String destinoReporte = "PDF";
 
     /**
      * Creates a new instance of ReporteController
      */
     public ReporteController() {
+    }
+    
+    public String getDestinoReporte() {
+        return destinoReporte;
+    }
+    
+    public void setDestinoReporte(String destinoReporte) {
+        this.destinoReporte = destinoReporte;
     }
     
     public String imprimirDelantalSetup() {
@@ -56,32 +68,22 @@ public class ReporteController implements Serializable {
     }
     
     public void generarReporte(Integer id) throws IOException {
-        JasperManager jm = new JasperManager();
-        List<Documento> lista = new ArrayList<>();
-        if (id == 0) {
-            lista = documentoFacade.findAll();
-        } else {
-            lista.add(documentoFacade.find(id));
+        try {
+            JasperManager jm = new JasperManager();
+            List<Documento> lista = new ArrayList<>();
+            if (id == 0) {
+                lista = documentoFacade.findAll();
+            } else {
+                lista.add(documentoFacade.find(id));
+            }
+            
+            String idFuenteReporte = "1";
+            FuenteReporte fr = new FuenteReporte(Integer.valueOf(idFuenteReporte));
+            String reportSource = jm.getPathweb() + "reportes/template/" + fr.getNombreReporte();
+            jm.generarReporte(reportSource, this.destinoReporte, lista);
+        } catch (Exception e) {
+            this.commonController.doExcepcion(e);
         }
-        
-        String tipoReporte = "PDF";
-        String idFuenteReporte = "1";
-        FuenteReporte fr = new FuenteReporte(Integer.valueOf(idFuenteReporte));
-        String reportSource = jm.getPathweb() + "reportes/template/" + fr.getNombreReporte();
-        jm.generarReporte(reportSource, tipoReporte, lista);
     }
     
-    public void generarReporteFicha(List<?> dataList) {
-        JasperManager jm = new JasperManager();
-        String tipoReporte = "PDF";
-        String idFuenteReporte = "1";
-        FuenteReporte fr = new FuenteReporte(Integer.valueOf(idFuenteReporte));
-        String reportSource = jm.getPathweb() + "reportes/template/" + fr.getNombreReporte();
-        if (dataList.size() > 0) {
-            jm.generarReporte(reportSource, tipoReporte, dataList);
-        } else {
-            JSFutil.addMessage("No hay datos para generar el reporte", JSFutil.StatusMessage.ERROR);
-        }
-        
-    }
 }

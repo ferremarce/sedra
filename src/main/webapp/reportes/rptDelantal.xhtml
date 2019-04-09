@@ -16,6 +16,13 @@
                 <p:inputText id="criterio" value="#{DocumentoController.criterio}" placeholder="Nro. Salida, STR, asunto, Nro. Entrada"/>
                 <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{DocumentoController.doBuscarSeguimiento()}" update="@form, messages"/>
             </p:panelGrid>
+            <p:selectOneButton value="#{ReporteController.destinoReporte}">
+                <f:selectItem itemLabel="PDF" itemValue="PDF" />
+                <f:selectItem itemLabel="XLS" itemValue="XLS" />
+                <f:selectItem itemLabel="HTML" itemValue="HTML" />
+                <f:selectItem itemLabel="CSV" itemValue="CSV" />
+                <f:selectItem itemLabel="DOCX" itemValue="DOCX" />
+            </p:selectOneButton>
             <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                          rows="10"
                          paginator="true"

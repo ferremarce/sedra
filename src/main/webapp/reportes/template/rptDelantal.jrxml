@@ -101,6 +101,7 @@
 		</field>
 	</subDataset>
 	<parameter name="imagenPath" class="java.lang.String"/>
+	<parameter name="author" class="java.lang.String"/>
 	<queryString language="EJBQL">
 		<![CDATA[select a from Documento a where a.idDocumento=120]]>
 	</queryString>
@@ -193,8 +194,8 @@
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
 			</textField>
-			<image>
-				<reportElement x="260" y="0" width="270" height="89" uuid="af8620e3-4474-4bc2-8d3f-a19d15a862c4"/>
+			<image hAlign="Right" vAlign="Middle">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="250" y="0" width="278" height="89" uuid="af8620e3-4474-4bc2-8d3f-a19d15a862c4"/>
 				<imageExpression><![CDATA[$P{imagenPath}]]></imageExpression>
 			</image>
 		</band>
@@ -498,11 +499,11 @@
 		<band splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band height="40" splitType="Stretch">
+		<band height="30" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="100" height="30" uuid="f0216735-b679-4acb-bacc-3ed1b6f4a32f"/>
+				<reportElement x="0" y="0" width="250" height="30" uuid="f0216735-b679-4acb-bacc-3ed1b6f4a32f"/>
 				<textElement verticalAlignment="Middle"/>
-				<text><![CDATA[Generado por: ]]></text>
+				<text><![CDATA[Generado por: $P{author}]]></text>
 			</staticText>
 			<line>
 				<reportElement x="0" y="0" width="528" height="1" uuid="fd00e9e9-4343-46ed-89ec-a11145c7ff3a"/>
