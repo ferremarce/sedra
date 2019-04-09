@@ -32,6 +32,8 @@ public class ReporteController implements Serializable {
     DocumentoController documentoController;
     @Inject
     CommonController commonController;
+    @Inject
+    ClasificadorController clasificadorController;
     
     private String destinoReporte = "PDF";
 
@@ -76,7 +78,9 @@ public class ReporteController implements Serializable {
             } else {
                 lista.add(documentoFacade.find(id));
             }
-            
+            for (int i = 0; i < lista.size(); i++) {
+                lista.get(i).setAnexo(clasificadorController.obtenerRutaClasificador(lista.get(i).getIdClasificador().getIdClasificador()));
+            }
             String idFuenteReporte = "1";
             FuenteReporte fr = new FuenteReporte(Integer.valueOf(idFuenteReporte));
             String reportSource = jm.getPathweb() + "reportes/template/" + fr.getNombreReporte();

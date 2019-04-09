@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import javax.inject.Inject;
-import org.primefaces.event.NodeCollapseEvent;
-import org.primefaces.event.NodeExpandEvent;
 import org.primefaces.event.TreeDragDropEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;

@@ -74,7 +74,7 @@
                         <h:outputText value="Acción"/>
                     </f:facet>
                     <p:commandLink ajax="false" target="_new" action="#{ReporteController.generarReporte(item.idDocumento)}">
-                        <p:commandButton type="button" icon="fa fa-print" title="#{bundle.ImprimirBoton}" value="#{bundle.ImprimirBoton}"/>
+                        <p:commandButton type="button" icon="fa fa-caret-square-o-down" title="#{bundle.ExportarBoton}" value="#{bundle.ExportarBoton}"/>
                     </p:commandLink>
                 </p:column>
             </p:dataTable>

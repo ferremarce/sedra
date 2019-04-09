@@ -26,13 +26,11 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.HtmlExporter;
 import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
-import net.sf.jasperreports.engine.export.JsonExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
 import net.sf.jasperreports.export.Exporter;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleHtmlExporterOutput;
-import net.sf.jasperreports.export.SimpleHtmlReportConfiguration;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimpleWriterExporterOutput;
 import net.sf.jasperreports.web.util.WebHtmlResourceHandler;
@@ -109,7 +107,7 @@ public class JasperManager {
             JasperPrint print = JasperFillManager.fillReport(report, params, listaReporte);
             String contentType = "text/html";
             String fileName = "reporte.txt";
-            Exporter exporter = new JRPdfExporter();
+            Exporter exporter;
 
             switch (tipoReporte) {
                 case "VPREVIA":
