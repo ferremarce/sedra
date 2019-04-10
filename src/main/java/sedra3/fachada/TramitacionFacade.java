@@ -5,6 +5,7 @@
  */
 package sedra3.fachada;
 
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -42,6 +43,22 @@ public class TramitacionFacade extends AbstractFacade<Tramitacion> {
         } else {
             q.setParameter("xCriterio", "123456");
         }
+        List<Tramitacion> tr = q.getResultList();
+        return tr;
+
+    }
+
+    public List<Tramitacion> getAllTramitacion(Integer idRol, Integer idEstado, Date fdesde, Date fhasta) {
+        Query q;
+        if (idEstado.compareTo(100) == 0) { //Terminado
+            q = em.createQuery("SELECT a FROM Tramitacion a WHERE a.idRol.idRol=:xIdRol AND a.idEstado.idEstado=:xIdEstado AND a.fechaSalida BETWEEN :xFdesde AND :xFhasta  ORDER BY a.idTramitacion");
+        } else { //Pendiente
+            q = em.createQuery("SELECT a FROM Tramitacion a WHERE a.idRol.idRol=:xIdRol AND a.idEstado.idEstado=:xIdEstado AND a.fechaRegistro BETWEEN :xFdesde AND :xFhasta ORDER BY a.idTramitacion");
+        }
+        q.setParameter("xFdesde", fdesde);
+        q.setParameter("xFhasta", fhasta);
+        q.setParameter("xIdRol", idRol);
+        q.setParameter("xIdEstado", idEstado);
         List<Tramitacion> tr = q.getResultList();
         return tr;
 

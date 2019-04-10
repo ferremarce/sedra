@@ -13,136 +13,122 @@
     <ui:define name="content">
         <h:form id="formMain">
             <p:panel header="Parámetros de Búsqueda">
-                <h:panelGrid columns="2" >
-                    <h:outputLabel for="fechaDesde" styleClass="itemResaltado1"  value="(*) Desde:"/>
-                    <h:panelGrid columns="2">
-                        <p:calendar navigator="true"  size="10" id="fechaDesde" value="#{ReporteController.tmpFechaDesde}" pattern="dd/MM/yyyy" title="Fecha Desde" required="true" requiredMessage="#{bundle.Requerido}"/>
-                        <p:message for="fechaDesde"/>
-                    </h:panelGrid>
-                    <h:outputLabel for="fechaHasta" styleClass="itemResaltado1"  value="(*) Hasta:"/>
-                    <h:panelGrid columns="2">
-                        <p:calendar navigator="true"  size="10" id="fechaHasta" value="#{ReporteController.tmpFechaHasta}" pattern="dd/MM/yyyy" title="Fecha Hasta" required="true" requiredMessage="#{bundle.Requerido}"/>
-                        <p:message for="fechaHasta"/>
-                    </h:panelGrid>
-                    <h:outputLabel for="idRol" styleClass="itemResaltado1" value="(*) Dependencia:"/>
-                    <h:panelGrid columns="2">
-                        <p:selectOneMenu disabled="#{ReporteController.disabled}" id="idRol" value="#{ReporteController.tmpIdRol}" required="true" requiredMessage="#{bundle.Requerido}" >
-                            <f:selectItems value="#{RolController.rolSet}"/>
-                        </p:selectOneMenu>
-                        <p:message for="idRol"/>
-                    </h:panelGrid> 
-                    <h:outputLabel for="idEstadoTramitacion" styleClass="itemResaltado1" value="(*) Estado:"/>
-                    <h:panelGrid columns="2">
-                        <h:selectOneRadio id="idEstadoTramitacion" value="#{ReporteController.tmpEstadoTramitacion}" title="Seleccione una opción" required="true" requiredMessage="#{bundle.Requerido}"  >
-                            <f:selectItems value="#{EstadoTramitacionController.estadoTramitacionSet}"/>
-                        </h:selectOneRadio>
-                        <p:message for="idEstadoTramitacion"/>
-                    </h:panelGrid>
-                    <p:commandButton id="cmdBuscar" type="submit" value="Buscar"  ajax="true" image="search" action="#{ReporteController.buscarDocumento()}" update="formMain" />
-                </h:panelGrid>
+                <p:panelGrid columns="3" styleClass="ui-panelgrid-blank">
+                    <p:outputLabel for="fechaDesde" styleClass="itemResaltado1"  value="Desde:"/>
+                    <p:calendar navigator="true"  size="10" id="fechaDesde" value="#{ReporteController.tmpFechaDesde}" pattern="dd/MM/yyyy" title="Fecha Desde" required="true" requiredMessage="#{bundle.Requerido}"/>
+                    <p:message for="fechaDesde"/>
+                    <p:outputLabel for="fechaHasta" styleClass="itemResaltado1"  value="Hasta:"/>
+                    <p:calendar navigator="true"  size="10" id="fechaHasta" value="#{ReporteController.tmpFechaHasta}" pattern="dd/MM/yyyy" title="Fecha Hasta" required="true" requiredMessage="#{bundle.Requerido}"/>
+                    <p:message for="fechaHasta"/>
+                    <p:outputLabel for="idRol" styleClass="itemResaltado1" value="Dependencia:"/>
+                    <p:selectOneMenu disabled="#{ReporteController.disabled}" id="idRol" value="#{ReporteController.tmpIdRol}" required="true" requiredMessage="#{bundle.Requerido}" >
+                        <f:selectItems value="#{RolController.rolSet}"/>
+                    </p:selectOneMenu>
+                    <p:message for="idRol"/>
+                    <p:outputLabel for="idEstadoTramitacion" styleClass="itemResaltado1" value="Estado:"/>
+                    <h:selectOneRadio id="idEstadoTramitacion" value="#{ReporteController.tmpEstadoTramitacion}" title="Seleccione una opción" required="true" requiredMessage="#{bundle.Requerido}"  >
+                        <f:selectItems value="#{EstadoTramitacionController.estadoTramitacionSet}"/>
+                    </h:selectOneRadio>
+                    <p:message for="idEstadoTramitacion"/>
+                    <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{ReporteController.buscarDocumento()}" update="@form, messages"/>
+                </p:panelGrid>
             </p:panel>
-            <p:dataTable id="dataTable" var="item" value="#{ReporteController.model}" scrollWidth="900" scrollRows="50"  scrollHeight="400" scrollable="true" liveScroll="true" resizableColumns="true" emptyMessage="#{bundle.SinRegistrosMensaje}">
-                <p:column headerText="Acción" style="width:50px">
-                    <f:facet name="header">  
-                        <h:outputText value="Acción" />  
-                    </f:facet>
-                    <p:commandButton ajax="false" title="#{bundle.VerBoton}" image="ver" action="#{DocumentoController.verSetup(item.idDocumento.idDocumento,'/reportes/ListadoTramitacionOficina')}"/>
+            <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{ReporteController.listaTramitacion}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                         rows="50"
+                         paginator="true"
+                         filterEvent="enter"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,25,50,100"                         
+                         >
+                <f:facet name="header">
+                    Tabla de Datos
+                    <p:outputPanel style="text-align: right" styleClass="ui-panelgrid-blank">
+                        <p:outputLabel value="Exportar: "/>
+                        <p:commandLink title="Exportar a Excel" ajax="false">
+                            <p:graphicImage value="/img/xls-icon.png"/>
+                            <p:dataExporter type="xls" target="dataTable" fileName="listado"/>
+                        </p:commandLink>
+                        <p:commandLink title="Exportar a CSV" ajax="false">
+                            <p:graphicImage value="/img/csv-icon.png"/>
+                            <p:dataExporter type="csv" target="dataTable" fileName="listado"/>
+                        </p:commandLink>
+                    </p:outputPanel>
+                </f:facet> 
+                <p:column exportable="false" width="40">
+                    <h:outputText style="display: inline" value="#{index+1}"/>
+                    <p:rowToggler/>
                 </p:column>
-                <p:column style="width:50px" >
-                    <f:facet name="header">  
-                        <h:outputText value="Derivado" />  
-                    </f:facet>
-                    <h:outputText value="#{item.fechaDerivacion}">
-                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                    </h:outputText>
+                <p:column headerText="Nro. Ent." width="7%">  
+                    <p:commandLink title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento.idDocumento)}">
+                        <h:outputText title="#{item.idDocumento.idDocumento}" styleClass="fontBold Blue" value=" #{item.idDocumento.nroEntrada}"/>
+                    </p:commandLink>
+                </p:column>  
+                <p:rowExpansion>
+                    <p:panelGrid columns="2" style="width: 400px" >
+                        <p:outputLabel value="Derivado: "/>
+                        <h:outputText value="#{item.fechaDerivacion}">
+                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                        <p:outputLabel value="Recibido: "/>
+                        <p:outputPanel>
+                            <h:outputText value="#{item.fechaRegistro}">
+                                <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                            <p:spacer width="10px"/>
+                            <h:outputText value="#{item.horaRegistro}">
+                                <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="HH:mm" />
+                            </h:outputText>
+                        </p:outputPanel>
+                        <p:outputLabel value="Confirmado: "/>
+                        <p:outputPanel>
+                            <h:outputText value="#{item.fechaConfirmacion}">
+                                <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                            <p:spacer width="10px"/>
+                            <h:outputText value="#{item.horaConfirmacion}">
+                                <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="HH:mm" />
+                            </h:outputText>
+                        </p:outputPanel>
+                        <p:outputLabel value="Procesado: "/>
+                        <p:outputPanel>
+                            <h:outputText value="#{item.fechaSalida}">
+                                <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                            <p:spacer width="10px"/>
+                            <h:outputText value="#{item.horaSalida}">
+                                <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="HH:mm" />
+                            </h:outputText>
+                        </p:outputPanel>
+                    </p:panelGrid>
+                </p:rowExpansion>
+                <p:column headerText="Despacho" width="100" rendered="#{!TramitacionController.documento.cerrado}">
+                    <h:outputText value="#{CommonController.doDiferenciaTiempo(item.fechaRegistro, item.horaRegistro, item.fechaSalida, item.horaSalida)} "/>
                 </p:column>
-                <p:column headerText="Recibido" style="width:100px" >
-                    <f:facet name="header">  
-                        <h:outputText value="Recibido" />  
-                    </f:facet>
-                    <h:outputText value="#{item.fechaRegistro}">
-                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                    </h:outputText>
-                    <h:outputText value=" "/>
-                    <h:outputText value="#{item.horaRegistro}">
-                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="HH:mm" />
-                    </h:outputText>
-                </p:column>
-                <p:column headerText="Procesado" style="width:100px" >
-                    <f:facet name="header">  
-                        <h:outputText value="Procesado" />  
-                    </f:facet>
-                    <h:outputText value="#{item.fechaSalida}">
-                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                    </h:outputText>
-                    <h:outputText value=" "/>
-                    <h:outputText value="#{item.horaSalida}">
-                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="HH:mm" />
-                    </h:outputText>
-                </p:column>
-                <p:column headerText="Despacho" style="width:100px" >
-                    <f:facet name="header">  
-                        <h:outputText value="Despacho" />  
-                    </f:facet>
-                    <h:outputText value="#{JSFutil.diferenciaTime(item.fechaRegistro, item.horaRegistro, item.fechaSalida, item.horaSalida)} "/>
-                </p:column>
-                <p:column headerText="Nro. Ent." style="width:50px" >
-                    <f:facet name="header">  
-                        <h:outputText value="Nro. Ent." />  
-                    </f:facet>
-                    <h:outputText value=" #{item.idDocumento.nroEntrada}"/>
-                </p:column>
-                <p:column headerText="Asunto" style="width:150px" >
-                    <f:facet name="header">  
-                        <h:outputText value="Asunto" />  
-                    </f:facet>
+                <p:column headerText="Asunto">
                     <h:outputText value="#{item.idDocumento.asunto}"/>
                 </p:column>
-                <p:column headerText="Dependencia" style="width:100px" >  
-                    <f:facet name="header">  
-                        <h:outputText value="Dependencia" />  
-                    </f:facet>
-                    <h:outputText value="#{item.idRol.descripcionRol}"/>
-                </p:column>  
-                <p:column headerText="Nota" style="width:100px" > 
-                    <f:facet name="header">  
-                        <h:outputText value="Nota" />  
-                    </f:facet>
-                    <h:outputText value="#{item.notaBreve}"/>
-                </p:column>  
-                <p:column headerText="De" style="width:100px" > 
-                    <f:facet name="header">  
-                        <h:outputText value="De" />  
-                    </f:facet>
+                <p:column headerText="De" width="100" > 
                     <h:outputText value="#{item.remitidoPor}"/>
                 </p:column>  
-                <p:column headerText="Para" style="width:100px" > 
-                    <f:facet name="header">  
-                        <h:outputText value="Para" />  
-                    </f:facet>
+                <p:column headerText="Para" width="100" > 
                     <h:outputText value="#{item.remitidoA}"/>
+                    <h:outputText value=" [#{item.idRol.descripcionRol}]"/>
                 </p:column>  
-                <p:column headerText="Usuario" style="width:100px" > 
-                    <f:facet name="header">  
-                        <h:outputText value="Derivado" />  
-                    </f:facet>
+                <p:column headerText="Nota"> 
+                    <h:outputText value="#{item.notaBreve}"/>
+                </p:column>  
+                <p:column headerText="Usuario" width="80"> 
                     <h:outputText value="#{item.idUsuario}"/>
                 </p:column>
-                <p:column headerText="Adjunto" style="width:50px"> 
-                    <f:facet name="header">  
-                        <h:outputText value="Adjunto" />  
-                    </f:facet>
-                    <p:commandButton title="Descargar" image="download" ajax="false">
-                        <p:fileDownload value="#{TramitacionController.download(item.idTramitacion)}" />  
+                <p:column exportable="false" headerText="Adjunto" width="115">  
+                    <p:commandButton rendered="#{item.nombreArchivo!=null}" title="Descargar" icon="fa fa-download" ajax="false">
+                        <p:fileDownload value="#{DownloadFile.downloadDocumentoTramite(item.idTramitacion)}" />  
                     </p:commandButton>
-                </p:column> 
-                <f:facet name="footer">  
-                    Exportar a
-                    <h:commandLink >  
-                        <p:graphicImage alt="Excel" height="30" width="30" value="/iconos/excel.png" />  
-                    <p:dataExporter type="xls" target="dataTable" fileName="listado" />  
-                </h:commandLink>
-                </f:facet>  
+                    <h:outputText value="#{item.nombreArchivo!=null ? item.nombreArchivo:'Sin archivo'}"/>
+                </p:column>  
+                <p:column headerText="Adjunto" visible="false" width="115">  
+                    <h:outputText value="#{item.nombreArchivo!=null ? item.nombreArchivo:'Sin archivo'}"/>
+                </p:column>  
             </p:dataTable>
         </h:form>
     </ui:define>

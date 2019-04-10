@@ -10,10 +10,15 @@ import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 import sedra3.fachada.DocumentoFacade;
+import sedra3.fachada.TramitacionFacade;
 import sedra3.modelo.Documento;
+import sedra3.modelo.EstadoTramitacion;
+import sedra3.modelo.Rol;
+import sedra3.modelo.Tramitacion;
 import sedra3.reportes.FuenteReporte;
 import sedra3.reportes.JasperManager;
 import sedra3.util.JSFutil;
@@ -25,50 +30,100 @@ import sedra3.util.JSFutil;
 @Named(value = "ReporteController")
 @SessionScoped
 public class ReporteController implements Serializable {
-    
+
     @Inject
     DocumentoFacade documentoFacade;
+    @Inject
+    TramitacionFacade tramitacionFacade;
     @Inject
     DocumentoController documentoController;
     @Inject
     CommonController commonController;
     @Inject
     ClasificadorController clasificadorController;
-    
+
     private String destinoReporte = "PDF";
+    private Date tmpFechaDesde = new Date();
+    private Date tmpFechaHasta = new Date();
+    private Rol tmpIdRol;
+    private EstadoTramitacion tmpEstadoTramitacion;
+    private Boolean disabled = Boolean.TRUE;
+    List<Tramitacion> listaTramitacion;
 
     /**
      * Creates a new instance of ReporteController
      */
     public ReporteController() {
     }
-    
+
     public String getDestinoReporte() {
         return destinoReporte;
     }
-    
+
     public void setDestinoReporte(String destinoReporte) {
         this.destinoReporte = destinoReporte;
     }
-    
+
+    public Date getTmpFechaDesde() {
+        return tmpFechaDesde;
+    }
+
+    public void setTmpFechaDesde(Date tmpFechaDesde) {
+        this.tmpFechaDesde = tmpFechaDesde;
+    }
+
+    public Date getTmpFechaHasta() {
+        return tmpFechaHasta;
+    }
+
+    public void setTmpFechaHasta(Date tmpFechaHasta) {
+        this.tmpFechaHasta = tmpFechaHasta;
+    }
+
+    public Rol getTmpIdRol() {
+        return tmpIdRol;
+    }
+
+    public void setTmpIdRol(Rol tmpIdRol) {
+        this.tmpIdRol = tmpIdRol;
+    }
+
+    public Boolean getDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(Boolean disabled) {
+        this.disabled = disabled;
+    }
+
+    public EstadoTramitacion getTmpEstadoTramitacion() {
+        return tmpEstadoTramitacion;
+    }
+
+    public void setTmpEstadoTramitacion(EstadoTramitacion tmpEstadoTramitacion) {
+        this.tmpEstadoTramitacion = tmpEstadoTramitacion;
+    }
+
+    public List<Tramitacion> getListaTramitacion() {
+        return listaTramitacion;
+    }
+
+    public void setListaTramitacion(List<Tramitacion> listaTramitacion) {
+        this.listaTramitacion = listaTramitacion;
+    }
+
     public String imprimirDelantalSetup() {
         this.documentoController.setCriterio("");
         this.documentoController.setListaDocumento(new ArrayList<Documento>());
         return "/reportes/rptDelantal";
     }
-    
+
     public String listTramitacionOficinaSetup() {
-//        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
-//        Usuario user = (Usuario) session.getAttribute("user");
-//        this.tmpIdRol = user.getIdRol();
-//        if (user.getIdRol().getIdRol().compareTo(18) == 0) {//Es archivo
-//            this.disabled = false;
-//        } else {
-//            this.disabled = true;
-//        }
+        this.tmpIdRol = JSFutil.getUsuarioConectado().getIdRol();
+        this.disabled = this.tmpIdRol.getIdRol().compareTo(18) != 0; //Es archivo
         return "/reportes/ListadoTramitacionOficina";
     }
-    
+
     public void generarReporte(Integer id) throws IOException {
         try {
             JasperManager jm = new JasperManager();
@@ -89,5 +144,13 @@ public class ReporteController implements Serializable {
             this.commonController.doExcepcion(e);
         }
     }
-    
+
+    public void buscarDocumento() {
+        this.listaTramitacion = tramitacionFacade.getAllTramitacion(tmpIdRol.getIdRol(), tmpEstadoTramitacion.getIdEstado(), tmpFechaDesde, tmpFechaHasta);
+        if (this.listaTramitacion.isEmpty()) {
+            JSFutil.addMessage("No hay resultados...", JSFutil.StatusMessage.WARNING);
+        } else {
+            JSFutil.addMessage(this.listaTramitacion.size() + " registros recuperados", JSFutil.StatusMessage.INFORMATION);
+        }
+    }
 }
