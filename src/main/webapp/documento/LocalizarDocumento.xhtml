@@ -12,7 +12,129 @@
 
     <ui:define name="content">
         <h:form id="formMain">
-            <h:outputText styleClass="Orange font3x fontBold" value="En proceso de reingeniería"/>
+            <p:panel>
+                <p:outputLabel for="filtro" value="Filtrar por: "/>
+                <p:selectOneRadio id="filtro" layout="pageDirection" value="#{DocumentoController.tmpConNota}">
+                    <f:selectItem itemLabel="Documentos con Nota/STR" itemValue="1" />  
+                    <f:selectItem itemLabel="Nota/STR independiente" itemValue="2" /> 
+                    <p:ajax event="change" update="@form"/>
+                </p:selectOneRadio>
+            </p:panel>
+            <p:panel rendered="#{DocumentoController.tmpConNota==1}" id="localizarDocumento">
+                <p:panelGrid  columns="3" styleClass="ui-panelgrid-blank">
+                    <p:outputLabel for="opciones" value="Buscar en: " />
+                    <p:selectOneRadio  id="opciones" value="#{DocumentoController.selectedOption}" required="true" requiredMessage="#{bundle.Requerido}">  
+                        <f:selectItem itemLabel="Asunto" itemValue="d.asunto" />  
+                        <f:selectItem itemLabel="Nro. Entrada" itemValue="d.nroEntrada" />  
+                        <f:selectItem itemLabel="Referencia" itemValue="d.referencia" />  
+                        <f:selectItem itemLabel="Remitido a" itemValue="t.remitidoA" />  
+                        <f:selectItem itemLabel="Remitido por" itemValue="t.remitidoPor" />  
+                        <f:selectItem itemLabel="Nota" itemValue="t.notaBreve" />  
+                        <f:selectItem itemLabel="Nro.Salida/Memo" itemValue="b.idNota.numeroSalida" />  
+                        <f:selectItem itemLabel="STR" itemValue="b.idNota.numeroStr" />  
+                    </p:selectOneRadio> 
+                    <p:message for="opciones"/>
+                    <p:outputLabel for="criterio" value="Criterio: "/>
+                    <p:inputText id="criterio" value="#{DocumentoController.criterio}" title="Búsqueda" />                      
+                    <p:message for="criterio"/>
+                    <p:outputLabel for="fechaDesde" value="Desde:"/>
+                    <p:calendar navigator="true" id="fechaDesde" value="#{DocumentoController.tmpFechaDesde}" pattern="dd/MM/yyyy" title="Fecha Desde" required="true" requiredMessage="#{bundle.Requerido}"/>
+                    <p:message for="fechaDesde"/>
+                    <p:outputLabel for="fechaHasta" value="Hasta:"/>
+                    <p:calendar navigator="true" id="fechaHasta" value="#{DocumentoController.tmpFechaHasta}" pattern="dd/MM/yyyy" title="Fecha Hasta" required="true" requiredMessage="#{bundle.Requerido}"/>
+                    <p:message for="fechaHasta"/>
+                    <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{DocumentoController.localizarDocumento()}" update="@form, messages"/>
+                </p:panelGrid>
+                <p:dataTable rowIndexVar="index" id="dataTableDoc" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                             rows="50"
+                             paginator="true"
+                             filterEvent="enter"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,25,50,100"                         
+                             >
+                    <f:facet name="header">
+                        Tabla de Datos
+                    </f:facet>
+                    <p:column headerText="#" style="width: 40px">
+                        <h:outputText value="#{index+1}"/>
+                    </p:column>
+                    <p:column headerText="Nro. Ent." style="width:7%" >  
+                        <p:commandLink title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
+                            <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value=" #{item.nroEntrada}"/>
+                        </p:commandLink>
+                    </p:column>  
+                    <p:column headerText="F. Doc." style="width:10%" >
+                        <h:outputText value="#{item.fechaDocumento}">
+                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Asunto">
+                        <i class="fa fa-folder-open"/>
+                        <h:outputText value=" #{ClasificadorController.obtenerRutaClasificador(item.idClasificador.idClasificador)}"/>
+                        <blockquote>
+                            <h:outputText styleClass="Brown fontBold" value="#{item.asunto}"/>
+                        </blockquote>
+                    </p:column>  
+                    <p:column headerText="F. Ing." style="width:10%" >  
+                        <h:outputText value="#{item.fechaIngreso}">
+                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>   
+                    <p:column headerText="Enlazado con" style="width:150px" > 
+                        <p:dataList rendered="#{item.detalleNotaSalidaList.size()>0}" value="#{item.detalleNotaSalidaList}" var="nota" emptyMessage="#{bundle.SinRegistrosMensaje}">  
+                            <h:outputText  value="[#{nota.idNota.idTipoNota.descripcionTipoNota}] " />  
+                            <p:commandLink styleClass="fontBold Red" rendered="#{nota.idNota.numeroSalida!=null}" title="Ver Nota" value="Nro. Salida: #{nota.idNota.numeroSalida}" ajax="false" action="#{NotaSalidaController.doVerForm(nota.idNota.idNota)}" />  
+                            <p:commandLink styleClass="fontBold Red" rendered="#{nota.idNota.numeroStr!=null}" title="Ver STR" value="Nro. STR: #{nota.idNota.numeroStr}" ajax="false" action="#{NotaSalidaController.doVerForm(nota.idNota.idNota)}" />   
+                            <p:separator/>
+                            <h:outputText value="#{nota.idNota.referencia}"/> 
+                            <h:outputText value="#{nota.idNota.rubro}" />  
+                        </p:dataList>
+                    </p:column> 
+                </p:dataTable>
+            </p:panel>
+            <p:panel rendered="#{DocumentoController.tmpConNota==2}" id="localizarNota">
+                <p:panel>
+                    <p:panelGrid columns="3" styleClass="ui-panelgrid-blank">
+                        <p:outputLabel for="criterio2" value="Criterio: "/>
+                        <p:inputText tabindex="0" size="100" id="criterio2" value="#{NotaSalidaController.criterioBusqueda}" title="Búsqueda" placeholder="Nro. Salida, STR, Referencia" />
+                        <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{NotaSalidaController.localizarAllNotaSalida()}" update="@form, messages"/>
+                    </p:panelGrid>
+                    <h:outputText value="Puede realizar la búsqueda utilizando % como caracter o palabra comodín"/>
+                    <p:dataTable rowIndexVar="index" id="dataTableNota" var="item" value="#{NotaSalidaController.listaNotaSalida}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                                 rows="50"
+                                 paginator="true"
+                                 filterEvent="enter"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,25,50,100"                         
+                                 >
+                        <f:facet name="header">
+                            Tabla de Datos
+                        </f:facet>
+                        <p:column headerText="No. Sal./STR" width="100" styleClass="top">  
+                            <p:commandLink title="#{bundle.VerBoton} detalle de la Nota de Salida" target="_new" ajax="false" action="#{NotaSalidaController.doVerForm(item.idNota)}">
+                                <h:outputText rendered="#{item.numeroSalida!=null}" styleClass="fontBold Blue" value="Salida #: #{item.numeroSalida}"/>
+                                <br/>
+                                <h:outputText rendered="#{item.numeroStr!=null}" styleClass="fontBold Blue" value="STR #: #{item.numeroStr}"/>
+                            </p:commandLink>
+                        </p:column> 
+                        <p:column headerText="Referencia/Rubro" >  
+                            <h:outputText value="#{item.referencia}"/>
+                            <p:separator/>
+                            <h:outputText value="#{item.rubro}"/>
+                            <br/>
+                            <h:outputText rendered="#{item.detalleNotaSalidaList.size()>0}" value="Enlazado con"/><br/>
+                            <p:repeat rendered="#{item.detalleNotaSalidaList.size()>0}" value="#{item.detalleNotaSalidaList}" var="valor" > 
+                                <p:commandLink styleClass="Red fontBold" target="_new" title="Ver Documento" value="[Entrada] #{valor.idDocumento.nroEntrada} " ajax="false" action="#{DocumentoController.doVerForm(valor.idDocumento.idDocumento)}"/> 
+                                <h:outputText value="#{valor.idDocumento.asunto.length()>80 ? valor.idDocumento.asunto.substring(0, 79): valor.idDocumento.asunto}..." />  <br/>
+                            </p:repeat>
+                        </p:column>  
+                        <p:column headerText="Clasificador" styleClass="top">  
+                            <h:outputText value=" #{ClasificadorController.obtenerRutaClasificador(item.idClasificador.idClasificador)}"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </p:panel>
+
         </h:form>
     </ui:define>
 

@@ -5,6 +5,7 @@
  */
 package sedra3.fachada;
 
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -110,4 +111,33 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
         return tr;
     }
 
+    public List<Documento> getAllDocumento(String criterio, String campo, Date f1, Date f2) {
+        String select = "SELECT d FROM Documento d ";
+        String where = "";
+        String consultaSQL;
+        switch (campo.charAt(0)) {
+            case 'd':
+                where += " WHERE UPPER(" + campo + ") LIKE :xCriterio ";
+                break;
+            case 'b':
+                where += " WHERE d.idDocumento IN (SELECT b.idDocumento.idDocumento FROM DetalleNotaSalida b WHERE UPPER(" + campo + ") LIKE :xCriterio) ";
+                break;
+            default:
+                where += " WHERE d.idDocumento IN (SELECT t.idDocumento.idDocumento FROM Tramitacion t WHERE UPPER(" + campo + ") LIKE :xCriterio) ";
+                break;
+        }
+        String orderby = " AND d.fechaDocumento BETWEEN :xF1 AND :xF2 ORDER BY d.idDocumento ";
+        consultaSQL = select + where + orderby;
+        Query q = em.createQuery(consultaSQL);
+        if (criterio.compareTo("") != 0) {
+            q.setParameter("xCriterio", "%" + criterio.toUpperCase() + "%");
+        } else {
+            q.setParameter("xCriterio", "123456");
+        }
+        q.setParameter("xF1", f1);
+        q.setParameter("xF2", f2);
+        List<Documento> tr = q.getResultList();
+        return tr;
+
+    }
 }

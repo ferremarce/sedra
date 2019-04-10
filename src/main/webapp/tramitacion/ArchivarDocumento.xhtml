@@ -167,6 +167,7 @@
                         <p:separator/>
                         <h:outputText value="#{item.rubro}"/>
                         <br/>
+                        <h:outputText rendered="#{item.detalleNotaSalidaList.size()>0}" value="Enlazado con"/><br/>
                         <p:repeat rendered="#{item.detalleNotaSalidaList.size()>0}" value="#{item.detalleNotaSalidaList}" var="valor" > 
                             <p:commandLink styleClass="Red fontBold" target="_new" title="Ver Documento" value="[Entrada] #{valor.idDocumento.nroEntrada} " ajax="false" action="#{DocumentoController.doVerForm(valor.idDocumento.idDocumento)}"/> 
                             <h:outputText value="#{valor.idDocumento.asunto.length()>80 ? valor.idDocumento.asunto.substring(0, 79): valor.idDocumento.asunto}..." />  <br/>

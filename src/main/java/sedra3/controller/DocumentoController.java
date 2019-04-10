@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -68,6 +69,10 @@ public class DocumentoController implements Serializable {
     private Integer idClasificadorTmp;
     private Clasificador clasificadorSeleccionado;
     private List<NotaSalida> listaNotaSalida;
+    private Integer tmpConNota = 1; //Se utiliza para filtrar la busqueda de documentos para llavear/desllavear
+    private String selectedOption = "d.asunto";
+    private Date tmpFechaDesde = new Date();
+    private Date tmpFechaHasta = new Date();
 
     /**
      * Creates a new instance of DocumentoController
@@ -129,6 +134,38 @@ public class DocumentoController implements Serializable {
 
     public void setCriterio(String criterio) {
         this.criterio = criterio;
+    }
+
+    public Integer getTmpConNota() {
+        return tmpConNota;
+    }
+
+    public void setTmpConNota(Integer tmpConNota) {
+        this.tmpConNota = tmpConNota;
+    }
+
+    public String getSelectedOption() {
+        return selectedOption;
+    }
+
+    public void setSelectedOption(String selectedOption) {
+        this.selectedOption = selectedOption;
+    }
+
+    public Date getTmpFechaDesde() {
+        return tmpFechaDesde;
+    }
+
+    public void setTmpFechaDesde(Date tmpFechaDesde) {
+        this.tmpFechaDesde = tmpFechaDesde;
+    }
+
+    public Date getTmpFechaHasta() {
+        return tmpFechaHasta;
+    }
+
+    public void setTmpFechaHasta(Date tmpFechaHasta) {
+        this.tmpFechaHasta = tmpFechaHasta;
     }
 
 ///---------------------METODOS---------------------///
@@ -425,4 +462,13 @@ public class DocumentoController implements Serializable {
         }
     }
 
+    public void localizarDocumento() {
+        this.listaDocumento = documentoFacade.getAllDocumento(this.getCriterio(), this.selectedOption, this.tmpFechaDesde, this.tmpFechaHasta);
+        if (this.listaDocumento.isEmpty()) {
+            JSFutil.addMessage("No hay resultados...", JSFutil.StatusMessage.WARNING);
+        } else {
+            JSFutil.addMessage(this.listaDocumento.size() + " registros recuperados", JSFutil.StatusMessage.INFORMATION);
+        }
+
+    }
 }

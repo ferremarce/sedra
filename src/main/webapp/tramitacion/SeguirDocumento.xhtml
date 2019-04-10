@@ -69,30 +69,8 @@
                     <f:facet name="header">
                         Tabla de Datos
                     </f:facet> 
-                    <p:column headerText="#" width="20" rendered="#{TramitacionController.documento.cerrado}">
-                        <h:outputText style="display: inline" value="#{index+1}"/>
-                    </p:column>
-                    <p:column headerText="Derivado" width="110" rendered="#{TramitacionController.documento.cerrado}">
-                        <h:outputText value="#{item.fechaDerivacion}">
-                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                        </h:outputText>
-                    </p:column>
-                    <p:column headerText="Remitido a" rendered="#{TramitacionController.documento.cerrado}">
-                        <h:outputText value="#{item.remitidoA}"/>
-                        <p:separator/>
-                        <h:outputText value="#{item.idUsuario}"/>
-                    </p:column>
-                    <p:column headerText="Nota breve" rendered="#{TramitacionController.documento.cerrado}">
-                        <h:outputText value="#{item.notaBreve}"/>
-                    </p:column>
-                    <p:column headerText="Estado" width="100" rendered="#{TramitacionController.documento.cerrado}">
-                        <h:outputText value="#{item.idEstado.toString()}"/>
-                    </p:column>
-                    <p:column headerText="Observaciones" rendered="#{TramitacionController.documento.cerrado}">
-                        <h:outputText value="#{item.observacion}"/>
-                    </p:column>
                     <!-- CUANDO ES EDICION -->
-                    <p:column headerText="#" style="width: 40px" rendered="#{!TramitacionController.documento.cerrado}">
+                    <p:column headerText="#" style="width: 40px">
                         <h:outputText style="display: inline" value="#{index+1}"/>
                         <p:rowToggler/>
                     </p:column>
@@ -134,10 +112,10 @@
                             </p:outputPanel>
                         </p:panelGrid>
                     </p:rowExpansion>
-                    <p:column headerText="Despacho" width="100" rendered="#{!TramitacionController.documento.cerrado}">
+                    <p:column headerText="Despacho" width="100">
                         <h:outputText value="#{CommonController.doDiferenciaTiempo(item.fechaRegistro, item.horaRegistro, item.fechaSalida, item.horaSalida)} "/>
                     </p:column>
-                    <p:column headerText="Remitido a" rendered="#{!TramitacionController.documento.cerrado}">
+                    <p:column headerText="Remitido a">
                         <h:outputText styleClass="fontItalic" value="Usuario: #{item.idUsuario}"/>
                         <p/>
                         <p:inputText title="Remitido a" value="#{item.remitidoA}"/>
@@ -145,15 +123,15 @@
                             <f:selectItems value="#{RolController.rolSet}"/>
                         </p:selectOneMenu>
                     </p:column>
-                    <p:column headerText="Nota Breve" width="130" rendered="#{!TramitacionController.documento.cerrado}">
+                    <p:column headerText="Nota Breve" width="130">
                         <h:outputText value=" #{item.notaBreve}"/>
                     </p:column>
-                    <p:column headerText="Estado" width="130" rendered="#{!TramitacionController.documento.cerrado}">
+                    <p:column headerText="Estado" width="130">
                         <p:selectOneMenu id="idEstado" value="#{item.idEstado}" required="true" requiredMessage="#{bundle.Requerido}" >
                             <f:selectItems value="#{EstadoTramitacionController.estadoTramitacionSet}"/>
                         </p:selectOneMenu>
                     </p:column>
-                    <p:column headerText="Observaciones" rendered="#{!TramitacionController.documento.cerrado}">
+                    <p:column headerText="Observaciones" >
                         <p:inputTextarea rows="3"  cols="20" id="observaciones" value="#{item.observacion}" title="Observaciones" />
                     </p:column>
                     <p:column headerText="Adjunto" width="115">  

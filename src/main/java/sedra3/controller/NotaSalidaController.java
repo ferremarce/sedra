@@ -165,6 +165,14 @@ public class NotaSalidaController implements Serializable {
             JSFutil.addMessage(this.listaNotaSalida.size() + " registros recuperados", JSFutil.StatusMessage.INFORMATION);
         }
     }
+    public void localizarAllNotaSalida() {
+        this.listaNotaSalida = notaSalidaFacade.getAllNotaSalida(criterioBusqueda);
+        if (this.listaNotaSalida.isEmpty()) {
+            JSFutil.addMessage("No hay resultados...", JSFutil.StatusMessage.WARNING);
+        } else {
+            JSFutil.addMessage(this.listaNotaSalida.size() + " registros recuperados", JSFutil.StatusMessage.INFORMATION);
+        }
+    }
 
     public String createSetup(Integer idDoc) {
         Calendar c = Calendar.getInstance();

@@ -40,12 +40,12 @@
                     <h:outputText id="observaciones" value="#{DocumentoController.documento.observacion}" title="Observaciones"  />
                     <p:outputLabel for="idTipoDocumento" value="Tipo Documento:"/>
                     <h:outputText id="idTipoDocumento" value="#{DocumentoController.documento.idTipoDocumento.toString()}" />
-                    
+
                     <p:outputLabel rendered="#{DocumentoController.documento.nombreArchivo!=null}" for="downAdjunto"  value="Adjunto:"/>
                     <p:outputPanel rendered="#{DocumentoController.documento.nombreArchivo!=null}" id="downAdjunto">
-                    <p:commandButton  style="width: 150px" title="Descargar" value="#{bundle.DescargarBoton}" icon="fa fa-download" ajax="false">
-                        <p:fileDownload value="#{DownloadFile.downloadDocumento(DocumentoController.documento.idDocumento)}" />  
-                    </p:commandButton>
+                        <p:commandButton  style="width: 150px" title="Descargar" value="#{bundle.DescargarBoton}" icon="fa fa-download" ajax="false">
+                            <p:fileDownload value="#{DownloadFile.downloadDocumento(DocumentoController.documento.idDocumento)}" />  
+                        </p:commandButton>
                         <h:outputText value="#{DocumentoController.documento.nombreArchivo}"/>
                     </p:outputPanel>
                     <p:outputLabel value="Enlazado a:"/>
@@ -59,7 +59,7 @@
                     </p:dataList>
                 </p:panelGrid>
 
-                <p:dataTable id="dataTableAdjunto" var="expeAdj" value="#{DocumentoController.documento.documentoAdjuntoList}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}">
+                <p:dataTable id="dataTableAdjunto" var="expeAdj" rendered="#{DocumentoController.documento.documentoAdjuntoList.size()>0}" value="#{DocumentoController.documento.documentoAdjuntoList}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}">
                     <f:facet name="header">
                         <h:outputText styleClass="Purple" value="Archivos del Documento"/>
                     </f:facet>
@@ -71,7 +71,86 @@
                             <p:fileDownload value="#{DownloadFile.downloadDocumentoAdjunto(expeAdj.idDocumentoAdjunto)}" />  
                         </p:commandButton>
                     </p:column>
-                </p:dataTable> 
+                </p:dataTable>
+                <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{DocumentoController.documento.tramitacionList}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                             rows="50"
+                             paginator="true"
+                             filterEvent="enter"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,25,50,100"                         
+                             >
+                    <f:facet name="header">
+                        Tabla de Datos
+                    </f:facet> 
+                    <p:column headerText="#" width="20">
+                        <h:outputText style="display: inline" value="#{index+1}"/>
+                        <p:rowToggler/>
+                    </p:column>
+                    <p:column headerText="Derivado" width="110">
+                        <h:outputText value="#{item.fechaDerivacion}">
+                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Remitido a">
+                        <h:outputText value="#{item.remitidoA}"/>
+                        <p:separator/>
+                        <h:outputText value="#{item.idUsuario}"/>
+                    </p:column>
+                    <p:column headerText="Nota breve">
+                        <h:outputText value="#{item.notaBreve}"/>
+                    </p:column>
+                    <p:column headerText="Estado" width="100">
+                        <h:outputText value="#{item.idEstado.toString()}"/>
+                    </p:column>
+                    <p:column headerText="Observaciones">
+                        <h:outputText value="#{item.observacion}"/>
+                    </p:column>
+                    <p:column headerText="Adjunto" width="115">  
+                        <p:commandButton rendered="#{item.nombreArchivo!=null}" title="Descargar" icon="fa fa-download" ajax="false">
+                            <p:fileDownload value="#{DownloadFile.downloadDocumentoTramite(item.idTramitacion)}" />  
+                        </p:commandButton>
+                        <h:outputText value="#{item.nombreArchivo!=null ? item.nombreArchivo:'Sin archivo'}"/>
+                    </p:column>
+                    <p:rowExpansion>
+                        <p:panelGrid columns="2" style="width: 400px" >
+                            <p:outputLabel value="Derivado: "/>
+                            <h:outputText value="#{item.fechaDerivacion}">
+                                <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                            <p:outputLabel value="Recibido: "/>
+                            <p:outputPanel>
+                                <h:outputText value="#{item.fechaRegistro}">
+                                    <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                                <p:spacer width="10px"/>
+                                <h:outputText value="#{item.horaRegistro}">
+                                    <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="HH:mm" />
+                                </h:outputText>
+                            </p:outputPanel>
+                            <p:outputLabel value="Confirmado: "/>
+                            <p:outputPanel>
+                                <h:outputText value="#{item.fechaConfirmacion}">
+                                    <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                                <p:spacer width="10px"/>
+                                <h:outputText value="#{item.horaConfirmacion}">
+                                    <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="HH:mm" />
+                                </h:outputText>
+                            </p:outputPanel>
+                            <p:outputLabel value="Procesado: "/>
+                            <p:outputPanel>
+                                <h:outputText value="#{item.fechaSalida}">
+                                    <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                                <p:spacer width="10px"/>
+                                <h:outputText value="#{item.horaSalida}">
+                                    <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="HH:mm" />
+                                </h:outputText>
+                            </p:outputPanel>
+                        </p:panelGrid>
+                    </p:rowExpansion>
+
+                </p:dataTable>
             </p:panel>
         </h:form>
     </ui:define>

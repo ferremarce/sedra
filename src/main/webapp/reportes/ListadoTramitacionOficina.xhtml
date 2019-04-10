@@ -26,9 +26,9 @@
                     </p:selectOneMenu>
                     <p:message for="idRol"/>
                     <p:outputLabel for="idEstadoTramitacion" styleClass="itemResaltado1" value="Estado:"/>
-                    <h:selectOneRadio id="idEstadoTramitacion" value="#{ReporteController.tmpEstadoTramitacion}" title="Seleccione una opción" required="true" requiredMessage="#{bundle.Requerido}"  >
+                    <p:selectOneButton id="idEstadoTramitacion" value="#{ReporteController.tmpEstadoTramitacion}" required="true" requiredMessage="#{bundle.Requerido}"  >
                         <f:selectItems value="#{EstadoTramitacionController.estadoTramitacionSet}"/>
-                    </h:selectOneRadio>
+                    </p:selectOneButton>
                     <p:message for="idEstadoTramitacion"/>
                     <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{ReporteController.buscarDocumento()}" update="@form, messages"/>
                 </p:panelGrid>
