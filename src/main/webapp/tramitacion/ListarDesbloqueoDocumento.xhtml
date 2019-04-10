@@ -12,7 +12,106 @@
 
     <ui:define name="content">
         <h:form id="formMain">
-            <h:outputText styleClass="Orange font3x fontBold" value="En proceso de reingeniería"/>
+            <p:panel>
+                <h:outputLabel for="options" value="Filtrar por: "/>
+                <p:selectOneRadio id="options" layout="pageDirection" value="#{DocumentoController.tmpConNota}">
+                    <f:selectItem itemLabel="Documentos con Nota/STR" itemValue="1" />  
+                    <f:selectItem itemLabel="Documentos sin Nota/STR" itemValue="2" /> 
+                    <p:ajax event="change" update="@form"/>
+                </p:selectOneRadio>
+            </p:panel>
+            <p:panel rendered="#{DocumentoController.tmpConNota==1}" id="panelNotaSalida">
+                <p:panelGrid columns="3" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2">
+                    <h:outputLabel for="criterio" value="Criterio: "/>
+                    <p:inputText id="criterio" value="#{NotaSalidaController.criterioBusqueda}" title="Búsqueda" placeholder="Nro. Salida, STR, asunto, Nro. Entrada"/>
+                    <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{NotaSalidaController.localizarAllNotaSalida()}" update="@form, messages"/>
+                </p:panelGrid>
+                <h:outputText value="Puede realizar la búsqueda utilizando % como caracter o palabra comodín"/>
+                <p:dataTable rowIndexVar="index" id="dataTableNota" var="item" value="#{NotaSalidaController.listaNotaSalida}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                             rows="50"
+                             paginator="true"
+                             filterEvent="enter"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,25,50,100"                         
+                             >
+                    <f:facet name="header">
+                        Tabla de Datos
+                    </f:facet>
+                    <p:column headerText="Acción" width="120" styleClass="top">
+                        <p:commandButton ajax="true" update="@form, messages" style="background: #fde5cd !important; color: black" rendered="#{item.cerrado==true}" value="#{bundle.DesllavearBoton}" title="Documento llaveado" onclick="if (!confirm('El documento se encuentra llaveado. El desbloqueo permitira alteraciones posteriores al documento y sus anexos. Desea desbloquear?')) {return false;}"  icon="fa fa-lock" actionListener="#{NotaSalidaController.desLlavear(item)}"/>
+                        <p:commandButton ajax="true" update="@form, messages" rendered="#{item.cerrado==false}" value="#{bundle.LlavearBoton}" title="Documento abierto" onclick="if (!confirm('Desea realmente bloquear el documento y todas sus tramitaciones?...')) {return false;}"  icon="fa fa-unlock" actionListener="#{NotaSalidaController.llavear(item)}"/>
+                    </p:column> 
+                    <p:column headerText="No. Sal./STR" width="100" styleClass="top">  
+                        <p:commandLink title="#{bundle.VerBoton} detalle de la Nota de Salida" target="_new" ajax="false" action="#{NotaSalidaController.doVerForm(item.idNota)}">
+                            <h:outputText rendered="#{item.numeroSalida!=null}" styleClass="fontBold Blue" value="Salida #: #{item.numeroSalida}"/>
+                            <br/>
+                            <h:outputText rendered="#{item.numeroStr!=null}" styleClass="fontBold Blue" value="STR #: #{item.numeroStr}"/>
+                        </p:commandLink>
+                    </p:column> 
+                    <p:column headerText="Referencia/Rubro" >  
+                        <h:outputText value="#{item.referencia}"/>
+                        <p:separator/>
+                        <h:outputText value="#{item.rubro}"/>
+                        <br/>
+                        <h:outputText rendered="#{item.detalleNotaSalidaList.size()>0}" value="Enlazado con"/><br/>
+                        <p:repeat rendered="#{item.detalleNotaSalidaList.size()>0}" value="#{item.detalleNotaSalidaList}" var="valor" > 
+                            <p:commandLink styleClass="Red fontBold" target="_new" title="Ver Documento" value="[Entrada] #{valor.idDocumento.nroEntrada} " ajax="false" action="#{DocumentoController.doVerForm(valor.idDocumento.idDocumento)}"/> 
+                            <h:outputText value="#{valor.idDocumento.asunto.length()>80 ? valor.idDocumento.asunto.substring(0, 79): valor.idDocumento.asunto}..." />  <br/>
+                        </p:repeat>
+                    </p:column>  
+                    <p:column headerText="Clasificador" styleClass="top">  
+                        <h:outputText value=" #{ClasificadorController.obtenerRutaClasificador(item.idClasificador.idClasificador)}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+            <p:panel rendered="#{DocumentoController.tmpConNota==2}" id="panelDocumento">
+                <p:panelGrid columns="3" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2">
+                    <h:outputLabel for="acapite" value="Criterio: "/>
+                    <p:inputText id="acapite" value="#{DocumentoController.criterio}" title="Búsqueda" placeholder="Asunto, Nro. Entrada" />
+                    <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{DocumentoController.buscarDocumentoSinNota()}" update="@form, messages"/>
+                </p:panelGrid>
+                <h:outputText value="Puede realizar la búsqueda utilizando % como caracter o palabra comodín"/>
+                <p:dataTable rowIndexVar="index" id="dataTableDoc" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                             rows="50"
+                             paginator="true"
+                             filterEvent="enter"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,25,50,100"                         
+                             >
+                    <f:facet name="header">
+                        Tabla de Datos
+                    </f:facet>
+                    <p:column headerText="Acción" width="120">
+                        <p:commandButton ajax="true" update="@form, messages" style="background: #fde5cd !important; color: black" rendered="#{item.cerrado==true}" value="#{bundle.DesllavearBoton}" title="Documento llaveado" onclick="if (!confirm('El documento se encuentra llaveado. El desbloqueo permitira alteraciones posteriores al documento y sus anexos. Desea desbloquear?')) {return false;}"  icon="fa fa-lock" actionListener="#{DocumentoController.desbloquearDocumento(item.idDocumento)}"/>
+                        <p:commandButton ajax="true" update="@form, messages" rendered="#{item.cerrado==false}" value="#{bundle.LlavearBoton}" title="Documento abierto" onclick="if (!confirm('Desea realmente bloquear el documento y todas sus tramitaciones?...')) {return false;}"  icon="fa fa-unlock" actionListener="#{DocumentoController.bloquearDocumento(item.idDocumento)}"/>
+                    </p:column> 
+                    <p:column headerText="Nro. Ent." width="7%" >  
+                        <p:commandLink title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
+                            <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value=" #{item.nroEntrada}"/>
+                        </p:commandLink>
+                    </p:column>  
+                    <p:column headerText="F. Doc." width="10%" >
+                        <h:outputText value="#{item.fechaDocumento}">
+                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Asunto">
+                        <i class="fa fa-folder-open"/>
+                        <h:outputText value=" #{ClasificadorController.obtenerRutaClasificador(item.idClasificador.idClasificador)}"/>
+                        <blockquote>
+                            <h:outputText styleClass="Brown fontBold" value="#{item.asunto}"/>
+                        </blockquote>
+                        <h:outputText value="Referencia: #{item.referencia}"/>
+                    </p:column>  
+                    <p:column headerText="F. Ing." width="10%" >  
+                        <h:outputText value="#{item.fechaIngreso}">
+                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>   
+
+                </p:dataTable>
+
+            </p:panel>
         </h:form>
     </ui:define>
 

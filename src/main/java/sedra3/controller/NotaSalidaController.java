@@ -165,6 +165,7 @@ public class NotaSalidaController implements Serializable {
             JSFutil.addMessage(this.listaNotaSalida.size() + " registros recuperados", JSFutil.StatusMessage.INFORMATION);
         }
     }
+
     public void localizarAllNotaSalida() {
         this.listaNotaSalida = notaSalidaFacade.getAllNotaSalida(criterioBusqueda);
         if (this.listaNotaSalida.isEmpty()) {
@@ -373,5 +374,23 @@ public class NotaSalidaController implements Serializable {
             JSFutil.addMessage(this.listaNotaSalida.size() + " registros recuperados", JSFutil.StatusMessage.INFORMATION);
         }
         return "";
+    }
+
+    public void desLlavear(NotaSalida ns) {
+        NotaSalida tmpNota = ns;
+        try {
+            for (DetalleNotaSalida dns : tmpNota.getDetalleNotaSalidaList()) {
+                Documento d = dns.getIdDocumento();
+                d.setCerrado(Boolean.FALSE);
+                documentoFacade.edit(d);
+            }
+            tmpNota.setCerrado(Boolean.FALSE);
+            notaSalidaFacade.edit(tmpNota);
+            auditaFacade.create(new Audita("NOTA_SALIDA", "El documento y todas sus tramitaciones fueron desbloqueados exitosamente.", JSFutil.getFechaHoraActual(), tmpNota.toAudita(), JSFutil.getUsuarioConectado()));
+            JSFutil.addMessage("El documento y todas sus tramitaciones fueron desbloqueados exitosamente.", JSFutil.StatusMessage.INFORMATION);
+        } catch (Exception e) {
+            this.commonController.doExcepcion(e);
+        }
+        this.localizarAllNotaSalida();
     }
 }
