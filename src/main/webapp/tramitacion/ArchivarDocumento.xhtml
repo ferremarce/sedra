@@ -129,7 +129,7 @@
             </p:dialog> 
         </h:form>
         <h:form id="formPanelNotaSalida">
-            <p:dialog modal="true" position="center top" header="Nota de Salida/STR" widgetVar="formNotaSalida" height="450" width="90%">  
+            <p:dialog position="center top" header="Nota de Salida/STR" widgetVar="formNotaSalida" height="450" width="90%">  
                 <p:panel id="panelNotaSalida" header="Documento">
                     <p:panelGrid styleClass="ui-panelgrid-blank" columns="2">
                         <p:outputLabel  for="txtNroEntrada" value="Entrada"/>
@@ -141,7 +141,7 @@
                 <p:outputLabel for="criterio" value="Criterio: "/>
                 <h:panelGrid columns="2">
                     <p:inputText tabindex="0" size="50" id="criterio" value="#{NotaSalidaController.criterioBusqueda}" title="Búsqueda" />
-                    <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{NotaSalidaController.buscarAllNotaSalida()}" update="dataTableNota, messages"/>
+                    <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{NotaSalidaController.localizarAllNotaSalida()}" update="dataTableNota, messages"/>
                     <p:watermark for="criterio" value="Nro. Salida, STR" />                        
                 </h:panelGrid>
                 <p:dataTable rowIndexVar="index" id="dataTableNota" var="item" value="#{NotaSalidaController.listaNotaSalida}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
