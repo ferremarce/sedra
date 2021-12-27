@@ -46,6 +46,9 @@ public class Usuario implements Serializable {
     @Column(name = "contrasenha")
     private String contrasenha;
     @Size(max = 255)
+    @Column(name = "secure_password")
+    private String securePassword;
+    @Size(max = 255)
     @Column(name = "cuenta")
     private String cuenta;
     @Size(max = 255)
@@ -97,6 +100,14 @@ public class Usuario implements Serializable {
 
     public void setContrasenha(String contrasenha) {
         this.contrasenha = contrasenha;
+    }
+
+    public String getSecurePassword() {
+        return securePassword;
+    }
+
+    public void setSecurePassword(String securePassword) {
+        this.securePassword = securePassword;
     }
 
     public String getCuenta() {

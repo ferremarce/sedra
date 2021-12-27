@@ -10,6 +10,7 @@ import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
 import sedra3.fachada.UsuarioFacade;
@@ -23,15 +24,15 @@ import sedra3.util.JSFutil;
 @Named(value = "UsuarioController")
 @SessionScoped
 public class UsuarioController implements Serializable {
-
+    
     private static final Logger LOG = Logger.getLogger(UsuarioController.class.getName());
     ResourceBundle bundle = ResourceBundle.getBundle("propiedades.bundle", JSFutil.getmyLocale());
-
+    
     @Inject
     UsuarioFacade usuarioFacade;
     @Inject
     CommonController commonController;
-
+    
     private Usuario usuario;
     private List<Usuario> listaUsuario;
     private String criterio;
@@ -44,55 +45,55 @@ public class UsuarioController implements Serializable {
      */
     public UsuarioController() {
     }
-
+    
     public String getContrasenhaNueva() {
         return contrasenhaNueva;
     }
-
+    
     public void setContrasenhaNueva(String contrasenhaNueva) {
         this.contrasenhaNueva = contrasenhaNueva;
     }
-
+    
     public String getContrasenhaRepetida() {
         return contrasenhaRepetida;
     }
-
+    
     public void setContrasenhaRepetida(String contrasenhaRepetida) {
         this.contrasenhaRepetida = contrasenhaRepetida;
     }
-
+    
     public UsuarioFacade getUsuarioFacade() {
         return usuarioFacade;
     }
-
+    
     public boolean isTmpActivo() {
         return tmpActivo;
     }
-
+    
     public void setTmpActivo(boolean tmpActivo) {
         this.tmpActivo = tmpActivo;
     }
-
+    
     public Usuario getUsuario() {
         return usuario;
     }
-
+    
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-
+    
     public List<Usuario> getListaUsuario() {
         return listaUsuario;
     }
-
+    
     public void setListaUsuario(List<Usuario> listaUsuario) {
         this.listaUsuario = listaUsuario;
     }
-
+    
     public String getCriterio() {
         return criterio;
     }
-
+    
     public void setCriterio(String criterio) {
         this.criterio = criterio;
     }
@@ -101,18 +102,18 @@ public class UsuarioController implements Serializable {
     public String listUsuarioSetup() {
         return "/usuario/ListarUsuario";
     }
-
+    
     public String createSetup() {
         this.usuario = new Usuario();
         return "/usuario/CrearUsuario";
     }
-
+    
     public String editSetup(Integer idUsuario) {
         this.usuario = usuarioFacade.find(idUsuario);
         this.tmpActivo = this.stringToBoolean(usuario.getActivo());
         return "/usuario/CrearUsuario";
     }
-
+    
     public String delete(Integer idUsuario) {
         try {
             Usuario u = usuarioFacade.find(idUsuario);
@@ -125,7 +126,7 @@ public class UsuarioController implements Serializable {
         }
         return "/usuario/ListarUsuario";
     }
-
+    
     public String create() {
         if (usuario.getContrasenha().length() < 8) {
             JSFutil.addMessage("Contraseña insegura. Debe proporcionar una contraseña de al menos 8 letras/numeros", JSFutil.StatusMessage.ERROR);
@@ -145,7 +146,7 @@ public class UsuarioController implements Serializable {
         }
         return "/usuario/ListarUsuario";
     }
-
+    
     private String booleanToString(boolean x) {
         if (x == true) {
             return "SI";
@@ -153,11 +154,11 @@ public class UsuarioController implements Serializable {
             return "NO";
         }
     }
-
+    
     private boolean stringToBoolean(String x) {
         return x.compareTo("SI") == 0;
     }
-
+    
     public String doBuscar() {
         if (this.criterio.isEmpty()) {
             JSFutil.addMessage("No hay criterios para buscar...", JSFutil.StatusMessage.WARNING);
@@ -171,7 +172,7 @@ public class UsuarioController implements Serializable {
         }
         return "";
     }
-
+    
     public String doRefrescar() {
         this.listaUsuario = usuarioFacade.getAllUsuario("%");
         if (this.listaUsuario.isEmpty()) {
@@ -181,5 +182,17 @@ public class UsuarioController implements Serializable {
         }
         return "";
     }
-
+    
+    public void doUpdateSecurePassword() {
+        this.listaUsuario = usuarioFacade.findAll();
+        for (Usuario u : this.listaUsuario) {
+            if (u.getSecurePassword() == null) {
+                LOG.log(Level.INFO, "Actualizando secure pass for: {0}", u.getCuenta());
+                u.setSecurePassword(JSFutil.getSecurePassword(u.getContrasenha()));
+                u.setContrasenha(null);
+                usuarioFacade.edit(u);
+            }
+        }
+    }
+    
 }

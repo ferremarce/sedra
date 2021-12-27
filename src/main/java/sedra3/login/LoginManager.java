@@ -108,7 +108,7 @@ public class LoginManager implements Serializable {
         try {
             Usuario user = usuarioFacade.getUsuario(cuenta);
             if (user != null) {
-                if (!user.getContrasenha().equals(contrasenha)) {
+                if (!JSFutil.checkSecurePassword(this.contrasenha, user.getSecurePassword())) {
                     JSFutil.addMessage("Acceso incorrecto!... El password ingresado es incorrecto.", JSFutil.StatusMessage.ERROR);
                     auditaFacade.create(new Audita("LOGIN", "Acceso incorrecto!... El password ingresado es incorrecto.", JSFutil.getFechaHoraActual(), user.getCuenta() + "/" + contrasenha, null));
                     return null;
@@ -146,7 +146,7 @@ public class LoginManager implements Serializable {
         if (session != null) {
             session.invalidate();
         }
-        
+
         JSFutil.addMessage("Sesión expirada.", JSFutil.StatusMessage.WARNING);
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
         context.redirect(context.getRequestContextPath() + "/faces/login.xhtml??faces-redirect=true");
