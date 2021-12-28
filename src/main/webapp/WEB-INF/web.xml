@@ -7,15 +7,7 @@
     <context-param>
         <param-name>com.sun.faces.enableRestoreView11Compatibility</param-name>
         <param-value>true</param-value>
-    </context-param>
-    <context-param>
-        <param-name>primefaces.FONT_AWESOME</param-name>
-        <param-value>true</param-value>
-    </context-param>
-    <context-param>
-        <param-name>primefaces.THEME</param-name>
-        <param-value>omega</param-value>
-    </context-param>
+    </context-param> 
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -35,25 +27,20 @@
     </welcome-file-list>
     <error-page>
         <error-code>404</error-code>
-        <location>/404.xhtml</location>
+        <location>/error/404.xhtml</location>
     </error-page>
-    <!--error-page>
-        <exception-type>java.lang.Throwable</exception-type>
-        <location>/general_error.xhtml</location>
-    </error-page-->
-    <!--error-page>
+    <error-page>
         <error-code>500</error-code>
-        <location>/general_error.xhtml</location>
-    </error-page-->
+        <location>/error/500.xhtml</location>
+    </error-page>  
     <error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
-        <location>/index.xhtml</location>
+        <location>/error/expired.xhtml</location>
     </error-page>
-
     <!--FONT AWESOME-->
     <context-param>
         <param-name>primefaces.FONT_AWESOME</param-name>
-        <param-value>true</param-value>
+        <param-value>false</param-value>
     </context-param>
     <mime-mapping>
         <extension>eot</extension>

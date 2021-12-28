@@ -10,6 +10,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <h:outputStylesheet library="css" name="style.css"  />
         <h:outputScript library="js" name="primefaces.js" />
+        <h:outputStylesheet library="webjars" name="font-awesome/5.15.4/css/all.min-jsf.css" />
+        <h:outputStylesheet library="webjars" name="font-awesome/5.15.4/css/v4-shims.min-jsf.css" />
         <title>#{ConfiguracionController.configuracion.tituloSistema}</title>
     </h:head>
 
@@ -30,8 +32,7 @@
             <p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
                 <p:graphicImage value="#{MainController.serverURLDownload}/logoServlet" height="80" cache="false"/>
                 <p:outputPanel>
-                    <h:outputText styleClass="tresD fontBold" style="font-size: xx-large"  value="SEDRA v.3"/><br/>
-                    <p:separator/>
+                    <h:outputText styleClass="tresD fontBold" style="font-size: xx-large"  value="SEDRA"/><br/>
                     <h:outputText styleClass="font1x fontBold" value="#{ConfiguracionController.configuracion.tituloSistema}"/><br/>
                     <h:outputText styleClass="Gray" value="#{ConfiguracionController.configuracion.subTituloSistema}"/>
                 </p:outputPanel>
@@ -51,7 +52,7 @@
                     <f:facet name="right">
                         <p:panelGrid columns="3" styleClass="ui-panelgrid-blank">
                             <p:commandButton ajax="false" icon="fa fa fa-cogs" rendered="#{LoginManager.usuarioLogeado.idRol.idRol==1 or LoginManager.usuarioLogeado.idRol.idRol==18}"  value="Configuraciones" action="#{ConfiguracionController.editSetup()}"/>
-                            <p:commandButton ajax="false" icon="fa fa-credit-card"  value="Cambio de Contraseña" action="#{LoginManager.doCambiarContrasenhaForm()}"/>
+                            <p:commandButton ajax="false" icon="fa fa-key"  value="Cambio de Contraseña" action="#{LoginManager.doCambiarContrasenhaForm()}"/>
                             <p:commandButton ajax="false" icon="fa fa-sign-out" value="Salir" action="#{LoginManager.doLogout()}"/>
                         </p:panelGrid>
                     </f:facet>
@@ -60,7 +61,7 @@
             <ui:insert name="title">
             </ui:insert>
             <ui:insert name="ajax">
-                <ui:include src="/ajax.xhtml"/>
+                <ui:include src="/includes/ajax.xhtml"/>
             </ui:insert>
             <p:growl life="5000" globalOnly="true" showDetail="true" severity="info, warn" id="messages"/> 
             <p:messages closable="true" showDetail="true" globalOnly="true" severity="error, fatal" id="messagesError">

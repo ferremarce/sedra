@@ -16,7 +16,7 @@ import java.util.List;
 import javax.inject.Inject;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.NodeSelectEvent;
-import org.primefaces.model.UploadedFile;
+import org.primefaces.model.file.UploadedFile;
 import sedra3.fachada.AuditaFacade;
 import sedra3.fachada.DetalleNotaSalidaFacade;
 import sedra3.fachada.DocumentoFacade;
@@ -311,7 +311,7 @@ public class NotaSalidaController implements Serializable {
                 JSFutil.addMessage("NotaSalida creado exitosamente. ", JSFutil.StatusMessage.INFORMATION);
                 //Grabar el archivo a disco
                 if (this.adjunto != null) {
-                    int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(this.adjunto.getContents()), JSFutil.folderDocumento + notaSalida.getIdNota() + "-" + this.adjunto.getFileName());
+                    int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(this.adjunto.getContent()), JSFutil.folderDocumento + notaSalida.getIdNota() + "-" + this.adjunto.getFileName());
                     if (resultado != 0) {
                         JSFutil.addMessage("Pero no se ha podido guardar el adjunto debido a un error interno en el procesamiento", JSFutil.StatusMessage.ERROR);
                     }
@@ -343,7 +343,7 @@ public class NotaSalidaController implements Serializable {
                 JSFutil.addMessage("NotaSalida actualizado exitosamente. ", JSFutil.StatusMessage.INFORMATION);
                 //Grabar el archivo a disco
                 if (this.adjunto != null) {
-                    int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(this.adjunto.getContents()), JSFutil.folderDocumento + notaSalida.getIdNota() + "-" + this.adjunto.getFileName());
+                    int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(this.adjunto.getContent()), JSFutil.folderDocumento + notaSalida.getIdNota() + "-" + this.adjunto.getFileName());
                     if (resultado != 0) {
                         JSFutil.addMessage("Pero no se ha podido guardar el adjunto debido a un error interno en el procesamiento", JSFutil.StatusMessage.ERROR);
                     }

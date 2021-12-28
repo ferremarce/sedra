@@ -16,14 +16,13 @@
             <p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
                 <p:graphicImage value="#{MainController.serverURLDownload}/logoServlet" height="80" cache="false"/>
                 <p:outputPanel>
-                    <h:outputText styleClass="tresD fontBold" style="font-size: xx-large"  value="SEDRA v.3"/>
-                    <p:separator/>
+                    <h:outputText styleClass="tresD fontBold" style="font-size: xx-large"  value="SEDRA"/><br/>
                     <h:outputText styleClass="font1x fontBold" value="#{ConfiguracionController.configuracion.tituloSistema}"/><br/>
                     <h:outputText styleClass="Gray" value="#{ConfiguracionController.configuracion.subTituloSistema}"/>
                 </p:outputPanel>
             </p:panelGrid>
             <p:messages showDetail="true"/>
-            <p:panel style="width: 600px" header="Credenciales de Acceso">
+            <p:panel style="width: 600px;"  header="Credenciales de Acceso">
                 <p:panelGrid columns="3"  styleClass="ui-panelgrid-blank">
                     <p:outputLabel for="cuenta" value="Cuenta"/>
                     <p:inputText id="cuenta" value="#{LoginManager.cuenta}" required="true" requiredMessage="#{bundle.Requerido}"/>
@@ -33,7 +32,7 @@
                     <p:message for="passwd"/>
                 </p:panelGrid>
                 <f:facet name="footer">
-                    <p:commandButton ajax="false" value="#{bundle.AccederBoton}" action="#{LoginManager.doLogin()}" icon="fa fa-sign-in"/>
+                    <p:commandButton ajax="false" value="#{bundle.AccederBoton}" action="#{LoginManager.doLogin()}" icon="pi pi-sign-in"/>
                 </f:facet>
             </p:panel>
         </h:form>

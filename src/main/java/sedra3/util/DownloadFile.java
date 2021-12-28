@@ -9,6 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.logging.Logger;
 import javax.enterprise.context.SessionScoped;
@@ -76,62 +77,46 @@ public class DownloadFile implements Serializable {
     public StreamedContent downloadDocumentoAdjunto(Integer id) throws FileNotFoundException {
         DocumentoAdjunto pa = documentoAdjuntoFacade.find(id);
         File archivo = new File(JSFutil.folderDocumento + pa.getIdDocumentoAdjunto() + "-" + pa.getNombreArchivo());
-        if (archivo.exists()) {
-            StreamedContent file = new DefaultStreamedContent(new FileInputStream(archivo), pa.getTipoArchivoMime(), pa.getNombreArchivo());
-            return file;
-        } else {
-            System.out.println("ARCHIVO_NO_ENCONTRADO: " + pa.getClass() + " con ID " + pa.getIdDocumentoAdjunto());
-            JSFutil.addMessage("No dispone de adjuntos para visualizar...", JSFutil.StatusMessage.WARNING);
-            String noContent = "<html><h1>Sin adjunto...</></html>";
-            return new DefaultStreamedContent(new ByteArrayInputStream(noContent.getBytes()), "text/html", "No existe Archivo");
-        }
+        System.out.println("ARCHIVO: " + pa.getClass() + " con ID " + id + pa.getNombreArchivo());
+        //if (archivo.exists()) {
+        FileInputStream input = new FileInputStream(archivo);
+        return DefaultStreamedContent.builder().name(pa.getNombreArchivo()).contentType(pa.getTipoArchivoMime()).stream(() -> input).build();
+
     }
 
     public StreamedContent downloadDocumento(Integer id) throws FileNotFoundException {
         Documento pa = documentoFacade.find(id);
         File archivo = new File(JSFutil.folderDocumento + pa.getIdDocumento() + "-" + pa.getNombreArchivo());
-        if (archivo.exists()) {
-            StreamedContent file = new DefaultStreamedContent(new FileInputStream(archivo), pa.getTipoArchivo(), pa.getNombreArchivo());
-            return file;
-        } else {
-            System.out.println("ARCHIVO_NO_ENCONTRADO: " + pa.getClass() + " con ID " + pa.getIdDocumento());
-            JSFutil.addMessage("No dispone de adjuntos para visualizar...", JSFutil.StatusMessage.WARNING);
-            String noContent = "<html><h1>Sin adjunto...</></html>";
-            return new DefaultStreamedContent(new ByteArrayInputStream(noContent.getBytes()), "text/html", "No existe Archivo");
-        }
+        System.out.println("ARCHIVO: " + pa.getClass() + " con ID " + id + pa.getNombreArchivo());
+        //if (archivo.exists()) {
+        FileInputStream input = new FileInputStream(archivo);
+        return DefaultStreamedContent.builder().name(pa.getNombreArchivo()).contentType(pa.getTipoArchivo()).stream(() -> input).build();
     }
 
     public StreamedContent downloadNotaSalida(Integer id) throws FileNotFoundException {
         NotaSalida pa = notaSalidaFacade.find(id);
         File archivo = new File(JSFutil.folderDocumento + pa.getIdNota() + "-" + pa.getNombreArchivo());
-        if (archivo.exists()) {
-            StreamedContent file = new DefaultStreamedContent(new FileInputStream(archivo), pa.getTipoArchivo(), pa.getNombreArchivo());
-            return file;
-        } else {
-            System.out.println("ARCHIVO_NO_ENCONTRADO: " + pa.getClass() + " con ID " + pa.getIdNota());
-            JSFutil.addMessage("No dispone de adjuntos para visualizar...", JSFutil.StatusMessage.WARNING);
-            String noContent = "<html><h1>Sin adjunto...</></html>";
-            return new DefaultStreamedContent(new ByteArrayInputStream(noContent.getBytes()), "text/html", "No existe Archivo");
-        }
+        System.out.println("ARCHIVO: " + pa.getClass() + " con ID " + id + pa.getNombreArchivo());
+        //if (archivo.exists()) {
+        FileInputStream input = new FileInputStream(archivo);
+        return DefaultStreamedContent.builder().name(pa.getNombreArchivo()).contentType(pa.getTipoArchivo()).stream(() -> input).build();
     }
 
     public StreamedContent downloadDocumentoTramite(Integer id) throws FileNotFoundException {
         Tramitacion pa = tramitacionFacade.find(id);
         File archivo = new File(JSFutil.folderDocumento + pa.getIdTramitacion() + "-" + pa.getNombreArchivo());
-        if (archivo.exists()) {
-            StreamedContent file = new DefaultStreamedContent(new FileInputStream(archivo), pa.getTipoArchivo(), pa.getNombreArchivo());
-            return file;
-        } else {
-            System.out.println("ARCHIVO_NO_ENCONTRADO: " + pa.getClass() + " con ID " + pa.getIdDocumento());
-            JSFutil.addMessage("No dispone de adjuntos para visualizar...", JSFutil.StatusMessage.WARNING);
-            String noContent = "<html><h1>Sin adjunto...</></html>";
-            return new DefaultStreamedContent(new ByteArrayInputStream(noContent.getBytes()), "text/html", "No existe Archivo");
-        }
+        System.out.println("ARCHIVO: " + pa.getClass() + " con ID " + id + pa.getNombreArchivo());
+        //if (archivo.exists()) {
+        FileInputStream input = new FileInputStream(archivo);
+        return DefaultStreamedContent.builder().name(pa.getNombreArchivo()).contentType(pa.getTipoArchivo()).stream(() -> input).build();
+
     }
+
     public StreamedContent logoToDisplay(Integer id) {
-        Configuracion configuracion=configuracionFacade.find(id);
+        Configuracion configuracion = configuracionFacade.find(id);
         if (configuracion.getArchivoLogo() != null) {
-            return new DefaultStreamedContent(new ByteArrayInputStream(configuracion.getArchivoLogo()), configuracion.getLogoFileType(), configuracion.getLogoFileName());
+            InputStream input = new ByteArrayInputStream(configuracion.getArchivoLogo());
+            return DefaultStreamedContent.builder().name(configuracion.getLogoFileName()).contentType(configuracion.getLogoFileType()).stream(() -> input).build();
         } else {
             return null;
         }

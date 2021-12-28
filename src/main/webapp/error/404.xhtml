@@ -1,0 +1,32 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/error/errorTemplate.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        <h1>Error 404</h1>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="formMain" >
+            <p:panel>
+                <h2>Ups... la petición no ha sido resuelta con éxito.</h2>
+                <p/>
+                <span >La página solicitada no existe o ha sido cambiada!</span>
+
+                <h3>Es posible que no pueda visitar esta página debido a:</h3>
+                <ul>
+                    <li>La dirección pudo haber sido cambiada</li>
+                    <li>Un enlace/marcador/favorito fuera de fecha</li>
+                    <li>Una dirección mal escrita</li>
+                    <li>El recurso solicitado no fue encontrado</li>
+                    <li>Se produjo un error al procesar su solicitud</li>
+                </ul>
+                <h3>Por favor, regrese al menú principal en intente de vuelta.</h3>
+                <p/>
+                <p:button value="#{bundle.RegresarBoton}" title="#{bundle.RegresarBoton}" href="#{request.contextPath}" />
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

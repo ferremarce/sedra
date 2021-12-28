@@ -53,13 +53,16 @@ public class logoServlet extends HttpServlet {
         String imagenSource = root_path + "img/logo-new.png";
         File logoF = new File(imagenSource);
         StreamedContent content;
-        
+
         Configuracion configuracion = configuracionFacade.find(1);
-        
+
         if (configuracion.getLogoFileName() != null) {
-            content = new DefaultStreamedContent(new ByteArrayInputStream(configuracion.getArchivoLogo()), configuracion.getLogoFileType(), configuracion.getLogoFileName());
+            InputStream input = new ByteArrayInputStream(configuracion.getArchivoLogo());
+            content = DefaultStreamedContent.builder().name(configuracion.getLogoFileName()).contentType(configuracion.getLogoFileType()).stream(() -> input).build();
+
         } else {
-            content = new DefaultStreamedContent(new FileInputStream(logoF), new MimetypesFileTypeMap().getContentType(logoF),"logo-new.png");
+            InputStream input = new FileInputStream(logoF);
+            content = DefaultStreamedContent.builder().name("logo-new.png").contentType(new MimetypesFileTypeMap().getContentType(logoF)).stream(() -> input).build();
         }
         response.setContentType(content.getContentType());
         response.setHeader("Content-disposition", "inline; filename=" + content.getName());
@@ -67,7 +70,7 @@ public class logoServlet extends HttpServlet {
         byte[] buffer = new byte[2048];
         int length;
 
-        InputStream inputStream = content.getStream();
+        InputStream inputStream = content.getStream().get();
         OutputStream output = response.getOutputStream();
         while ((length = (inputStream.read(buffer))) >= 0) {
             output.write(buffer, 0, length);

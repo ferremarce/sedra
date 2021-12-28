@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import javax.inject.Inject;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.UploadedFile;
+import org.primefaces.model.file.UploadedFile;
 import sedra3.fachada.AuditaFacade;
 import sedra3.fachada.ClasificadorFacade;
 import sedra3.fachada.DetalleNotaSalidaFacade;
@@ -333,7 +333,7 @@ public class TramitacionController implements Serializable {
                 auditaFacade.create(new Audita("TRAMITACION", "Tramitacion creada exitosamente.", JSFutil.getFechaHoraActual(), tramTemp.toAudita(), JSFutil.getUsuarioConectado()));
                 //Grabar el archivo a disco
                 if (this.adjunto != null) {
-                    int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(this.adjunto.getContents()), JSFutil.folderDocumento + tramTemp.getIdTramitacion() + "-" + this.adjunto.getFileName());
+                    int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(this.adjunto.getContent()), JSFutil.folderDocumento + tramTemp.getIdTramitacion() + "-" + this.adjunto.getFileName());
                     if (resultado != 0) {
                         JSFutil.addMessage("No se ha podido guardar el adjunto debido a un error interno en el procesamiento del archivo. Se deshace el guardado del archivo.", JSFutil.StatusMessage.ERROR);
                     }
@@ -401,7 +401,7 @@ public class TramitacionController implements Serializable {
             auditaFacade.create(new Audita("TRAMITACION", "Anexo agregado exitosamente para Archivo.", JSFutil.getFechaHoraActual(), "[Id=" + tramitacion.getIdTramitacion() + "] [NombreArchivo=" + tramitacion.getNombreArchivo() + "]", JSFutil.getUsuarioConectado()));
             JSFutil.addMessage("El anexo se ha agregado exitosamente.", JSFutil.StatusMessage.INFORMATION);
             //Grabar el archivo a disco
-            int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(event.getFile().getContents()), JSFutil.folderDocumento + tramitacion.getIdTramitacion() + "-" + event.getFile().getFileName());
+            int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(event.getFile().getContent()), JSFutil.folderDocumento + tramitacion.getIdTramitacion() + "-" + event.getFile().getFileName());
             if (resultado != 0) {
                 JSFutil.addMessage("Pero no se ha podido guardar el adjunto debido a un error interno en el procesamiento", JSFutil.StatusMessage.ERROR);
             }

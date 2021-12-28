@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.NodeSelectEvent;
-import org.primefaces.model.UploadedFile;
+import org.primefaces.model.file.UploadedFile;
 import sedra3.fachada.AuditaFacade;
 import sedra3.fachada.DocumentoAdjuntoFacade;
 import sedra3.fachada.DocumentoFacade;
@@ -231,7 +231,7 @@ public class DocumentoController implements Serializable {
                         //ap.setTipoAdjunto("PROYECTO");
                         ap.setFechaRegistro(JSFutil.getFechaHoraActual());
                         documentoAdjuntoFacade.create(ap);
-                        int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(uf.getContents()), JSFutil.folderDocumento + ap.getIdDocumentoAdjunto() + "-" + JSFutil.sanitizeFilename(uf.getFileName()));
+                        int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(uf.getContent()), JSFutil.folderDocumento + ap.getIdDocumentoAdjunto() + "-" + JSFutil.sanitizeFilename(uf.getFileName()));
                         if (resultado != 0) {
                             JSFutil.addMessage("No se ha podido guardar el adjunto debido a un error interno en el procesamiento del archivo. Se deshace el guardado del archivo.", JSFutil.StatusMessage.ERROR);
                             documentoAdjuntoFacade.remove(ap);
@@ -269,7 +269,7 @@ public class DocumentoController implements Serializable {
                         //ap.setTipoAdjunto("PROYECTO");
                         ap.setFechaRegistro(JSFutil.getFechaHoraActual());
                         documentoAdjuntoFacade.create(ap);
-                        int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(uf.getContents()), JSFutil.folderDocumento + ap.getIdDocumentoAdjunto() + "-" + JSFutil.sanitizeFilename(uf.getFileName()));
+                        int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(uf.getContent()), JSFutil.folderDocumento + ap.getIdDocumentoAdjunto() + "-" + JSFutil.sanitizeFilename(uf.getFileName()));
                         if (resultado != 0) {
                             JSFutil.addMessage("No se ha podido guardar el adjunto debido a un error interno en el procesamiento del archivo. Se deshace el guardado del archivo.", JSFutil.StatusMessage.ERROR);
                             documentoAdjuntoFacade.remove(ap);
@@ -429,7 +429,7 @@ public class DocumentoController implements Serializable {
                 //ap.setTipoAdjunto("PROYECTO");
                 ap.setFechaRegistro(JSFutil.getFechaHoraActual());
                 documentoAdjuntoFacade.create(ap);
-                int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(adjunto.getContents()), JSFutil.folderDocumento + ap.getIdDocumentoAdjunto() + "-" + JSFutil.sanitizeFilename(adjunto.getFileName()));
+                int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(adjunto.getContent()), JSFutil.folderDocumento + ap.getIdDocumentoAdjunto() + "-" + JSFutil.sanitizeFilename(adjunto.getFileName()));
                 if (resultado != 0) {
                     JSFutil.addMessage("No se ha podido guardar el adjunto debido a un error interno en el procesamiento del archivo. Se deshace el guardado del archivo.", JSFutil.StatusMessage.ERROR);
                     documentoAdjuntoFacade.remove(ap);

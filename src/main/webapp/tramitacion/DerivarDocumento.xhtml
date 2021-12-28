@@ -2,7 +2,7 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="/template.xhtml"
+                template="/includes/template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
@@ -11,7 +11,7 @@
     </ui:define>
 
     <ui:define name="content">
-         <style>
+        <style>
             .ui-fileupload-content{
                 min-height: 50px;
             }
@@ -42,7 +42,7 @@
                     <p:outputLabel for="downAdjunto" value="Adjunto:"/>
                     <p:panelGrid id="downAdjunto" columns="1">
                         <p:fileUpload id="adjunto" label="#{bundle.SeleccionarBoton}" cancelLabel="#{bundle.EliminarBoton}" uploadLabel="#{bundle.AgregarBoton}" 
-                                      fileUploadListener="#{TramitacionController.handleFileUpload}"
+                                      listener="#{TramitacionController.handleFileUpload}"
                                       mode="advanced"
                                       required="true"
                                       requiredMessage="Adjunto"

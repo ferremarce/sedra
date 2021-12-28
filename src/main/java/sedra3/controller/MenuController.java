@@ -47,35 +47,77 @@ public class MenuController implements Serializable {
         this.montarMenu();
     }
 
+//    public void montarMenu() {
+//        Usuario user = JSFutil.getUsuarioConectado();
+//
+//        String nivel;
+//        model = new DefaultMenuModel();
+//        DefaultSubMenu submenu = new DefaultSubMenu();
+//        DefaultMenuItem item;
+//
+//        List<Permiso> tr = usuarioFacade.getPermisoUsuario(user);
+//        for (Permiso x : tr) {
+//            nivel = x.getNivel();
+//            if (nivel.replaceAll("[^.]", "").length() == 0) { //cantidad de puntos que tiene la cadena
+//                if (submenu.getLabel() != null) {
+//                    model.addElement(submenu);
+//                }
+//                submenu = new DefaultSubMenu(x.getDescripcionPermiso());
+//                submenu.setIcon(x.getUrlImagen());
+//            } else {
+//                /*Agregar un item*/
+//                item = new DefaultMenuItem(x.getDescripcionPermiso());
+//                item.setCommand(x.getTagMenu());
+//                item.setIcon(x.getUrlImagen());
+//                item.setAjax(false);
+//                submenu.addElement(item);
+//            }
+//        }
+//        if (submenu.getLabel() != null) {
+//            model.addElement(submenu);
+//        }
+//
+//    }
     public void montarMenu() {
         Usuario user = JSFutil.getUsuarioConectado();
 
         String nivel;
         model = new DefaultMenuModel();
-        DefaultSubMenu submenu = new DefaultSubMenu();
+
+        DefaultSubMenu submenu;
         DefaultMenuItem item;
+
+//        submenu.getElements().add(DefaultSubMenu.builder().label("Otro submenu").build());
+        item = DefaultMenuItem.builder().value("Inicio").build();
+        item.setCommand("/index");
+        item.setIcon("fa fa-home");
+        model.getElements().add(item);
+        submenu = DefaultSubMenu.builder().label("solo inicial").build();
 
         List<Permiso> tr = usuarioFacade.getPermisoUsuario(user);
         for (Permiso x : tr) {
             nivel = x.getNivel();
-            if (nivel.replaceAll("[^.]", "").length() == 0) { //cantidad de puntos que tiene la cadena
-                if (submenu.getLabel() != null) {
-                    model.addElement(submenu);
-                }
-                submenu = new DefaultSubMenu(x.getDescripcionPermiso());
+            if (x.getTagMenu() == null) { //es un menu
+                //submenu = new DefaultSubMenu(x.getDescripcionPermiso());
+                submenu = DefaultSubMenu.builder().label(x.getDescripcionPermiso()).build();
                 submenu.setIcon(x.getUrlImagen());
+//                if(submenu.geti)
+                model.getElements().add(submenu);
+                //submenu.setIcon(x.getUrlImagen());
             } else {
                 /*Agregar un item*/
-                item = new DefaultMenuItem(x.getDescripcionPermiso());
+                //item = new DefaultMenuItem(x.getDescripcionPermiso());
+                item = DefaultMenuItem.builder().value(x.getDescripcionPermiso()).build();
                 item.setCommand(x.getTagMenu());
                 item.setIcon(x.getUrlImagen());
                 item.setAjax(false);
-                submenu.addElement(item);
+                item.setOnclick("PF('statusAjax').show();");
+                submenu.getElements().add(item);
             }
         }
-        if (submenu.getLabel() != null) {
-            model.addElement(submenu);
-        }
+//        if (submenu.getLabel() != null) {
+//            model.getElements().add(submenu);
+//        }
 
     }
 

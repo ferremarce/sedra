@@ -5,6 +5,7 @@
  */
 package sedra3.controller;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.inject.Named;
@@ -22,7 +23,7 @@ import javax.servlet.http.HttpSession;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-import org.primefaces.model.UploadedFile;
+import org.primefaces.model.file.UploadedFile;
 import sedra3.util.JSFutil;
 
 /**
@@ -92,12 +93,10 @@ public class CommonController implements Serializable {
     public StreamedContent downloadAdjuntoTMP(UploadedFile adjunto) throws IOException {
         //System.out.println("Invocado...");
         if (adjunto != null) {
-            InputStream stream = adjunto.getInputstream();
-            StreamedContent file = new DefaultStreamedContent(stream, adjunto.getContentType(), adjunto.getFileName());
-            return file;
-        } else {
-            return null;
+            InputStream input = new ByteArrayInputStream(adjunto.getContent());
+            return DefaultStreamedContent.builder().name(adjunto.getFileName()).contentType(adjunto.getContentType()).stream(() -> input).build();
         }
+        return null;
     }
 
     public String getServerURLDownload() {

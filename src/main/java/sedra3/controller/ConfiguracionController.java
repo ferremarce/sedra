@@ -6,21 +6,18 @@
 package sedra3.controller;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.io.InputStream;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-import org.primefaces.model.UploadedFile;
+import org.primefaces.model.file.UploadedFile;
 import sedra3.fachada.ConfiguracionFacade;
 import sedra3.modelo.Configuracion;
 import sedra3.util.JSFutil;
@@ -32,12 +29,12 @@ import sedra3.util.JSFutil;
 @Named(value = "ConfiguracionController")
 @SessionScoped
 public class ConfiguracionController implements Serializable {
-    
+
     @Inject
     CommonController commonController;
     @Inject
     ConfiguracionFacade configuracionFacade;
-    
+
     private Configuracion configuracion;
     private List<UploadedFile> imagenLogo;
 
@@ -46,39 +43,39 @@ public class ConfiguracionController implements Serializable {
      */
     public ConfiguracionController() {
     }
-    
+
     @PostConstruct
     public void initConfig() {
         this.configuracion = configuracionFacade.find(1);
     }
-    
+
     public Configuracion getConfiguracion() {
         return configuracion;
     }
-    
+
     public void setConfiguracion(Configuracion configuracion) {
         this.configuracion = configuracion;
     }
-    
+
     public void handleFileUpload(FileUploadEvent event) {
 //        if (this.imagenLogo == null || this.imagenLogo.isEmpty()) {
 //            this.imagenLogo = new ArrayList<>();
 //        }
 //        this.imagenLogo.add(event.getFile());
         UploadedFile uf = event.getFile();
-        this.configuracion.setArchivoLogo(uf.getContents());
+        this.configuracion.setArchivoLogo(uf.getContent());
         this.configuracion.setLogoFileType(uf.getContentType());
         this.configuracion.setLogoFileName(JSFutil.sanitizeFilename(uf.getFileName()));
 
 //PrimeFaces.current().ajax().update("formMain:acordeon:logoCargado");
     }
-    
+
     public String editSetup() {
         this.imagenLogo = new ArrayList<>();
         this.configuracion = configuracionFacade.find(1);
         return "/configuracion/EditarConfiguracion";
     }
-    
+
     public void edit() {
         try {
             configuracionFacade.edit(configuracion);
@@ -104,10 +101,11 @@ public class ConfiguracionController implements Serializable {
 
     public StreamedContent logoToDisplay() {
         if (this.configuracion.getArchivoLogo() != null) {
-            return new DefaultStreamedContent(new ByteArrayInputStream(this.configuracion.getArchivoLogo()), this.configuracion.getLogoFileType(), this.configuracion.getLogoFileName());
+            InputStream input = new ByteArrayInputStream(this.configuracion.getArchivoLogo());
+            return DefaultStreamedContent.builder().name(this.configuracion.getLogoFileName()).contentType(this.configuracion.getLogoFileType()).stream(() -> input).build();
         } else {
             return null;
         }
     }
-    
+
 }

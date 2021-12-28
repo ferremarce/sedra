@@ -1,0 +1,35 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/error/errorTemplate.xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        <h1>Algo salió mal</h1>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="formMain" >
+            <p:panel>
+                <h2>Ups... la petición no ha sido resuelta con éxito.</h2>
+                <blockquote>
+                    <h:outputText value="Error Code: #{ExceptionController.statusCode}"></h:outputText>
+                    <br />
+                    <h:outputText value="Error Description: #{ExceptionController.message}"></h:outputText>
+                    <br />
+                    <h:outputText value="Exception Type: #{ExceptionController.exceptionType}"></h:outputText>
+                    <br />
+                    <h:outputText value="Exception Class: #{ExceptionController.exception}"></h:outputText>
+                    <br />
+                    <h:outputText value="Request URI : #{ExceptionController.requestURI}"></h:outputText>
+                </blockquote>
+                <p:spacer height="10"/>
+                <p:fieldset legend="Detalle del error" style="width: 50%" toggleable="true" collapsed="true" toggleSpeed="500">
+                    <h:outputText  value="#{ExceptionController.doStackTrace()}"/>
+                </p:fieldset>
+                <p/>
+                <p:button value="#{bundle.RegresarBoton}" title="#{bundle.RegresarBoton}" href="#{request.contextPath}" />
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>
