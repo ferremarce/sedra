@@ -92,7 +92,7 @@
                             <h:outputLabel for="enlace" value="Enlazado a:"/>
                             <p:panelGrid id="panelEnlace" columnClasses="top, top" columns="3">
                                 <p:inputText size="10" id="enlace" value="#{NotaSalidaController.nroEntrada}" title="Nro. Entrada" />
-                                <p:commandButton icon="fa fa-plus" partialSubmit="true" process="panelEnlace" ajax="true" action="#{NotaSalidaController.obtenerDocumentoByNroEntrada()}" update=":formMain:panelEnlace, messages" />
+                                <p:commandButton icon="fa fa-plus" partialSubmit="true" process="panelEnlace" ajax="true" action="#{NotaSalidaController.obtenerDocumentoByNroEntrada()}" update=":formMain:panelEnlace, panelMensajeEstado" />
                                 <p:dataList id="dataListDoc" rowIndexVar="indice" rendered="#{NotaSalidaController.selectedDocumentos.size()>0}" value="#{NotaSalidaController.selectedDocumentos}" var="valor" itemType="circle">  
                                     <h:outputText value="#{valor}"/>
                                     <p:commandButton style="width: 30px" icon="fa fa-minus-square" title="Eliminar" update=":formMain:panelEnlace" action="#{NotaSalidaController.doSacarDocumento(valor)}"/>

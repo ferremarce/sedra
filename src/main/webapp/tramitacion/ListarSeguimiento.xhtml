@@ -14,7 +14,7 @@
         <h:form id="formMain">
             <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2">
                 <p:inputText id="criterio" value="#{DocumentoController.criterio}" placeholder="Nro. Salida, STR, asunto, Nro. Entrada"/>
-                <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{DocumentoController.doBuscarSeguimiento()}" update="@form, messages"/>
+                <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{DocumentoController.doBuscarSeguimiento()}" update="@form, panelMensajeEstado"/>
             </p:panelGrid>
             <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                          rows="10"

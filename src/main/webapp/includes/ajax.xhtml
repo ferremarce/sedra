@@ -12,16 +12,23 @@
             <p:graphicImage value="/img/loading3.gif" height="100"/><br/>
             <h:outputText value="Procesando..."/>
         </p:dialog>
-        <p:panel visible="false" widgetVar="errorPanel" styleClass="ui-panelgrid-blank" closable="true" style="position: fixed; left: 40%; top: 10px; z-index: 98;">
-            <f:facet name="header">
-                <h:outputText styleClass="font2x fontBold Red" value="Error"/>
-            </f:facet>
-
+        <p:panel visible="false" widgetVar="errorPanel" header="Error..." styleClass="ui-panelgrid-blank" closable="true" style="position: fixed; left: 40%; top: 10px; z-index: 98;">
             <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-10">
-                <i class="fa fa-frown-o font3x Red fontBold"/>
-                <h:outputText escape="false" value="Ocurrió un error al procesar la consulta...&lt;br/&gt;Por favor intente más tarde."/>
+                <i class="fa fa-bug font3x" style="color: red"></i>
+                <h:outputText escape="false" value="Ocurrió un error al procesar la consulta...&lt;br /&gt;Por favor intente más tarde."/>
             </p:panelGrid>
         </p:panel>
+        <h:form>
+            <p:confirmDialog styleClass="dialogBox" id="confirmacion" global="true" showEffect="fade" hideEffect="fade" >
+                <p:commandButton value="SI" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check" />
+                <p:commandButton value="NO" type="button" styleClass="ui-confirmdialog-no ui-button-danger" icon="fa fa-close" />
+            </p:confirmDialog>
+        </h:form>
+        <p:outputPanel id="panelMensajeEstado">
+            <p:growl life="5000" globalOnly="true" showDetail="true" severity="info, warn"/> 
+            <p:messages closable="true" showDetail="true" globalOnly="true" severity="error, fatal" >                    
+            </p:messages>
+        </p:outputPanel>
     </ui:fragment>
 </html>
 

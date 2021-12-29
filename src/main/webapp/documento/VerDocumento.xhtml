@@ -74,6 +74,7 @@
                 </p:dataTable>
                 <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{DocumentoController.documento.tramitacionList}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                              rows="50"
+                             rowKey="#{item.idTramitacion}"
                              paginator="true"
                              filterEvent="enter"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"

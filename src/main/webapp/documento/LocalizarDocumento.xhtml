@@ -43,7 +43,7 @@
                     <p:outputLabel for="fechaHasta" value="Hasta:"/>
                     <p:calendar navigator="true" id="fechaHasta" value="#{DocumentoController.tmpFechaHasta}" pattern="dd/MM/yyyy" title="Fecha Hasta" required="true" requiredMessage="#{bundle.Requerido}"/>
                     <p:message for="fechaHasta"/>
-                    <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{DocumentoController.localizarDocumento()}" update="@form, messages"/>
+                    <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{DocumentoController.localizarDocumento()}" update="@form, panelMensajeEstado"/>
                 </p:panelGrid>
                 <p:dataTable rowIndexVar="index" id="dataTableDoc" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                              rows="50"
@@ -97,7 +97,7 @@
                     <p:panelGrid columns="3" styleClass="ui-panelgrid-blank">
                         <p:outputLabel for="criterio2" value="Criterio: "/>
                         <p:inputText tabindex="0" size="100" id="criterio2" value="#{NotaSalidaController.criterioBusqueda}" title="Búsqueda" placeholder="Nro. Salida, STR, Referencia" />
-                        <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{NotaSalidaController.localizarAllNotaSalida()}" update="@form, messages"/>
+                        <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{NotaSalidaController.localizarAllNotaSalida()}" update="@form, panelMensajeEstado"/>
                     </p:panelGrid>
                     <h:outputText value="Puede realizar la búsqueda utilizando % como caracter o palabra comodín"/>
                     <p:dataTable rowIndexVar="index" id="dataTableNota" var="item" value="#{NotaSalidaController.listaNotaSalida}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"

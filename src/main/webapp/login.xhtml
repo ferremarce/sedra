@@ -7,20 +7,24 @@
     <h:head>
         <title>Acceso al Sistema</title>
         <h:outputStylesheet library="css" name="style.css"  />
+        <h:outputStylesheet library="css" name="primeflex.min.css"  />
+        <h:outputStylesheet library="webjars" name="font-awesome/5.15.4/css/all.min-jsf.css" />
+        <h:outputStylesheet library="webjars" name="font-awesome/5.15.4/css/v4-shims.min-jsf.css" />
     </h:head>
     <f:metadata>
         <f:event type="preRenderView" listener="#{UsuarioController.doUpdateSecurePassword()}"/>
     </f:metadata>
     <h:body>
         <h:form>
-            <p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
-                <p:graphicImage value="#{MainController.serverURLDownload}/logoServlet" height="80" cache="false"/>
-                <p:outputPanel>
-                    <h:outputText styleClass="tresD fontBold" style="font-size: xx-large"  value="SEDRA"/><br/>
-                    <h:outputText styleClass="font1x fontBold" value="#{ConfiguracionController.configuracion.tituloSistema}"/><br/>
+            <div class="p-d-flex">
+                <div class="p-mr-2"> <p:graphicImage value="#{MainController.serverURLDownload}/logoServlet" height="80" cache="false"/></div>
+                <div class="p-mr-2">
+                    <h:outputText styleClass="font3x fontBold tresD" value="#{bundle.TituloSistema}"/><br/>
+                    <h:outputText styleClass="fontBold fontItalic" value="#{ConfiguracionController.configuracion.tituloSistema}"/>
+                    <br/>
                     <h:outputText styleClass="Gray" value="#{ConfiguracionController.configuracion.subTituloSistema}"/>
-                </p:outputPanel>
-            </p:panelGrid>
+                </div>
+            </div>
             <p:messages showDetail="true"/>
             <p:panel style="width: 600px;"  header="Credenciales de Acceso">
                 <p:panelGrid columns="3"  styleClass="ui-panelgrid-blank">

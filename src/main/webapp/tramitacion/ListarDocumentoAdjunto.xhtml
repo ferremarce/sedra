@@ -14,7 +14,7 @@
         <h:form id="formMain">
             <p:panelGrid columns="3" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2">
                 <p:inputText id="criterio" value="#{DocumentoController.criterio}"/>
-                <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" action="#{DocumentoController.buscarDocumentoParaArchivo()}" update=":formMain:dataTable, messages" />
+                <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" action="#{DocumentoController.buscarDocumentoParaArchivo()}" update=":formMain:dataTable, panelMensajeEstado" />
             </p:panelGrid>
             <p:watermark for="criterio" value="Nro. Entrada" />
             <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"

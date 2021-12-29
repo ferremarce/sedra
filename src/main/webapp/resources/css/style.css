@@ -89,3 +89,6 @@ label{
 .top{
     vertical-align: top !important;
 }
+.espaciadoToolbar{
+    margin-right: .5rem !important;
+}

@@ -10,17 +10,13 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <h:outputStylesheet library="css" name="style.css"  />
         <h:outputScript library="js" name="primefaces.js" />
+        <h:outputStylesheet library="css" name="primeflex.min.css"  />
         <h:outputStylesheet library="webjars" name="font-awesome/5.15.4/css/all.min-jsf.css" />
         <h:outputStylesheet library="webjars" name="font-awesome/5.15.4/css/v4-shims.min-jsf.css" />
         <title>#{ConfiguracionController.configuracion.tituloSistema}</title>
     </h:head>
 
     <h:body>
-        <style>
-            .ui-clock{
-                border: none !important;
-            }
-        </style>
         <p:idleMonitor timeout="#{CommonController.tiempoSesionActiva}" >
             <p:ajax global="true" event="idle" listener="#{LoginManager.doLogout()}" oncomplete="alert('La sesión del usuario ha expirado. Para acceder nuevamente haga click en OK')"/>
         </p:idleMonitor>
@@ -28,58 +24,24 @@
             <p:graphicImage value="/img/loading3.gif" height="100"/><br/>
             <h:outputText value="Cargando..."/>
         </p:panel>
-        <div class="ui-fluid">
-            <p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
-                <p:graphicImage value="#{MainController.serverURLDownload}/logoServlet" height="80" cache="false"/>
-                <p:outputPanel>
-                    <h:outputText styleClass="tresD fontBold" style="font-size: xx-large"  value="SEDRA"/><br/>
-                    <h:outputText styleClass="font1x fontBold" value="#{ConfiguracionController.configuracion.tituloSistema}"/><br/>
-                    <h:outputText styleClass="Gray" value="#{ConfiguracionController.configuracion.subTituloSistema}"/>
-                </p:outputPanel>
-            </p:panelGrid>
-            <h:form>
-                <p:menubar model="#{MenuController.model}"/> 
-                <p:toolbar>  
-                    <f:facet name="left">
-                        <p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
-                            <p:outputPanel>
-                                <h:outputText styleClass="Green" value="Usuario: #{LoginManager.usuarioLogeado.usuario}"/> 
-                                |
-                                <p:clock class="ui-panelgrid-blank" timeZone="#{LoginManager.myTimeZone}" pattern="EEEEE, dd/MMM/yyyy HH:mm:ss" mode="server" />
-                            </p:outputPanel>
-                        </p:panelGrid>
-                    </f:facet>
-                    <f:facet name="right">
-                        <p:panelGrid columns="3" styleClass="ui-panelgrid-blank">
-                            <p:commandButton ajax="false" icon="fa fa fa-cogs" rendered="#{LoginManager.usuarioLogeado.idRol.idRol==1 or LoginManager.usuarioLogeado.idRol.idRol==18}"  value="Configuraciones" action="#{ConfiguracionController.editSetup()}"/>
-                            <p:commandButton ajax="false" icon="fa fa-key"  value="Cambio de Contraseña" action="#{LoginManager.doCambiarContrasenhaForm()}"/>
-                            <p:commandButton ajax="false" icon="fa fa-sign-out" value="Salir" action="#{LoginManager.doLogout()}"/>
-                        </p:panelGrid>
-                    </f:facet>
-                </p:toolbar>  
-            </h:form>
-            <ui:insert name="title">
-            </ui:insert>
-            <ui:insert name="ajax">
-                <ui:include src="/includes/ajax.xhtml"/>
-            </ui:insert>
-            <p:growl life="5000" globalOnly="true" showDetail="true" severity="info, warn" id="messages"/> 
-            <p:messages closable="true" showDetail="true" globalOnly="true" severity="error, fatal" id="messagesError">
-                <p:autoUpdate/>
-            </p:messages>
-            <ui:insert name="content">
-            </ui:insert>
-            <footer>
-                <p:panel>
-                    <span >
-                        &copy;2019 #{ConfiguracionController.configuracion.tituloSistema}
-                    </span>
-                    <span style="float: right;">
-                        Desarrollado por @ferremarce
-                    </span>
-                </p:panel>
-            </footer>
-        </div>
+        <ui:include src="/includes/header.xhtml"/>     
+        <ui:insert name="title">
+        </ui:insert>
+        <ui:insert name="ajax">
+            <ui:include src="/includes/ajax.xhtml"/>
+        </ui:insert>
+        <ui:insert name="content">
+        </ui:insert>
+        <footer>
+            <p:panel>
+                <span >
+                    &copy;2019 #{ConfiguracionController.configuracion.tituloSistema}
+                </span>
+                <span style="float: right;">
+                    Desarrollado por @ferremarce
+                </span>
+            </p:panel>
+        </footer>
         <script>
             document.getElementById('panelLoad').style.display = 'none';
         </script>

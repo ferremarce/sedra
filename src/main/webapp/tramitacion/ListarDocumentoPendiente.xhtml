@@ -14,7 +14,7 @@
         <h:form id="formMain">
             <p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
                 <p:inputText id="criterio" value="#{TramitacionController.criterioBusqueda}"/>
-                <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{TramitacionController.buscarAllPendiente()}" update=":formMain:tabPendiente:dataTablePendiente, :formMain:tabPendiente:dataTablePendienteConfirmado, messages"/>
+                <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{TramitacionController.buscarAllPendiente()}" update=":formMain:tabPendiente:dataTablePendiente, :formMain:tabPendiente:dataTablePendienteConfirmado, panelMensajeEstado"/>
             </p:panelGrid>
             <p:watermark for="criterio" value="Asunto, Nro. Entrada"/>
             <p:tabView id="tabPendiente">

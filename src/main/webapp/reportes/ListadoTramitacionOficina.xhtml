@@ -30,7 +30,7 @@
                         <f:selectItems value="#{EstadoTramitacionController.estadoTramitacionSet}"/>
                     </p:selectOneButton>
                     <p:message for="idEstadoTramitacion"/>
-                    <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{ReporteController.buscarDocumento()}" update="@form, messages"/>
+                    <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{ReporteController.buscarDocumento()}" update="@form, panelMensajeEstado"/>
                 </p:panelGrid>
             </p:panel>
             <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{ReporteController.listaTramitacion}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"

@@ -18,7 +18,7 @@
             </p:selectOneRadio>
             <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
                 <p:inputText id="criterio" value="#{NotaSalidaController.criterioBusqueda}" placeholder="Nro. Salida, Referencia"/>
-                <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{NotaSalidaController.buscarAllNotaSalida()}" update="@form, messages"/>
+                <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{NotaSalidaController.buscarAllNotaSalida()}" update="@form, panelMensajeEstado"/>
                 <p:commandButton immediate="true" value="#{bundle.NuevoBoton}" icon="fa fa-plus" ajax="false" action="#{NotaSalidaController.createSetup(null)}"/>
                 <p:commandButton immediate="true" value="#{bundle.ListarBoton}" icon="fa fa-th-list" onclick="PF('statusDialog').show()" ajax="false" action="#{NotaSalidaController.doRefrescar()}"/>
             </p:panelGrid>
@@ -56,7 +56,7 @@
                     </p:dataList>
                 </p:column> 
                 <p:column headerText="Acción" width="115">
-                    <p:commandButton ajax="true" update="dataTable, messages" rendered="false" title="#{bundle.LlavearBoton}" value="#{bundle.LlavearBoton}" onclick="return confirm('Desea realmente bloquear el documento y todas sus tramitaciones?...');" icon="fa fa-unlock" actionListener="#{NotaSalidaController.llavear(item)}"/>
+                    <p:commandButton ajax="true" update="dataTable, panelMensajeEstado" rendered="false" title="#{bundle.LlavearBoton}" value="#{bundle.LlavearBoton}" onclick="return confirm('Desea realmente bloquear el documento y todas sus tramitaciones?...');" icon="fa fa-unlock" actionListener="#{NotaSalidaController.llavear(item)}"/>
                     <p:commandButton type="button" style="background: #fde5cd !important; color: black" rendered="#{item.cerrado==true}" onclick="return alert('El documento y sus anexos ya están archivados');" ajax="false" title="Documento llaveado" value="Llaveado" icon="fa fa-lock"/>
                     <p:menuButton rendered="#{item.cerrado==false}" value="Opciones">
                         <p:menuitem ajax="false" onclick="if (!confirm('Desea realmente bloquear el documento y todas sus tramitaciones?...')) {

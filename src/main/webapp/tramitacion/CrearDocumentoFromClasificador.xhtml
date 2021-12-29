@@ -32,7 +32,7 @@
                               multiple="true"
                               oncomplete="rc()">
                 </p:fileUpload>
-                <p:remoteCommand name="rc" update="formMain, messages, messagesError" actionListener="#{DocumentoController.save()}" />
+                <p:remoteCommand name="rc" update="formMain, panelMensajeEstado" actionListener="#{DocumentoController.save()}" />
                 <h:outputText value="Carpeta: "/>
                 <h:outputText rendered="#{DocumentoController.clasificadorSeleccionado!=null}" styleClass="Purple fontBold" value="#{ClasificadorController.obtenerRutaClasificador(DocumentoController.clasificadorSeleccionado.idClasificador)}"/>
                 <p:tabView>

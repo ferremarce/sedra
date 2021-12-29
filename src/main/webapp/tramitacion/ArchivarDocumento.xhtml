@@ -54,7 +54,7 @@
                     <p:outputLabel for="comprobantePago" value="Comprob. Pago:"/>
                     <p:panelGrid columns="2">
                         <p:inputText size="20" id="comprobantePago" value="#{TramitacionController.documento.comprobantePago}" title="Comprobante de Pago"  />
-                        <p:commandButton action="#{TramitacionController.updateCP()}" ajax="true" update="@form, messages, messagesError" icon="fa fa-save"  value="#{bundle.ActualizarBoton}" title="#{bundle.ActualizarBoton}"/>  
+                        <p:commandButton action="#{TramitacionController.updateCP()}" ajax="true" update="@form, panelMensajeEstado" icon="fa fa-save"  value="#{bundle.ActualizarBoton}" title="#{bundle.ActualizarBoton}"/>  
                     </p:panelGrid>
                 </p:panelGrid>
             </p:panel>
@@ -122,7 +122,7 @@
                                   mode="advanced"
                                   required="true"
                                   requiredMessage="#{bundle.Requerido}"
-                                  update="messages, :formMain:dataTable"
+                                  update="panelMensajeEstado, :formMain:dataTable"
                                   oncomplete="PF('anexo1').hide();"
                                   />
                 </p:panelGrid>                        
@@ -141,7 +141,7 @@
                 <p:outputLabel for="criterio" value="Criterio: "/>
                 <h:panelGrid columns="2">
                     <p:inputText tabindex="0" size="50" id="criterio" value="#{NotaSalidaController.criterioBusqueda}" title="Búsqueda" />
-                    <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{NotaSalidaController.localizarAllNotaSalida()}" update="dataTableNota, messages"/>
+                    <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{NotaSalidaController.localizarAllNotaSalida()}" update="dataTableNota, panelMensajeEstado"/>
                     <p:watermark for="criterio" value="Nro. Salida, STR" />                        
                 </h:panelGrid>
                 <p:dataTable rowIndexVar="index" id="dataTableNota" var="item" value="#{NotaSalidaController.listaNotaSalida}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
@@ -155,7 +155,7 @@
                         Tabla de Datos
                     </f:facet> 
                     <p:column headerText="Acción" style="width:150px">
-                        <p:commandButton ajax="false" update="dataTable, messages" onclick="return confirm('#{bundle.ConfirmacionMensaje}');" title="#{bundle.EnlazarBoton}" value="#{bundle.EnlazarBoton}" icon="fa fa-link" action="#{TramitacionController.enlazarAnotaSalida(item.idNota)}"/>
+                        <p:commandButton ajax="false" update="dataTable, panelMensajeEstado" onclick="return confirm('#{bundle.ConfirmacionMensaje}');" title="#{bundle.EnlazarBoton}" value="#{bundle.EnlazarBoton}" icon="fa fa-link" action="#{TramitacionController.enlazarAnotaSalida(item.idNota)}"/>
                     </p:column>  
                     <p:column headerText="No. Sal./STR" style="width:150px" >  
                         <h:outputText rendered="#{item.numeroSalida!=null}" value="Nro. Salida: #{item.numeroSalida}"/>
