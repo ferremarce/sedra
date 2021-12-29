@@ -1,15 +1,11 @@
-/*
-.ui-widget {
-    font-size: 1em !important;
+.ui-menu .ui-menu-parent .ui-menu-child {
+    width: 20em;
 }
-.ui-widget .ui-widget {
-    font-size: 1em !important;
+
+.dialogBox{
+    top: 15% !important;
+    left:30% !important;
 }
-.ui-datatable,
-.ui-datatable .ui-datatable-tablewrapper table {
-    font-size: 1em !important;
-}
-*/
 
 h1{
     font-family: Arial,sans-serif;

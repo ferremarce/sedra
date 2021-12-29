@@ -103,7 +103,7 @@ public class Documento implements Serializable {
     private Usuario idUsuario;
     @OneToMany(mappedBy = "idDocumento")
     private List<DetalleNotaSalida> detalleNotaSalidaList;
-    @OneToMany(mappedBy = "idDocumento")
+    @OneToMany(mappedBy = "idDocumento", cascade = CascadeType.REMOVE)
     @OrderBy("fechaDerivacion ASC, idTramitacion ASC")
     private List<Tramitacion> tramitacionList;
     @OneToMany(mappedBy = "idDocumento", cascade = CascadeType.REMOVE)

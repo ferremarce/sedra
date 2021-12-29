@@ -32,10 +32,10 @@
                 <f:facet name="header">
                     Tabla de Datos
                 </f:facet>  
-                <p:column headerText="#" width="30">
+                <p:column headerText="#" width="30" style="text-align: right">
                     <h:outputText value="#{index+1}"/>
                 </p:column>
-                <p:column headerText="#Entrada" width="100" sortBy="#{item.nroEntrada}" >  
+                <p:column headerText="#Entrada" width="100" sortBy="#{item.nroEntrada}" style="text-align: right">  
                     <p:commandLink title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
                         <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value=" #{item.nroEntrada}"/>
                     </p:commandLink>
@@ -64,9 +64,9 @@
                     <p:commandButton type="button" style="background: #fde5cd !important; color: black" rendered="#{item.cerrado==true}" onclick="return alert('El documento y sus anexos ya están archivados');" ajax="false" title="Documento llaveado" value="Llaveado" icon="fa fa-lock"/>
                     <p:menuButton rendered="#{item.cerrado==false}" value="Opciones">
                         <p:menuitem ajax="false" value="#{bundle.EditarBoton}" action="#{DocumentoController.editSetup(item.idDocumento)}" icon="fa fa-pencil-square"/>
-                        <p:menuitem ajax="false" onclick="if (!confirm('#{bundle.ConfirmacionMensaje}')) {
-                                    return false;
-                                }" value="#{bundle.EliminarBoton}" action="#{DocumentoController.delete(item.idDocumento)}" icon="fa fa-minus-square"/>
+                        <p:menuitem icon="fa fa-minus-square" value="#{bundle.EliminarBoton}" action="#{DocumentoController.delete(item.idDocumento)}" update="@form, panelMensajeEstado">
+                            <p:confirm escape="false" header="Confirmación" message="Está a punto de eliminar el Contrato ##{item.toString()}. &lt;br/&gt;¿Estás seguro?" icon="fa fa-exclamation-triangle" />
+                        </p:menuitem>
                     </p:menuButton>
                 </p:column>
             </p:dataTable>
