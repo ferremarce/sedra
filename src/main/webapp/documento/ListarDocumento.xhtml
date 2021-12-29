@@ -65,7 +65,7 @@
                     <p:menuButton rendered="#{item.cerrado==false}" value="Opciones">
                         <p:menuitem ajax="false" value="#{bundle.EditarBoton}" action="#{DocumentoController.editSetup(item.idDocumento)}" icon="fa fa-pencil-square"/>
                         <p:menuitem icon="fa fa-minus-square" value="#{bundle.EliminarBoton}" action="#{DocumentoController.delete(item.idDocumento)}" update="@form, panelMensajeEstado">
-                            <p:confirm escape="false" header="Confirmación" message="Está a punto de eliminar el Contrato ##{item.toString()}. &lt;br/&gt;¿Estás seguro?" icon="fa fa-exclamation-triangle" />
+                            <p:confirm escape="false" header="Confirmación" message="Está a punto de eliminar el registro ##{item.toString()}. &lt;br/&gt;¿Estás seguro?" icon="fa fa-exclamation-triangle" />
                         </p:menuitem>
                     </p:menuButton>
                 </p:column>

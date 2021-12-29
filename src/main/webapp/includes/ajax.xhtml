@@ -8,7 +8,7 @@
     <ui:fragment>
         <p:ajaxStatus onstart="PF('statusAjax').show()" onsuccess="PF('statusAjax').hide()" onerror="PF('errorPanel').show()" />
 
-        <p:dialog position="center top" widgetVar="statusAjax" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+        <p:dialog position="center top" widgetVar="statusAjax" modal="true" draggable="false" closable="false" resizable="false" showHeader="false" closeOnEscape="true">
             <p:graphicImage value="/img/loading3.gif" height="100"/><br/>
             <h:outputText value="Procesando..."/>
         </p:dialog>

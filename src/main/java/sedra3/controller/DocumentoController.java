@@ -197,7 +197,7 @@ public class DocumentoController implements Serializable {
             Documento u = documentoFacade.find(idDocumento);
             String name = u.getAsunto();
             if (u.getTramitacionList().size() > 1) {
-                JSFutil.addMessage("No es posible eliminar porque ya registra trámites", JSFutil.StatusMessage.WARNING);
+                JSFutil.addMessage("No es posible eliminar el documento porque ya registra trámites", JSFutil.StatusMessage.WARNING);
                 return "";
             }
             documentoFacade.remove(u);
@@ -283,7 +283,7 @@ public class DocumentoController implements Serializable {
             }
             this.criterio = documento.getAsunto();
             this.doBuscar();
-            JSFutil.addMessage("Documento creado exitosamente. ", JSFutil.StatusMessage.INFORMATION);
+            JSFutil.addMessage("Documento procesado exitosamente. ", JSFutil.StatusMessage.INFORMATION);
         } catch (Exception ex) {
             this.commonController.doExcepcion(ex);
         }

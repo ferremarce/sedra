@@ -1,10 +1,11 @@
 .ui-menu .ui-menu-parent .ui-menu-child {
-    width: 20em;
+    width: 20em !important;
 }
 
 .dialogBox{
     top: 15% !important;
     left:30% !important;
+    right: 30% !important;
 }
 
 h1{
