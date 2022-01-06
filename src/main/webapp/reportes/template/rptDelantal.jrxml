@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptDelantal" pageWidth="612" pageHeight="792" columnWidth="528" leftMargin="56" rightMargin="28" topMargin="28" bottomMargin="28" uuid="5458e021-a38f-4365-b119-eb7d740077b7">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="SedraDataAdapter.xml"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
 			<pen lineWidth="0.5" lineColor="#000000"/>
@@ -103,7 +103,7 @@
 	<parameter name="author" class="java.lang.String"/>
 	<parameter name="imagenPath" class="java.lang.String"/>
 	<queryString language="EJBQL">
-		<![CDATA[select a from Documento a where a.idDocumento=120]]>
+		<![CDATA[select a from Documento a where a.idDocumento=44204]]>
 	</queryString>
 	<field name="documentoAdjuntoList" class="java.util.List">
 		<fieldDescription><![CDATA[documentoAdjuntoList]]></fieldDescription>
@@ -214,7 +214,7 @@
 				</textElement>
 				<text><![CDATA[Asunto:]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement x="120" y="140" width="408" height="20" uuid="a9628777-8a55-48de-98e5-8a2d2b35922c">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f0322112-245f-4cf6-8711-148054f1ab4e"/>
 				</reportElement>
@@ -323,13 +323,13 @@
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{anho}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField textAdjust="StretchHeight">
 				<reportElement stretchType="ContainerHeight" x="120" y="60" width="408" height="20" uuid="fc98b226-7c2d-42b4-a6f1-836f738fe837">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5251f4aa-a330-4935-baf4-4b6cbf297f59"/>
 					<property name="net.sf.jasperreports.consume.space.on.overflow" value="true"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle" markup="none"/>
-				<textFieldExpression><![CDATA[$F{idClasificador} +" -> "+ $F{anexo} ]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{idClasificador} +" -> "+ $F{anexo}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
 				<reportElement x="120" y="40" width="100" height="20" uuid="133c7fd0-8639-4667-b2e5-43af6161af26">
@@ -386,7 +386,7 @@
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true">
+							<textField textAdjust="StretchHeight">
 								<reportElement x="0" y="0" width="88" height="30" uuid="0a479e21-7231-4c9b-84ed-d4e2301c289f"/>
 								<textElement verticalAlignment="Middle">
 									<paragraph leftIndent="5" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
@@ -406,7 +406,7 @@
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true">
+							<textField textAdjust="StretchHeight">
 								<reportElement x="0" y="0" width="88" height="30" uuid="b43019b4-ea11-4773-8cb9-bb860311479c"/>
 								<textElement verticalAlignment="Middle">
 									<paragraph leftIndent="5" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
@@ -426,7 +426,7 @@
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
+							<textField textAdjust="StretchHeight" pattern="dd/MM/yyyy">
 								<reportElement x="0" y="0" width="88" height="30" uuid="dea25479-26fb-42e3-b71a-244246dd21cf"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<paragraph leftIndent="5" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
@@ -446,7 +446,7 @@
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true">
+							<textField textAdjust="StretchHeight">
 								<reportElement x="0" y="0" width="88" height="30" uuid="305373c4-e08e-4686-b507-4422ddd4e030"/>
 								<textElement verticalAlignment="Middle">
 									<paragraph leftIndent="5" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
@@ -466,7 +466,7 @@
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true">
+							<textField textAdjust="StretchHeight">
 								<reportElement x="0" y="0" width="88" height="30" uuid="19b432e5-3c44-482c-9a5f-1eb210305648"/>
 								<textElement verticalAlignment="Middle">
 									<paragraph leftIndent="5" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
@@ -486,7 +486,7 @@
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField isStretchWithOverflow="true">
+							<textField textAdjust="StretchHeight">
 								<reportElement x="0" y="0" width="88" height="30" uuid="9030ecca-cc53-41f8-95c0-fd74e930e81b"/>
 								<textElement verticalAlignment="Middle">
 									<paragraph leftIndent="5" rightIndent="5" spacingBefore="5" spacingAfter="5"/>

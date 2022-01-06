@@ -2,33 +2,35 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                 template="/includes/template.xhtml"
+                template="/includes/template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
     <ui:define name="title">
         <h1>Cambiar Contraseña</h1>
     </ui:define>
-
     <ui:define name="content">
         <h:form id="formMain">
             <p:panel header="Datos del Usuario" >
-                <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-10">
+                <p:panelGrid columns="3" layout="flex" columnClasses="p-col-2,p-col-8,p-col-2" contentStyleClass="ui-fluid">
                     <p:outputLabel for="cuenta" value="Cuenta:"/>
                     <h:outputText id="cuenta" value="#{LoginManager.usuarioLogeado.cuenta}" title="Cuenta"/>
+                    <p:message for="cuenta"/>
                     <p:outputLabel for="usuario" value="Usuario:"/>
                     <h:outputText id="usuario" value="#{LoginManager.usuarioLogeado.usuario}" title="Usuario"/>
+                    <p:message for="usuario"/>
                     <p:outputLabel for="rol" value="Rol:"/>
                     <h:outputText id="rol" value="#{LoginManager.usuarioLogeado.idRol.descripcionRol}"/>  
+                    <p:message for="rol"/>
                     <p:outputLabel for="password" value="Nueva Contraseña:"/>
                     <p:password promptLabel="Ingrese la contraseña" redisplay="true" feedback="true" weakLabel="Débil" goodLabel="Buena" strongLabel="Excelente" id="password" value="#{LoginManager.contrasenha}" title="Contraseña" required="true" requiredMessage="#{bundle.Requerido}" />
+                    <p:message for="password"/>
                     <p:outputLabel for="passwordRepeat" value="Repetir Contraseña:"/>
                     <p:password promptLabel="Ingrese la contraseña" redisplay="true" feedback="true" weakLabel="Débil" goodLabel="Buena" strongLabel="Excelente" id="passwordRepeat" value="#{LoginManager.contrasenha2}" title="Contraseña" required="true" requiredMessage="#{bundle.Requerido}" />
+                    <p:message for="passwordRepeat"/>
                 </p:panelGrid>
                 <f:facet name="footer">
-                    <p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
-                        <p:commandButton ajax="false" icon="fa fa-save" value="#{bundle.GuardarBoton}" action="#{LoginManager.doCambiarContrasenha()}"/>
-                    </p:panelGrid>
+                    <p:commandButton ajax="false" icon="fa fa-save" value="#{bundle.GuardarBoton}" action="#{LoginManager.doCambiarContrasenha()}"/>
                 </f:facet>   
             </p:panel>
         </h:form>

@@ -119,7 +119,6 @@ public class LoginManager implements Serializable {
                 }
                 FacesContext context = FacesContext.getCurrentInstance();
                 context.getExternalContext().getSessionMap().put(USER_SESSION_KEY, user);
-                this.usuarioActual = new Usuario();
                 this.usuarioActual = user;
                 auditaFacade.create(new Audita("LOGIN", "Acceso correcto.", JSFutil.getFechaHoraActual(), user.getCuenta(), null));
                 JSFutil.putSessionVariable("tema", this.usuarioActual.getIdTheme());

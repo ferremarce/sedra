@@ -9,7 +9,6 @@
     <ui:define name="title">
         <h1>Crear/Editar Documento</h1>
     </ui:define>
-
     <ui:define name="content">
         <h:form id="formMain">
             <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="flex" columnClasses="p-col-4,p-col-8">
@@ -58,8 +57,7 @@
                         </p:selectOneMenu>
                         <p:outputLabel value="Adjunto:"/>
                         <p:panel header="Haga click en #{bundle.SeleccionarBoton} o Arrastre hasta aquí los archivos">
-                            <p:fileUpload style="min-height: 200px"
-                                          id="archivo" label="#{bundle.SeleccionarBoton}" cancelLabel="#{bundle.EliminarBoton}" uploadLabel="#{bundle.AgregarBoton}" 
+                            <p:fileUpload id="archivo" label="#{bundle.SeleccionarBoton}" cancelLabel="#{bundle.EliminarBoton}" uploadLabel="#{bundle.AgregarBoton}" 
                                           listener="#{DocumentoController.handleFileUpload}"
                                           mode="advanced"
                                           multiple="true"
@@ -77,7 +75,6 @@
                             </p:dataTable>
                         </p:panel>
                     </p:panelGrid>
-
                     <p:dataTable id="dataTableAdjunto" var="expeAdj" value="#{DocumentoController.documento.documentoAdjuntoList}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}">
                         <f:facet name="header">
                             <h:outputText styleClass="Purple" value="Archivos del Documento"/>
@@ -97,7 +94,7 @@
                         </p:column>
                     </p:dataTable> 
                     <f:facet name="footer">
-                        <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" columnClasses="p-col-6,p-col-6">
+                        <p:panelGrid columns="2" >
                             <p:commandButton ajax="false" icon="fa fa-save" value="#{bundle.GuardarBoton}" action="#{DocumentoController.create()}"/>
                             <p:commandButton immediate="true" ajax="false" icon="fa fa-sign-out" value="#{bundle.RegresarBoton}" action="#{DocumentoController.listDocumentoSetup()}"/>
                         </p:panelGrid>

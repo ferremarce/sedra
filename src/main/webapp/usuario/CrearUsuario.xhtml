@@ -13,22 +13,29 @@
     <ui:define name="content">
         <h:form id="formMain">
             <p:panel header="Datos del Usuario" >
-                <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-10">
-                    <p:outputLabel for="usuario" value="Usuario:"/>
+                <p:panelGrid columns="3" contentStyleClass="ui-fluid" layout="flex" columnClasses="p-col-2,p-col-8, p-col-2">
+                    <p:outputLabel for="usuario" value="Nombre de Usuario:"/>
                     <p:inputText id="usuario" value="#{UsuarioController.usuario.usuario}" title="Usuario" required="true" requiredMessage="#{bundle.Requerido}" />
+                    <p:message for="usuario"/>
                     <p:outputLabel for="rol" value="Rol:"/>
                     <p:selectOneMenu id="rol" value="#{UsuarioController.usuario.idRol}" required="true" requiredMessage="#{bundle.Requerido}">  
                         <f:selectItems value="#{RolController.rolSet}"/>
                     </p:selectOneMenu>
+                    <p:message for="rol"/>
                     <p:outputLabel for="cuenta" value="Cuenta:"/>
                     <p:inputText id="cuenta" value="#{UsuarioController.usuario.cuenta}" title="Cuenta" required="true" requiredMessage="#{bundle.Requerido}" />
-                    <p:outputLabel for="password" value="Contraseña:"/>
-                    <p:password promptLabel="Ingrese la contraseña" redisplay="true" feedback="true" weakLabel="Débil" goodLabel="Buena" strongLabel="Excelente" id="password" value="#{UsuarioController.usuario.contrasenha}" title="Contraseña" required="true" requiredMessage="#{bundle.Requerido}" />
+                    <p:message for="cuenta"/>
+                    <p:selectBooleanCheckbox  value="#{UsuarioController.conPassword}" itemLabel="Habilitar Contraseña: *">
+                        <p:ajax event="change" update="password"/>
+                    </p:selectBooleanCheckbox>
+                    <p:password disabled="#{!UsuarioController.conPassword}" promptLabel="Ingrese la contraseña" redisplay="true" feedback="true" weakLabel="Débil" goodLabel="Buena" strongLabel="Excelente" id="password" value="#{UsuarioController.usuario.contrasenha}" title="Contraseña" required="true" requiredMessage="#{bundle.Requerido}" />
+                    <p:message for="password"/>
                     <p:outputLabel for="activo" value="Activo:"/>
                     <p:selectBooleanCheckbox id="activo" value="#{UsuarioController.tmpActivo}" />
+                    <p:message for="activo"/>
                 </p:panelGrid>
                 <f:facet name="footer">
-                    <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" columnClasses="ui-grid-col-6,ui-grid-col-6">
+                    <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" columnClasses="p-col-6,p-col-6">
                         <p:commandButton ajax="false" icon="fa fa-save" value="#{bundle.GuardarBoton}" action="#{UsuarioController.create()}"/>
                         <p:commandButton immediate="true" ajax="false" icon="fa fa-sign-out" value="#{bundle.RegresarBoton}" action="#{UsuarioController.listUsuarioSetup()}"/>
                     </p:panelGrid>

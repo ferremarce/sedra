@@ -11,11 +11,6 @@
     </ui:define>
 
     <ui:define name="content">
-        <style>
-            .ui-fileupload-content{
-                min-height: 50px;
-            }
-        </style>
         <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-4,ui-grid-col-8">
             <h:form id="formTree">
                 <p:tree draggable="true" droppable="true" dropCopyNode="true" id="planArchivo" filterBy="#{node}" filterMatchMode="contains" animate="true" value="#{ClasificadorController.root}" var="node" dynamic="false" cache="false" selectionMode="single"  selection="#{ClasificadorController.selectedNode}">
