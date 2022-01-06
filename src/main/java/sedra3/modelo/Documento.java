@@ -27,6 +27,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
+import sedra3.util.JSFutil;
 
 /**
  *
@@ -330,7 +331,7 @@ public class Documento implements Serializable {
 
     @Override
     public String toString() {
-          return "[" + this.nroEntrada + "] " + this.asunto;
+        return "[" + this.nroEntrada + "] " + this.asunto;
     }
 
     public String toAudita() {
@@ -341,4 +342,9 @@ public class Documento implements Serializable {
                 + "[Referencia=" + this.referencia + "] "
                 + "[Archivo=" + this.nombreArchivo + "]";
     }
+
+    public String toVerURL() {
+        return JSFutil.getAbsoluteApplicationUrl() + "/faces/documento/VerDocumento.xhtml?id=" + this.getIdDocumento();
+    }
+
 }

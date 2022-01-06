@@ -99,8 +99,13 @@ public class CommonController implements Serializable {
         return null;
     }
 
-    public String getServerURLDownload() {
+    public String getServerURL() {
+        //System.out.print("Web: "+JSFutil.getAbsoluteApplicationUrl());
         return JSFutil.getAbsoluteApplicationUrl();
+    }
+
+    public String getServerURLDownload() {
+        return JSFutil.getAbsoluteApplicationUrl() + "/descarga";
     }
 
     public String doDiferenciaTiempo(Date finicio, Date hinicio, Date ffin, Date hfin) {

@@ -14,9 +14,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.file.UploadedFile;
@@ -353,7 +357,7 @@ public class DocumentoController implements Serializable {
 
     public String doVerForm(Integer idExpediente) {
         this.documento = documentoFacade.find(idExpediente);
-        return "/documento/VerDocumento?faces-redirect=true";
+        return "/documento/VerDocumento?faces-redirect=true&id=" + this.documento.getIdDocumento();
     }
 
     public void onNodeSelect(NodeSelectEvent event) {
@@ -511,4 +515,20 @@ public class DocumentoController implements Serializable {
         this.buscarDocumentoSinNota();
         // return "";
     }
+
+    public void init() {
+        try {
+            FacesContext context = FacesContext.getCurrentInstance();
+            Map<String, String> paramMap = context.getExternalContext().getRequestParameterMap();
+            String id = paramMap.get("id");
+            if (id != null) {
+                HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+                LOG.log(Level.INFO, "DOCUMENTO:  {0} desde la IP: {1}", new Object[]{id, JSFutil.getClientIpAddr(request)});
+                this.documento = documentoFacade.find(Integer.parseInt(id));
+            }
+        } catch (Exception e) {
+            this.commonController.doExcepcion(e);
+        }
+    }
+
 }
