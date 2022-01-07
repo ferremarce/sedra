@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptTicketDocumento" pageWidth="215" pageHeight="311" columnWidth="177" leftMargin="19" rightMargin="19" topMargin="5" bottomMargin="5" uuid="ffc08ccd-fc6b-434b-a18d-5d550fa64904">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="tituloReporte" class="java.lang.String">
+		<defaultValueExpression><![CDATA["SEDRA"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="author" class="java.lang.String"/>
+	<queryString language="ejbql">
+		<![CDATA[select a from Documento a where a.idDocumento=44204]]>
+	</queryString>
+	<field name="documentoAdjuntoList" class="java.util.List">
+		<fieldDescription><![CDATA[documentoAdjuntoList]]></fieldDescription>
+	</field>
+	<field name="nombreArchivo" class="java.lang.String">
+		<fieldDescription><![CDATA[nombreArchivo]]></fieldDescription>
+	</field>
+	<field name="anexo" class="java.lang.String">
+		<fieldDescription><![CDATA[anexo]]></fieldDescription>
+	</field>
+	<field name="idClasificador" class="sedra3.modelo.Clasificador">
+		<fieldDescription><![CDATA[idClasificador]]></fieldDescription>
+	</field>
+	<field name="detalleNotaSalidaList" class="java.util.List">
+		<fieldDescription><![CDATA[detalleNotaSalidaList]]></fieldDescription>
+	</field>
+	<field name="idUsuario" class="sedra3.modelo.Usuario">
+		<fieldDescription><![CDATA[idUsuario]]></fieldDescription>
+	</field>
+	<field name="tipoArchivo" class="java.lang.String">
+		<fieldDescription><![CDATA[tipoArchivo]]></fieldDescription>
+	</field>
+	<field name="cerrado" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[cerrado]]></fieldDescription>
+	</field>
+	<field name="fechaLimite" class="java.util.Date">
+		<fieldDescription><![CDATA[fechaLimite]]></fieldDescription>
+	</field>
+	<field name="asunto" class="java.lang.String">
+		<fieldDescription><![CDATA[asunto]]></fieldDescription>
+	</field>
+	<field name="idTipoDocumento" class="sedra3.modelo.TipoDocumento">
+		<fieldDescription><![CDATA[idTipoDocumento]]></fieldDescription>
+	</field>
+	<field name="tamanhoArchivo" class="java.math.BigInteger">
+		<fieldDescription><![CDATA[tamanhoArchivo]]></fieldDescription>
+	</field>
+	<field name="anho" class="java.lang.Integer">
+		<fieldDescription><![CDATA[anho]]></fieldDescription>
+	</field>
+	<field name="fechaDocumento" class="java.util.Date">
+		<fieldDescription><![CDATA[fechaDocumento]]></fieldDescription>
+	</field>
+	<field name="documentoClass" class="sedra3.modelo.Documento">
+		<fieldDescription><![CDATA[_THIS]]></fieldDescription>
+	</field>
+	<field name="observacion" class="java.lang.String">
+		<fieldDescription><![CDATA[observacion]]></fieldDescription>
+	</field>
+	<field name="comprobantePago" class="java.lang.String">
+		<fieldDescription><![CDATA[comprobantePago]]></fieldDescription>
+	</field>
+	<field name="archivo" class="byte[]">
+		<fieldDescription><![CDATA[archivo]]></fieldDescription>
+	</field>
+	<field name="horaRegistro" class="java.util.Date">
+		<fieldDescription><![CDATA[horaRegistro]]></fieldDescription>
+	</field>
+	<field name="fechaRegistro" class="java.util.Date">
+		<fieldDescription><![CDATA[fechaRegistro]]></fieldDescription>
+	</field>
+	<field name="nroEntrada" class="java.lang.String">
+		<fieldDescription><![CDATA[nroEntrada]]></fieldDescription>
+	</field>
+	<field name="fechaIngreso" class="java.util.Date">
+		<fieldDescription><![CDATA[fechaIngreso]]></fieldDescription>
+	</field>
+	<field name="idDocumento" class="java.lang.Integer">
+		<fieldDescription><![CDATA[idDocumento]]></fieldDescription>
+	</field>
+	<field name="tramitacionList" class="java.util.List">
+		<fieldDescription><![CDATA[tramitacionList]]></fieldDescription>
+	</field>
+	<field name="referencia" class="java.lang.String">
+		<fieldDescription><![CDATA[referencia]]></fieldDescription>
+	</field>
+	<field name="numeroExpediente" class="java.lang.Integer">
+		<fieldDescription><![CDATA[numeroExpediente]]></fieldDescription>
+	</field>
+	<title>
+		<band height="70" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="177" height="30" uuid="92a19f55-3b05-491b-8a00-41ee4f3a12ed"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{tituloReporte}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="30" width="177" height="20" uuid="3d836d78-06a5-4232-8379-6ebe44436f47">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Registro de Expediente]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy HH:mm">
+				<reportElement x="0" y="50" width="177" height="20" uuid="9341a857-172d-4f51-a629-c2330b5e0d86">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="50" width="177" height="1" uuid="390d8f15-9213-4d0e-a983-ec1b0b8d23a0">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+		</band>
+	</title>
+	<detail>
+		<band height="206" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.layout"/>
+			<textField pattern="000000000" isBlankWhenNull="true">
+				<reportElement x="40" y="15" width="137" height="15" uuid="16f05158-e700-495b-89af-16d7dae08e1f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cdcd8c50-b675-4d73-a059-7a45aff73700"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{numeroExpediente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="15" width="40" height="15" uuid="1a52a4bf-8d7e-472e-8505-ef6ad8555518">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cdcd8c50-b675-4d73-a059-7a45aff73700"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Exp.#:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="40" y="30" width="137" height="15" uuid="e019a1f7-2a19-406d-a6d6-3f04a2b4ca41"/>
+				<textFieldExpression><![CDATA[$F{fechaDocumento}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="30" width="40" height="15" uuid="10edf787-b3ee-43f7-9bc4-69895605f2aa"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="0" width="177" height="15" uuid="fe4eb6e4-4925-4f78-bbfb-08d96acb5de9"/>
+				<textFieldExpression><![CDATA[$F{idTipoDocumento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="40" y="45" width="137" height="15" uuid="2634c5c6-0b10-413e-ab2f-adafe9a339f5"/>
+				<textFieldExpression><![CDATA[$F{referencia}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="45" width="40" height="15" uuid="b98e1472-3139-4dd1-b7c8-789233de15d8"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ref.:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="75" width="177" height="55" uuid="393276a0-a579-4309-a2e1-e52950c7b679">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Justified"/>
+				<textFieldExpression><![CDATA[$F{asunto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="60" width="177" height="15" uuid="834dcfc0-33e6-4879-852c-3ad4de7d3498"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Asunto:]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement positionType="Float" x="0" y="130" width="177" height="76" uuid="978d1f0b-d959-4bd3-a8f5-90e6618419bb"/>
+				<jr:QRCode xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<jr:codeExpression><![CDATA[$F{documentoClass}.toVerURL()]]></jr:codeExpression>
+				</jr:QRCode>
+			</componentElement>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="15">
+			<textField>
+				<reportElement x="0" y="0" width="177" height="15" uuid="3041efe1-9331-4fd1-b585-216f32d563ab">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA["Usuario: "+$P{author}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+</jasperReport>

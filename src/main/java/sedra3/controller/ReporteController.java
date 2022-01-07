@@ -145,6 +145,25 @@ public class ReporteController implements Serializable {
         }
     }
 
+    public void generarTicket(Integer id) throws IOException {
+        try {
+            JasperManager jm = new JasperManager();
+            List<Documento> lista = new ArrayList<>();
+            if (id == 0) {
+                lista = documentoFacade.findAll();
+            } else {
+                lista.add(documentoFacade.find(id));
+            }
+
+            String idFuenteReporte = "2";
+            FuenteReporte fr = new FuenteReporte(Integer.valueOf(idFuenteReporte));
+            String reportSource = jm.getPathweb() + "reportes/template/" + fr.getNombreReporte();
+            jm.generarReporte(reportSource, this.destinoReporte, lista);
+        } catch (Exception e) {
+            this.commonController.doExcepcion(e);
+        }
+    }
+
     public void buscarDocumento() {
         this.listaTramitacion = tramitacionFacade.getAllTramitacion(tmpIdRol.getIdRol(), tmpEstadoTramitacion.getIdEstado(), tmpFechaDesde, tmpFechaHasta);
         if (this.listaTramitacion.isEmpty()) {

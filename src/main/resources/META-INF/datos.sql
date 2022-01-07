@@ -25,4 +25,6 @@ UPDATE public.permiso SET descripcion_permiso='Localizar Doc.', nivel='4.3', ord
 UPDATE public.permiso SET descripcion_permiso='Nota de Salida/STR', nivel='3.5', orden=NULL, tag_menu='#{NotaSalidaController.listNotaSalidaSetup}', url_imagen='fa fa-sign' WHERE id_permiso=20;
 UPDATE public.permiso SET descripcion_permiso='Cambiar Contraseña', nivel='1.1', orden=NULL, tag_menu='#{LoginManager.doCambiarContrasenhaForm}', url_imagen='fa fa-key' WHERE id_permiso=2;
 UPDATE public.permiso SET descripcion_permiso='Salir', nivel='1.4', orden=NULL, tag_menu='#{LoginManager.doLogout}', url_imagen='fa fa-sign-out' WHERE id_permiso=5;
+INSERT INTO public.permiso (id_permiso, descripcion_permiso, nivel, orden, tag_menu, url_imagen) VALUES(21, 'Registro Autoḿatico de Expedientes', '2.4', NULL, '#{DocumentoController.doCrearRegistroAutomatico()}', 'fa fa-file-contract');
 
+ALTER TABLE public.documento ADD numero_expediente int4 NULL;

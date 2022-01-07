@@ -7,21 +7,36 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
     <ui:define name="title">
-        <h1>Listar Documentos</h1>
+        <h1>Crear/Editar Registro Automático</h1>
     </ui:define>
     <ui:define name="content">
-        <h:form>
+        <h:form id="formMain">
+            <p:panel header="Información del Documento">
+                <p:panelGrid columns="4" layout="flex" columnClasses="p-col-2,p-col-4,p-col-2,p-col-4" contentStyleClass="ui-fluid">
+                    <p:outputLabel for="nroExpediente" value="#Expediente:"/>
+                    <h:outputText id="nroExpediente" value="#{DocumentoController.documento.numeroExpediente}" title="Numero de Expediente">
+                        <f:convertNumber pattern="0000000000000"/>
+                    </h:outputText>
+                    <p:outputLabel for="idTipoDocumento" value="Tipo Documento:"/>
+                    <p:selectOneMenu id="idTipoDocumento" value="#{DocumentoController.documento.idTipoDocumento}" required="true" requiredMessage="Tipo Documento">  
+                        <f:selectItems value="#{TipoDocumentoController.tipoDocumentoSet}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel for="fechaDocumento" value="Fecha del Documento:"/>
+                    <p:calendar navigator="true" id="fechaDocumento" value="#{DocumentoController.documento.fechaDocumento}" pattern="dd/MM/yyyy" title="Fecha Documento" required="true" requiredMessage="Fecha Documento"/>
+                    <p:outputLabel for="referencia" value="Referencia"/>
+                    <p:inputText id="referencia" value="#{DocumentoController.documento.referencia}" title="Referencia" required="true" requiredMessage="Referencia" />
+                    <p:outputLabel for="asunto" value="Asunto "/>
+                    <p:inputTextarea autoResize="true" id="asunto" value="#{DocumentoController.documento.asunto}" title="Asunto" required="true" requiredMessage="Asunto" />
+                    <p:outputLabel for="observaciones" value="Observaciones:"/>
+                    <p:inputTextarea cols="60" id="observaciones" value="#{DocumentoController.documento.observacion}" title="Observaciones"  />
+                </p:panelGrid>
+            </p:panel>
             <p:toolbar>
                 <p:toolbarGroup>
-                    <p:commandButton styleClass="espaciadoToolbar ui-button-success" value="#{bundle.NuevoBoton}" icon="fa fa-plus" ajax="false" action="#{DocumentoController.createSetup()}"/>
-                    <p:commandButton styleClass="espaciadoToolbar" value="#{bundle.ListarBoton}" icon="fa fa-th-list" ajax="false" action="#{DocumentoController.doRefrescar()}"/>
-                </p:toolbarGroup>
-                <p:toolbarGroup align="right">
-                    <p:inputText styleClass="espaciadoToolbar" size="50" id="criterio" value="#{DocumentoController.criterio}" placeholder="Asunto, Nro. Entrada" />
-                    <p:commandButton styleClass="espaciadoToolbar" id="cmdBuscar" icon="fa fa-search" ajax="true" action="#{DocumentoController.doBuscar()}" update="@form, panelMensajeEstado"/>
+                    <p:commandButton id="btnSave" ajax="false" icon="fa fa-check"  styleClass="espaciadoToolbar" value="#{bundle.GuardarBoton}" action="#{DocumentoController.doGuardarRegistroAutomatico()}"/>
                 </p:toolbarGroup>
             </p:toolbar>
-            <p:defaultCommand target="cmdBuscar"/>
+
             <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                          rows="50"
                          paginator="true"
@@ -36,7 +51,7 @@
                     <h:outputText value="#{index+1}"/>
                 </p:column>
                 <p:column headerText="#Entrada" width="100" sortBy="#{item.nroEntrada}" style="text-align: right">  
-                    <p:commandLink title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
+                    <p:commandLink immediate="true" title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
                         <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value=" #{item.nroEntrada}"/>
                     </p:commandLink>
                 </p:column>  
@@ -61,13 +76,10 @@
                     <f:facet name="header">
                         <h:outputText value="Acción"/>
                     </f:facet>
-                    <p:commandButton type="button" style="background: #fde5cd !important; color: black" rendered="#{item.cerrado==true}" onclick="return alert('El documento y sus anexos ya están archivados');" ajax="false" title="Documento llaveado" value="Llaveado" icon="fa fa-lock"/>
-                    <p:outputPanel rendered="#{item.cerrado==false}">
-                        <p:commandButton immediate="true" icon="fa fa-pencil" styleClass="rounded-button ui-button-success" ajax="false" title="#{bundle.EditarBoton}" action="#{DocumentoController.editSetup(item.idDocumento)}"/>
-                        <p:commandButton immediate="true" icon="fa fa-times" styleClass="rounded-button ui-button-warning" title="#{bundle.EliminarBoton}" action="#{DocumentoController.delete(item.idDocumento)}" update="@form, panelMensajeEstado">
-                            <p:confirm escape="false" header="Confirmación" message="Está a punto de eliminar el Contrato ##{item.toString()}. &lt;br/&gt;¿Estás seguro?" icon="fa fa-exclamation-triangle" />
-                        </p:commandButton>
-                    </p:outputPanel>
+                    <p:commandButton immediate="true" icon="fa fa-pencil" styleClass="rounded-button ui-button-success" ajax="false" title="#{bundle.EditarBoton}" action="#{DocumentoController.doEditarRegistroAutomatico(item.idDocumento)}"/>
+                    <p:commandLink immediate="true" ajax="false" title="#{bundle.GenerarBoton}" target="_new" action="#{ReporteController.generarTicket(item.idDocumento)}">
+                        <p:button href="#" icon="fa fa-file-pdf" styleClass="rounded-button"/>
+                    </p:commandLink>
                 </p:column>
             </p:dataTable>
         </h:form>

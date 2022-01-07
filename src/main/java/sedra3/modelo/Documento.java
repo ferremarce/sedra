@@ -109,6 +109,8 @@ public class Documento implements Serializable {
     private List<Tramitacion> tramitacionList;
     @OneToMany(mappedBy = "idDocumento", cascade = CascadeType.REMOVE)
     private List<DocumentoAdjunto> documentoAdjuntoList;
+    @Column(name = "numero_expediente")
+    private Integer numeroExpediente;
 
     public Documento() {
     }
@@ -307,6 +309,14 @@ public class Documento implements Serializable {
 
     public void setDocumentoAdjuntoList(List<DocumentoAdjunto> documentoAdjuntoList) {
         this.documentoAdjuntoList = documentoAdjuntoList;
+    }
+
+    public Integer getNumeroExpediente() {
+        return numeroExpediente;
+    }
+
+    public void setNumeroExpediente(Integer numeroExpediente) {
+        this.numeroExpediente = numeroExpediente;
     }
 
     @Override

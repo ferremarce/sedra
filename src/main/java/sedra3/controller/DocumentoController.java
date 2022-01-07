@@ -28,6 +28,7 @@ import sedra3.fachada.AuditaFacade;
 import sedra3.fachada.DocumentoAdjuntoFacade;
 import sedra3.fachada.DocumentoFacade;
 import sedra3.fachada.NotaSalidaFacade;
+import sedra3.fachada.TipoDocumentoFacade;
 import sedra3.fachada.TramitacionFacade;
 import sedra3.modelo.Audita;
 import sedra3.modelo.Clasificador;
@@ -38,6 +39,7 @@ import sedra3.modelo.NotaSalida;
 import sedra3.modelo.Rol;
 import sedra3.modelo.TipoDocumento;
 import sedra3.modelo.Tramitacion;
+import sedra3.util.Codigo;
 import sedra3.util.JSFutil;
 
 /**
@@ -65,6 +67,8 @@ public class DocumentoController implements Serializable {
     TramitacionFacade tramitacionFacade;
     @Inject
     NotaSalidaFacade notaSalidaFacade;
+    @Inject
+    TipoDocumentoFacade tipoDocumentoFacade;
 
     private Documento documento;
     private List<Documento> listaDocumento;
@@ -174,6 +178,7 @@ public class DocumentoController implements Serializable {
 
 ///---------------------METODOS---------------------///
     public String listDocumentoSetup() {
+        this.listaDocumento = null;
         return "/documento/ListarDocumento";
     }
 
@@ -529,6 +534,36 @@ public class DocumentoController implements Serializable {
         } catch (Exception e) {
             this.commonController.doExcepcion(e);
         }
+    }
+
+    public String doCrearRegistroAutomatico() {
+        this.documento = new Documento();
+        this.documento.setIdTipoDocumento(this.tipoDocumentoFacade.find(Codigo.TIPO_DOCUMENTO_DEFECTO));
+        this.documento.setFechaDocumento(JSFutil.getFechaHoraActual());
+        this.documento.setNumeroExpediente(this.documentoFacade.findNextNroExpediente());
+
+        this.listaDocumento = this.documentoFacade.findAllRegistroAutomatico();
+        return "/documento/CrearRegistroAutomatico";
+    }
+
+    public String doEditarRegistroAutomatico(Integer idDocumento) {
+        this.documento = documentoFacade.find(idDocumento);
+        return "/documento/CrearRegistroAutomatico";
+    }
+
+    public String doGuardarRegistroAutomatico() {
+        this.documento.setFechaIngreso(this.documento.getFechaDocumento());
+        if (this.documento.getNumeroExpediente() == null) {
+            this.documento.setNumeroExpediente(this.documentoFacade.findNextNroExpediente());
+        }
+        this.documento.setNroEntrada(this.documento.getNumeroExpediente().toString());
+        Calendar cal = JSFutil.getCalendar();
+        cal.setTime(this.documento.getFechaDocumento());
+        this.documento.setAnho(cal.get(Calendar.YEAR));
+        this.adjuntoDocumento = new ArrayList<>();
+
+        this.create();
+        return this.doCrearRegistroAutomatico();
     }
 
 }

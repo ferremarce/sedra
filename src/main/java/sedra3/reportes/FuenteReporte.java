@@ -35,6 +35,9 @@ public class FuenteReporte {
             case 1:
                 this.nombreReporte = "rptDelantal.jrxml";
                 break;
+            case 2:
+                this.nombreReporte = "rptTicketDocumento.jrxml";
+                break;
         }
     }
 }

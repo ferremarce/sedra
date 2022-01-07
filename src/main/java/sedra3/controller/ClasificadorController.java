@@ -90,6 +90,9 @@ public class ClasificadorController implements Serializable {
     }
 
     public String obtenerRutaClasificador(Integer idClasificador) {
+        if (idClasificador == null) {
+            return "SIN-CLASIFICADOR";
+        }
         String cadena = "";
         Integer padre;
         Clasificador c = clasificadorFacade.find(idClasificador);

@@ -153,4 +153,20 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
         List<Documento> tr = q.getResultList();
         return tr;
     }
+
+    public Integer findNextNroExpediente() {
+        Query q = em.createQuery("SELECT a FROM Documento a WHERE a.numeroExpediente IS NOT NULL ORDER BY a.numeroExpediente DESC");
+        q.setMaxResults(1);
+        List<Documento> tr = q.getResultList();
+        if (!tr.isEmpty()) {
+            return (tr.get(0).getNumeroExpediente() + 1);
+        } else {
+            return 1;
+        }
+    }
+    public List<Documento> findAllRegistroAutomatico() {
+        Query q = em.createQuery("SELECT a FROM Documento a WHERE a.idClasificador IS NULL AND a.numeroExpediente IS NOT NULL ORDER BY a.numeroExpediente DESC");
+        List<Documento> tr = q.getResultList();
+        return tr;
+    }
 }

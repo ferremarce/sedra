@@ -70,4 +70,7 @@ public class ClasificadorFacade extends AbstractFacade<Clasificador> {
             return null;
         }
     }
+//    public Clasificador findDefaultClasificador(){
+//        this.find(em)
+//    }
 }
