@@ -77,8 +77,9 @@
                         <h:outputText value="Acción"/>
                     </f:facet>
                     <p:commandButton immediate="true" icon="fa fa-pencil" styleClass="rounded-button ui-button-success" ajax="false" title="#{bundle.EditarBoton}" action="#{DocumentoController.doEditarRegistroAutomatico(item.idDocumento)}"/>
+                    <p:spacer width="10"/>
                     <p:commandLink immediate="true" ajax="false" title="#{bundle.GenerarBoton}" target="_new" action="#{ReporteController.generarTicket(item.idDocumento)}">
-                        <p:button href="#" icon="fa fa-file-pdf" styleClass="rounded-button"/>
+                        <p:button href="#" icon="fa fa-file-pdf" />
                     </p:commandLink>
                 </p:column>
             </p:dataTable>

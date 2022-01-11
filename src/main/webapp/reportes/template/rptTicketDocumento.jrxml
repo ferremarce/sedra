@@ -9,6 +9,8 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<property name="net.sf.jasperreports.export.pdf.javascript" value=""/>
+	<property name="net.sf.jasperreports.export.pdf.size.page.to.content" value="true"/>
 	<parameter name="tituloReporte" class="java.lang.String">
 		<defaultValueExpression><![CDATA["SEDRA"]]></defaultValueExpression>
 	</parameter>
@@ -25,13 +27,13 @@
 	<field name="anexo" class="java.lang.String">
 		<fieldDescription><![CDATA[anexo]]></fieldDescription>
 	</field>
-	<field name="idClasificador" class="sedra3.modelo.Clasificador">
+	<field name="idClasificador" class="sedra.modelo.Clasificador">
 		<fieldDescription><![CDATA[idClasificador]]></fieldDescription>
 	</field>
 	<field name="detalleNotaSalidaList" class="java.util.List">
 		<fieldDescription><![CDATA[detalleNotaSalidaList]]></fieldDescription>
 	</field>
-	<field name="idUsuario" class="sedra3.modelo.Usuario">
+	<field name="idUsuario" class="sedra.modelo.Usuario">
 		<fieldDescription><![CDATA[idUsuario]]></fieldDescription>
 	</field>
 	<field name="tipoArchivo" class="java.lang.String">
@@ -46,7 +48,7 @@
 	<field name="asunto" class="java.lang.String">
 		<fieldDescription><![CDATA[asunto]]></fieldDescription>
 	</field>
-	<field name="idTipoDocumento" class="sedra3.modelo.TipoDocumento">
+	<field name="idTipoDocumento" class="sedra.modelo.TipoDocumento">
 		<fieldDescription><![CDATA[idTipoDocumento]]></fieldDescription>
 	</field>
 	<field name="tamanhoArchivo" class="java.math.BigInteger">
@@ -58,7 +60,7 @@
 	<field name="fechaDocumento" class="java.util.Date">
 		<fieldDescription><![CDATA[fechaDocumento]]></fieldDescription>
 	</field>
-	<field name="documentoClass" class="sedra3.modelo.Documento">
+	<field name="documentoClass" class="sedra.modelo.Documento">
 		<fieldDescription><![CDATA[_THIS]]></fieldDescription>
 	</field>
 	<field name="observacion" class="java.lang.String">
@@ -109,7 +111,7 @@
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
+					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Registro de Expediente]]></text>
 			</staticText>

@@ -39,7 +39,7 @@
 		<field name="nombreArchivo" class="java.lang.String">
 			<fieldDescription><![CDATA[nombreArchivo]]></fieldDescription>
 		</field>
-		<field name="idRol" class="sedra3.modelo.Rol">
+		<field name="idRol" class="sedra.modelo.Rol">
 			<fieldDescription><![CDATA[idRol]]></fieldDescription>
 		</field>
 		<field name="idTramitacion" class="java.lang.Integer">
@@ -57,7 +57,7 @@
 		<field name="fechaDerivacion" class="java.util.Date">
 			<fieldDescription><![CDATA[fechaDerivacion]]></fieldDescription>
 		</field>
-		<field name="idUsuario" class="sedra3.modelo.Usuario">
+		<field name="idUsuario" class="sedra.modelo.Usuario">
 			<fieldDescription><![CDATA[idUsuario]]></fieldDescription>
 		</field>
 		<field name="remitidoA" class="java.lang.String">
@@ -66,7 +66,7 @@
 		<field name="horaConfirmacion" class="java.util.Date">
 			<fieldDescription><![CDATA[horaConfirmacion]]></fieldDescription>
 		</field>
-		<field name="idUsuarioConfirmacion" class="sedra3.modelo.Usuario">
+		<field name="idUsuarioConfirmacion" class="sedra.modelo.Usuario">
 			<fieldDescription><![CDATA[idUsuarioConfirmacion]]></fieldDescription>
 		</field>
 		<field name="notaBreve" class="java.lang.String">
@@ -78,16 +78,16 @@
 		<field name="horaSalida" class="java.util.Date">
 			<fieldDescription><![CDATA[horaSalida]]></fieldDescription>
 		</field>
-		<field name="idUsuarioRemitente" class="sedra3.modelo.Usuario">
+		<field name="idUsuarioRemitente" class="sedra.modelo.Usuario">
 			<fieldDescription><![CDATA[idUsuarioRemitente]]></fieldDescription>
 		</field>
-		<field name="idEstado" class="sedra3.modelo.EstadoTramitacion">
+		<field name="idEstado" class="sedra.modelo.EstadoTramitacion">
 			<fieldDescription><![CDATA[idEstado]]></fieldDescription>
 		</field>
 		<field name="fechaConfirmacion" class="java.util.Date">
 			<fieldDescription><![CDATA[fechaConfirmacion]]></fieldDescription>
 		</field>
-		<field name="idDocumento" class="sedra3.modelo.Documento">
+		<field name="idDocumento" class="sedra.modelo.Documento">
 			<fieldDescription><![CDATA[idDocumento]]></fieldDescription>
 		</field>
 		<field name="fechaSalida" class="java.util.Date">
@@ -117,13 +117,13 @@
 	<field name="anexo" class="java.lang.String">
 		<fieldDescription><![CDATA[anexo]]></fieldDescription>
 	</field>
-	<field name="idClasificador" class="sedra3.modelo.Clasificador">
+	<field name="idClasificador" class="sedra.modelo.Clasificador">
 		<fieldDescription><![CDATA[idClasificador]]></fieldDescription>
 	</field>
 	<field name="detalleNotaSalidaList" class="java.util.List">
 		<fieldDescription><![CDATA[detalleNotaSalidaList]]></fieldDescription>
 	</field>
-	<field name="idUsuario" class="sedra3.modelo.Usuario">
+	<field name="idUsuario" class="sedra.modelo.Usuario">
 		<fieldDescription><![CDATA[idUsuario]]></fieldDescription>
 	</field>
 	<field name="tipoArchivo" class="java.lang.String">
@@ -138,7 +138,7 @@
 	<field name="asunto" class="java.lang.String">
 		<fieldDescription><![CDATA[asunto]]></fieldDescription>
 	</field>
-	<field name="idTipoDocumento" class="sedra3.modelo.TipoDocumento">
+	<field name="idTipoDocumento" class="sedra.modelo.TipoDocumento">
 		<fieldDescription><![CDATA[idTipoDocumento]]></fieldDescription>
 	</field>
 	<field name="tamanhoArchivo" class="java.math.BigInteger">
@@ -177,7 +177,7 @@
 	<field name="referencia" class="java.lang.String">
 		<fieldDescription><![CDATA[referencia]]></fieldDescription>
 	</field>
-	<field name="documentoClass" class="sedra3.modelo.Documento">
+	<field name="documentoClass" class="sedra.modelo.Documento">
 		<fieldDescription><![CDATA[_THIS]]></fieldDescription>
 	</field>
 	<background>

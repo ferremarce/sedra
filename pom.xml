@@ -92,6 +92,14 @@
     </dependencies>
 
     <build>
+        <!--PARA BUILDNUMBER-->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <!--END BUILDNUMBER-->
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -137,7 +145,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>         
         </plugins>
     </build>
     <repositories>
