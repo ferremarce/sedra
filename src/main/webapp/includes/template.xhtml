@@ -32,17 +32,7 @@
         </ui:insert>
         <ui:insert name="content">
         </ui:insert>
-        <footer>
-            <p:panel>
-                <span >
-                    &copy;2022 #{ConfiguracionController.configuracion.tituloSistema}
-                </span>
-                <span style="float: right;">
-                    <h:outputText styleClass="fontBold" value="#{config.InformacionSistema}"/>
-                    <h:outputText value=" | Desarrollado por @ferremarce"/>
-                </span>
-            </p:panel>
-        </footer>
+        <ui:include src="/includes/footer.xhtml"/>
         <script>
             document.getElementById('panelLoad').style.display = 'none';
         </script>

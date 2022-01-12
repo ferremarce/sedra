@@ -11,7 +11,7 @@
     </ui:define>
 
     <ui:define name="content">
-        <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-4,ui-grid-col-8">
+        <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="flex" columnClasses="p-col-4,p-col-8" contentStyleClass="ui-fluid">
             <h:form id="formTree">
                 <p:tree draggable="true" droppable="true" dropCopyNode="true" id="planArchivo" filterBy="#{node}" filterMatchMode="contains" animate="true" value="#{ClasificadorController.root}" var="node" dynamic="false" cache="false" selectionMode="single"  selection="#{ClasificadorController.selectedNode}">
                     <p:ajax event="select" update="formMain" listener="#{DocumentoController.verNodeSelect}" />  
@@ -41,10 +41,10 @@
                             <f:facet name="header">
                                 Tabla de Datos
                             </f:facet>  
-                            <p:column headerText="Nro. Ent." style="width:40px" >  
+                            <p:column headerText="#Entrada" width="40" >  
                                 <h:outputText value=" #{item.nroEntrada}"/>
                             </p:column>  
-                            <p:column headerText="F. Doc." style="width:80px" >
+                            <p:column headerText="Fecha" width="80">
                                 <h:outputText value="#{item.fechaDocumento}">
                                     <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
                                 </h:outputText>
@@ -52,16 +52,25 @@
                             <p:column headerText="Asunto" >  
                                 <h:outputText value="#{item.asunto}"/>
                             </p:column>  
-                            <p:column headerText="Acción" style="width:120px">
+                            <p:column width="50">
+                                <p:repeat var="adjunto" value="#{item.documentoAdjuntoList}">
+                                    <p:commandButton styleClass="rounded-button ui-button-success" title="Descargar" icon="fa fa-download" ajax="false">
+                                        <p:fileDownload value="#{DownloadFile.downloadDocumentoAdjunto(adjunto.idDocumentoAdjunto)}" />  
+                                    </p:commandButton>
+                                </p:repeat> 
+                                <p:commandButton ajax="false" rendered="#{item.nombreArchivo!=null}" title="Descargar" icon="fa fa-download" >
+                                    <p:fileDownload value="#{DownloadFile.downloadDocumento(item.idDocumento)}" />  
+                                </p:commandButton>
+                            </p:column>
+                            <p:column headerText="Acción" width="120">
                                 <p:menuButton value="Opciones">
                                     <p:menuitem ajax="false" title="#{bundle.VerBoton}" target="_new" value="#{bundle.VerBoton}" icon="fa fa-search" action="#{DocumentoController.doVerForm(item.idDocumento)}"/>
-                                    <p:menuitem ajax="false" rendered="#{item.nombreArchivo!=null}" icon="fa fa-download" value="#{bundle.DescargarBoton}">
-                                        <p:fileDownload value="#{DownloadFile.downloadDocumento(item.idDocumento)}" />  
-                                    </p:menuitem>
                                     <p:menuitem rendered="#{item.tramitacionList.size()==0}" ajax="true" icon="fa fa-briefcase" 
                                                 title="#{bundle.ArchivarBoton}" value="#{bundle.ArchivarBoton}" 
-                                                update="@form"
-                                                actionListener="#{DocumentoController.insertarTramitacion(item.idDocumento)}"/>
+                                                update="@form, panelMensajeEstado"
+                                                actionListener="#{DocumentoController.insertarTramitacion(item.idDocumento)}">
+                                        <p:confirm escape="false" header="Confirmación" message="Está a punto de archivar -> #{item.asunto}. &lt;br/&gt;¿Estás seguro?" icon="fa fa-exclamation-triangle" />
+                                    </p:menuitem>
                                 </p:menuButton>
                             </p:column>  
                         </p:dataTable>

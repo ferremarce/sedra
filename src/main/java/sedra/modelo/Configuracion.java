@@ -48,6 +48,8 @@ public class Configuracion implements Serializable {
     @Lob
     @Column(name = "ARCHIVO_LOGO")
     private byte[] archivoLogo;
+    @Column(name = "validator")
+    private String validator;
 
     public Configuracion() {
     }
@@ -102,6 +104,14 @@ public class Configuracion implements Serializable {
 
     public void setArchivoLogo(byte[] archivoLogo) {
         this.archivoLogo = archivoLogo;
+    }
+
+    public String getValidator() {
+        return validator;
+    }
+
+    public void setValidator(String validator) {
+        this.validator = validator;
     }
 
     @Override

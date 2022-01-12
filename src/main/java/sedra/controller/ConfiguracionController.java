@@ -36,7 +36,6 @@ public class ConfiguracionController implements Serializable {
     ConfiguracionFacade configuracionFacade;
 
     private Configuracion configuracion;
-    private List<UploadedFile> imagenLogo;
 
     /**
      * Creates a new instance of ConfiguracionController
@@ -71,7 +70,6 @@ public class ConfiguracionController implements Serializable {
     }
 
     public String editSetup() {
-        this.imagenLogo = new ArrayList<>();
         this.configuracion = configuracionFacade.find(1);
         return "/configuracion/EditarConfiguracion";
     }

@@ -176,13 +176,6 @@ public class TramitacionController implements Serializable {
         this.listaTramitacionSeguimiento = listaTramitacionSeguimiento;
     }
 
-    public String crearDocumentoFromClasificadorSetup() {
-        this.documentoController.setClasificadorSeleccionado(clasificadorFacade.getFirstClasificador());
-        this.clasificadorController.setSelectedNode(null);
-        this.clasificadorController.cargarTree(Boolean.FALSE);
-        return "/tramitacion/CrearDocumentoFromClasificador";
-    }
-
     public String listPendientesSetup() {
         //this.criterioBusqueda = "";
         if (this.listaTramitacionPendiente == null) {

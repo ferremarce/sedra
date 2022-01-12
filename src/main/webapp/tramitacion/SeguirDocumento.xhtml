@@ -143,7 +143,7 @@
                 </p:dataTable>
                 <f:facet name="footer">
                     <p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
-                        <p:commandButton rendered="#{!TramitacionController.documento.cerrado}" ajax="false" icon="fa fa-save" value="#{bundle.GuardarBoton}" action="#{TramitacionController.updateAll()}"/>
+                        <p:commandButton rendered="#{!TramitacionController.documento.cerrado}" ajax="false" icon="fa fa-check" value="#{bundle.GuardarBoton}" action="#{TramitacionController.updateAll()}"/>
                         <p:commandButton immediate="true" ajax="false" icon="fa fa-sign-out" value="#{bundle.RegresarBoton}" action="/tramitacion/ListarSeguimiento"/>
                     </p:panelGrid>
                 </f:facet>   

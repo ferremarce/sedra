@@ -354,7 +354,7 @@ public class Documento implements Serializable {
     }
 
     public String toVerURL() {
-        return JSFutil.getAbsoluteApplicationUrl() + "/faces/documento/VerDocumento.xhtml?id=" + this.getIdDocumento();
+        return JSFutil.getAbsoluteApplicationUrl() + "/documento/VerDocumento.xhtml?id=" + this.getIdDocumento();
     }
 
 }

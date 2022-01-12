@@ -1,6 +1,9 @@
 .ui-menu .ui-menu-parent .ui-menu-child {
     width: 20em !important;
 }
+body .ui-panelgrid .ui-panelgrid-cell{
+   padding: 0.5rem;
+}
 
 .dialogBox{
     top: 15% !important;

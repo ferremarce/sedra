@@ -25,6 +25,7 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.file.UploadedFile;
 import sedra.fachada.AuditaFacade;
+import sedra.fachada.ClasificadorFacade;
 import sedra.fachada.DocumentoAdjuntoFacade;
 import sedra.fachada.DocumentoFacade;
 import sedra.fachada.NotaSalidaFacade;
@@ -69,6 +70,8 @@ public class DocumentoController implements Serializable {
     NotaSalidaFacade notaSalidaFacade;
     @Inject
     TipoDocumentoFacade tipoDocumentoFacade;
+    @Inject
+    ClasificadorFacade clasificadorFacade;
 
     private Documento documento;
     private List<Documento> listaDocumento;
@@ -231,7 +234,7 @@ public class DocumentoController implements Serializable {
                 this.documento.setCerrado(false);
                 documentoFacade.create(documento);
                 auditaFacade.create(new Audita("DOCUMENTO", "Documento creado exitosamente. ", JSFutil.getFechaHoraActual(), documento.toAudita(), JSFutil.getUsuarioConectado()));
-                JSFutil.addMessage("Documento creado exitosamente. ", JSFutil.StatusMessage.INFORMATION);
+                //JSFutil.addMessage("Documento creado exitosamente. ", JSFutil.StatusMessage.INFORMATION);
                 //Grabar el archivo a disco
                 if (!this.adjuntoDocumento.isEmpty()) {
                     DocumentoAdjunto ap;
@@ -566,4 +569,11 @@ public class DocumentoController implements Serializable {
         return this.doCrearRegistroAutomatico();
     }
 
+    public String crearDocumentoFromClasificadorSetup() {
+        this.clasificadorSeleccionado = clasificadorFacade.getFirstClasificador();
+        this.clasificadorController.setSelectedNode(null);
+        this.clasificadorController.cargarTree(Boolean.FALSE);
+        this.listaDocumento = null;
+        return "/documento/CrearDocumentoFromClasificador";
+    }
 }

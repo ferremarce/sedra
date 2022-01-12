@@ -12,7 +12,7 @@
     <ui:define name="content">
         <h:form id="formMain">
             <p:panel header="Información del Documento">
-                <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-10">
+                <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="flex" columnClasses="p-col-2,p-col-10" contentStyleClass="ui-fluid">
                     <p:outputLabel for="idClasificador" value="Clasificador:"/>
                     <h:outputText id="idClasificador" rendered="#{TramitacionController.documento.idClasificador!=null}" value="#{ClasificadorController.obtenerRutaClasificador(TramitacionController.documento.idClasificador.idClasificador)}" title="Clasificador" />
                     <p:outputLabel for="nroEntrada" value="Nro. de Entrada:"/>

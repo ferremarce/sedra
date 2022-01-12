@@ -16,7 +16,7 @@ UPDATE public.permiso SET descripcion_permiso='Plan de Archivo', nivel='2.2', or
 UPDATE public.permiso SET descripcion_permiso='Delantal de Documento', nivel='4.1', orden=NULL, tag_menu='#{ReporteController.imprimirDelantalSetup}', url_imagen='fa fa-scroll' WHERE id_permiso=14;
 UPDATE public.permiso SET descripcion_permiso='Informes', nivel='4', orden=NULL, tag_menu=NULL, url_imagen='fa fa-list-alt' WHERE id_permiso=13;
 UPDATE public.permiso SET descripcion_permiso='Seguimiento Doc.', nivel='3.4', orden=NULL, tag_menu='#{TramitacionController.listSeguimientoSetup}', url_imagen='fa fa-file-contract' WHERE id_permiso=15;
-UPDATE public.permiso SET descripcion_permiso='Agregador Doc.', nivel='2.3', orden=NULL, tag_menu='#{TramitacionController.crearDocumentoFromClasificadorSetup}', url_imagen='fa fa-file-medical' WHERE id_permiso=12;
+UPDATE public.permiso SET descripcion_permiso='Agregador Doc.', nivel='2.3', orden=NULL, tag_menu='#{DocumentoController.crearDocumentoFromClasificadorSetup}', url_imagen='fa fa-file-medical' WHERE id_permiso=12;
 UPDATE public.permiso SET descripcion_permiso='Documentos en Dependencias', nivel='4.2', orden=NULL, tag_menu='#{ReporteController.listTramitacionOficinaSetup}', url_imagen='fa fa-building' WHERE id_permiso=16;
 UPDATE public.permiso SET descripcion_permiso='Archivar Doc.', nivel='3.2', orden=NULL, tag_menu='#{DocumentoController.listAdjuntaDocumentoSetup}', url_imagen='fa fa-file-archive' WHERE id_permiso=11;
 UPDATE public.permiso SET descripcion_permiso='Operaciones Especiales', nivel='5', orden=NULL, tag_menu=NULL, url_imagen='fa fa-user-tag' WHERE id_permiso=17;
