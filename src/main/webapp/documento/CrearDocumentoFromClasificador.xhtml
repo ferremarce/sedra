@@ -41,18 +41,22 @@
                             <f:facet name="header">
                                 Tabla de Datos
                             </f:facet> 
-                            <p:column headerText="#Exp." width="40" >  
-                                <h:outputText value="#{item.numeroExpediente}"/>
+                            <p:column headerText="#Exp." width="110" sortBy="#{item.numeroExpediente}" >  
+                                <p:commandLink immediate="true" title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
+                                    <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.numeroExpediente}">
+                                        <f:convertNumber pattern="0000000000000"/>
+                                    </h:outputText>
+                                </p:commandLink>
                             </p:column> 
-                            <p:column headerText="#Entrada" width="40" >  
+                            <p:column headerText="#Entrada" width="100" sortBy="#{item.nroEntrada}" >  
                                 <h:outputText value="#{item.nroEntrada}"/>
                             </p:column>  
-                            <p:column headerText="Fecha" width="80">
+                            <p:column headerText="Fecha" width="80" sortBy="#{item.fechaDocumento}">
                                 <h:outputText value="#{item.fechaDocumento}">
                                     <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
                                 </h:outputText>
                             </p:column>
-                            <p:column headerText="Asunto" >  
+                            <p:column headerText="Asunto" sortBy="#{item.asunto}">  
                                 <h:outputText value="#{item.asunto}"/>
                             </p:column>  
                             <p:column width="50">
@@ -88,12 +92,12 @@
                             <f:facet name="header">
                                 Información de notas
                             </f:facet>
-                            <p:column headerText="No. Sal./STR" style="width: 40px" >  
+                            <p:column headerText="No. Sal./STR" width="100" sortBy="#{itemSal.numeroSalida+itemSal.numeroStr}">  
                                 <h:outputText value="#{itemSal.numeroSalida}"/>
                                 <p:separator rendered="#{itemSal.numeroStr.length()>0}"/>
                                 <h:outputText value="#{itemSal.numeroStr}"/>
                             </p:column> 
-                            <p:column headerText="Referencia/Rubro"> 
+                            <p:column headerText="Referencia/Rubro" sortBy="#{itemSal.referencia}"> 
                                 <h:outputText value="#{itemSal.idTipoNota.descripcionTipoNota}"/>
                                 <blockquote>
                                     <h:outputText value="#{itemSal.referencia}"/>
@@ -107,7 +111,7 @@
                                     <h:outputText value="#{valor.idDocumento.asunto.length()>80 ? valor.idDocumento.asunto.substring(0, 79): valor.idDocumento.asunto}..." />  
                                 </p:repeat>
                             </p:column> 
-                            <p:column headerText="Acción" style="width:120px">
+                            <p:column headerText="Acción" width="120">
                                 <p:menuButton value="Opciones">
                                     <p:menuitem ajax="false" title="#{bundle.VerBoton}" target="_new" value="#{bundle.VerBoton}" icon="fa fa-search" action="#{NotaSalidaController.doVerForm(itemSal.idNota)}"/>
                                     <p:menuitem ajax="false" rendered="#{itemSal.nombreArchivo!=null}" icon="fa fa-download" value="#{bundle.DescargarBoton}">

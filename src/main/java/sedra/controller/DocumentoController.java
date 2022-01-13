@@ -50,10 +50,10 @@ import sedra.util.JSFutil;
 @Named(value = "DocumentoController")
 @SessionScoped
 public class DocumentoController implements Serializable {
-
+    
     private static final Logger LOG = Logger.getLogger(DocumentoController.class.getName());
     ResourceBundle bundle = ResourceBundle.getBundle("propiedades.bundle", JSFutil.getmyLocale());
-
+    
     @Inject
     DocumentoFacade documentoFacade;
     @Inject
@@ -72,7 +72,7 @@ public class DocumentoController implements Serializable {
     TipoDocumentoFacade tipoDocumentoFacade;
     @Inject
     ClasificadorFacade clasificadorFacade;
-
+    
     private Documento documento;
     private List<Documento> listaDocumento;
     private List<UploadedFile> adjuntoDocumento;
@@ -90,91 +90,91 @@ public class DocumentoController implements Serializable {
      */
     public DocumentoController() {
     }
-
+    
     public List<NotaSalida> getListaNotaSalida() {
         return listaNotaSalida;
     }
-
+    
     public void setListaNotaSalida(List<NotaSalida> listaNotaSalida) {
         this.listaNotaSalida = listaNotaSalida;
     }
-
+    
     public Clasificador getClasificadorSeleccionado() {
         return clasificadorSeleccionado;
     }
-
+    
     public void setClasificadorSeleccionado(Clasificador clasificadorSeleccionado) {
         this.clasificadorSeleccionado = clasificadorSeleccionado;
     }
-
+    
     public Integer getIdClasificadorTmp() {
         return idClasificadorTmp;
     }
-
+    
     public void setIdClasificadorTmp(Integer idClasificadorTmp) {
         this.idClasificadorTmp = idClasificadorTmp;
     }
-
+    
     public List<UploadedFile> getAdjuntoDocumento() {
         return adjuntoDocumento;
     }
-
+    
     public void setAdjuntoDocumento(List<UploadedFile> adjuntoDocumento) {
         this.adjuntoDocumento = adjuntoDocumento;
     }
-
+    
     public Documento getDocumento() {
         return documento;
     }
-
+    
     public void setDocumento(Documento documento) {
         this.documento = documento;
     }
-
+    
     public List<Documento> getListaDocumento() {
         return listaDocumento;
     }
-
+    
     public void setListaDocumento(List<Documento> listaDocumento) {
         this.listaDocumento = listaDocumento;
     }
-
+    
     public String getCriterio() {
         return criterio;
     }
-
+    
     public void setCriterio(String criterio) {
         this.criterio = criterio;
     }
-
+    
     public Integer getTmpConNota() {
         return tmpConNota;
     }
-
+    
     public void setTmpConNota(Integer tmpConNota) {
         this.tmpConNota = tmpConNota;
     }
-
+    
     public String getSelectedOption() {
         return selectedOption;
     }
-
+    
     public void setSelectedOption(String selectedOption) {
         this.selectedOption = selectedOption;
     }
-
+    
     public Date getTmpFechaDesde() {
         return tmpFechaDesde;
     }
-
+    
     public void setTmpFechaDesde(Date tmpFechaDesde) {
         this.tmpFechaDesde = tmpFechaDesde;
     }
-
+    
     public Date getTmpFechaHasta() {
         return tmpFechaHasta;
     }
-
+    
     public void setTmpFechaHasta(Date tmpFechaHasta) {
         this.tmpFechaHasta = tmpFechaHasta;
     }
@@ -184,7 +184,7 @@ public class DocumentoController implements Serializable {
         this.listaDocumento = null;
         return "/documento/ListarDocumento";
     }
-
+    
     public String createSetup() {
         this.documento = new Documento();
         this.idClasificadorTmp = null;
@@ -197,14 +197,14 @@ public class DocumentoController implements Serializable {
         this.documento.setNumeroExpediente(this.documentoFacade.findNextNroExpediente());
         return "/documento/CrearDocumento";
     }
-
+    
     public String editSetup(Integer idDocumento) {
         this.documento = documentoFacade.find(idDocumento);
         this.adjuntoDocumento = new ArrayList<>();
         this.clasificadorController.cargarTree(Boolean.FALSE);
         return "/documento/CrearDocumento";
     }
-
+    
     public String delete(Integer idDocumento) {
         try {
             Documento u = documentoFacade.find(idDocumento);
@@ -221,7 +221,7 @@ public class DocumentoController implements Serializable {
         }
         return "/documento/ListarDocumento";
     }
-
+    
     public String create() {
         try {
             if (this.documento.getIdDocumento() == null) {
@@ -315,7 +315,7 @@ public class DocumentoController implements Serializable {
         }
         return "/documento/ListarDocumento";
     }
-
+    
     public String doBuscar() {
         if (this.criterio.isEmpty()) {
             JSFutil.addMessage("No hay criterios para buscar...", JSFutil.StatusMessage.WARNING);
@@ -329,7 +329,7 @@ public class DocumentoController implements Serializable {
         }
         return "";
     }
-
+    
     public String doBuscarSeguimiento() {
         if (this.criterio.isEmpty()) {
             JSFutil.addMessage("No hay criterios para buscar...", JSFutil.StatusMessage.WARNING);
@@ -343,7 +343,7 @@ public class DocumentoController implements Serializable {
         }
         return "";
     }
-
+    
     public String doRefrescar() {
         this.listaDocumento = documentoFacade.getAllDocumento("%");
         if (this.listaDocumento.isEmpty()) {
@@ -353,7 +353,7 @@ public class DocumentoController implements Serializable {
         }
         return "";
     }
-
+    
     public String doBorrarAdjunto(Integer id) {
         try {
             DocumentoAdjunto ea = documentoAdjuntoFacade.find(id);
@@ -371,23 +371,23 @@ public class DocumentoController implements Serializable {
         }
         return "";
     }
-
+    
     public void handleFileUpload(FileUploadEvent event) {
         //LOG.log(Level.INFO, "Agregado el archivo {0}", event.getFile().getFileName());
         this.adjuntoDocumento.add(event.getFile());
     }
-
+    
     public String doVerForm(Integer idExpediente) {
         this.documento = documentoFacade.find(idExpediente);
         return "/documento/VerDocumento?faces-redirect=true&id=" + this.documento.getIdDocumento();
     }
-
+    
     public void onNodeSelect(NodeSelectEvent event) {
         Clasificador c = (Clasificador) event.getTreeNode().getData();
         System.out.println("Seleccionado: " + c.toString());
         this.documento.setIdClasificador(c);
     }
-
+    
     public void verNodeSelect(NodeSelectEvent event) {
         JSFutil.addMessage("Seleccionado: " + event.getTreeNode().toString(), JSFutil.StatusMessage.INFORMATION);
         this.clasificadorSeleccionado = (Clasificador) event.getTreeNode().getData();
@@ -399,7 +399,7 @@ public class DocumentoController implements Serializable {
             JSFutil.addMessage(this.listaDocumento.size() + " Entradas y " + this.listaNotaSalida.size() + " Salidas", JSFutil.StatusMessage.INFORMATION);
         }
     }
-
+    
     public void insertarTramitacion(Integer idDocumento) {
         try {
             Documento d = documentoFacade.find(idDocumento);
@@ -425,12 +425,12 @@ public class DocumentoController implements Serializable {
         //this.tramitacion = new Tramitacion();
         //return null;
     }
-
+    
     public void handleDirectFileUpload(FileUploadEvent event) {
         this.adjuntoDocumento = new ArrayList<>();
         this.adjuntoDocumento.add(event.getFile());
     }
-
+    
     public void save() {
         for (UploadedFile adjunto : this.adjuntoDocumento) {
             this.documento = new Documento();
@@ -444,7 +444,9 @@ public class DocumentoController implements Serializable {
             this.documento.setIdClasificador(clasificadorSeleccionado);
             this.documento.setIdTipoDocumento(new TipoDocumento(4));
             this.documento.setIdUsuario(JSFutil.getUsuarioConectado());
-
+            Calendar cal = JSFutil.getCalendar();
+            this.documento.setAnho(cal.get(Calendar.YEAR));
+            
             try {
                 documentoFacade.create(documento);
                 this.listaDocumento = documentoFacade.getAllDocumentoPlanArchivo(this.clasificadorSeleccionado.getIdClasificador());
@@ -469,12 +471,12 @@ public class DocumentoController implements Serializable {
             }
         }
     }
-
+    
     public String listAdjuntaDocumentoSetup() {
         this.listaDocumento = new ArrayList<>();
         return "/tramitacion/ListarDocumentoAdjunto";
     }
-
+    
     public String listLocalizarDocumentoSetup() {
 //        this.criterioBusqueda = "";
 //        this.model = null;
@@ -482,7 +484,7 @@ public class DocumentoController implements Serializable {
 //        this.tmpFechaHasta = new Date();
         return "/documento/LocalizarDocumento";
     }
-
+    
     public void buscarDocumentoParaArchivo() {
         this.listaDocumento = documentoFacade.getAllDocumentoByExpediente(this.criterio);
         if (this.listaDocumento.isEmpty()) {
@@ -491,7 +493,7 @@ public class DocumentoController implements Serializable {
             JSFutil.addMessage(this.listaDocumento.size() + " registros recuperados", JSFutil.StatusMessage.INFORMATION);
         }
     }
-
+    
     public void localizarDocumento() {
         this.listaDocumento = documentoFacade.getAllDocumento(this.getCriterio(), this.selectedOption, this.tmpFechaDesde, this.tmpFechaHasta);
         if (this.listaDocumento.isEmpty()) {
@@ -500,7 +502,7 @@ public class DocumentoController implements Serializable {
             JSFutil.addMessage(this.listaDocumento.size() + " registros recuperados", JSFutil.StatusMessage.INFORMATION);
         }
     }
-
+    
     public void desbloquearDocumento(Integer id) {
         try {
             this.documento = documentoFacade.find(id);
@@ -514,7 +516,7 @@ public class DocumentoController implements Serializable {
         this.buscarDocumentoSinNota();
         //return "";
     }
-
+    
     public void buscarDocumentoSinNota() {
         this.listaDocumento = documentoFacade.getAllDocumentoSinNota(this.criterio);
         if (this.listaDocumento.isEmpty()) {
@@ -523,7 +525,7 @@ public class DocumentoController implements Serializable {
             JSFutil.addMessage(this.listaDocumento.size() + " registros recuperados", JSFutil.StatusMessage.INFORMATION);
         }
     }
-
+    
     public void bloquearDocumento(Integer id) {
         try {
             this.documento = documentoFacade.find(id);
@@ -537,7 +539,7 @@ public class DocumentoController implements Serializable {
         this.buscarDocumentoSinNota();
         // return "";
     }
-
+    
     public void init() {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
@@ -552,7 +554,7 @@ public class DocumentoController implements Serializable {
             this.commonController.doExcepcion(e);
         }
     }
-
+    
     public String doCrearRegistroAutomatico() {
         this.documento = new Documento();
         this.documento.setIdTipoDocumento(this.tipoDocumentoFacade.find(Codigo.TIPO_DOCUMENTO_DEFECTO));
@@ -560,16 +562,16 @@ public class DocumentoController implements Serializable {
         this.documento.setCerrado(Boolean.FALSE);
         this.documento.setIdUsuario(JSFutil.getUsuarioConectado());
         this.documento.setNumeroExpediente(this.documentoFacade.findNextNroExpediente());
-
+        
         this.listaDocumento = this.documentoFacade.findAllRegistroAutomatico();
         return "/documento/CrearRegistroAutomatico";
     }
-
+    
     public String doEditarRegistroAutomatico(Integer idDocumento) {
         this.documento = documentoFacade.find(idDocumento);
         return "/documento/CrearRegistroAutomatico";
     }
-
+    
     public String doGuardarRegistroAutomatico() {
         if (this.documento.getIdDocumento() != null) {
             this.documentoFacade.edit(documento);
@@ -583,7 +585,7 @@ public class DocumentoController implements Serializable {
         }
         return this.doCrearRegistroAutomatico();
     }
-
+    
     public String crearDocumentoFromClasificadorSetup() {
         this.clasificadorSeleccionado = clasificadorFacade.getFirstClasificador();
         this.clasificadorController.setSelectedNode(null);

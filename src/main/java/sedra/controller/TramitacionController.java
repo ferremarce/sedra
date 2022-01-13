@@ -186,14 +186,14 @@ public class TramitacionController implements Serializable {
         if (estado.compareTo(1) == 0) {
             this.listaTramitacionPendiente = tramitacionFacade.getAllTramitacionPendientes(JSFutil.getUsuarioConectado().getIdRol().getIdRol(), this.criterioBusqueda, estado);
             if (this.listaTramitacionPendiente.isEmpty()) {
-                JSFutil.addMessage("No hay resultados...", JSFutil.StatusMessage.WARNING);
+                JSFutil.addMessage("No hay pendientes de confirmación", JSFutil.StatusMessage.WARNING);
             } else {
                 JSFutil.addMessage(this.listaTramitacionPendiente.size() + " pendientes no confirmados", JSFutil.StatusMessage.INFORMATION);
             }
         } else {
             this.listaTramitacionConfirmado = tramitacionFacade.getAllTramitacionPendientes(JSFutil.getUsuarioConectado().getIdRol().getIdRol(), this.criterioBusqueda, estado);
             if (this.listaTramitacionConfirmado.isEmpty()) {
-                JSFutil.addMessage("No hay resultados...", JSFutil.StatusMessage.WARNING);
+                JSFutil.addMessage("No hay pendientes para tramitación", JSFutil.StatusMessage.WARNING);
             } else {
                 JSFutil.addMessage(this.listaTramitacionConfirmado.size() + " pendientes para tramitación", JSFutil.StatusMessage.INFORMATION);
             }
@@ -201,6 +201,12 @@ public class TramitacionController implements Serializable {
     }
 
     public void buscarAllPendiente() {
+        if (this.criterioBusqueda.isEmpty()) {
+            JSFutil.addMessage("No ha especificado un criterio para buscar", JSFutil.StatusMessage.WARNING);
+            this.listaTramitacionPendiente = null;
+            this.listaTramitacionConfirmado = null;
+            return;
+        }
         this.buscarPendiente(1);
         this.buscarPendiente(3);
     }
@@ -220,6 +226,7 @@ public class TramitacionController implements Serializable {
             this.tramitacion.setIdUsuarioConfirmacion(JSFutil.getUsuarioConectado());
             tramitacionFacade.edit(tramitacion);
             this.buscarPendiente(1);
+            this.buscarPendiente(3);
             JSFutil.addMessage("Tramite confirmado exitosamente", JSFutil.StatusMessage.INFORMATION);
         } catch (Exception ex) {
             this.commonController.doExcepcion(ex);
@@ -235,7 +242,6 @@ public class TramitacionController implements Serializable {
             this.tramitacionRechazo.setIdRol(this.tramitacion.getIdUsuarioRemitente().getIdRol());
             this.tramitacionRechazo.setNotaBreve("Rechazado según observaciones ");
             this.tramitacionRechazo.setRemitidoA(this.tramitacion.getIdUsuarioRemitente().getUsuario());
-            this.tramitacionRechazo.setObservacion(this.tramitacion.getObservacion());
 
             this.tramitacionRechazo.setRemitidoPor(JSFutil.getUsuarioConectado().getUsuario());
             this.tramitacionRechazo.setFechaRegistro(JSFutil.getFechaHoraActual());

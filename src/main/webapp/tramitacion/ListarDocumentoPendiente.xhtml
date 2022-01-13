@@ -2,7 +2,7 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                 template="/includes/template.xhtml"
+                template="/includes/template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
@@ -12,10 +12,12 @@
 
     <ui:define name="content">
         <h:form id="formMain">
-            <p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
-                <p:inputText id="criterio" value="#{TramitacionController.criterioBusqueda}"/>
-                <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{TramitacionController.buscarAllPendiente()}" update=":formMain:tabPendiente:dataTablePendiente, :formMain:tabPendiente:dataTablePendienteConfirmado, panelMensajeEstado"/>
-            </p:panelGrid>
+            <p:toolbar>
+                <p:toolbarGroup align="right">
+                    <p:inputText styleClass="espaciadoToolbar" size="50" id="criterio" value="#{TramitacionController.criterioBusqueda}" placeholder="Asunto, Nro. Entrada" />
+                    <p:commandButton styleClass="espaciadoToolbar" id="cmdBuscar" icon="fa fa-search" ajax="true" action="#{TramitacionController.buscarAllPendiente()}" update="@form, panelMensajeEstado"/>
+                </p:toolbarGroup>
+            </p:toolbar>
             <p:watermark for="criterio" value="Asunto, Nro. Entrada"/>
             <p:tabView id="tabPendiente">
                 <p:tab title="Pendiente de Confirmación">
@@ -29,39 +31,39 @@
                         <f:facet name="header">
                             Tabla de Datos
                         </f:facet>  
-                        <p:column headerText="F. Deriv." style="width:10%" >
+                        <p:column headerText="F. Deriv." width="80" sortBy="#{item.fechaDerivacion}" >
                             <h:outputText value="#{item.fechaDerivacion}">
                                 <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
                             </h:outputText>
                         </p:column>
-                        <p:column headerText="Documento">  
+                        <p:column headerText="Documento" sortBy="#{item.idDocumento.nroEntrada}">  
                             <h:outputText value="Nro. Entrada: #{item.idDocumento.nroEntrada}"/>
                             <blockquote>
                                 <h:outputText styleClass="Brown fontBold" value="#{item.idDocumento.asunto}"/>
                             </blockquote>
                         </p:column>
-                        <p:column headerText="Dependencia" style="width:10%" >  
+                        <p:column headerText="Remitido a" width="150" sortBy="#{item.remitidoA}">  
                             <h:outputText value="#{item.remitidoA}"/><br/>
                             <h:outputText styleClass="fontBold" value="[#{item.idRol.descripcionRol}]"/>
                         </p:column>
-                        <p:column headerText="Observación" style="width: 20%" >  
+                        <p:column headerText="Observación" width="200">  
                             <h:outputText value="#{item.observacion}"/>
                         </p:column>
-                        <p:column headerText="Adjunto" style="width: 10%">  
+                        <p:column headerText="Adjunto" width="100">  
                             <p:commandButton rendered="#{item.nombreArchivo!=null}" title="Descargar" icon="fa fa-download" ajax="false">
                                 <p:fileDownload value="#{DownloadFile.downloadDocumentoTramite(item.idTramitacion)}" />  
                             </p:commandButton>
                             <h:outputText value="#{item.nombreArchivo!=null ? item.nombreArchivo:'Sin archivo'}"/>
                         </p:column>   
-                        <p:column width="130">
+                        <p:column width="120">
                             <f:facet name="header">
                                 <h:outputText value="Acción"/>
                             </f:facet>
                             <p:menuButton value="Opciones">
                                 <p:menuitem ajax="false" title="#{bundle.RechazarBoton}" value="#{bundle.RechazarBoton}" icon="fa fa-remove" action="#{TramitacionController.rechazaSetup(item.idTramitacion)}"/>
-                                <p:menuitem ajax="false" title="#{bundle.ConfirmarBoton}" value="#{bundle.ConfirmarBoton}" icon="fa fa-check-square"  onclick="if (!confirm('#{bundle.ConfirmacionMensaje}')) {
-                                            return false;
-                                        }" action="#{TramitacionController.confirmaTramite(item.idTramitacion)}"/>
+                                <p:menuitem title="#{bundle.ConfirmarBoton}" value="#{bundle.ConfirmarBoton}" icon="fa fa-check-square" action="#{TramitacionController.confirmaTramite(item.idTramitacion)}" update="@form, panelMensajeEstado">
+                                    <p:confirm escape="false" header="Confirmación" message="Está a punto de confirmar el Documento ##{item.idDocumento.toString()}. &lt;br/&gt;¿Estás seguro?" icon="fa fa-exclamation-triangle" />
+                                </p:menuitem>
                             </p:menuButton>
                         </p:column>
                     </p:dataTable>
@@ -79,23 +81,23 @@
                         <f:facet name="header">
                             Tabla de Datos
                         </f:facet>
-                        <p:column selectionMode="multiple" style="width:20px"/>  
-                        <p:column headerText="F. Deriv." style="width:10%" >
+                        <p:column selectionMode="multiple" width="20"/>  
+                        <p:column headerText="F. Deriv." width="80" sortBy="#{item2.fechaDerivacion}" >
                             <h:outputText value="#{item2.fechaDerivacion}">
                                 <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
                             </h:outputText>
                         </p:column>
-                        <p:column headerText="Documento">  
+                        <p:column headerText="Documento" sortBy="#{item2.idDocumento.nroEntrada}">  
                             <h:outputText value="Nro. Entrada: #{item2.idDocumento.nroEntrada}"/>
                             <blockquote>
                                 <h:outputText styleClass="Brown fontBold" value="#{item2.idDocumento.asunto}"/>
                             </blockquote>
                         </p:column>
-                        <p:column headerText="Dependencia" style="width:10%" >  
+                        <p:column headerText="Remitido a" width="150" sortBy="#{item2.remitidoA}">  
                             <h:outputText value="#{item2.remitidoA}"/><br/>
                             <h:outputText styleClass="fontBold" value="[#{item2.idRol.descripcionRol}]"/>
                         </p:column>
-                        <p:column headerText="Observación" style="width: 20%" >  
+                        <p:column headerText="Observación" width="200">  
                             <h:outputText value="#{item2.observacion}"/>
                         </p:column>
                         <p:column headerText="Adjunto" style="width: 10%">  

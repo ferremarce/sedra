@@ -13,7 +13,7 @@
     <ui:define name="content">
         <h:form id="formMain">
             <p:panel header="Información del Rechazo">
-                <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4">
+                <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" layout="flex" columnClasses="p-col-2,p-col-4,p-col-2,p-col-4" contentStyleClass="ui-fluid">
                     <p:outputLabel for="remitenteNroEntrada" value="Entrada:"/>
                     <h:outputText id="remitenteNroEntrada" value="#{TramitacionController.tramitacion.idDocumento.nroEntrada} - #{TramitacionController.tramitacion.idDocumento.asunto}"/>
                     <p:outputLabel for="remitenteFechaDerivacion" value="Fecha de Derivación:"/>
@@ -25,20 +25,20 @@
                     <p:outputLabel for="remitenteNotaBreve" value="Nota breve:"/>
                     <h:outputText id="remitenteNotaBreve" value="#{TramitacionController.tramitacion.notaBreve}"/>
                 </p:panelGrid>
-                <p:separator/>
-                <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-10">
+                <p:divider/>
+                <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="flex" columnClasses="p-col-2,p-col-10" contentStyleClass="ui-fluid">
                     <p:outputLabel for="retorno"  value="Retornar para:"/>
                     <h:outputText id="retorno" value="#{TramitacionController.tramitacion.idUsuarioRemitente.usuario} (#{TramitacionController.tramitacion.idUsuarioRemitente.cuenta})"/>
                     <p:outputLabel for="observaciones"  value="Observaciones:"/>
                     <p:inputTextarea rows="3" id="observaciones" value="#{TramitacionController.tramitacionRechazo.observacion}" title="Observaciones" required="true" requiredMessage="#{bundle.Requerido}" />
                 </p:panelGrid>
-                <f:facet name="footer">
-                    <p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
-                        <p:commandButton icon="fa fa-share" action="#{TramitacionController.rechazar()}" ajax="false"  value="#{bundle.DerivarBoton}" title="#{bundle.DerivarBoton}"/>  
-                        <p:commandButton immediate="true" ajax="false" icon="fa fa-sign-out" action="#{TramitacionController.listPendientesSetup()}" value="#{bundle.CancelarBoton}" title="#{bundle.CancelarBoton}"/>  
-                    </p:panelGrid>
-                </f:facet>
             </p:panel>
+            <p:toolbar>
+                <p:toolbarGroup>
+                    <p:commandButton styleClass="espaciadoToolbar" icon="fa fa-share" action="#{TramitacionController.rechazar()}" ajax="false"  value="#{bundle.DerivarBoton}" title="#{bundle.DerivarBoton}"/>
+                    <p:commandButton immediate="true" ajax="false" icon="fa fa-times" styleClass="espaciadoToolbar ui-button-warning" value="#{bundle.CancelarBoton}" action="#{TramitacionController.listPendientesSetup()}"/>
+                </p:toolbarGroup>
+            </p:toolbar>
         </h:form>
     </ui:define>
 
