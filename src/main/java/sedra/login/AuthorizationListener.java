@@ -32,7 +32,7 @@ public class AuthorizationListener implements PhaseListener {
         } catch (Exception e) {
             directorio = "faces";
         }
-        System.out.println("Vista: "+directorio);
+        System.out.println("Vista: " + directorio);
         if (directorio.compareTo("publico") != 0) {
             boolean isLoginPage = (currentPage.lastIndexOf(USER_LOGIN_OUTCOME) > -1);
             HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);

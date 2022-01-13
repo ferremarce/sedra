@@ -146,9 +146,9 @@ public class LoginManager implements Serializable {
             session.invalidate();
         }
 
-        JSFutil.addMessage("Sesión expirada.", JSFutil.StatusMessage.WARNING);
+        JSFutil.addMessage("Sesión terminada.", JSFutil.StatusMessage.ERROR);
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-        context.redirect(context.getRequestContextPath() + "login.xhtml??faces-redirect=true");
+        context.redirect(context.getRequestContextPath() + "/login.xhtml??faces-redirect=true");
 
     }
 

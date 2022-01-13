@@ -40,9 +40,12 @@
                                      rowsPerPageTemplate="5,10,25,50,100">
                             <f:facet name="header">
                                 Tabla de Datos
-                            </f:facet>  
+                            </f:facet> 
+                            <p:column headerText="#Exp." width="40" >  
+                                <h:outputText value="#{item.numeroExpediente}"/>
+                            </p:column> 
                             <p:column headerText="#Entrada" width="40" >  
-                                <h:outputText value=" #{item.nroEntrada}"/>
+                                <h:outputText value="#{item.nroEntrada}"/>
                             </p:column>  
                             <p:column headerText="Fecha" width="80">
                                 <h:outputText value="#{item.fechaDocumento}">

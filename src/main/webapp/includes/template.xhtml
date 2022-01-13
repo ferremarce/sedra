@@ -18,7 +18,7 @@
 
     <h:body>
         <p:idleMonitor timeout="#{CommonController.tiempoSesionActiva}" >
-            <p:ajax global="true" event="idle" listener="#{LoginManager.doLogout()}" oncomplete="alert('La sesión del usuario ha expirado. Para acceder nuevamente haga click en OK')"/>
+            <p:ajax global="false" event="idle" listener="#{LoginManager.doLogout()}" oncomplete="document.getElementById('formHeader:cmdLogout').click(); " onsuccess="alert('La sesión del usuario ha expirado. Para acceder nuevamente haga click en OK')"/>
         </p:idleMonitor>
         <p:panel widgetVar="statusDialog" id="panelLoad" style="position: fixed; left: 40%; top: 40px; z-index: 99;" >
             <p:graphicImage value="/img/loading3.gif" height="100"/><br/>

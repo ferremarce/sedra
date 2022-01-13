@@ -356,5 +356,5 @@ public class Documento implements Serializable {
     public String toVerURL() {
         return JSFutil.getAbsoluteApplicationUrl() + "/documento/VerDocumento.xhtml?id=" + this.getIdDocumento();
     }
-
+    
 }

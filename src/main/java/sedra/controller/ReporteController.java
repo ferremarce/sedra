@@ -120,7 +120,7 @@ public class ReporteController implements Serializable {
 
     public String listTramitacionOficinaSetup() {
         this.tmpIdRol = JSFutil.getUsuarioConectado().getIdRol();
-        this.disabled = this.tmpIdRol.getIdRol().compareTo(18) != 0; //Es archivo
+        this.disabled = (this.tmpIdRol.getIdRol().compareTo(18) != 0 && this.tmpIdRol.getIdRol().compareTo(1) != 0); //Es archivo
         return "/reportes/ListadoTramitacionOficina";
     }
 

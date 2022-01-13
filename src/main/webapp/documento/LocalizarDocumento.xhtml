@@ -2,7 +2,7 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                 template="/includes/template.xhtml"
+                template="/includes/template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
@@ -25,7 +25,8 @@
                     <p:outputLabel for="opciones" value="Buscar en: " />
                     <p:selectOneRadio  id="opciones" value="#{DocumentoController.selectedOption}" required="true" requiredMessage="#{bundle.Requerido}">  
                         <f:selectItem itemLabel="Asunto" itemValue="d.asunto" />  
-                        <f:selectItem itemLabel="Nro. Entrada" itemValue="d.nroEntrada" />  
+                        <f:selectItem itemLabel="# Entrada" itemValue="d.nroEntrada" />
+                        <f:selectItem itemLabel="# Expediente" itemValue="d.numeroExpediente" />
                         <f:selectItem itemLabel="Referencia" itemValue="d.referencia" />  
                         <f:selectItem itemLabel="Remitido a" itemValue="t.remitidoA" />  
                         <f:selectItem itemLabel="Remitido por" itemValue="t.remitidoPor" />  
@@ -55,15 +56,22 @@
                     <f:facet name="header">
                         Tabla de Datos
                     </f:facet>
-                    <p:column headerText="#" style="width: 40px">
+                    <p:column headerText="#" width="40">
                         <h:outputText value="#{index+1}"/>
                     </p:column>
-                    <p:column headerText="Nro. Ent." style="width:7%" >  
+                    <p:column headerText="#Exp." width="110" sortBy="#{item.numeroExpediente}" style="text-align: right">  
+                        <p:commandLink immediate="true" title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
+                            <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.numeroExpediente}">
+                                <f:convertNumber pattern="0000000000000"/>
+                            </h:outputText>
+                        </p:commandLink>
+                    </p:column> 
+                    <p:column headerText="Nro. Ent." width="100" style="text-align: right">  
                         <p:commandLink title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
                             <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value=" #{item.nroEntrada}"/>
                         </p:commandLink>
                     </p:column>  
-                    <p:column headerText="F. Doc." style="width:10%" >
+                    <p:column headerText="F. Doc." width="80" >
                         <h:outputText value="#{item.fechaDocumento}">
                             <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
                         </h:outputText>
@@ -75,12 +83,12 @@
                             <h:outputText styleClass="Brown fontBold" value="#{item.asunto}"/>
                         </blockquote>
                     </p:column>  
-                    <p:column headerText="F. Ing." style="width:10%" >  
+                    <p:column headerText="F. Ing." width="80" >  
                         <h:outputText value="#{item.fechaIngreso}">
                             <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>   
-                    <p:column headerText="Enlazado con" style="width:150px" > 
+                    <p:column headerText="Enlazado con" width="150" > 
                         <p:dataList rendered="#{item.detalleNotaSalidaList.size()>0}" value="#{item.detalleNotaSalidaList}" var="nota" emptyMessage="#{bundle.SinRegistrosMensaje}">  
                             <h:outputText  value="[#{nota.idNota.idTipoNota.descripcionTipoNota}] " />  
                             <p:commandLink styleClass="fontBold Red" rendered="#{nota.idNota.numeroSalida!=null}" title="Ver Nota" value="Nro. Salida: #{nota.idNota.numeroSalida}" ajax="false" action="#{NotaSalidaController.doVerForm(nota.idNota.idNota)}" />  
@@ -124,7 +132,7 @@
                             <br/>
                             <h:outputText rendered="#{item.detalleNotaSalidaList.size()>0}" value="Enlazado con"/><br/>
                             <p:repeat rendered="#{item.detalleNotaSalidaList.size()>0}" value="#{item.detalleNotaSalidaList}" var="valor" > 
-                                <p:commandLink styleClass="Red fontBold" target="_new" title="Ver Documento" value="[Entrada] #{valor.idDocumento.nroEntrada} " ajax="false" action="#{DocumentoController.doVerForm(valor.idDocumento.idDocumento)}"/> 
+                                <p:commandLink styleClass="Red fontBold" target="_new" title="Ver Documento" value="[Entrada] #{valor.idDocumento.nroEntrada} {#{valor.idDocumento.numeroExpediente}}" ajax="false" action="#{DocumentoController.doVerForm(valor.idDocumento.idDocumento)}"/> 
                                 <h:outputText value="#{valor.idDocumento.asunto.length()>80 ? valor.idDocumento.asunto.substring(0, 79): valor.idDocumento.asunto}..." />  <br/>
                             </p:repeat>
                         </p:column>  

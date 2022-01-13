@@ -11,9 +11,10 @@
     </ui:define>
     <ui:define name="content">
         <h:form id="formMain">
-            <p:fieldset  toggleable="true" collapsed="true" toggleSpeed="500" widgetVar="panelNuevo">
-                <f:facet name="legend">
-                    <h:outputLabel value="Agregar"/>
+            <p:panel toggleable="true" collapsed="true" toggleSpeed="500" widgetVar="panelNuevo">
+                <f:facet name="header">
+                    <p:commandButton immediate="true" global="true" styleClass="espaciadoToolbar ui-button-success" value="#{bundle.NuevoBoton}" 
+                                     icon="fa fa-plus" action="#{DocumentoController.doCrearRegistroAutomatico()}" oncomplete="PF('panelNuevo').toggle()" update="@form"/>
                 </f:facet>
                 <p:panelGrid columns="4" layout="flex" columnClasses="p-col-2,p-col-4,p-col-2,p-col-4" contentStyleClass="ui-fluid">
                     <p:outputLabel for="nroExpediente" value="#Expediente:"/>
@@ -25,7 +26,10 @@
                         <f:selectItems value="#{TipoDocumentoController.tipoDocumentoSet}"/>
                     </p:selectOneMenu>
                     <p:outputLabel for="fechaDocumento" value="Fecha del Documento:"/>
-                    <p:calendar navigator="true" id="fechaDocumento" value="#{DocumentoController.documento.fechaDocumento}" pattern="dd/MM/yyyy" title="Fecha Documento" required="true" requiredMessage="Fecha Documento"/>
+                    <p:outputPanel>
+                        <p:calendar navigator="true" id="fechaDocumento" mindate="#{CommonController.calcularFechaMinima(DocumentoController.documento.idDocumento)}" value="#{DocumentoController.documento.fechaDocumento}" pattern="dd/MM/yyyy" title="Fecha Documento" required="true" requiredMessage="Fecha Documento"/>
+                        <p:message for="fechaDocumento"/>
+                    </p:outputPanel>
                     <p:outputLabel for="referencia" value="Referencia"/>
                     <p:inputText id="referencia" value="#{DocumentoController.documento.referencia}" title="Referencia" required="true" requiredMessage="Referencia" />
                     <p:outputLabel for="asunto" value="Asunto "/>
@@ -39,7 +43,8 @@
                         <p:commandButton immediate="true" ajax="false" icon="fa fa-times" styleClass="espaciadoToolbar ui-button-warning"   value="#{bundle.CancelarBoton}" action="#{DocumentoController.doCrearRegistroAutomatico()}"/>
                     </p:toolbarGroup>
                 </p:toolbar>
-            </p:fieldset>
+            </p:panel>
+            <p:spacer width="20"/>
             <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                          rows="50"
                          paginator="true"
@@ -47,15 +52,14 @@
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          rowsPerPageTemplate="50,100,250,500"                         
                          >
-                <f:facet name="header">
-                    Tabla de Datos
-                </f:facet>  
                 <p:column headerText="#" width="30" style="text-align: right">
                     <h:outputText value="#{index+1}"/>
                 </p:column>
-                <p:column headerText="#Entrada" width="100" sortBy="#{item.nroEntrada}" style="text-align: right">  
+                <p:column headerText="#Entrada" width="110" sortBy="#{item.numeroExpediente}" style="text-align: right">  
                     <p:commandLink immediate="true" title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
-                        <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value=" #{item.nroEntrada}"/>
+                        <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.numeroExpediente}">
+                            <f:convertNumber pattern="0000000000000"/>
+                        </h:outputText>
                     </p:commandLink>
                 </p:column>  
                 <p:column headerText="Fecha" width="100" sortBy="#{item.fechaDocumento}">

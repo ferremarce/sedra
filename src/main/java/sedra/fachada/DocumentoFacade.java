@@ -5,12 +5,19 @@
  */
 package sedra.fachada;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ConcurrentMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import org.eclipse.persistence.sessions.Session;
+import org.eclipse.persistence.sessions.factories.SessionManager;
 import sedra.modelo.Documento;
 
 /**
@@ -36,15 +43,27 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
         Query q = em.createQuery("SELECT a FROM Documento a "
                 + "WHERE UPPER(a.asunto) LIKE :xCriterio OR UPPER(a.nroEntrada) LIKE :xCriterio "
                 //+ "OR a.idDocumento IN (SELECT d.idDocumento.idDocumento FROM DetalleNotaSalida d WHERE UPPER(d.idNota.numeroSalida) LIKE :xCriterio OR UPPER(d.idNota.numeroStr) LIKE :xCriterio) "
-                + "ORDER BY a.idDocumento");
+                + "ORDER BY a.idDocumento DESC");
         if (criterio.compareTo("") != 0) {
             q.setParameter("xCriterio", "%" + criterio.toUpperCase() + "%");
         } else {
             q.setParameter("xCriterio", "123456");
         }
         List<Documento> tr = q.getResultList();
+        this.metaDatabase();
         return tr;
 
+    }
+
+    private String metaDatabase() {
+        try {
+            Connection con = this.getEntityManager().unwrap(Connection.class);
+            System.out.println(con.getMetaData().getDatabaseProductName() +" "+ con.getMetaData().getDatabaseProductVersion() +" "+ con.getMetaData().getDriverVersion());
+            return "";
+        } catch (SQLException ex) {
+            Logger.getLogger(DocumentoFacade.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
     }
 
     public List<Documento> getAllDocumentoParaSeguimiento(String criterio) {
@@ -117,7 +136,7 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
         String consultaSQL;
         switch (campo.charAt(0)) {
             case 'd':
-                where += " WHERE UPPER(" + campo + ") LIKE :xCriterio ";
+                where += " WHERE UPPER(CONCAT(" + campo + ",'')) LIKE :xCriterio ";
                 break;
             case 'b':
                 where += " WHERE d.idDocumento IN (SELECT b.idDocumento.idDocumento FROM DetalleNotaSalida b WHERE UPPER(" + campo + ") LIKE :xCriterio) ";
@@ -164,6 +183,7 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
             return 1;
         }
     }
+
     public List<Documento> findAllRegistroAutomatico() {
         Query q = em.createQuery("SELECT a FROM Documento a WHERE a.idClasificador IS NULL AND a.numeroExpediente IS NOT NULL ORDER BY a.numeroExpediente DESC");
         List<Documento> tr = q.getResultList();

@@ -58,7 +58,14 @@
                     <h:outputText style="display: inline" value="#{index+1}"/>
                     <p:rowToggler/>
                 </p:column>
-                <p:column headerText="Nro. Ent." width="7%">  
+                  <p:column headerText="#Exp." width="110" sortBy="#{item.numeroExpediente}" style="text-align: right">  
+                    <p:commandLink immediate="true" title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento.idDocumento)}">
+                        <h:outputText title="#{item.idDocumento.idDocumento}" styleClass="fontBold Blue" value="#{item.idDocumento.numeroExpediente}">
+                            <f:convertNumber pattern="0000000000000"/>
+                        </h:outputText>
+                    </p:commandLink>
+                </p:column> 
+                <p:column headerText="Nro. Ent." width="100" style="text-align: right">  
                     <p:commandLink title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento.idDocumento)}">
                         <h:outputText title="#{item.idDocumento.idDocumento}" styleClass="fontBold Blue" value=" #{item.idDocumento.nroEntrada}"/>
                     </p:commandLink>

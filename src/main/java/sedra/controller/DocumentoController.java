@@ -194,6 +194,7 @@ public class DocumentoController implements Serializable {
         this.documento.setFechaLimite(JSFutil.getFechaHoraActual());
         this.documento.setAnho(Calendar.getInstance(JSFutil.getMyTimeZone()).get(Calendar.YEAR));
         this.clasificadorController.cargarTree(Boolean.FALSE);
+        this.documento.setNumeroExpediente(this.documentoFacade.findNextNroExpediente());
         return "/documento/CrearDocumento";
     }
 
@@ -213,8 +214,7 @@ public class DocumentoController implements Serializable {
                 return "";
             }
             documentoFacade.remove(u);
-            this.criterio = name;
-            this.doBuscar();
+            this.doRefrescar();
             JSFutil.addMessage("El Documento #" + name + "# fue eliminado.", JSFutil.StatusMessage.INFORMATION);
         } catch (Exception ex) {
             this.commonController.doExcepcion(ex);
@@ -234,7 +234,6 @@ public class DocumentoController implements Serializable {
                 this.documento.setCerrado(false);
                 documentoFacade.create(documento);
                 auditaFacade.create(new Audita("DOCUMENTO", "Documento creado exitosamente. ", JSFutil.getFechaHoraActual(), documento.toAudita(), JSFutil.getUsuarioConectado()));
-                //JSFutil.addMessage("Documento creado exitosamente. ", JSFutil.StatusMessage.INFORMATION);
                 //Grabar el archivo a disco
                 if (!this.adjuntoDocumento.isEmpty()) {
                     DocumentoAdjunto ap;
@@ -291,6 +290,21 @@ public class DocumentoController implements Serializable {
                             documentoAdjuntoFacade.remove(ap);
                         }
                     }
+                }
+                if (this.documento.getTramitacionList().isEmpty()) {
+                    Tramitacion t = new Tramitacion();
+                    t.setIdDocumento(documento);
+                    t.setFechaDerivacion(documento.getFechaIngreso());
+                    t.setIdEstado(new EstadoTramitacion(1));
+                    t.setFechaRegistro(documento.getFechaRegistro());
+                    t.setHoraRegistro(documento.getHoraRegistro());
+                    t.setIdUsuario(documento.getIdUsuario());
+                    t.setIdRol(documento.getIdUsuario().getIdRol());
+                    t.setRemitidoPor(documento.getIdUsuario().getUsuario());
+                    t.setRemitidoA(documento.getIdUsuario().getUsuario());
+                    t.setNotaBreve("Entrada del Documento");
+                    t.setIdUsuarioRemitente(documento.getIdUsuario());
+                    tramitacionFacade.create(t);
                 }
             }
             this.criterio = documento.getAsunto();
@@ -420,10 +434,10 @@ public class DocumentoController implements Serializable {
     public void save() {
         for (UploadedFile adjunto : this.adjuntoDocumento) {
             this.documento = new Documento();
-//        this.documento.setArchivo(this.adjunto.getContents());
+            this.documento.setNumeroExpediente(this.documentoFacade.findNextNroExpediente());
             this.documento.setCerrado(false);
             this.documento.setFechaDocumento(JSFutil.getFechaHoraActual());
-            this.documento.setNroEntrada("xxxx");
+            this.documento.setNroEntrada(this.documento.getNumeroExpediente().toString());
             this.documento.setAsunto("Documento suelto: " + adjunto.getFileName());
             this.documento.setFechaRegistro(JSFutil.getFechaHoraActual());
             this.documento.setHoraRegistro(JSFutil.getFechaHoraActual());
@@ -543,6 +557,8 @@ public class DocumentoController implements Serializable {
         this.documento = new Documento();
         this.documento.setIdTipoDocumento(this.tipoDocumentoFacade.find(Codigo.TIPO_DOCUMENTO_DEFECTO));
         this.documento.setFechaDocumento(JSFutil.getFechaHoraActual());
+        this.documento.setCerrado(Boolean.FALSE);
+        this.documento.setIdUsuario(JSFutil.getUsuarioConectado());
         this.documento.setNumeroExpediente(this.documentoFacade.findNextNroExpediente());
 
         this.listaDocumento = this.documentoFacade.findAllRegistroAutomatico();
@@ -555,17 +571,16 @@ public class DocumentoController implements Serializable {
     }
 
     public String doGuardarRegistroAutomatico() {
-        this.documento.setFechaIngreso(this.documento.getFechaDocumento());
-        if (this.documento.getNumeroExpediente() == null) {
+        if (this.documento.getIdDocumento() != null) {
+            this.documentoFacade.edit(documento);
+        } else {
+            this.documento.setFechaIngreso(this.documento.getFechaDocumento());
             this.documento.setNumeroExpediente(this.documentoFacade.findNextNroExpediente());
+            Calendar cal = JSFutil.getCalendar();
+            cal.setTime(this.documento.getFechaDocumento());
+            this.documento.setAnho(cal.get(Calendar.YEAR));
+            this.documentoFacade.create(documento);
         }
-        this.documento.setNroEntrada(this.documento.getNumeroExpediente().toString());
-        Calendar cal = JSFutil.getCalendar();
-        cal.setTime(this.documento.getFechaDocumento());
-        this.documento.setAnho(cal.get(Calendar.YEAR));
-        this.adjuntoDocumento = new ArrayList<>();
-
-        this.create();
         return this.doCrearRegistroAutomatico();
     }
 

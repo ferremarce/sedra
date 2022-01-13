@@ -27,7 +27,7 @@ import sedra.util.JSFutil;
 @Named(value = "MenuController")
 @SessionScoped
 public class MenuController implements Serializable {
-
+    
     @Inject
     UsuarioFacade usuarioFacade;
     private DefaultMenuModel model;
@@ -37,11 +37,11 @@ public class MenuController implements Serializable {
      */
     public MenuController() {
     }
-
+    
     public MenuModel getModel() {
         return model;
     }
-
+    
     @PostConstruct
     public void init() {
         this.montarMenu();
@@ -80,20 +80,21 @@ public class MenuController implements Serializable {
 //    }
     public void montarMenu() {
         Usuario user = JSFutil.getUsuarioConectado();
-
+        
         String nivel;
         model = new DefaultMenuModel();
-
+        
         DefaultSubMenu submenu;
         DefaultMenuItem item;
 
 //        submenu.getElements().add(DefaultSubMenu.builder().label("Otro submenu").build());
         item = DefaultMenuItem.builder().value("Inicio").build();
         item.setCommand("/index");
+        item.setAjax(Boolean.FALSE);
         item.setIcon("fa fa-home");
         model.getElements().add(item);
         submenu = DefaultSubMenu.builder().label("solo inicial").build();
-
+        
         List<Permiso> tr = usuarioFacade.getPermisoUsuario(user);
         for (Permiso x : tr) {
             nivel = x.getNivel();
@@ -120,5 +121,5 @@ public class MenuController implements Serializable {
 //        }
 
     }
-
+    
 }

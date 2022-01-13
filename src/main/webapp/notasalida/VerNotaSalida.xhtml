@@ -36,7 +36,7 @@
                     </p:outputPanel>
                     <p:outputLabel for="listaNota" value="Enlazado a:"/>
                     <p:dataList id="listaNota" rendered="#{NotaSalidaController.notaSalida.detalleNotaSalidaList.size()>0}" value="#{NotaSalidaController.notaSalida.detalleNotaSalidaList}" var="nota" itemType="circle"> 
-                        <p:commandLink styleClass="fontBold Red" title="Ver Documento" value="[Entrada] #{nota.idDocumento.nroEntrada}" ajax="false" action="#{DocumentoController.doVerForm(nota.idDocumento.idDocumento)}"/>  
+                        <p:commandLink styleClass="fontBold Red" title="Ver Documento" value="[Entrada] #{nota.idDocumento.nroEntrada} #{nota.idDocumento.numeroExpediente}" ajax="false" action="#{DocumentoController.doVerForm(nota.idDocumento.idDocumento)}"/>  
                         <p:separator/>
                         <h:outputText value="#{nota.idDocumento.asunto}" />  
                     </p:dataList>

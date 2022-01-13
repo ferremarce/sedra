@@ -51,7 +51,7 @@
                 </p:column>  
                 <p:column headerText="Enlazado con" > 
                     <p:dataList rendered="#{item.detalleNotaSalidaList.size()>0}" value="#{item.detalleNotaSalidaList}" var="valor" itemType="circle"> 
-                        <p:commandLink styleClass="Red fontBold" title="Ver Documento" value="[Entrada] #{valor.idDocumento.nroEntrada}" target="_new" ajax="false" action="#{DocumentoController.doVerForm(valor.idDocumento.idDocumento)}"/>  
+                        <p:commandLink styleClass="Red fontBold" title="Ver Documento" value="[Entrada] #{valor.idDocumento.nroEntrada} {#{valor.idDocumento.numeroExpediente}}" target="_new" ajax="false" action="#{DocumentoController.doVerForm(valor.idDocumento.idDocumento)}"/>  
                         <h:outputText value=" #{valor.idDocumento.asunto.length()>80 ? valor.idDocumento.asunto.substring(0, 79): valor.idDocumento.asunto}..." />  
                     </p:dataList>
                 </p:column> 

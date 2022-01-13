@@ -177,13 +177,8 @@ public class TramitacionController implements Serializable {
     }
 
     public String listPendientesSetup() {
-        //this.criterioBusqueda = "";
-        if (this.listaTramitacionPendiente == null) {
-            this.buscarPendiente(1);
-        }
-        if (this.listaTramitacionConfirmado == null) {
-            this.buscarPendiente(3);
-        }
+        this.buscarPendiente(1);
+        this.buscarPendiente(3);
         return "/tramitacion/ListarDocumentoPendiente";
     }
 

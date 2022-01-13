@@ -11,6 +11,7 @@ import java.io.InputStream;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -110,5 +111,15 @@ public class CommonController implements Serializable {
 
     public String doDiferenciaTiempo(Date finicio, Date hinicio, Date ffin, Date hfin) {
         return JSFutil.diferenciaTime(finicio, hinicio, ffin, hfin);
+    }
+
+    public Date calcularFechaMinima(Object ob) {
+        Calendar cal = JSFutil.getCalendar();
+        cal.add(Calendar.MONTH, -6);
+        //LOG.log(Level.INFO, JSFutil.getFechaHoraLargo(cal.getTime()));
+        if (ob != null) {
+            return null;
+        }
+        return cal.getTime();
     }
 }

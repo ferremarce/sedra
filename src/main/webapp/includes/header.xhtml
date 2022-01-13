@@ -15,7 +15,7 @@
                 <h:outputText styleClass="Gray" value="#{ConfiguracionController.configuracion.subTituloSistema}"/>
             </div>
         </div>
-        <h:form>
+        <h:form id="formHeader">
             <p:menubar model="#{MenuController.model}">
                 <f:facet name="options">
                     <div class="p-d-inline-flex"><p:clock timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" mode="server"/></div>
@@ -24,7 +24,7 @@
                     <p:overlayPanel for="btnMiCuenta" style="width: 60%" >
                         <div class="p-d-inline-flex"><h:outputText value="#{LoginManager.usuarioLogeado.usuario} (#{LoginManager.usuarioLogeado.idRol.toString()})"/></div>
                         <div class="p-d-inline-flex"><p:commandButton ajax="false" value="#{bundle.CambiarContrasenhaBoton}" icon="fa fa-lock" action="#{LoginManager.doCambiarContrasenhaForm()}" /></div>
-                        <div class="p-d-inline-flex"><p:commandButton ajax="false" value="#{bundle.SalirBoton}" icon="fa fa-sign-out" action="#{LoginManager.doLogout()}" /></div>
+                        <div class="p-d-inline-flex"><p:commandButton id="cmdLogout" ajax="false" value="#{bundle.SalirBoton}" icon="fa fa-sign-out" action="#{LoginManager.doLogout()}" /></div>
                     </p:overlayPanel>
                 </f:facet>
             </p:menubar>

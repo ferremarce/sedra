@@ -35,11 +35,18 @@
                 <p:column headerText="#" width="30" style="text-align: right">
                     <h:outputText value="#{index+1}"/>
                 </p:column>
+                <p:column headerText="#Exp." width="110" sortBy="#{item.numeroExpediente}" style="text-align: right">  
+                    <p:commandLink immediate="true" title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
+                        <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.numeroExpediente}">
+                            <f:convertNumber pattern="0000000000000"/>
+                        </h:outputText>
+                    </p:commandLink>
+                </p:column> 
                 <p:column headerText="#Entrada" width="100" sortBy="#{item.nroEntrada}" style="text-align: right">  
                     <p:commandLink title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
                         <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value=" #{item.nroEntrada}"/>
                     </p:commandLink>
-                </p:column>  
+                </p:column> 
                 <p:column headerText="Fecha" width="100" sortBy="#{item.fechaDocumento}">
                     <h:outputText value="#{item.fechaDocumento}">
                         <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
@@ -57,16 +64,19 @@
                         <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
                     </h:outputText>
                 </p:column>  
-                <p:column width="115">
+                <p:column width="150">
                     <f:facet name="header">
                         <h:outputText value="Acción"/>
                     </f:facet>
                     <p:commandButton type="button" style="background: #fde5cd !important; color: black" rendered="#{item.cerrado==true}" onclick="return alert('El documento y sus anexos ya están archivados');" ajax="false" title="Documento llaveado" value="Llaveado" icon="fa fa-lock"/>
                     <p:outputPanel rendered="#{item.cerrado==false}">
                         <p:commandButton immediate="true" icon="fa fa-pencil" styleClass="rounded-button ui-button-success" ajax="false" title="#{bundle.EditarBoton}" action="#{DocumentoController.editSetup(item.idDocumento)}"/>
-                        <p:commandButton immediate="true" icon="fa fa-times" styleClass="rounded-button ui-button-warning" title="#{bundle.EliminarBoton}" action="#{DocumentoController.delete(item.idDocumento)}" update="@form, panelMensajeEstado">
+                        <p:commandButton immediate="true" icon="fa fa-times" styleClass="rounded-button ui-button-warning" title="#{bundle.EliminarBoton}" action="#{DocumentoController.delete(item.idDocumento)}" update="dataTable, panelMensajeEstado">
                             <p:confirm escape="false" header="Confirmación" message="Está a punto de eliminar el Contrato ##{item.toString()}. &lt;br/&gt;¿Estás seguro?" icon="fa fa-exclamation-triangle" />
                         </p:commandButton>
+                        <p:commandLink immediate="true" ajax="false" title="#{bundle.GenerarBoton}" target="_new" action="#{ReporteController.generarTicket(item.idDocumento)}">
+                            <p:button href="#" icon="fa fa-file-pdf" />
+                        </p:commandLink>
                     </p:outputPanel>
                 </p:column>
             </p:dataTable>
