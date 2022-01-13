@@ -254,7 +254,7 @@ public class TramitacionController implements Serializable {
             this.tramitacionRechazo.setIdUsuarioConfirmacion(JSFutil.getUsuarioConectado());
 
             tramitacionFacade.create(this.tramitacionRechazo);
-            auditaFacade.create(new Audita("TRAMITACION", "Tramitacion creada exitosamente.", JSFutil.getFechaHoraActual(), this.tramitacionRechazo.toAudita(), JSFutil.getUsuarioConectado()));
+            auditaFacade.create(new Audita("TRAMITACION", "Tramitacion Rechazo creada exitosamente.", JSFutil.getFechaHoraActual(), this.tramitacionRechazo.toAudita(), JSFutil.getUsuarioConectado()));
             this.selectedTramitacion = null;
 
             //Sacar del pendiente
@@ -264,7 +264,7 @@ public class TramitacionController implements Serializable {
             this.tramitacion.setHoraSalida(JSFutil.getFechaHoraActual());
             tramitacionFacade.edit(this.tramitacion);
 
-            JSFutil.addMessage("Tramitacion creada exitosamente. ", JSFutil.StatusMessage.INFORMATION);
+            JSFutil.addMessage("Tramitacion rechazada exitosamente. ", JSFutil.StatusMessage.INFORMATION);
         } catch (Exception ex) {
             commonController.doExcepcion(ex);
         }
@@ -281,7 +281,7 @@ public class TramitacionController implements Serializable {
         this.listSelectedTramitacion = (List<Tramitacion>) JSFutil.arrayToList(this.selectedTramitacion);
         this.tramitacion = new Tramitacion();
         this.selectedRol = new Rol[0];
-        //this.tramitacion.setIdDocumento(tramitacionActual.getIdDocumento());
+        this.adjunto = null;
         this.tramitacion.setFechaDerivacion(JSFutil.getFechaHoraActual());
         return "/tramitacion/DerivarDocumento";
     }
