@@ -7,6 +7,7 @@ package sedra.fachada;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;
@@ -19,6 +20,8 @@ import javax.persistence.Query;
 import org.eclipse.persistence.sessions.Session;
 import org.eclipse.persistence.sessions.factories.SessionManager;
 import sedra.modelo.Documento;
+import sedra.modelo.Documento_;
+import sedra.util.JSFutil;
 
 /**
  *
@@ -41,7 +44,7 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
 
     public List<Documento> getAllDocumento(String criterio) {
         Query q = em.createQuery("SELECT a FROM Documento a "
-                + "WHERE UPPER(a.asunto) LIKE :xCriterio OR UPPER(a.nroEntrada) LIKE :xCriterio "
+                + "WHERE UPPER(a.asunto) LIKE :xCriterio OR UPPER(a.nroEntrada) LIKE :xCriterio OR a.numeroExpediente=:xNroExpe "
                 //+ "OR a.idDocumento IN (SELECT d.idDocumento.idDocumento FROM DetalleNotaSalida d WHERE UPPER(d.idNota.numeroSalida) LIKE :xCriterio OR UPPER(d.idNota.numeroStr) LIKE :xCriterio) "
                 + "ORDER BY a.idDocumento DESC");
         if (criterio.compareTo("") != 0) {
@@ -49,6 +52,13 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
         } else {
             q.setParameter("xCriterio", "123456");
         }
+        Integer nroExpe = -1;
+        try {
+            nroExpe = Integer.parseInt(criterio);
+        } catch (NumberFormatException ex) {
+
+        }
+        q.setParameter("xNroExpe", nroExpe);
         List<Documento> tr = q.getResultList();
         this.metaDatabase();
         return tr;
@@ -58,7 +68,7 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
     private String metaDatabase() {
         try {
             Connection con = this.getEntityManager().unwrap(Connection.class);
-            System.out.println(con.getMetaData().getDatabaseProductName() +" "+ con.getMetaData().getDatabaseProductVersion() +" "+ con.getMetaData().getDriverVersion());
+            System.out.println(con.getMetaData().getDatabaseProductName() + " " + con.getMetaData().getDatabaseProductVersion() + " " + con.getMetaData().getDriverVersion());
             return "";
         } catch (SQLException ex) {
             Logger.getLogger(DocumentoFacade.class.getName()).log(Level.SEVERE, null, ex);
@@ -174,8 +184,10 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
     }
 
     public Integer findNextNroExpediente() {
-        Query q = em.createQuery("SELECT a FROM Documento a WHERE a.numeroExpediente IS NOT NULL ORDER BY a.numeroExpediente DESC");
+        Query q = em.createQuery("SELECT a FROM Documento a WHERE a.numeroExpediente IS NOT NULL AND a.anho=:xAnho ORDER BY a.numeroExpediente DESC");
         q.setMaxResults(1);
+        Calendar cal = JSFutil.getCalendar();
+        q.setParameter("xAnho", cal.get(Calendar.YEAR));
         List<Documento> tr = q.getResultList();
         if (!tr.isEmpty()) {
             return (tr.get(0).getNumeroExpediente() + 1);

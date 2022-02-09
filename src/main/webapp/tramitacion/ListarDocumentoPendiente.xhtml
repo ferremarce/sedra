@@ -13,7 +13,7 @@
     <ui:define name="content">
         <h:form id="formMain">
             <p:toolbar>
-                <p:toolbarGroup align="right">
+                <p:toolbarGroup>
                     <p:inputText styleClass="espaciadoToolbar" size="50" id="criterio" value="#{TramitacionController.criterioBusqueda}" placeholder="Asunto, Nro. Entrada" />
                     <p:commandButton styleClass="espaciadoToolbar" id="cmdBuscar" icon="fa fa-search" ajax="true" action="#{TramitacionController.buscarAllPendiente()}" update="@form, panelMensajeEstado"/>
                 </p:toolbarGroup>
@@ -26,7 +26,7 @@
                                  paginator="true"
                                  filterEvent="enter"
                                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                 rowsPerPageTemplate="5,10,25,50,100"
+                                 rowsPerPageTemplate="#{bundle.Paginacion}"
                                  >
                         <f:facet name="header">
                             Tabla de Datos
@@ -74,7 +74,7 @@
                                  paginator="true"
                                  filterEvent="enter"
                                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                 rowsPerPageTemplate="5,10,25,50,100"
+                                 rowsPerPageTemplate="#{bundle.Paginacion}"
                                  selection="#{TramitacionController.selectedTramitacion}"
                                  rowKey="#{item2}"
                                  >

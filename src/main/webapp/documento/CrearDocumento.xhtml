@@ -40,15 +40,13 @@
                         </p:outputPanel>
                     </p:panelGrid>
                     <p:panelGrid columns="4" layout="flex" columnClasses="p-col-2,p-col-4,p-col-2,p-col-4" contentStyleClass="ui-fluid">
-                        <p:outputLabel for="nroEntrada" value="Nro. de Entrada:"/>
-                        <p:inputText id="nroEntrada" value="#{DocumentoController.documento.nroEntrada}" title="Numero Entrada" required="true" requiredMessage="Numero Entrada" />
-                        <p:outputLabel for="anho" value="Año:"/>
-                        <p:inputText id="anho" value="#{DocumentoController.documento.anho}" title="Año" required="true" requiredMessage="#{bundle.Requerido}" />
                         <p:outputLabel for="fechaDocumento" value="Fecha del Documento:"/>
                         <p:outputPanel>
                             <p:calendar navigator="true" id="fechaDocumento" mindate="#{CommonController.calcularFechaMinima(DocumentoController.documento.idClasificador)}" value="#{DocumentoController.documento.fechaDocumento}" pattern="dd/MM/yyyy" title="Fecha Documento" required="true" requiredMessage="Fecha Documento"/>
                             <p:message for="fechaDocumento"/>
                         </p:outputPanel>
+                        <p:outputLabel for="anho" value="Año:"/>
+                        <p:inputText id="anho" value="#{DocumentoController.documento.anho}" title="Año" required="true" requiredMessage="#{bundle.Requerido}" />
                         <p:outputLabel for="fechaIngreso" value="Fecha del Ingreso:"/>
                         <p:outputPanel>
                             <p:calendar navigator="true" id="fechaIngreso" mindate="#{CommonController.calcularFechaMinima(DocumentoController.documento.idClasificador)}" value="#{DocumentoController.documento.fechaIngreso}" pattern="dd/MM/yyyy" title="Fecha Ingreso" required="true" requiredMessage="Fecha Ingreso"/>

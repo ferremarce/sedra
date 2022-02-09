@@ -63,7 +63,7 @@
                              paginator="true"
                              filterEvent="enter"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             rowsPerPageTemplate="5,10,25,50,100"
+                             rowsPerPageTemplate="#{bundle.Paginacion}"
                              >
                     <p:column headerText="Acción" style="width:100px">
                         <p:commandButton oncomplete="PF('anexo1').show();" update=":formDlg:panelAnexo" title="#{bundle.AgregarAnexoBoton}" value="#{bundle.AgregarAnexoBoton}" icon="fa fa-plus" actionListener="#{TramitacionController.tramitacionAnexo(item.idTramitacion)}" />
@@ -148,7 +148,7 @@
                              paginator="true"
                              filterEvent="enter"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             rowsPerPageTemplate="5,10,25,50,100"
+                             rowsPerPageTemplate="#{bundle.Paginacion}"
                              >
                     <f:facet name="header">
                         Tabla de Datos
