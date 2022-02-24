@@ -569,7 +569,7 @@ public class DocumentoController implements Serializable {
         this.documento.setFechaDocumento(JSFutil.getFechaHoraActual());
         this.documento.setCerrado(Boolean.FALSE);
         this.documento.setIdUsuario(JSFutil.getUsuarioConectado());
-        
+        this.documento.setNumeroExpediente(this.documentoFacade.findNextNroExpediente());
         this.listaDocumento = this.documentoFacade.findAllRegistroAutomatico();
         return "/documento/CrearRegistroAutomatico";
     }
@@ -584,6 +584,7 @@ public class DocumentoController implements Serializable {
             this.documentoFacade.edit(documento);
         } else {
             this.documento.setFechaIngreso(this.documento.getFechaDocumento());
+            this.documento.setNumeroExpediente(this.documentoFacade.findNextNroExpediente());
             Calendar cal = JSFutil.getCalendar();
             cal.setTime(this.documento.getFechaDocumento());
             this.documento.setAnho(cal.get(Calendar.YEAR));
