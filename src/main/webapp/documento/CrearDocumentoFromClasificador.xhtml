@@ -48,9 +48,6 @@
                                     </h:outputText>
                                 </p:commandLink>
                             </p:column> 
-                            <p:column headerText="#Entrada" width="100" sortBy="#{item.nroEntrada}" >  
-                                <h:outputText value="#{item.nroEntrada}"/>
-                            </p:column>  
                             <p:column headerText="Fecha" width="80" sortBy="#{item.fechaDocumento}">
                                 <h:outputText value="#{item.fechaDocumento}">
                                     <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
@@ -107,7 +104,7 @@
                             </p:column>  
                             <p:column headerText="Enlazado con" > 
                                 <p:repeat rendered="#{itemSal.detalleNotaSalidaList.size()>0}" value="#{itemSal.detalleNotaSalidaList}" var="valor" > 
-                                    <p:commandLink styleClass="Red fontBold" target="_new" title="Ver Documento" value="[Entrada] #{valor.idDocumento.nroEntrada}" ajax="false" action="#{DocumentoController.doVerForm(valor.idDocumento.idDocumento)}"/> <br/>
+                                    <p:commandLink styleClass="Red fontBold" target="_new" title="Ver Documento" value="[Entrada] #{valor.idDocumento.numeroExpediente}" ajax="false" action="#{DocumentoController.doVerForm(valor.idDocumento.idDocumento)}"/> <br/>
                                     <h:outputText value="#{valor.idDocumento.asunto.length()>80 ? valor.idDocumento.asunto.substring(0, 79): valor.idDocumento.asunto}..." />  
                                 </p:repeat>
                             </p:column> 

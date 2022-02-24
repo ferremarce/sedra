@@ -16,8 +16,8 @@
                 <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-10">
                     <p:outputLabel for="idClasificador" value="Clasificador:"/>
                     <h:outputText id="idClasificador" rendered="#{TramitacionController.documento.idClasificador!=null}" value="#{ClasificadorController.obtenerRutaClasificador(TramitacionController.documento.idClasificador.idClasificador)}" title="Clasificador" />
-                    <p:outputLabel for="nroEntrada" value="Nro. de Entrada:"/>
-                    <h:outputText id="nroEntrada" value="#{TramitacionController.documento.nroEntrada}" title="Numero Entrada" />
+                    <p:outputLabel for="nroExpediente" value="Nro. Expediente:"/>
+                    <h:outputText id="nroExpediente" value="#{TramitacionController.documento.numeroExpediente}" title="Numero Expediente" />
                     <p:outputLabel for="anho" value="Año:"/>
                     <h:outputText id="anho" value="#{TramitacionController.documento.anho}" title="Año" />
                     <p:outputLabel for="fechaDocumento" value="Fecha del Documento:"/>

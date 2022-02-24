@@ -33,7 +33,7 @@ public class TramitacionFacade extends AbstractFacade<Tramitacion> {
     }
 
     public List<Tramitacion> getAllTramitacionPendientes(Integer idRol, String criterio, Integer estado) {
-        Query q = em.createQuery("SELECT a FROM Tramitacion a WHERE a.idRol.idRol=:xIdRol AND a.idEstado.idEstado=:xEstado AND a.idDocumento.cerrado=:xCerrado AND (UPPER(a.idDocumento.asunto) LIKE :xCriterio OR UPPER(a.idDocumento.nroEntrada) LIKE :xCriterio) ORDER BY a.idTramitacion");
+        Query q = em.createQuery("SELECT a FROM Tramitacion a WHERE a.idRol.idRol=:xIdRol AND a.idEstado.idEstado=:xEstado AND a.idDocumento.cerrado=:xCerrado AND (UPPER(a.idDocumento.asunto) LIKE :xCriterio OR a.idDocumento.numeroExpediente=:xNroExpe) ORDER BY a.idTramitacion");
         q.setParameter("xIdRol", idRol);
         q.setParameter("xCerrado", Boolean.FALSE);
         q.setParameter("xEstado", estado);
@@ -43,6 +43,13 @@ public class TramitacionFacade extends AbstractFacade<Tramitacion> {
         } else {
             q.setParameter("xCriterio", "123456");
         }
+        Integer nroExpe = -1;
+        try {
+            nroExpe = Integer.parseInt(criterio);
+        } catch (NumberFormatException ex) {
+
+        }
+        q.setParameter("xNroExpe", nroExpe);
         List<Tramitacion> tr = q.getResultList();
         return tr;
 

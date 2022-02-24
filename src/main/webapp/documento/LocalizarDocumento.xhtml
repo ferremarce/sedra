@@ -25,7 +25,6 @@
                     <p:outputLabel for="opciones" value="Buscar en: " />
                     <p:selectOneRadio  id="opciones" value="#{DocumentoController.selectedOption}" required="true" requiredMessage="#{bundle.Requerido}">  
                         <f:selectItem itemLabel="Asunto" itemValue="d.asunto" />  
-                        <f:selectItem itemLabel="# Entrada" itemValue="d.nroEntrada" />
                         <f:selectItem itemLabel="# Expediente" itemValue="d.numeroExpediente" />
                         <f:selectItem itemLabel="Referencia" itemValue="d.referencia" />  
                         <f:selectItem itemLabel="Remitido a" itemValue="t.remitidoA" />  
@@ -66,11 +65,6 @@
                             </h:outputText>
                         </p:commandLink>
                     </p:column> 
-                    <p:column headerText="Nro. Ent." width="100" style="text-align: right">  
-                        <p:commandLink title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
-                            <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value=" #{item.nroEntrada}"/>
-                        </p:commandLink>
-                    </p:column>  
                     <p:column headerText="F. Doc." width="80" >
                         <h:outputText value="#{item.fechaDocumento}">
                             <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
@@ -132,7 +126,7 @@
                             <br/>
                             <h:outputText rendered="#{item.detalleNotaSalidaList.size()>0}" value="Enlazado con"/><br/>
                             <p:repeat rendered="#{item.detalleNotaSalidaList.size()>0}" value="#{item.detalleNotaSalidaList}" var="valor" > 
-                                <p:commandLink styleClass="Red fontBold" target="_new" title="Ver Documento" value="[Entrada] #{valor.idDocumento.nroEntrada} {#{valor.idDocumento.numeroExpediente}}" ajax="false" action="#{DocumentoController.doVerForm(valor.idDocumento.idDocumento)}"/> 
+                                <p:commandLink styleClass="Red fontBold" target="_new" title="Ver Documento" value="[Entrada] #{valor.idDocumento.toShortString()}" ajax="false" action="#{DocumentoController.doVerForm(valor.idDocumento.idDocumento)}"/> 
                                 <h:outputText value="#{valor.idDocumento.asunto.length()>80 ? valor.idDocumento.asunto.substring(0, 79): valor.idDocumento.asunto}..." />  <br/>
                             </p:repeat>
                         </p:column>  

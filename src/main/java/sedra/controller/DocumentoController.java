@@ -90,6 +90,14 @@ public class DocumentoController implements Serializable {
      */
     public DocumentoController() {
     }
+
+    public DocumentoFacade getDocumentoFacade() {
+        return documentoFacade;
+    }
+
+    public void setDocumentoFacade(DocumentoFacade documentoFacade) {
+        this.documentoFacade = documentoFacade;
+    }
     
     public List<NotaSalida> getListaNotaSalida() {
         return listaNotaSalida;
@@ -225,9 +233,9 @@ public class DocumentoController implements Serializable {
     public String create() {
         try {
             if (this.documento.getIdDocumento() == null) {
-                Documento d = documentoFacade.getDocumentoByNroEntradaAnho(this.documento.getNroEntrada(), this.documento.getAnho());
+                Documento d = documentoFacade.getDocumentoByNroEntradaAnho(this.documento.getNumeroExpediente(), this.documento.getAnho());
                 if (d != null) {
-                    JSFutil.addMessage("El Nro. de entrada " + this.documento.getNroEntrada() + " ya existe en el año " + this.documento.getAnho(), JSFutil.StatusMessage.WARNING);
+                    JSFutil.addMessage("El Nro. de Expediente " + this.documento.getNumeroExpediente() + " ya existe en el año " + this.documento.getAnho(), JSFutil.StatusMessage.WARNING);
                     return "";
                 }
                 this.documento.setIdUsuario(JSFutil.getUsuarioConectado());
@@ -437,7 +445,7 @@ public class DocumentoController implements Serializable {
             this.documento.setNumeroExpediente(this.documentoFacade.findNextNroExpediente());
             this.documento.setCerrado(false);
             this.documento.setFechaDocumento(JSFutil.getFechaHoraActual());
-            this.documento.setNroEntrada(this.documento.getNumeroExpediente().toString());
+//            this.documento.setNroEntrada(this.documento.getNumeroExpediente().toString());
             this.documento.setAsunto("Documento suelto: " + adjunto.getFileName());
             this.documento.setFechaRegistro(JSFutil.getFechaHoraActual());
             this.documento.setHoraRegistro(JSFutil.getFechaHoraActual());

@@ -80,8 +80,8 @@ public class Documento implements Serializable {
     @Column(name = "nombre_archivo")
     private String nombreArchivo;
     @Size(max = 255)
-    @Column(name = "nro_entrada")
-    private String nroEntrada;
+//    @Column(name = "nro_entrada")
+//    private String nroEntrada;
     @Size(max = 255)
     @Column(name = "observacion")
     private String observacion;
@@ -223,14 +223,13 @@ public class Documento implements Serializable {
         this.nombreArchivo = nombreArchivo;
     }
 
-    public String getNroEntrada() {
-        return nroEntrada;
-    }
-
-    public void setNroEntrada(String nroEntrada) {
-        this.nroEntrada = nroEntrada;
-    }
-
+//    public String getNroEntrada() {
+//        return nroEntrada;
+//    }
+//
+//    public void setNroEntrada(String nroEntrada) {
+//        this.nroEntrada = nroEntrada;
+//    }
     public String getObservacion() {
         return observacion;
     }
@@ -341,12 +340,12 @@ public class Documento implements Serializable {
 
     @Override
     public String toString() {
-        return "[" + this.nroEntrada + "] " + this.asunto;
+        return "[" + this.numeroExpediente + "] " + this.asunto;
     }
 
     public String toAudita() {
         return "[Id=" + this.idDocumento + "] "
-                + "[Nro.Entrada=" + this.nroEntrada + "] "
+                + "[Nro.Expediente=" + this.numeroExpediente + "] "
                 + "[Asunto=" + this.asunto + "] "
                 + "[CP=" + this.comprobantePago + "] "
                 + "[Referencia=" + this.referencia + "] "
@@ -356,5 +355,9 @@ public class Documento implements Serializable {
     public String toVerURL() {
         return JSFutil.getAbsoluteApplicationUrl() + "/documento/VerDocumento.xhtml?id=" + this.getIdDocumento();
     }
-    
+
+    public String toShortString() {
+        return this.numeroExpediente + "/" + this.anho;
+    }
+
 }

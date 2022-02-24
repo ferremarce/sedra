@@ -10,17 +10,13 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import org.eclipse.persistence.sessions.Session;
-import org.eclipse.persistence.sessions.factories.SessionManager;
 import sedra.modelo.Documento;
-import sedra.modelo.Documento_;
 import sedra.util.JSFutil;
 
 /**
@@ -44,7 +40,7 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
 
     public List<Documento> getAllDocumento(String criterio) {
         Query q = em.createQuery("SELECT a FROM Documento a "
-                + "WHERE UPPER(a.asunto) LIKE :xCriterio OR UPPER(a.nroEntrada) LIKE :xCriterio OR a.numeroExpediente=:xNroExpe "
+                + "WHERE UPPER(a.asunto) LIKE :xCriterio OR a.numeroExpediente=:xNroExpe "
                 //+ "OR a.idDocumento IN (SELECT d.idDocumento.idDocumento FROM DetalleNotaSalida d WHERE UPPER(d.idNota.numeroSalida) LIKE :xCriterio OR UPPER(d.idNota.numeroStr) LIKE :xCriterio) "
                 + "ORDER BY a.idDocumento DESC");
         if (criterio.compareTo("") != 0) {
@@ -78,7 +74,7 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
 
     public List<Documento> getAllDocumentoParaSeguimiento(String criterio) {
         Query q = em.createQuery("SELECT a FROM Documento a "
-                + "WHERE UPPER(a.asunto) LIKE :xCriterio OR UPPER(a.nroEntrada) LIKE :xCriterio "
+                + "WHERE UPPER(a.asunto) LIKE :xCriterio OR a.numeroExpediente=:xNroExpe "
                 + "OR a.idDocumento IN (SELECT d.idDocumento.idDocumento FROM DetalleNotaSalida d WHERE UPPER(d.idNota.numeroSalida) LIKE :xCriterio OR UPPER(d.idNota.numeroStr) LIKE :xCriterio) "
                 + "ORDER BY a.idDocumento");
         if (criterio.compareTo("") != 0) {
@@ -86,16 +82,24 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
         } else {
             q.setParameter("xCriterio", "123456");
         }
+        Integer nroExpe = -1;
+        try {
+            nroExpe = Integer.parseInt(criterio);
+        } catch (NumberFormatException ex) {
+
+        }
+        q.setParameter("xNroExpe", nroExpe);
+
         List<Documento> tr = q.getResultList();
         return tr;
 
     }
 
-    public Documento getDocumentoByNroEntradaAnho(String nroEntrada, Integer anho) {
+    public Documento getDocumentoByNroEntradaAnho(Integer nroExpediente, Integer anho) {
         Query q = em.createQuery("SELECT a FROM Documento a "
-                + "WHERE UPPER(a.nroEntrada) LIKE :xNroEntrada "
+                + "WHERE a.numeroExpediente=:xNroExpe "
                 + "AND a.anho=:xAnho");
-        q.setParameter("xNroEntrada", nroEntrada.toUpperCase());
+        q.setParameter("xNroExpe", nroExpediente);
         q.setParameter("xAnho", anho);
 
         List<Documento> tr = q.getResultList();
@@ -116,13 +120,16 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
 
     public List<Documento> getAllDocumentoByExpediente(String criterio) {
         Query q = em.createQuery("SELECT a FROM Documento a "
-                + "WHERE UPPER(a.nroEntrada) LIKE :xCriterio "
+                + "WHERE a.numeroExpediente=:xNroExpe "
                 + "ORDER BY a.idDocumento");
-        if (criterio.compareTo("") != 0) {
-            q.setParameter("xCriterio", "%" + criterio.toUpperCase() + "%");
-        } else {
-            q.setParameter("xCriterio", "123456");
+        Integer nroExpe = -1;
+        try {
+            nroExpe = Integer.parseInt(criterio);
+        } catch (NumberFormatException ex) {
+
         }
+        q.setParameter("xNroExpe", nroExpe);
+
         List<Documento> tr = q.getResultList();
         return tr;
 
@@ -198,6 +205,19 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
 
     public List<Documento> findAllRegistroAutomatico() {
         Query q = em.createQuery("SELECT a FROM Documento a WHERE a.idClasificador IS NULL AND a.numeroExpediente IS NOT NULL ORDER BY a.numeroExpediente DESC");
+        List<Documento> tr = q.getResultList();
+        return tr;
+    }
+
+    public List<Documento> findAllDocumentoAutocomplete(String query) {
+        Query q = em.createQuery("SELECT a FROM Documento a WHERE a.numeroExpediente=:xNroExpe ORDER BY a.anho DESC");
+        Integer nroExpe = -1;
+        try {
+            nroExpe = Integer.parseInt(query);
+        } catch (NumberFormatException ex) {
+
+        }
+        q.setParameter("xNroExpe", nroExpe);
         List<Documento> tr = q.getResultList();
         return tr;
     }

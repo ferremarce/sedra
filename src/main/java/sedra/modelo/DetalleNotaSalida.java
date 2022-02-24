@@ -114,7 +114,7 @@ public class DetalleNotaSalida implements Serializable {
     public String toAudita() {
         return "[Id=" + this.idDetalleNota + "]"
                 + "[FechaEnlace=" + this.fechaEnlace + "]"
-                + "[IdDoc/Entrada=" + this.idDocumento.getIdDocumento() + "/" + this.idDocumento.getNroEntrada() + "]"
+                + "[IdDoc/Expediente=" + this.idDocumento.getIdDocumento() + "/" + this.idDocumento.getNumeroExpediente() + "]"
                 + "[IdNota/Nro=" + this.idNota + "/" + this.idNota.getNumeroSalida() + "]";
     }
 

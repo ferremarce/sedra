@@ -42,11 +42,6 @@
                         </h:outputText>
                     </p:commandLink>
                 </p:column> 
-                <p:column headerText="#Entrada" width="100" sortBy="#{item.nroEntrada}" style="text-align: right">  
-                    <p:commandLink title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
-                        <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value=" #{item.nroEntrada}"/>
-                    </p:commandLink>
-                </p:column> 
                 <p:column headerText="Fecha" width="100" sortBy="#{item.fechaDocumento}">
                     <h:outputText value="#{item.fechaDocumento}">
                         <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />

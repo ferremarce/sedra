@@ -78,9 +78,6 @@
 	<field name="fechaRegistro" class="java.util.Date">
 		<fieldDescription><![CDATA[fechaRegistro]]></fieldDescription>
 	</field>
-	<field name="nroEntrada" class="java.lang.String">
-		<fieldDescription><![CDATA[nroEntrada]]></fieldDescription>
-	</field>
 	<field name="fechaIngreso" class="java.util.Date">
 		<fieldDescription><![CDATA[fechaIngreso]]></fieldDescription>
 	</field>

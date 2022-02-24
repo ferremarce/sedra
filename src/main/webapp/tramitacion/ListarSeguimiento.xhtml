@@ -30,21 +30,24 @@
                 <p:column headerText="#" width="30">
                     <h:outputText value="#{index+1}"/>
                 </p:column>
-                <p:column headerText="Nro. Ent." style="width:50px" > 
-                    <p:commandLink title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
-                        <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value=" #{item.nroEntrada}"/>
+                <p:column headerText="#Exp." width="110" sortBy="#{item.numeroExpediente}" style="text-align: right">  
+                    <p:commandLink immediate="true" title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
+                        <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.numeroExpediente}">
+                            <f:convertNumber pattern="0000000000000"/>
+                        </h:outputText>
                     </p:commandLink>
                 </p:column>  
-                <p:column headerText="Fechas" width="150" >
-                    <h:outputText value="F. Doc: "/>
-                    <h:outputText value="#{item.fechaDocumento}">
-                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                    </h:outputText>
-                    <p/>
-                    <h:outputText value="F. Ing: "/>
-                    <h:outputText value="#{item.fechaIngreso}">
-                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                    </h:outputText>
+                <p:column headerText="Fechas" width="200" >
+                    <p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+                        <h:outputText value="Documento: "/>
+                        <h:outputText value="#{item.fechaDocumento}">
+                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                        <h:outputText value="Ingreso: "/>
+                        <h:outputText value="#{item.fechaIngreso}">
+                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:panelGrid>
                 </p:column>
                 <p:column headerText="Asunto" >  
                     <i class="fa fa-folder-open"/>

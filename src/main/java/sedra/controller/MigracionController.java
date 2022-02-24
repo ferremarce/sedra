@@ -32,13 +32,13 @@ public class MigracionController implements Serializable {
 
     public void doConvertirNroEntrada() {
         List<Documento> lista = documentoFacade.findAll();
-        String nroEntrada;
+        String nroEntrada="";
         String[] nroEntradaArray;
         Integer nroExpe = 0;
         int cantidadError = 0;
         int cantidadUpdate = 0;
         for (Documento doc : lista) {
-            nroEntrada = doc.getNroEntrada();
+            //nroEntrada = doc.getNroEntrada();
             try {
                 nroEntradaArray = nroEntrada.split("-");
                 nroExpe = Integer.parseInt(nroEntradaArray[0]);

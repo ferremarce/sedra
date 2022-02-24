@@ -2,7 +2,7 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                 template="/includes/template.xhtml"
+                template="/includes/template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
@@ -38,8 +38,12 @@
                         Tabla de Datos
                     </f:facet>
                     <p:column headerText="Acción" width="120" styleClass="top">
-                        <p:commandButton ajax="true" update="@form, panelMensajeEstado" style="background: #fde5cd !important; color: black" rendered="#{item.cerrado==true}" value="#{bundle.DesllavearBoton}" title="Documento llaveado" onclick="if (!confirm('El documento se encuentra llaveado. El desbloqueo permitira alteraciones posteriores al documento y sus anexos. Desea desbloquear?')) {return false;}"  icon="fa fa-lock" actionListener="#{NotaSalidaController.desLlavear(item)}"/>
-                        <p:commandButton ajax="true" update="@form, panelMensajeEstado" rendered="#{item.cerrado==false}" value="#{bundle.LlavearBoton}" title="Documento abierto" onclick="if (!confirm('Desea realmente bloquear el documento y todas sus tramitaciones?...')) {return false;}"  icon="fa fa-unlock" actionListener="#{NotaSalidaController.llavear(item)}"/>
+                        <p:commandButton ajax="true" update="dataTableNota, panelMensajeEstado" style="background: #fde5cd !important; color: black" rendered="#{item.cerrado==true}" value="#{bundle.DesllavearBoton}" title="Documento llaveado" onclick="if (!confirm('El documento se encuentra llaveado. El desbloqueo permitira alteraciones posteriores al documento y sus anexos. Desea desbloquear?')) {
+                                    return false;
+                                }"  icon="fa fa-lock" actionListener="#{NotaSalidaController.desLlavear(item)}"/>
+                        <p:commandButton ajax="true" update="dataTableNota, panelMensajeEstado" rendered="#{item.cerrado==false}" value="#{bundle.LlavearBoton}" title="Documento abierto" onclick="if (!confirm('Desea realmente bloquear el documento y todas sus tramitaciones?...')) {
+                                    return false;
+                                }"  icon="fa fa-unlock" actionListener="#{NotaSalidaController.llavear(item.idNota)}"/>
                     </p:column> 
                     <p:column headerText="No. Sal./STR" width="100" styleClass="top">  
                         <p:commandLink title="#{bundle.VerBoton} detalle de la Nota de Salida" target="_new" ajax="false" action="#{NotaSalidaController.doVerForm(item.idNota)}">
@@ -55,7 +59,7 @@
                         <br/>
                         <h:outputText rendered="#{item.detalleNotaSalidaList.size()>0}" value="Enlazado con"/><br/>
                         <p:repeat rendered="#{item.detalleNotaSalidaList.size()>0}" value="#{item.detalleNotaSalidaList}" var="valor" > 
-                            <p:commandLink styleClass="Red fontBold" target="_new" title="Ver Documento" value="[Entrada] #{valor.idDocumento.nroEntrada} " ajax="false" action="#{DocumentoController.doVerForm(valor.idDocumento.idDocumento)}"/> 
+                            <p:commandLink styleClass="Red fontBold" target="_new" title="Ver Documento" value="[Entrada] #{valor.idDocumento.toShortString()}" ajax="false" action="#{DocumentoController.doVerForm(valor.idDocumento.idDocumento)}"/> 
                             <h:outputText value="#{valor.idDocumento.asunto.length()>80 ? valor.idDocumento.asunto.substring(0, 79): valor.idDocumento.asunto}..." />  <br/>
                         </p:repeat>
                     </p:column>  
@@ -82,14 +86,19 @@
                         Tabla de Datos
                     </f:facet>
                     <p:column headerText="Acción" width="120">
-                        <p:commandButton ajax="true" update="@form, panelMensajeEstado" style="background: #fde5cd !important; color: black" rendered="#{item.cerrado==true}" value="#{bundle.DesllavearBoton}" title="Documento llaveado" onclick="if (!confirm('El documento se encuentra llaveado. El desbloqueo permitira alteraciones posteriores al documento y sus anexos. Desea desbloquear?')) {return false;}"  icon="fa fa-lock" actionListener="#{DocumentoController.desbloquearDocumento(item.idDocumento)}"/>
-                        <p:commandButton ajax="true" update="@form, panelMensajeEstado" rendered="#{item.cerrado==false}" value="#{bundle.LlavearBoton}" title="Documento abierto" onclick="if (!confirm('Desea realmente bloquear el documento y todas sus tramitaciones?...')) {return false;}"  icon="fa fa-unlock" actionListener="#{DocumentoController.bloquearDocumento(item.idDocumento)}"/>
+                        <p:commandButton ajax="true" update="@form, panelMensajeEstado" style="background: #fde5cd !important; color: black" rendered="#{item.cerrado==true}" value="#{bundle.DesllavearBoton}" title="Documento llaveado" onclick="if (!confirm('El documento se encuentra llaveado. El desbloqueo permitira alteraciones posteriores al documento y sus anexos. Desea desbloquear?')) {
+                                    return false;
+                                }"  icon="fa fa-lock" actionListener="#{DocumentoController.desbloquearDocumento(item.idDocumento)}"/>
+                        <p:commandButton ajax="true" update="@form, panelMensajeEstado" rendered="#{item.cerrado==false}" value="#{bundle.LlavearBoton}" title="Documento abierto" onclick="if (!confirm('Desea realmente bloquear el documento y todas sus tramitaciones?...')) {
+                                    return false;}"  icon="fa fa-unlock" actionListener="#{DocumentoController.bloquearDocumento(item.idDocumento)}"/>
                     </p:column> 
-                    <p:column headerText="Nro. Ent." width="7%" >  
-                        <p:commandLink title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
-                            <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value=" #{item.nroEntrada}"/>
+                    <p:column headerText="#Exp." width="110" sortBy="#{item.numeroExpediente}" style="text-align: right">  
+                        <p:commandLink immediate="true" title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
+                            <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.numeroExpediente}">
+                                <f:convertNumber pattern="0000000000000"/>
+                            </h:outputText>
                         </p:commandLink>
-                    </p:column>  
+                    </p:column> 
                     <p:column headerText="F. Doc." width="10%" >
                         <h:outputText value="#{item.fechaDocumento}">
                             <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />

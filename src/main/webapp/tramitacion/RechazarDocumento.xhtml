@@ -14,8 +14,8 @@
         <h:form id="formMain">
             <p:panel header="Información del Rechazo">
                 <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" layout="flex" columnClasses="p-col-2,p-col-4,p-col-2,p-col-4" contentStyleClass="ui-fluid">
-                    <p:outputLabel for="remitenteNroEntrada" value="Entrada:"/>
-                    <h:outputText id="remitenteNroEntrada" value="#{TramitacionController.tramitacion.idDocumento.nroEntrada} - #{TramitacionController.tramitacion.idDocumento.asunto}"/>
+                    <p:outputLabel for="remitenteNroExpediente" value="Expediente:"/>
+                    <h:outputText id="remitenteNroExpediente" value="#{TramitacionController.tramitacion.idDocumento.numeroExpediente} - #{TramitacionController.tramitacion.idDocumento.asunto}"/>
                     <p:outputLabel for="remitenteFechaDerivacion" value="Fecha de Derivación:"/>
                     <h:outputText id="remitenteFechaDerivacion" value="#{TramitacionController.tramitacion.fechaDerivacion}">
                         <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />

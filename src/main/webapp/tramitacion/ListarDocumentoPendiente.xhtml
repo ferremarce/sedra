@@ -36,8 +36,10 @@
                                 <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
                             </h:outputText>
                         </p:column>
-                        <p:column headerText="Documento" sortBy="#{item.idDocumento.nroEntrada}">  
-                            <h:outputText value="Nro. Entrada: #{item.idDocumento.nroEntrada}"/>
+                        <p:column headerText="Documento" sortBy="#{item.idDocumento.numeroExpediente}">  
+                            <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.idDocumento.numeroExpediente}">
+                                <f:convertNumber pattern="0000000000000"/>
+                            </h:outputText>
                             <blockquote>
                                 <h:outputText styleClass="Brown fontBold" value="#{item.idDocumento.asunto}"/>
                             </blockquote>
@@ -87,8 +89,10 @@
                                 <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
                             </h:outputText>
                         </p:column>
-                        <p:column headerText="Documento" sortBy="#{item2.idDocumento.nroEntrada}">  
-                            <h:outputText value="Nro. Entrada: #{item2.idDocumento.nroEntrada}"/>
+                        <p:column headerText="Documento" sortBy="#{item2.idDocumento.numeroExpediente}">  
+                            <h:outputText value="Nro. Expediente: #{item2.idDocumento.numeroExpediente}">
+                                  <f:convertNumber pattern="0000000000000"/>
+                            </h:outputText>
                             <blockquote>
                                 <h:outputText styleClass="Brown fontBold" value="#{item2.idDocumento.asunto}"/>
                             </blockquote>

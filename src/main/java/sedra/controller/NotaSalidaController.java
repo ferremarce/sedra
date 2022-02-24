@@ -65,8 +65,7 @@ public class NotaSalidaController implements Serializable {
     private TipoNota tipoNota;
     private UploadedFile adjunto;
     private List<Documento> selectedDocumentos;
-    private String nroEntrada;
-
+//    private String nroEntrada;
     /**
      * Creates a new instance of NotaSalidaController
      */
@@ -121,13 +120,13 @@ public class NotaSalidaController implements Serializable {
         this.adjunto = adjunto;
     }
 
-    public String getNroEntrada() {
-        return nroEntrada;
-    }
-
-    public void setNroEntrada(String nroEntrada) {
-        this.nroEntrada = nroEntrada;
-    }
+//    public String getNroEntrada() {
+//        return nroEntrada;
+//    }
+//
+//    public void setNroEntrada(String nroEntrada) {
+//        this.nroEntrada = nroEntrada;
+//    }
 
     public List<Documento> getSelectedDocumentos() {
         return selectedDocumentos;
@@ -247,7 +246,7 @@ public class NotaSalidaController implements Serializable {
             this.commonController.doExcepcion(e);
         }
         //this.criterioBusqueda = ns.getNumeroSalida() == null ? ns.getNumeroSTR() : ns.getNumeroSalida();
-        this.buscarAllNotaSalida();
+        this.localizarAllNotaSalida();
         //return "/notaSalida/ListarNotaSalida";
     }
 
@@ -261,26 +260,26 @@ public class NotaSalidaController implements Serializable {
         this.adjunto = event.getFile();
     }
 
-    public void obtenerDocumentoByNroEntrada() {
-        if (!this.nroEntrada.isEmpty()) {
-            List<Documento> lista = documentoFacade.getDocumentoByNroEntrada(this.nroEntrada);
-            if (!lista.isEmpty()) {
-                for (Documento d : lista) {
-                    if (d.getCerrado()) {
-                        JSFutil.addMessage("El documento con entrada: " + this.nroEntrada + " del año " + d.getAnho() + " ya se encuentra llaveado", JSFutil.StatusMessage.WARNING);
-                    } else {
-                        this.selectedDocumentos.add(d);
-                        this.nroEntrada = "";
-                        break;
-                    }
-                }
-            } else {
-                JSFutil.addMessage("No existe nigun documento con entrada: " + this.nroEntrada, JSFutil.StatusMessage.WARNING);
-            }
-        } else {
-            JSFutil.addMessage("No es posible localizar el documento con entrada: " + this.nroEntrada, JSFutil.StatusMessage.WARNING);
-        }
-    }
+//    public void obtenerDocumentoByNroEntrada() {
+//        if (!this.nroEntrada.isEmpty()) {
+//            List<Documento> lista = documentoFacade.getDocumentoByNroEntrada(this.nroEntrada);
+//            if (!lista.isEmpty()) {
+//                for (Documento d : lista) {
+//                    if (d.getCerrado()) {
+//                        JSFutil.addMessage("El documento con entrada: " + this.nroEntrada + " del año " + d.getAnho() + " ya se encuentra llaveado", JSFutil.StatusMessage.WARNING);
+//                    } else {
+//                        this.selectedDocumentos.add(d);
+//                        this.nroEntrada = "";
+//                        break;
+//                    }
+//                }
+//            } else {
+//                JSFutil.addMessage("No existe nigun documento con entrada: " + this.nroEntrada, JSFutil.StatusMessage.WARNING);
+//            }
+//        } else {
+//            JSFutil.addMessage("No es posible localizar el documento con entrada: " + this.nroEntrada, JSFutil.StatusMessage.WARNING);
+//        }
+//    }
 
     public String doGuardar() {
         try {
@@ -303,7 +302,7 @@ public class NotaSalidaController implements Serializable {
                         dtn.setIdNota(notaSalida);
                         dtn.setFechaEnlace(JSFutil.getFechaHoraActual());
                         detalleNotaSalidaFacade.create(dtn);
-                        doc += d.getNroEntrada() + " ";
+                        doc += d.getNumeroExpediente() + " ";
                     }
                 }
                 this.criterioBusqueda = notaSalida.getNumeroSalida() == null ? notaSalida.getNumeroStr() : notaSalida.getNumeroSalida();
@@ -335,7 +334,7 @@ public class NotaSalidaController implements Serializable {
                         dtn.setIdNota(notaSalida);
                         dtn.setFechaEnlace(JSFutil.getFechaHoraActual());
                         detalleNotaSalidaFacade.create(dtn);
-                        doc += d.getNroEntrada() + " ";
+                        doc += d.getNumeroExpediente() + " ";
                     }
                 }
                 this.criterioBusqueda = notaSalida.getNumeroSalida() == null ? notaSalida.getNumeroStr() : notaSalida.getNumeroSalida();
@@ -393,4 +392,9 @@ public class NotaSalidaController implements Serializable {
         }
         this.localizarAllNotaSalida();
     }
+    
+    public List<Documento> autocompleteEnlaceDocumento(String query) {
+        return this.documentoFacade.findAllDocumentoAutocomplete(query);
+    }
+    
 }

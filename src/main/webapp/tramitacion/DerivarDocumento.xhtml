@@ -17,7 +17,7 @@
                     Documentos
                 </f:facet>
                 <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" contentStyleClass="ui-fluid">
-                    <h:outputText styleClass="Purple fontBold" value="#{item.idDocumento.nroEntrada}, #{item.idDocumento.asunto}"/>
+                    <h:outputText styleClass="Purple fontBold" value="#{item.idDocumento.toShortString()} - #{item.idDocumento.asunto}"/>
                     <h:outputText value="Remitente: [#{item.idUsuarioRemitente.usuario}]"/>                  
                 </p:panelGrid>
             </p:dataList> 
