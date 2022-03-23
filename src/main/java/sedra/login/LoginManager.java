@@ -191,7 +191,7 @@ public class LoginManager implements Serializable {
         }
         try {
             Usuario u = JSFutil.getUsuarioConectado();
-            u.setSecurePassword(JSFutil.getSecurePassword(u.getContrasenha()));
+            u.setSecurePassword(JSFutil.getSecurePassword(this.getContrasenha()));
             u.setContrasenha(null);
             
             usuarioFacade.edit(u);
