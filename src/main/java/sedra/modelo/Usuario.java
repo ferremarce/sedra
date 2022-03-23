@@ -22,6 +22,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import sedra.util.Codigo;
 
 /**
  *
@@ -206,5 +207,16 @@ public class Usuario implements Serializable {
     public String toString() {
         return this.getCuenta();
     }
-    
+
+    public Boolean esAdm() {
+        try {
+            return this.getIdRol().getIdRol().equals(Codigo.ADMINISTRADOR);
+        } catch (Exception ex) {
+            return Boolean.FALSE;
+        }
+    }
+
+    public String toInfoString() {
+        return this.getCuenta() + "\n" + this.getIdRol().toString();
+    }
 }

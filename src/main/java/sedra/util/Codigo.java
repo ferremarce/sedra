@@ -11,6 +11,8 @@ package sedra.util;
  */
 public interface Codigo {
 
+    public static final Integer ADMINISTRADOR = 1;
+
     public static final Integer TIPO_DOCUMENTO_DEFECTO = 2;
 
 }

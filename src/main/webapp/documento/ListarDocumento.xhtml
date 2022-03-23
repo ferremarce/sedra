@@ -59,6 +59,9 @@
                         <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
                     </h:outputText>
                 </p:column>  
+                 <p:column headerText="Creado por" width="100">  
+                     <h:outputText value="#{item.idUsuario.toInfoString()}"/>                      
+                </p:column>  
                 <p:column width="150">
                     <f:facet name="header">
                         <h:outputText value="Acción"/>

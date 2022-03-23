@@ -18,6 +18,13 @@
         <h:form id="formHeader">
             <p:menubar model="#{MenuController.model}">
                 <f:facet name="options">
+                    <div class="p-d-inline-flex">
+                        <p:selectOneMenu rendered="#{LoginManager.usuarioLogeado.esAdm()}" value="#{LoginManager.rolTMP}" filter="true" filterMatchMode="contains" >
+                            <f:selectItems value="#{RolController.rolCheckSet}" var="rol"/>
+                            <p:ajax event="change" listener="#{LoginManager.doCambioRol()}" update="panelMensajeEstado"/>
+                        </p:selectOneMenu> 
+                        <h:outputText styleClass="fontBold fontItalic" rendered="#{!LoginManager.usuarioLogeado.esAdm()}" value="#{LoginManager.rolTMP.toString()}"/>
+                    </div>
                     <div class="p-d-inline-flex"><p:clock timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" mode="server"/></div>
                     <div class="p-d-inline-flex"><p:commandButton ajax="false" icon="fa fa fa-cogs" rendered="#{LoginManager.usuarioLogeado.idRol.idRol==1 or LoginManager.usuarioLogeado.idRol.idRol==18}"  title="Configuraciones" action="#{ConfiguracionController.editSetup()}"/></div>                    
                     <div class="p-d-inline-flex"><p:commandButton id="btnMiCuenta" value="Mi cuenta" type="button" icon="fa fa-user" /></div>

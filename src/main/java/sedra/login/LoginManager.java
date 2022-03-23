@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import sedra.fachada.AuditaFacade;
 import sedra.fachada.UsuarioFacade;
 import sedra.modelo.Audita;
+import sedra.modelo.Rol;
 import sedra.modelo.Usuario;
 import sedra.util.JSFutil;
 
@@ -27,22 +28,32 @@ import sedra.util.JSFutil;
 @Named(value = "LoginManager")
 @SessionScoped
 public class LoginManager implements Serializable {
-
+    
     @Inject
     UsuarioFacade usuarioFacade;
     @Inject
     AuditaFacade auditaFacade;
-
+    
     public static final String USER_SESSION_KEY = "user";
+    public static final String ROL_KEY = "rol";
     private String cuenta;
     private String contrasenha;
     private String contrasenha2;
     private Usuario usuarioActual;
+    private Rol rolTMP;
 
     /**
      * Creates a new instance of LoginManager
      */
     public LoginManager() {
+    }
+    
+    public Rol getRolTMP() {
+        return rolTMP;
+    }
+    
+    public void setRolTMP(Rol rolTMP) {
+        this.rolTMP = rolTMP;
     }
 
     /**
@@ -119,11 +130,13 @@ public class LoginManager implements Serializable {
                 }
                 FacesContext context = FacesContext.getCurrentInstance();
                 context.getExternalContext().getSessionMap().put(USER_SESSION_KEY, user);
+                JSFutil.putSessionVariable(ROL_KEY, user.getIdRol());
+                this.rolTMP = user.getIdRol();
                 this.usuarioActual = user;
                 auditaFacade.create(new Audita("LOGIN", "Acceso correcto.", JSFutil.getFechaHoraActual(), user.getCuenta(), null));
                 JSFutil.putSessionVariable("tema", this.usuarioActual.getIdTheme());
                 return "/index";
-
+                
             } else {
                 JSFutil.addMessage("Login Fallido!... Usuario '" + cuenta + "' no existe.", JSFutil.StatusMessage.ERROR);
                 auditaFacade.create(new Audita("LOGIN", "Acceso Incorrecto!... Usuario no existe.", JSFutil.getFechaHoraActual(), cuenta + "/" + contrasenha, null));
@@ -145,11 +158,11 @@ public class LoginManager implements Serializable {
         if (session != null) {
             session.invalidate();
         }
-
+        
         JSFutil.addMessage("Sesión terminada.", JSFutil.StatusMessage.ERROR);
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
         context.redirect(context.getRequestContextPath() + "/login.xhtml??faces-redirect=true");
-
+        
     }
 
     /**
@@ -160,13 +173,13 @@ public class LoginManager implements Serializable {
     public Usuario getUsuarioLogeado() {
         return JSFutil.getUsuarioConectado();
     }
-
+    
     public String doCambiarContrasenhaForm() {
         this.contrasenha = "";
         this.contrasenha2 = "";
         return "/usuario/CambiarContrasenha";
     }
-
+    
     public String doCambiarContrasenha() {
         if (this.getContrasenha().length() < 8) {
             JSFutil.addMessage("Contraseña insegura. Debe proporcionar una contraseña de al menos 8 letras/numeros", JSFutil.StatusMessage.ERROR);
@@ -178,7 +191,9 @@ public class LoginManager implements Serializable {
         }
         try {
             Usuario u = JSFutil.getUsuarioConectado();
-            u.setContrasenha(this.contrasenha);
+            u.setSecurePassword(JSFutil.getSecurePassword(u.getContrasenha()));
+            u.setContrasenha(null);
+            
             usuarioFacade.edit(u);
             this.contrasenha = "";
             this.contrasenha2 = "";
@@ -196,5 +211,10 @@ public class LoginManager implements Serializable {
      */
     public TimeZone getMyTimeZone() {
         return JSFutil.getMyTimeZone();
+    }
+    
+    public void doCambioRol() {
+        JSFutil.putSessionVariable(ROL_KEY, this.rolTMP);
+        JSFutil.addMessage("Se ha cambiado el rol a  " + this.rolTMP.toString(), JSFutil.StatusMessage.INFORMATION);
     }
 }

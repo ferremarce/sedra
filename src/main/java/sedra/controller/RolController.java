@@ -192,7 +192,12 @@ public class RolController implements Serializable {
     public SelectItem[] getRolSet() {
         return JSFutil.getSelectItems(rolFacade.findAll(), Boolean.TRUE);
     }
+
     public SelectItem[] getRolSetList() {
         return JSFutil.getSelectItems(rolFacade.findAll(), Boolean.FALSE);
+    }
+
+    public SelectItem[] getRolCheckSet() {
+        return JSFutil.getSelectItems(this.rolFacade.findAll(), Boolean.FALSE);
     }
 }

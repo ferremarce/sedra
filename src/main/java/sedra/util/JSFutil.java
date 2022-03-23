@@ -24,14 +24,13 @@ import java.util.ResourceBundle;
 import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import org.eclipse.persistence.exceptions.DatabaseException;
 import org.mindrot.jbcrypt.BCrypt;
+import sedra.modelo.Rol;
 import sedra.modelo.Usuario;
 //import senado.gov.py.entity.Usuario;
 
@@ -507,5 +506,11 @@ public class JSFutil implements Serializable {
             Logger.getLogger(JSFutil.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    public static Rol getRolSesion() {
+        HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+        Rol rol = (Rol) session.getAttribute("rol");
+        return rol;
     }
 }

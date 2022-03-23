@@ -40,14 +40,17 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
 
     public List<Documento> getAllDocumento(String criterio) {
         Query q = em.createQuery("SELECT a FROM Documento a "
-                + "WHERE UPPER(a.asunto) LIKE :xCriterio OR a.numeroExpediente=:xNroExpe "
+                + "WHERE (UPPER(a.asunto) LIKE :xCriterio OR a.numeroExpediente=:xNroExpe) "
                 //+ "OR a.idDocumento IN (SELECT d.idDocumento.idDocumento FROM DetalleNotaSalida d WHERE UPPER(d.idNota.numeroSalida) LIKE :xCriterio OR UPPER(d.idNota.numeroStr) LIKE :xCriterio) "
+                + "AND a.idUsuario.idRol.idRol=:xIdRol "
                 + "ORDER BY a.idDocumento DESC");
         if (criterio.compareTo("") != 0) {
             q.setParameter("xCriterio", "%" + criterio.toUpperCase() + "%");
         } else {
             q.setParameter("xCriterio", "123456");
         }
+        q.setParameter("xIdRol", JSFutil.getRolSesion().getIdRol());
+        
         Integer nroExpe = -1;
         try {
             nroExpe = Integer.parseInt(criterio);
