@@ -86,9 +86,6 @@ label{
 .fontItalic{
     font-style: italic;
 }
-.fontBlink{
-    animation: blinker2 0.6s cubic-bezier(1, 0, 0, 1) infinite alternate;
-}
 .top{
     vertical-align: top !important;
 }

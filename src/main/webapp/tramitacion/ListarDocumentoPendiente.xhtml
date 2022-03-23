@@ -26,7 +26,7 @@
                         <i class="fa fa-bell"/>
                     </f:facet>
                     <p:dataTable rowIndexVar="index" id="dataTablePendiente" var="item" value="#{TramitacionController.listaTramitacionPendiente}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
-                                 rows="10"
+                                 rows="50"
                                  paginator="true"
                                  filterEvent="enter"
                                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -35,6 +35,9 @@
                         <f:facet name="header">
                             Tabla de Datos
                         </f:facet>  
+                        <p:column width="30" headerText="#">
+                            <h:outputText value="#{index+1}"/>
+                        </p:column>
                         <p:column headerText="F. Deriv." width="80" sortBy="#{item.fechaDerivacion}" >
                             <h:outputText value="#{item.fechaDerivacion}">
                                 <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
@@ -80,7 +83,7 @@
                         <i class="fa fa-bell"/>
                     </f:facet>
                     <p:dataTable rowIndexVar="index2" id="dataTablePendienteConfirmado" var="item2" value="#{TramitacionController.listaTramitacionConfirmado}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
-                                 rows="10"
+                                 rows="50"
                                  paginator="true"
                                  filterEvent="enter"
                                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -92,6 +95,9 @@
                             Tabla de Datos
                         </f:facet>
                         <p:column selectionMode="multiple" width="20"/>  
+                        <p:column width="50" headerText="#">
+                            <h:outputText value="#{index2+1}"/>
+                        </p:column>
                         <p:column headerText="F. Deriv." width="80" sortBy="#{item2.fechaDerivacion}" >
                             <h:outputText value="#{item2.fechaDerivacion}">
                                 <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
