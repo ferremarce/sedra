@@ -177,26 +177,26 @@ public class TramitacionController implements Serializable {
     }
 
     public String listPendientesSetup() {
-        this.buscarPendiente(1);
-        this.buscarPendiente(3);
+        this.listaTramitacionPendiente = this.buscarPendiente(1);
+        this.listaTramitacionConfirmado = this.buscarPendiente(3);
+        if (this.listaTramitacionPendiente.isEmpty()) {
+            JSFutil.addMessage("No hay pendientes de confirmación", JSFutil.StatusMessage.WARNING);
+        } else {
+            JSFutil.addMessage(this.listaTramitacionPendiente.size() + " pendientes no confirmados", JSFutil.StatusMessage.INFORMATION);
+        }
+        if (this.listaTramitacionConfirmado.isEmpty()) {
+            JSFutil.addMessage("No hay pendientes para tramitación", JSFutil.StatusMessage.WARNING);
+        } else {
+            JSFutil.addMessage(this.listaTramitacionConfirmado.size() + " pendientes para tramitación", JSFutil.StatusMessage.INFORMATION);
+        }
         return "/tramitacion/ListarDocumentoPendiente";
     }
 
-    public void buscarPendiente(Integer estado) {
+    public List<Tramitacion> buscarPendiente(Integer estado) {
         if (estado.compareTo(1) == 0) {
-            this.listaTramitacionPendiente = tramitacionFacade.getAllTramitacionPendientes(JSFutil.getUsuarioConectado().getIdRol().getIdRol(), this.criterioBusqueda, estado);
-            if (this.listaTramitacionPendiente.isEmpty()) {
-                JSFutil.addMessage("No hay pendientes de confirmación", JSFutil.StatusMessage.WARNING);
-            } else {
-                JSFutil.addMessage(this.listaTramitacionPendiente.size() + " pendientes no confirmados", JSFutil.StatusMessage.INFORMATION);
-            }
+            return tramitacionFacade.getAllTramitacionPendientes(this.criterioBusqueda, estado);
         } else {
-            this.listaTramitacionConfirmado = tramitacionFacade.getAllTramitacionPendientes(JSFutil.getUsuarioConectado().getIdRol().getIdRol(), this.criterioBusqueda, estado);
-            if (this.listaTramitacionConfirmado.isEmpty()) {
-                JSFutil.addMessage("No hay pendientes para tramitación", JSFutil.StatusMessage.WARNING);
-            } else {
-                JSFutil.addMessage(this.listaTramitacionConfirmado.size() + " pendientes para tramitación", JSFutil.StatusMessage.INFORMATION);
-            }
+            return tramitacionFacade.getAllTramitacionPendientes(this.criterioBusqueda, estado);
         }
     }
 
@@ -468,5 +468,9 @@ public class TramitacionController implements Serializable {
             this.commonController.doExcepcion(e);
         }
         return "";
+    }
+
+    public void checkPendientes() {
+        this.listaTramitacionPendiente = this.buscarPendiente(1);
     }
 }

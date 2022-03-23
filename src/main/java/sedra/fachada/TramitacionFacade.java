@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import sedra.modelo.Tramitacion;
+import sedra.util.JSFutil;
 
 /**
  *
@@ -32,9 +33,9 @@ public class TramitacionFacade extends AbstractFacade<Tramitacion> {
         super(Tramitacion.class);
     }
 
-    public List<Tramitacion> getAllTramitacionPendientes(Integer idRol, String criterio, Integer estado) {
+    public List<Tramitacion> getAllTramitacionPendientes(String criterio, Integer estado) {
         Query q = em.createQuery("SELECT a FROM Tramitacion a WHERE a.idRol.idRol=:xIdRol AND a.idEstado.idEstado=:xEstado AND a.idDocumento.cerrado=:xCerrado AND (UPPER(a.idDocumento.asunto) LIKE :xCriterio OR a.idDocumento.numeroExpediente=:xNroExpe) ORDER BY a.idTramitacion");
-        q.setParameter("xIdRol", idRol);
+        q.setParameter("xIdRol", JSFutil.getRolSesion().getIdRol());
         q.setParameter("xCerrado", Boolean.FALSE);
         q.setParameter("xEstado", estado);
         //q.setMaxResults(100);

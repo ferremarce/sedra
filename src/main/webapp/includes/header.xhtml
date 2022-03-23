@@ -25,14 +25,24 @@
                         </p:selectOneMenu> 
                         <h:outputText styleClass="fontBold fontItalic" rendered="#{!LoginManager.usuarioLogeado.esAdm()}" value="#{LoginManager.rolTMP.toString()}"/>
                     </div>
+                    <p:remoteCommand autoRun="true" async="true" name="rc" update="panelAlerta" actionListener="#{TramitacionController.checkPendientes()}"/>
+                    <div class="p-d-inline-flex">
+                        <p:outputPanel id="panelAlerta"> 
+                            <p:commandButton id="btnAlerta" icon="fa fa-bell" type="button" value="#{TramitacionController.listaTramitacionPendiente.size()} " />
+                            <p:overlayPanel for="btnAlerta" style="width: 30%">
+                                <p:commandLink value="#{TramitacionController.listaTramitacionPendiente.size()} documentos pendientes de trámite" action="#{TramitacionController.listPendientesSetup()}"/>
+                            </p:overlayPanel>
+                        </p:outputPanel>
+                    </div>
                     <div class="p-d-inline-flex"><p:clock timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" mode="server"/></div>
-                    <div class="p-d-inline-flex"><p:commandButton ajax="false" icon="fa fa fa-cogs" rendered="#{LoginManager.usuarioLogeado.idRol.idRol==1 or LoginManager.usuarioLogeado.idRol.idRol==18}"  title="Configuraciones" action="#{ConfiguracionController.editSetup()}"/></div>                    
+                    <div class="p-d-inline-flex"><p:commandButton ajax="false" icon="fa fa fa-cogs" rendered="#{LoginManager.usuarioLogeado.esAdm()}"  title="Configuraciones" action="#{ConfiguracionController.editSetup()}"/></div>                    
                     <div class="p-d-inline-flex"><p:commandButton id="btnMiCuenta" value="Mi cuenta" type="button" icon="fa fa-user" /></div>
                     <p:overlayPanel for="btnMiCuenta" style="width: 60%" >
                         <div class="p-d-inline-flex"><h:outputText value="#{LoginManager.usuarioLogeado.usuario} (#{LoginManager.usuarioLogeado.idRol.toString()})"/></div>
                         <div class="p-d-inline-flex"><p:commandButton ajax="false" value="#{bundle.CambiarContrasenhaBoton}" icon="fa fa-lock" action="#{LoginManager.doCambiarContrasenhaForm()}" /></div>
                         <div class="p-d-inline-flex"><p:commandButton id="cmdLogout" ajax="false" value="#{bundle.SalirBoton}" icon="fa fa-sign-out" action="#{LoginManager.doLogout()}" /></div>
                     </p:overlayPanel>
+
                 </f:facet>
             </p:menubar>
         </h:form>
