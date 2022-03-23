@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJBException;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.eclipse.persistence.exceptions.DatabaseException;
@@ -39,10 +40,23 @@ public class CommonController implements Serializable {
     ResourceBundle bundle = ResourceBundle.getBundle("propiedades.bundle", JSFutil.getmyLocale());
     private Integer tiempoSesionActiva;
 
+    @Inject
+    TramitacionController tramitacionController;
+    
+    private Boolean tieneAlerta = Boolean.FALSE;
+
     /**
      * Creates a new instance of CommonController
      */
     public CommonController() {
+    }
+
+    public Boolean getTieneAlerta() {
+        return tieneAlerta;
+    }
+
+    public void setTieneAlerta(Boolean tieneAlerta) {
+        this.tieneAlerta = tieneAlerta;
     }
 
     @PostConstruct
@@ -121,5 +135,13 @@ public class CommonController implements Serializable {
             return null;
         }
         return cal.getTime();
+    }
+
+    public void checkAlertas() {
+        this.tieneAlerta = Boolean.FALSE;
+        this.tramitacionController.checkPendientes();
+        if (!this.tramitacionController.getListaTramitacionPendiente().isEmpty()) {
+            this.tieneAlerta = Boolean.TRUE;
+        }
     }
 }

@@ -25,12 +25,14 @@
                         </p:selectOneMenu> 
                         <h:outputText styleClass="fontBold fontItalic" rendered="#{!LoginManager.usuarioLogeado.esAdm()}" value="#{LoginManager.rolTMP.toString()}"/>
                     </div>
-                    <p:remoteCommand autoRun="true" async="true" name="rc" update="panelAlerta" actionListener="#{TramitacionController.checkPendientes()}"/>
+                    <p:remoteCommand autoRun="true" async="true" name="rc" update="panelAlerta" actionListener="#{CommonController.checkAlertas()}"/>
                     <div class="p-d-inline-flex">
                         <p:outputPanel id="panelAlerta"> 
-                            <p:commandButton id="btnAlerta" icon="fa fa-bell" type="button" value="#{TramitacionController.listaTramitacionPendiente.size()} " />
+                            <p:commandButton id="btnAlerta" icon="fa fa-bell" styleClass="ui-button-warning rounded-button" title="Hay alertas en el sistema" type="button" rendered="#{CommonController.tieneAlerta}" value="Alerta!" >
+                                <p:effect type="pulsate" speed="5000" event="load" delay="1000"/>
+                            </p:commandButton>
                             <p:overlayPanel for="btnAlerta" style="width: 30%">
-                                <p:commandLink value="#{TramitacionController.listaTramitacionPendiente.size()} documentos pendientes de trámite" action="#{TramitacionController.listPendientesSetup()}"/>
+                                <p:commandLink ajax="false" value="#{TramitacionController.listaTramitacionPendiente.size()} documentos pendientes de trámite" action="#{TramitacionController.listPendientesSetup()}"/>
                             </p:overlayPanel>
                         </p:outputPanel>
                     </div>
