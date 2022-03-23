@@ -37,10 +37,13 @@
                                     <i class="fa fa-window-close"/>
                                 </p:commandLink>
                             </p:outputPanel>
+                            <p:outputLabel for="tiempoAlerta" value="Tiempo de Chequeo de Alertas (seg):"/>
+                            <p:inputNumber id="tiempoAlerta" value="#{ConfiguracionController.configuracion.tiempoAlerta}" title="Tiempo de alerta" required="true" requiredMessage="#{bundle.Requerido}" />
+                            <p:message for="tiempoAlerta"/>
                         </p:panelGrid>
                         <f:facet name="footer">
                             <p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
-                                <p:commandButton icon="fa fa-check" value="#{bundle.GuardarBoton}" update="panelMensajeEstado" action="#{ConfiguracionController.edit()}"/>
+                                <p:commandButton ajax="false" icon="fa fa-check" value="#{bundle.GuardarBoton}" action="#{ConfiguracionController.edit()}"/>
                             </p:panelGrid>
                         </f:facet>
                     </p:panel>

@@ -42,7 +42,7 @@ public class CommonController implements Serializable {
 
     @Inject
     TramitacionController tramitacionController;
-    
+
     private Boolean tieneAlerta = Boolean.FALSE;
 
     /**
@@ -138,10 +138,12 @@ public class CommonController implements Serializable {
     }
 
     public void checkAlertas() {
+
         this.tieneAlerta = Boolean.FALSE;
         this.tramitacionController.checkPendientes();
         if (!this.tramitacionController.getListaTramitacionPendiente().isEmpty()) {
             this.tieneAlerta = Boolean.TRUE;
         }
     }
+
 }

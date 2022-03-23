@@ -50,6 +50,8 @@ public class Configuracion implements Serializable {
     private byte[] archivoLogo;
     @Column(name = "validator")
     private String validator;
+    @Column(name = "tiempo_alerta")
+    private Integer tiempoAlerta;
 
     public Configuracion() {
     }
@@ -114,6 +116,14 @@ public class Configuracion implements Serializable {
         this.validator = validator;
     }
 
+    public Integer getTiempoAlerta() {
+        return tiempoAlerta;
+    }
+
+    public void setTiempoAlerta(Integer tiempoAlerta) {
+        this.tiempoAlerta = tiempoAlerta;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -139,4 +149,11 @@ public class Configuracion implements Serializable {
         return "sedra.modelo.Configuracion[ idConfiguracion=" + idConfiguracion + " ]";
     }
 
+    public Integer obtenerTiempoAlerta() {
+        //Si no se define un tiempo de alerta o es menor a 0 se retorna 60 seg. por defecto
+        if (this.tiempoAlerta != null && this.tiempoAlerta > 0) {
+            return this.tiempoAlerta;
+        }
+        return 60;
+    }
 }
