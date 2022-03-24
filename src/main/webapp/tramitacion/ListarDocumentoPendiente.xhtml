@@ -11,19 +11,21 @@
     </ui:define>
 
     <ui:define name="content">
+         <f:metadata>
+            <f:event type="preRenderView" listener="#{TramitacionController.init()}"/>
+        </f:metadata>
         <h:form id="formMain">
             <p:toolbar>
                 <p:toolbarGroup>
                     <p:inputText styleClass="espaciadoToolbar" size="50" id="criterio" value="#{TramitacionController.criterioBusqueda}" placeholder="Asunto, Nro. Entrada" />
-                    <p:commandButton styleClass="espaciadoToolbar" id="cmdBuscar" icon="fa fa-search" ajax="true" action="#{TramitacionController.buscarAllPendiente()}" update="@form, panelMensajeEstado"/>
+                    <p:commandButton styleClass="espaciadoToolbar" id="cmdBuscar" icon="fa fa-search" ajax="false" action="#{TramitacionController.buscarAllPendiente()}" />
                 </p:toolbarGroup>
             </p:toolbar>
             <p:watermark for="criterio" value="Asunto, Nro. Entrada"/>
-            <p:tabView id="tabPendiente">
+            <p:tabView id="tabPendiente" orientation="left" >
                 <p:tab>
                     <f:facet name="title">
                         <h:outputText value="Pendiente de Confirmación [#{TramitacionController.listaTramitacionPendiente.size()}]"/>
-                        <i class="fa fa-bell"/>
                     </f:facet>
                     <p:dataTable rowIndexVar="index" id="dataTablePendiente" var="item" value="#{TramitacionController.listaTramitacionPendiente}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                                  rows="50"
@@ -31,10 +33,9 @@
                                  filterEvent="enter"
                                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                  rowsPerPageTemplate="#{bundle.Paginacion}"
+                                 rowKey="#{item}"
                                  >
-                        <f:facet name="header">
-                            Tabla de Datos
-                        </f:facet>  
+                        <p:column selectionMode="multiple" width="20"/>  
                         <p:column width="30" headerText="#">
                             <h:outputText value="#{index+1}"/>
                         </p:column>
@@ -80,7 +81,6 @@
                 <p:tab>
                     <f:facet name="title">
                         <h:outputText value="Pendiente de Tramitación [#{TramitacionController.listaTramitacionConfirmado.size()}]"/>
-                        <i class="fa fa-bell"/>
                     </f:facet>
                     <p:dataTable rowIndexVar="index2" id="dataTablePendienteConfirmado" var="item2" value="#{TramitacionController.listaTramitacionConfirmado}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                                  rows="50"
@@ -91,9 +91,6 @@
                                  selection="#{TramitacionController.selectedTramitacion}"
                                  rowKey="#{item2}"
                                  >
-                        <f:facet name="header">
-                            Tabla de Datos
-                        </f:facet>
                         <p:column selectionMode="multiple" width="20"/>  
                         <p:column width="50" headerText="#">
                             <h:outputText value="#{index2+1}"/>

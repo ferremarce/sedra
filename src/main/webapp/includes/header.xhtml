@@ -28,11 +28,14 @@
                     <p:poll interval="#{ConfiguracionController.configuracion.obtenerTiempoAlerta()}" global="false" onstart="PF('barraNotifica').show()"  oncomplete="PF('barraNotifica').hide()" listener="#{CommonController.checkAlertas()}" update="panelAlerta"/>
                     <div class="p-d-inline-flex">
                         <p:outputPanel id="panelAlerta"> 
-                            <p:commandButton id="btnAlerta" icon="fa fa-bell" styleClass="ui-button-warning rounded-button" title="Hay alertas en el sistema" type="button" rendered="#{CommonController.tieneAlerta}" value="Alerta!" >
+                            <p:commandButton id="btnAlerta" icon="fa fa-bell" styleClass="ui-button-warning rounded-button" title="Hay alertas en el sistema" type="button" rendered="#{not empty CommonController.listaAlerta}" value="Alerta!" >
                                 <p:effect type="pulsate" speed="5000" event="load" delay="1000"/>
                             </p:commandButton>
                             <p:overlayPanel for="btnAlerta" style="width: 30%">
-                                <p:commandLink ajax="false" value="#{TramitacionController.listaTramitacionPendiente.size()} documentos pendientes de trámite" action="#{TramitacionController.listPendientesSetup()}"/>
+                                <p:dataList var="alerta" value="#{CommonController.listaAlerta}">
+                                    <i class="fa fa-bell"/>
+                                    <p:commandLink ajax="false" value="#{alerta.toString()}" action="#{alerta.toAction()}"/>
+                                </p:dataList>
                             </p:overlayPanel>
                         </p:outputPanel>
                     </div>

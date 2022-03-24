@@ -11,11 +11,16 @@ import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.file.UploadedFile;
+import sedra.aditional.Alerta;
 import sedra.fachada.AuditaFacade;
 import sedra.fachada.ClasificadorFacade;
 import sedra.fachada.DetalleNotaSalidaFacade;
@@ -29,6 +34,7 @@ import sedra.modelo.EstadoTramitacion;
 import sedra.modelo.NotaSalida;
 import sedra.modelo.Rol;
 import sedra.modelo.Tramitacion;
+import sedra.util.Codigo;
 import sedra.util.JSFutil;
 
 /**
@@ -177,8 +183,8 @@ public class TramitacionController implements Serializable {
     }
 
     public String listPendientesSetup() {
-        this.listaTramitacionPendiente = this.buscarPendiente(1);
-        this.listaTramitacionConfirmado = this.buscarPendiente(3);
+        this.listaTramitacionPendiente = this.buscarPendiente("%", 1);
+        this.listaTramitacionConfirmado = this.buscarPendiente("%", 3);
         if (this.listaTramitacionPendiente.isEmpty()) {
             JSFutil.addMessage("No hay pendientes de confirmación", JSFutil.StatusMessage.WARNING);
         } else {
@@ -192,11 +198,11 @@ public class TramitacionController implements Serializable {
         return "/tramitacion/ListarDocumentoPendiente";
     }
 
-    public List<Tramitacion> buscarPendiente(Integer estado) {
+    public List<Tramitacion> buscarPendiente(String criterio, Integer estado) {
         if (estado.compareTo(1) == 0) {
-            return tramitacionFacade.getAllTramitacionPendientes(this.criterioBusqueda, estado);
+            return tramitacionFacade.getAllTramitacionPendientes(criterio, estado);
         } else {
-            return tramitacionFacade.getAllTramitacionPendientes(this.criterioBusqueda, estado);
+            return tramitacionFacade.getAllTramitacionPendientes(criterio, estado);
         }
     }
 
@@ -207,8 +213,8 @@ public class TramitacionController implements Serializable {
             this.listaTramitacionConfirmado = null;
             return;
         }
-        this.buscarPendiente(1);
-        this.buscarPendiente(3);
+        this.listaTramitacionPendiente = this.buscarPendiente(this.criterioBusqueda, 1);
+        this.listaTramitacionConfirmado = this.buscarPendiente(this.criterioBusqueda, 3);
     }
 
     public String rechazaSetup(Integer idTramitacion) {
@@ -225,8 +231,8 @@ public class TramitacionController implements Serializable {
             this.tramitacion.setHoraConfirmacion(JSFutil.getFechaHoraActual());
             this.tramitacion.setIdUsuarioConfirmacion(JSFutil.getUsuarioConectado());
             tramitacionFacade.edit(tramitacion);
-            this.buscarPendiente(1);
-            this.buscarPendiente(3);
+            this.buscarPendiente("%", 1);
+            this.buscarPendiente("%", 3);
             JSFutil.addMessage("Tramite confirmado exitosamente", JSFutil.StatusMessage.INFORMATION);
         } catch (Exception ex) {
             this.commonController.doExcepcion(ex);
@@ -268,7 +274,7 @@ public class TramitacionController implements Serializable {
         } catch (Exception ex) {
             commonController.doExcepcion(ex);
         }
-        this.buscarPendiente(1);
+        this.buscarPendiente("%", 1);
         return "/tramitacion/ListarDocumentoPendiente";
         //return null;
     }
@@ -339,7 +345,7 @@ public class TramitacionController implements Serializable {
         } catch (Exception ex) {
             commonController.doExcepcion(ex);
         }
-        this.buscarPendiente(3);
+        this.buscarPendiente("%", 3);
         return "/tramitacion/ListarDocumentoPendiente";
         //return null;
     }
@@ -471,6 +477,23 @@ public class TramitacionController implements Serializable {
     }
 
     public void checkPendientes() {
-        this.listaTramitacionPendiente = this.buscarPendiente(1);
+        List<Tramitacion> lista = this.buscarPendiente("%", 1);
+        if (!lista.isEmpty()) {
+            this.commonController.getListaAlerta().add(new Alerta(Codigo.ALERTA_DOCUMENTO_PENDIENTE, lista.size(), "documento/s pendiente/s..."));
+        }
+    }
+
+    public void init() {
+        try {
+            String id = JSFutil.getRequestParameter("alerta");
+
+            if (id != null) {
+                this.listPendientesSetup();
+            }
+
+            //this.detalleProyecto(this.sesion.getIdSesion());
+        } catch (Exception e) {
+            this.commonController.doExcepcion(e);
+        }
     }
 }

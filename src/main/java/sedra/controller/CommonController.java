@@ -11,8 +11,10 @@ import java.io.InputStream;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +28,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.file.UploadedFile;
+import sedra.aditional.Alerta;
 import sedra.util.JSFutil;
 
 /**
@@ -43,7 +46,7 @@ public class CommonController implements Serializable {
     @Inject
     TramitacionController tramitacionController;
 
-    private Boolean tieneAlerta = Boolean.FALSE;
+    private List<Alerta> listaAlerta;
 
     /**
      * Creates a new instance of CommonController
@@ -51,12 +54,12 @@ public class CommonController implements Serializable {
     public CommonController() {
     }
 
-    public Boolean getTieneAlerta() {
-        return tieneAlerta;
+    public List<Alerta> getListaAlerta() {
+        return listaAlerta;
     }
 
-    public void setTieneAlerta(Boolean tieneAlerta) {
-        this.tieneAlerta = tieneAlerta;
+    public void setListaAlerta(List<Alerta> listaAlerta) {
+        this.listaAlerta = listaAlerta;
     }
 
     @PostConstruct
@@ -138,12 +141,8 @@ public class CommonController implements Serializable {
     }
 
     public void checkAlertas() {
-
-        this.tieneAlerta = Boolean.FALSE;
+        this.listaAlerta = new ArrayList<>();
         this.tramitacionController.checkPendientes();
-        if (!this.tramitacionController.getListaTramitacionPendiente().isEmpty()) {
-            this.tieneAlerta = Boolean.TRUE;
-        }
     }
 
 }

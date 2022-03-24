@@ -15,4 +15,6 @@ public interface Codigo {
 
     public static final Integer TIPO_DOCUMENTO_DEFECTO = 2;
 
+    public static final Integer ALERTA_DOCUMENTO_PENDIENTE = 100;
+
 }
