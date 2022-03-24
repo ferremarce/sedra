@@ -5,13 +5,14 @@
                 template="/includes/template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions" >
     <ui:define name="title">
         <h1>Documentos Pendientes</h1>
     </ui:define>
 
     <ui:define name="content">
-         <f:metadata>
+        <f:metadata>
             <f:event type="preRenderView" listener="#{TramitacionController.init()}"/>
         </f:metadata>
         <h:form id="formMain">
@@ -19,10 +20,11 @@
                 <p:toolbarGroup>
                     <p:inputText styleClass="espaciadoToolbar" size="50" id="criterio" value="#{TramitacionController.criterioBusqueda}" placeholder="Asunto, Nro. Entrada" />
                     <p:commandButton styleClass="espaciadoToolbar" id="cmdBuscar" icon="fa fa-search" ajax="false" action="#{TramitacionController.buscarAllPendiente()}" />
+                    <p:commandButton styleClass="espaciadoToolbar" value="#{bundle.ListarBoton}" icon="fa fa-th-list" ajax="false" action="#{TramitacionController.listPendientesSetup()}"/>
                 </p:toolbarGroup>
             </p:toolbar>
             <p:watermark for="criterio" value="Asunto, Nro. Entrada"/>
-            <p:tabView id="tabPendiente" orientation="left" >
+            <p:tabView id="tabPendiente" >
                 <p:tab>
                     <f:facet name="title">
                         <h:outputText value="Pendiente de Confirmación [#{TramitacionController.listaTramitacionPendiente.size()}]"/>
@@ -33,8 +35,13 @@
                                  filterEvent="enter"
                                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                  rowsPerPageTemplate="#{bundle.Paginacion}"
+                                 selection="#{TramitacionController.selectedTramitacion}"
                                  rowKey="#{item}"
                                  >
+                        <p:ajax event="rowSelectCheckbox" update=":formMain:tabPendiente:panelComando"/>
+                        <p:ajax event="rowUnselectCheckbox" update=":formMain:tabPendiente:panelComando"/>
+                        <p:ajax event="rowSelect" update=":formMain:tabPendiente:panelComando"/>
+                        <p:ajax event="rowUnselect" update=":formMain:tabPendiente:panelComando"/>
                         <p:column selectionMode="multiple" width="20"/>  
                         <p:column width="30" headerText="#">
                             <h:outputText value="#{index+1}"/>
@@ -51,32 +58,26 @@
                             <blockquote>
                                 <h:outputText styleClass="Brown fontBold" value="#{item.idDocumento.asunto}"/>
                             </blockquote>
+                            <h:outputText styleClass="fontItalic Gray" value="#{item.observacion}"/>
                         </p:column>
-                        <p:column headerText="Remitido a" width="150" sortBy="#{item.remitidoA}">  
+                        <p:column headerText="Corresponsal/es" width="200" sortBy="#{item.remitidoA}">  
                             <h:outputText value="#{item.remitidoA}"/><br/>
                             <h:outputText styleClass="fontBold" value="[#{item.idRol.descripcionRol}]"/>
                         </p:column>
-                        <p:column headerText="Observación" width="200">  
-                            <h:outputText value="#{item.observacion}"/>
-                        </p:column>
+
                         <p:column headerText="Adjunto" width="100">  
-                            <p:commandButton rendered="#{item.nombreArchivo!=null}" title="Descargar" icon="fa fa-download" ajax="false">
+                            <p:commandButton rendered="#{item.nombreArchivo!=null}" title="#{item.nombreArchivo!=null ? item.nombreArchivo:'Sin archivo'}" icon="fa fa-download" ajax="false">
                                 <p:fileDownload value="#{DownloadFile.downloadDocumentoTramite(item.idTramitacion)}" />  
                             </p:commandButton>
-                            <h:outputText value="#{item.nombreArchivo!=null ? item.nombreArchivo:'Sin archivo'}"/>
                         </p:column>   
-                        <p:column width="120">
-                            <f:facet name="header">
-                                <h:outputText value="Acción"/>
-                            </f:facet>
-                            <p:menuButton value="Opciones">
-                                <p:menuitem ajax="false" title="#{bundle.RechazarBoton}" value="#{bundle.RechazarBoton}" icon="fa fa-remove" action="#{TramitacionController.rechazaSetup(item.idTramitacion)}"/>
-                                <p:menuitem title="#{bundle.ConfirmarBoton}" value="#{bundle.ConfirmarBoton}" icon="fa fa-check-square" action="#{TramitacionController.confirmaTramite(item.idTramitacion)}" update="@form, panelMensajeEstado">
-                                    <p:confirm escape="false" header="Confirmación" message="Está a punto de confirmar el Documento ##{item.idDocumento.toString()}. &lt;br/&gt;¿Estás seguro?" icon="fa fa-exclamation-triangle" />
-                                </p:menuitem>
-                            </p:menuButton>
-                        </p:column>
+
                     </p:dataTable>
+                    <p:panel id="panelComando">
+                        <p:commandButton disabled="#{fn:length(TramitacionController.selectedTramitacion)==0}" styleClass="espaciadoToolbar" title="#{bundle.ConfirmarBoton}" value="#{bundle.ConfirmarBoton} [#{fn:length(TramitacionController.selectedTramitacion)}]" icon="fa fa-check-square" action="#{TramitacionController.confirmaMultipleSetup()}" update="@form, panelMensajeEstado">
+                            <p:confirm escape="false" header="Confirmación" message="Está a punto de confirmar [#{fn:length(TramitacionController.selectedTramitacion)}] documentos seleccionados. &lt;br/&gt;¿Estás seguro?" icon="fa fa-exclamation-triangle" />
+                        </p:commandButton>
+                        <p:commandButton disabled="#{fn:length(TramitacionController.selectedTramitacion)==0}" styleClass="espaciadoToolbar" ajax="false" title="#{bundle.RechazarBoton}" value="#{bundle.RechazarBoton} [#{fn:length(TramitacionController.selectedTramitacion)}]" icon="fa fa-remove" action="#{TramitacionController.rechazaMultipleSetup()}"/>     
+                    </p:panel>
                 </p:tab>
                 <p:tab>
                     <f:facet name="title">
@@ -92,7 +93,7 @@
                                  rowKey="#{item2}"
                                  >
                         <p:column selectionMode="multiple" width="20"/>  
-                        <p:column width="50" headerText="#">
+                        <p:column width="30" headerText="#">
                             <h:outputText value="#{index2+1}"/>
                         </p:column>
                         <p:column headerText="F. Deriv." width="80" sortBy="#{item2.fechaDerivacion}" >
@@ -107,25 +108,21 @@
                             <blockquote>
                                 <h:outputText styleClass="Brown fontBold" value="#{item2.idDocumento.asunto}"/>
                             </blockquote>
+                            <h:outputText styleClass="fontItalic Gray" value="#{item.observacion}"/>
                         </p:column>
-                        <p:column headerText="Remitido a" width="150" sortBy="#{item2.remitidoA}">  
+                        <p:column headerText="Corresponsal/es" width="200" sortBy="#{item2.remitidoA}">  
                             <h:outputText value="#{item2.remitidoA}"/><br/>
                             <h:outputText styleClass="fontBold" value="[#{item2.idRol.descripcionRol}]"/>
                         </p:column>
-                        <p:column headerText="Observación" width="200">  
-                            <h:outputText value="#{item2.observacion}"/>
-                        </p:column>
-                        <p:column headerText="Adjunto" style="width: 10%">  
-                            <p:commandButton rendered="#{item2.nombreArchivo!=null}" title="Descargar" icon="fa fa-download" ajax="false">
+                        <p:column headerText="Adjunto" width="100">  
+                            <p:commandButton rendered="#{item2.nombreArchivo!=null}" title="#{item2.nombreArchivo!=null ? item2.nombreArchivo:'Sin archivo'}" icon="fa fa-download" ajax="false">
                                 <p:fileDownload value="#{DownloadFile.downloadDocumentoTramite(item2.idTramitacion)}" />  
                             </p:commandButton>
-                            <h:outputText value="#{item2.nombreArchivo!=null ? item2.nombreArchivo:'Sin archivo'}"/>
                         </p:column>   
                     </p:dataTable>
                     <p:panelGrid columns="1" styleClass="ui-panelgrid-blank" >
                         <p:commandButton ajax="false" title="#{bundle.DerivarBoton}" value="#{bundle.DerivarBoton}" icon="fa fa-random" action="#{TramitacionController.derivaMultipleSetup()}"/>                        
                     </p:panelGrid>
-
                 </p:tab>
             </p:tabView>
         </h:form>

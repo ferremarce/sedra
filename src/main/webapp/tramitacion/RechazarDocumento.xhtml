@@ -12,6 +12,15 @@
 
     <ui:define name="content">
         <h:form id="formMain">
+            <p:dataList value="#{TramitacionController.listSelectedTramitacion}" var="item" type="ordered">  
+                <f:facet name="header">
+                    Documentos
+                </f:facet>
+                <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" contentStyleClass="ui-fluid">
+                    <h:outputText styleClass="Purple fontBold" value="#{item.idDocumento.toShortString()} - #{item.idDocumento.asunto}"/>
+                    <h:outputText value="Remitente: [#{item.idUsuarioRemitente.usuario}]"/>                  
+                </p:panelGrid>
+            </p:dataList> 
             <p:panel header="Información del Rechazo">
                 <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" layout="flex" columnClasses="p-col-2,p-col-4,p-col-2,p-col-4" contentStyleClass="ui-fluid">
                     <p:outputLabel for="remitenteNroExpediente" value="Expediente:"/>

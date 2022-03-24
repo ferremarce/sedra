@@ -217,13 +217,12 @@ public class TramitacionController implements Serializable {
         this.listaTramitacionConfirmado = this.buscarPendiente(this.criterioBusqueda, 3);
     }
 
-    public String rechazaSetup(Integer idTramitacion) {
-        this.tramitacion = tramitacionFacade.find(idTramitacion);
-        this.tramitacionRechazo = new Tramitacion();
+    public String rechazaMultipleSetup() {
+        this.listSelectedTramitacion = (List<Tramitacion>) JSFutil.arrayToList(this.selectedTramitacion);
         return "/tramitacion/RechazarDocumento";
     }
 
-    public String confirmaTramite(Integer idTramitacion) {
+    private void confirmaTramite(Integer idTramitacion) {
         try {
             this.tramitacion = tramitacionFacade.find(idTramitacion);
             this.tramitacion.setIdEstado(new EstadoTramitacion(3));
@@ -231,45 +230,58 @@ public class TramitacionController implements Serializable {
             this.tramitacion.setHoraConfirmacion(JSFutil.getFechaHoraActual());
             this.tramitacion.setIdUsuarioConfirmacion(JSFutil.getUsuarioConectado());
             tramitacionFacade.edit(tramitacion);
-            this.buscarPendiente("%", 1);
-            this.buscarPendiente("%", 3);
-            JSFutil.addMessage("Tramite confirmado exitosamente", JSFutil.StatusMessage.INFORMATION);
         } catch (Exception ex) {
             this.commonController.doExcepcion(ex);
         }
+    }
+
+    public String confirmaMultipleSetup() {
+        if (this.selectedTramitacion.length == 0) {
+            JSFutil.addMessage("Debe seleccionar al menos un documento para tramitar", JSFutil.StatusMessage.WARNING);
+            return "";
+        }
+        this.listSelectedTramitacion = (List<Tramitacion>) JSFutil.arrayToList(this.selectedTramitacion);
+        for (Tramitacion t : this.listSelectedTramitacion) {
+//            this.confirmaTramite(t.getIdTramitacion());
+        }
+        this.buscarPendiente("%", 1);
+        this.buscarPendiente("%", 3);
         return "";
     }
 
     public String rechazar() {
         try {
+            for (Tramitacion t : this.listSelectedTramitacion) {
+                this.tramitacionRechazo = new Tramitacion();
+                this.tramitacion = t;
 
-            this.tramitacionRechazo.setFechaDerivacion(JSFutil.getFechaHoraActual());
-            this.tramitacionRechazo.setIdDocumento(this.tramitacion.getIdDocumento());
-            this.tramitacionRechazo.setIdRol(this.tramitacion.getIdUsuarioRemitente().getIdRol());
-            this.tramitacionRechazo.setNotaBreve("Rechazado según observaciones ");
-            this.tramitacionRechazo.setRemitidoA(this.tramitacion.getIdUsuarioRemitente().getUsuario());
+                this.tramitacionRechazo.setFechaDerivacion(JSFutil.getFechaHoraActual());
+                this.tramitacionRechazo.setIdDocumento(this.tramitacion.getIdDocumento());
+                this.tramitacionRechazo.setIdRol(this.tramitacion.getIdUsuarioRemitente().getIdRol());
+                this.tramitacionRechazo.setNotaBreve("Rechazado según observaciones ");
+                this.tramitacionRechazo.setRemitidoA(this.tramitacion.getIdUsuarioRemitente().getUsuario());
 
-            this.tramitacionRechazo.setRemitidoPor(JSFutil.getUsuarioConectado().getUsuario());
-            this.tramitacionRechazo.setFechaRegistro(JSFutil.getFechaHoraActual());
-            this.tramitacionRechazo.setHoraRegistro(JSFutil.getFechaHoraActual());
-            this.tramitacionRechazo.setIdUsuarioRemitente(JSFutil.getUsuarioConectado());
-            //Automaticamente ya confirma la recepción porque la derivación ha sido rechazada
-            this.tramitacionRechazo.setIdEstado(new EstadoTramitacion(3));
-            this.tramitacionRechazo.setFechaConfirmacion(JSFutil.getFechaHoraActual());
-            this.tramitacionRechazo.setHoraConfirmacion(JSFutil.getFechaHoraActual());
-            this.tramitacionRechazo.setIdUsuarioConfirmacion(JSFutil.getUsuarioConectado());
+                this.tramitacionRechazo.setRemitidoPor(JSFutil.getUsuarioConectado().getUsuario());
+                this.tramitacionRechazo.setFechaRegistro(JSFutil.getFechaHoraActual());
+                this.tramitacionRechazo.setHoraRegistro(JSFutil.getFechaHoraActual());
+                this.tramitacionRechazo.setIdUsuarioRemitente(JSFutil.getUsuarioConectado());
+                //Automaticamente ya confirma la recepción porque la derivación ha sido rechazada
+                this.tramitacionRechazo.setIdEstado(new EstadoTramitacion(3));
+                this.tramitacionRechazo.setFechaConfirmacion(JSFutil.getFechaHoraActual());
+                this.tramitacionRechazo.setHoraConfirmacion(JSFutil.getFechaHoraActual());
+                this.tramitacionRechazo.setIdUsuarioConfirmacion(JSFutil.getUsuarioConectado());
 
-            tramitacionFacade.create(this.tramitacionRechazo);
-            auditaFacade.create(new Audita("TRAMITACION", "Tramitacion Rechazo creada exitosamente.", JSFutil.getFechaHoraActual(), this.tramitacionRechazo.toAudita(), JSFutil.getUsuarioConectado()));
-            this.selectedTramitacion = null;
+                tramitacionFacade.create(this.tramitacionRechazo);
+                auditaFacade.create(new Audita("TRAMITACION", "Tramitacion Rechazo creada exitosamente.", JSFutil.getFechaHoraActual(), this.tramitacionRechazo.toAudita(), JSFutil.getUsuarioConectado()));
+                this.selectedTramitacion = null;
 
-            //Sacar del pendiente
-            this.tramitacion.setIdEstado(new EstadoTramitacion(2)); //Rechazado
-            this.tramitacion.setIdUsuario(JSFutil.getUsuarioConectado());
-            this.tramitacion.setFechaSalida(JSFutil.getFechaHoraActual());
-            this.tramitacion.setHoraSalida(JSFutil.getFechaHoraActual());
-            tramitacionFacade.edit(this.tramitacion);
-
+                //Sacar del pendiente
+                this.tramitacion.setIdEstado(new EstadoTramitacion(2)); //Rechazado
+                this.tramitacion.setIdUsuario(JSFutil.getUsuarioConectado());
+                this.tramitacion.setFechaSalida(JSFutil.getFechaHoraActual());
+                this.tramitacion.setHoraSalida(JSFutil.getFechaHoraActual());
+                tramitacionFacade.edit(this.tramitacion);
+            }
             JSFutil.addMessage("Tramitacion rechazada exitosamente. ", JSFutil.StatusMessage.INFORMATION);
         } catch (Exception ex) {
             commonController.doExcepcion(ex);

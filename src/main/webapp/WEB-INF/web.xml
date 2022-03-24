@@ -34,6 +34,11 @@
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
         <location>/error/expired.xhtml</location>
     </error-page>
+    <error-page>
+        <!-- El error 500 es el defecto para capturar todos los tipos de excepción-->
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/error/500.xhtml</location>
+    </error-page>
     <!--FONT AWESOME-->
     <context-param>
         <param-name>primefaces.FONT_AWESOME</param-name>
