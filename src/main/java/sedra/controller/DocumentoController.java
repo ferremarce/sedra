@@ -28,6 +28,7 @@ import sedra.fachada.AuditaFacade;
 import sedra.fachada.ClasificadorFacade;
 import sedra.fachada.DocumentoAdjuntoFacade;
 import sedra.fachada.DocumentoFacade;
+import sedra.fachada.EstadoTramitacionFacade;
 import sedra.fachada.NotaSalidaFacade;
 import sedra.fachada.TipoDocumentoFacade;
 import sedra.fachada.TramitacionFacade;
@@ -72,6 +73,8 @@ public class DocumentoController implements Serializable {
     TipoDocumentoFacade tipoDocumentoFacade;
     @Inject
     ClasificadorFacade clasificadorFacade;
+    @Inject
+    EstadoTramitacionFacade estadoTramitacionFacade;
     
     private Documento documento;
     private List<Documento> listaDocumento;
@@ -264,7 +267,7 @@ public class DocumentoController implements Serializable {
                 Tramitacion t = new Tramitacion();
                 t.setIdDocumento(documento);
                 t.setFechaDerivacion(documento.getFechaIngreso());
-                t.setIdEstado(new EstadoTramitacion(1));
+                t.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_PENDIENTE));
                 t.setFechaRegistro(documento.getFechaRegistro());
                 t.setHoraRegistro(documento.getHoraRegistro());
                 //t.setArchivo(u.getArchivo());
@@ -303,7 +306,7 @@ public class DocumentoController implements Serializable {
                     Tramitacion t = new Tramitacion();
                     t.setIdDocumento(documento);
                     t.setFechaDerivacion(documento.getFechaIngreso());
-                    t.setIdEstado(new EstadoTramitacion(1));
+                    t.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_PENDIENTE));
                     t.setFechaRegistro(documento.getFechaRegistro());
                     t.setHoraRegistro(documento.getHoraRegistro());
                     t.setIdUsuario(documento.getIdUsuario());
@@ -422,7 +425,7 @@ public class DocumentoController implements Serializable {
             tramitacion.setFechaDerivacion(JSFutil.getFechaHoraActual());
             //tramitacion.setIdUsuario(user);
             tramitacion.setIdUsuarioRemitente(JSFutil.getUsuarioConectado());
-            tramitacion.setIdEstado(new EstadoTramitacion(1));
+            tramitacion.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_PENDIENTE));
             tramitacionFacade.create(tramitacion);
             this.listaDocumento = documentoFacade.getAllDocumentoPlanArchivo(this.clasificadorSeleccionado.getIdClasificador());
             JSFutil.addMessage("Se ha enviado el documento a Archivo. ", JSFutil.StatusMessage.INFORMATION);

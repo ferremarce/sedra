@@ -20,28 +20,26 @@
                     <h:outputText styleClass="Purple fontBold" value="#{item.idDocumento.toShortString()} - #{item.idDocumento.asunto}"/>
                     <h:outputText value="Remitente: [#{item.idUsuarioRemitente.usuario}]"/>                  
                 </p:panelGrid>
-            </p:dataList> 
-            <p:panel header="Información del Rechazo">
                 <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" layout="flex" columnClasses="p-col-2,p-col-4,p-col-2,p-col-4" contentStyleClass="ui-fluid">
                     <p:outputLabel for="remitenteNroExpediente" value="Expediente:"/>
-                    <h:outputText id="remitenteNroExpediente" value="#{TramitacionController.tramitacion.idDocumento.numeroExpediente} - #{TramitacionController.tramitacion.idDocumento.asunto}"/>
+                    <h:outputText id="remitenteNroExpediente" value="#{item.idDocumento.numeroExpediente} - #{item.idDocumento.asunto}"/>
                     <p:outputLabel for="remitenteFechaDerivacion" value="Fecha de Derivación:"/>
-                    <h:outputText id="remitenteFechaDerivacion" value="#{TramitacionController.tramitacion.fechaDerivacion}">
+                    <h:outputText id="remitenteFechaDerivacion" value="#{item.fechaDerivacion}">
                         <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
                     </h:outputText> 
                     <p:outputLabel for="enviadoPor" value="Remitido por:"/>
-                    <h:outputText id="enviadoPor" value="#{TramitacionController.tramitacion.remitidoPor}"/>
+                    <h:outputText id="enviadoPor" value="#{item.remitidoPor}"/>
                     <p:outputLabel for="remitenteNotaBreve" value="Nota breve:"/>
-                    <h:outputText id="remitenteNotaBreve" value="#{TramitacionController.tramitacion.notaBreve}"/>
+                    <h:outputText id="remitenteNotaBreve" value="#{item.notaBreve}"/>
                 </p:panelGrid>
                 <p:divider/>
                 <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="flex" columnClasses="p-col-2,p-col-10" contentStyleClass="ui-fluid">
                     <p:outputLabel for="retorno"  value="Retornar para:"/>
-                    <h:outputText id="retorno" value="#{TramitacionController.tramitacion.idUsuarioRemitente.usuario} (#{TramitacionController.tramitacion.idUsuarioRemitente.cuenta})"/>
+                    <h:outputText id="retorno" value="#{item.idUsuarioRemitente.usuario} (#{item.idUsuarioRemitente.cuenta})"/>
                     <p:outputLabel for="observaciones"  value="Observaciones:"/>
                     <p:inputTextarea rows="3" id="observaciones" value="#{TramitacionController.tramitacionRechazo.observacion}" title="Observaciones" required="true" requiredMessage="#{bundle.Requerido}" />
                 </p:panelGrid>
-            </p:panel>
+            </p:dataList> 
             <p:toolbar>
                 <p:toolbarGroup>
                     <p:commandButton styleClass="espaciadoToolbar" icon="fa fa-share" action="#{TramitacionController.rechazar()}" ajax="false"  value="#{bundle.DerivarBoton}" title="#{bundle.DerivarBoton}"/>

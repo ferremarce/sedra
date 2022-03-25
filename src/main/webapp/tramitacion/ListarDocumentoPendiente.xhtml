@@ -16,74 +16,72 @@
             <f:event type="preRenderView" listener="#{TramitacionController.init()}"/>
         </f:metadata>
         <h:form id="formMain">
-            <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="flex" columnClasses="p-col-2,p-col-10">
-                <p:menu>
-                    <p:submenu label="Bandejas">
-                        <p:separator/>
-                        <p:menuitem value="Entrada [#{TramitacionController.listaTramitacionEstado.size()}]" icon="fa fa-inbox" actionListener="#{TramitacionController.buscarAllPendienteAjax()}" update="dataTablePendiente, panelMensajeEstado"/>
-                        <p:menuitem value="Recibidos" icon="fa fa-check-to-slot" actionListener="#{TramitacionController.buscarAllConfirmadoAjax()}" update="dataTablePendiente, panelMensajeEstado"/>
-                        <p:menuitem value="Salida" icon="fa fa-paper-plane" actionListener="#{TramitacionController.buscarAllDerivadoAjax()}" update="dataTablePendiente, panelMensajeEstado"/>                
-                    </p:submenu>
-                </p:menu>
-
-                <p:dataTable rowIndexVar="index" id="dataTablePendiente" var="item" value="#{TramitacionController.listaTramitacionEstado}"
-                             widgetVar="wBandeja"
-                             reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
-                             rows="10"
-                             paginator="true"
-                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             rowsPerPageTemplate="#{bundle.Paginacion}"
-                             selection="#{TramitacionController.arraySelectedTramitacion}"
-                             rowKey="#{item}"
-                             globalFilterFunction="#{TramitacionController.globalFilterFunction}"                             
-                             >
-                    <p:ajax global="false" event="rowSelectCheckbox" update=":formMain:panelComando"/>
-                    <p:ajax global="false" event="rowUnselectCheckbox" update=":formMain:panelComando"/>
-                    <p:ajax global="false" event="rowSelect" update=":formMain:panelComando"/>
-                    <p:ajax global="false" event="rowUnselect" update=":formMain:panelComando"/>
-                    <p:ajax global="false" event="toggleSelect" update=":formMain:panelComando"/>
-                    <p:ajax global="false" event="filter"/>
-                    <f:facet name="header">
-                        <div class="p-d-flex p-jc-end">
-                            <p:inputText id="globalFilter" onkeyup="PF('wBandeja').filter()" style="width:300px"
-                                         placeholder="Asunto, Nro. Entrada" />
-                        </div>
-                        <p:tooltip position="top"
-                                   for="globalFilter"
-                                   value="Puede utilizar los comodines 1) * (muchos caracteres) y 2) ? (un caracter)"/>
-                    </f:facet>
-
-                    <p:column selectionMode="multiple" width="20"/>  
-                    <p:column width="30" headerText="#">
-                        <h:outputText value="#{index+1}"/>
-                    </p:column>
-                    <p:column headerText="F. Deriv." width="80" sortBy="#{item.fechaDerivacion}" >
-                        <h:outputText value="#{item.fechaDerivacion}">
-                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                        </h:outputText>
-                    </p:column>
-                    <p:column headerText="Documento" sortBy="#{item.idDocumento.numeroExpediente}" >  
-                        <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.idDocumento.numeroExpediente}">
-                            <f:convertNumber pattern="0000000000000"/>
-                        </h:outputText>
-                        <blockquote>
-                            <h:outputText styleClass="Brown fontBold" value="#{item.idDocumento.asunto}"/>
-                        </blockquote>
-                        <h:outputText styleClass="fontItalic Gray" value="#{item.observacion}"/>
-                    </p:column>
-                    <p:column headerText="Corresponsal/es" width="200" sortBy="#{item.remitidoA}">  
-                        <h:outputText value="#{item.remitidoA}"/><br/>
-                        <h:outputText styleClass="fontBold" value="[#{item.idRol.descripcionRol}]"/>
-                    </p:column>
-
-                    <p:column headerText="Adjunto" width="100">  
-                        <p:commandButton rendered="#{item.nombreArchivo!=null}" title="#{item.nombreArchivo!=null ? item.nombreArchivo:'Sin archivo'}" icon="fa fa-download" ajax="false">
-                            <p:fileDownload value="#{DownloadFile.downloadDocumentoTramite(item.idTramitacion)}" />  
-                        </p:commandButton>
-                    </p:column>   
-
-                </p:dataTable>
-            </p:panelGrid>
+            <div class="p-grid">
+                <div class="p-col-2">
+                    <p:menu>
+                        <p:submenu label="Bandejas">
+                            <p:separator/>
+                            <p:menuitem value="Entrada [#{TramitacionController.listaTramitacionEstado.size()}]" icon="fa fa-inbox" actionListener="#{TramitacionController.buscarAllPendienteAjax()}" update="dataTablePendiente, panelMensajeEstado"/>
+                            <p:menuitem value="Recibidos" icon="fa fa-check-to-slot" actionListener="#{TramitacionController.buscarAllConfirmadoAjax()}" update="dataTablePendiente, panelMensajeEstado"/>
+                            <p:menuitem value="Salida" icon="fa fa-paper-plane" actionListener="#{TramitacionController.buscarAllDerivadoAjax()}" update="dataTablePendiente, panelMensajeEstado"/>                
+                        </p:submenu>
+                    </p:menu>
+                </div>
+                <div class="p-col">
+                    <p:dataTable rowIndexVar="index" id="dataTablePendiente" var="item" value="#{TramitacionController.listaTramitacionEstado}"
+                                 widgetVar="wBandeja"
+                                 reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                                 rows="10"
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="#{bundle.Paginacion}"
+                                 selection="#{TramitacionController.arraySelectedTramitacion}"
+                                 rowKey="#{item}"
+                                 globalFilterFunction="#{TramitacionController.globalFilterFunction}"   
+                                 rowSelectMode="checkbox"
+                                 >
+                        <p:ajax global="false" event="rowSelectCheckbox" update=":formMain:panelComando"/>
+                        <p:ajax global="false" event="rowUnselectCheckbox" update=":formMain:panelComando"/>
+                        <p:ajax global="false" event="rowSelect" update=":formMain:panelComando"/>
+                        <p:ajax global="false" event="rowUnselect" update=":formMain:panelComando"/>
+                        <p:ajax global="false" event="toggleSelect" update=":formMain:panelComando"/>
+                        <p:ajax global="false" event="filter"/>
+                        <f:facet name="header">
+                            <p:inputText id="globalFilter" onkeyup="PF('wBandeja').filter()" style="width:300px" placeholder="Asunto, Nro. Entrada" />
+                            <p:tooltip for="globalFilter" value="Puede utilizar los comodines: * (muchos caracteres) y  ? (un caracter)"/>
+                        </f:facet>
+                        <p:column selectionMode="multiple" width="20"/>  
+                        <p:column width="30" headerText="#">
+                            <h:outputText value="#{index+1}"/>
+                        </p:column>
+                        <p:column headerText="F. Deriv." width="80" sortBy="#{item.fechaDerivacion}" >
+                            <h:outputText value="#{item.fechaDerivacion}">
+                                <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Documento" sortBy="#{item.idDocumento.numeroExpediente}" >  
+                            <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.idDocumento.numeroExpediente}">
+                                <f:convertNumber pattern="0000000000000"/>
+                            </h:outputText>
+                            <blockquote>
+                                <h:outputText styleClass="Brown fontBold" value="#{item.idDocumento.asunto}"/>
+                            </blockquote>
+                            <h:outputText styleClass="fontItalic Gray" value="#{item.observacion}"/>
+                        </p:column>
+                        <p:column headerText="Corresponsal/es" width="200" sortBy="#{item.remitidoA}">  
+                            <h:outputText value="#{item.remitidoA}"/><br/>
+                            <h:outputText styleClass="fontBold" value="[#{item.idRol.descripcionRol}]"/>
+                            <p:separator/>
+                            <h:outputText value="#{item.idUsuarioRemitente.toInfoString()}"/>
+                        </p:column>
+                        <p:column headerText="Adjunto" width="100">  
+                            <p:commandButton rendered="#{item.nombreArchivo!=null}" title="#{item.nombreArchivo!=null ? item.nombreArchivo:'Sin archivo'}" icon="fa fa-download" ajax="false">
+                                <p:fileDownload value="#{DownloadFile.downloadDocumentoTramite(item.idTramitacion)}" />  
+                            </p:commandButton>
+                        </p:column>   
+                    </p:dataTable>
+                </div>
+            </div>
             <p:panel id="panelComando">
                 <p:contextMenu for="dataTablePendiente">
                     <p:menuitem disabled="#{fn:length(TramitacionController.arraySelectedTramitacion)==0}" title="#{bundle.ConfirmarBoton}" value="#{bundle.ConfirmarBoton} [#{fn:length(TramitacionController.arraySelectedTramitacion)}]" icon="fa fa-check-square" action="#{TramitacionController.confirmaMultipleSetup()}" update="@form, panelMensajeEstado">
