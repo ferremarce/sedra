@@ -9,22 +9,27 @@ import java.io.ByteArrayInputStream;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import static java.lang.Integer.getInteger;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.file.UploadedFile;
+import org.primefaces.util.LangUtils;
 import sedra.aditional.Alerta;
 import sedra.fachada.AuditaFacade;
 import sedra.fachada.ClasificadorFacade;
 import sedra.fachada.DetalleNotaSalidaFacade;
 import sedra.fachada.DocumentoFacade;
+import sedra.fachada.EstadoTramitacionFacade;
 import sedra.fachada.NotaSalidaFacade;
 import sedra.fachada.TramitacionFacade;
 import sedra.modelo.Audita;
@@ -66,13 +71,14 @@ public class TramitacionController implements Serializable {
     NotaSalidaFacade notaSalidaFacade;
     @Inject
     DetalleNotaSalidaFacade detalleNotaSalidaFacade;
+    @Inject
+    EstadoTramitacionFacade estadoTramitacionFacade;
 
     private Tramitacion tramitacion;
     private Tramitacion tramitacionRechazo;
-    private List<Tramitacion> listaTramitacionPendiente;
-    private List<Tramitacion> listaTramitacionConfirmado;
+    private List<Tramitacion> listaTramitacionEstado;
     private String criterioBusqueda = "%";
-    private Tramitacion[] selectedTramitacion;
+    private Tramitacion[] arraySelectedTramitacion;
     private List<Tramitacion> listSelectedTramitacion;
     private List<Tramitacion> listaTramitacionSeguimiento;
     private Rol[] selectedRol;
@@ -110,6 +116,14 @@ public class TramitacionController implements Serializable {
         this.adjunto = adjunto;
     }
 
+    public List<Tramitacion> getListaTramitacionEstado() {
+        return listaTramitacionEstado;
+    }
+
+    public void setListaTramitacionEstado(List<Tramitacion> listaTramitacionEstado) {
+        this.listaTramitacionEstado = listaTramitacionEstado;
+    }
+
     public List<Tramitacion> getListSelectedTramitacion() {
         return listSelectedTramitacion;
     }
@@ -118,12 +132,12 @@ public class TramitacionController implements Serializable {
         this.listSelectedTramitacion = listSelectedTramitacion;
     }
 
-    public Tramitacion[] getSelectedTramitacion() {
-        return selectedTramitacion;
+    public Tramitacion[] getArraySelectedTramitacion() {
+        return arraySelectedTramitacion;
     }
 
-    public void setSelectedTramitacion(Tramitacion[] selectedTramitacion) {
-        this.selectedTramitacion = selectedTramitacion;
+    public void setArraySelectedTramitacion(Tramitacion[] arraySelectedTramitacion) {
+        this.arraySelectedTramitacion = arraySelectedTramitacion;
     }
 
     public String getCriterioBusqueda() {
@@ -150,22 +164,6 @@ public class TramitacionController implements Serializable {
         this.tramitacionRechazo = tramitacionRechazo;
     }
 
-    public List<Tramitacion> getListaTramitacionPendiente() {
-        return listaTramitacionPendiente;
-    }
-
-    public void setListaTramitacionPendiente(List<Tramitacion> listaTramitacionPendiente) {
-        this.listaTramitacionPendiente = listaTramitacionPendiente;
-    }
-
-    public List<Tramitacion> getListaTramitacionConfirmado() {
-        return listaTramitacionConfirmado;
-    }
-
-    public void setListaTramitacionConfirmado(List<Tramitacion> listaTramitacionConfirmado) {
-        this.listaTramitacionConfirmado = listaTramitacionConfirmado;
-    }
-
     public Documento getDocumento() {
         return documento;
     }
@@ -183,49 +181,44 @@ public class TramitacionController implements Serializable {
     }
 
     public String listPendientesSetup() {
-        this.listaTramitacionPendiente = this.buscarPendiente("%", 1);
-        this.listaTramitacionConfirmado = this.buscarPendiente("%", 3);
-        if (this.listaTramitacionPendiente.isEmpty()) {
+        //Obtenemos solo los pendientes de entrada (confirmación)
+        this.buscarAllPendienteAjax();
+        if (this.listaTramitacionEstado.isEmpty()) {
             JSFutil.addMessage("No hay pendientes de confirmación", JSFutil.StatusMessage.WARNING);
         } else {
-            JSFutil.addMessage(this.listaTramitacionPendiente.size() + " pendientes no confirmados", JSFutil.StatusMessage.INFORMATION);
-        }
-        if (this.listaTramitacionConfirmado.isEmpty()) {
-            JSFutil.addMessage("No hay pendientes para tramitación", JSFutil.StatusMessage.WARNING);
-        } else {
-            JSFutil.addMessage(this.listaTramitacionConfirmado.size() + " pendientes para tramitación", JSFutil.StatusMessage.INFORMATION);
+            JSFutil.addMessage(this.listaTramitacionEstado.size() + " pendientes no confirmados", JSFutil.StatusMessage.INFORMATION);
         }
         return "/tramitacion/ListarDocumentoPendiente";
     }
 
-    public List<Tramitacion> buscarPendiente(String criterio, Integer estado) {
-        if (estado.compareTo(1) == 0) {
-            return tramitacionFacade.getAllTramitacionPendientes(criterio, estado);
-        } else {
-            return tramitacionFacade.getAllTramitacionPendientes(criterio, estado);
-        }
+    private List<Tramitacion> buscarPendienteEstado(Integer estado) {
+        return tramitacionFacade.getAllTramitacionPendientes("%", estado);
     }
 
-    public void buscarAllPendiente() {
-        if (this.criterioBusqueda.isEmpty()) {
-            JSFutil.addMessage("No ha especificado un criterio para buscar", JSFutil.StatusMessage.WARNING);
-            this.listaTramitacionPendiente = null;
-            this.listaTramitacionConfirmado = null;
-            return;
-        }
-        this.listaTramitacionPendiente = this.buscarPendiente(this.criterioBusqueda, 1);
-        this.listaTramitacionConfirmado = this.buscarPendiente(this.criterioBusqueda, 3);
+    public void buscarAllPendienteAjax() {
+        this.listaTramitacionEstado = this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_PENDIENTE);
+        this.arraySelectedTramitacion = null;
+    }
+
+    public void buscarAllConfirmadoAjax() {
+        this.listaTramitacionEstado = this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_RECIBIDO);
+        this.arraySelectedTramitacion = null;
+    }
+
+    public void buscarAllDerivadoAjax() {
+        this.listaTramitacionEstado = this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_TERMINADO);
+        this.arraySelectedTramitacion = null;
     }
 
     public String rechazaMultipleSetup() {
-        this.listSelectedTramitacion = (List<Tramitacion>) JSFutil.arrayToList(this.selectedTramitacion);
+        this.listSelectedTramitacion = (List<Tramitacion>) JSFutil.arrayToList(this.arraySelectedTramitacion);
         return "/tramitacion/RechazarDocumento";
     }
 
     private void confirmaTramite(Integer idTramitacion) {
         try {
             this.tramitacion = tramitacionFacade.find(idTramitacion);
-            this.tramitacion.setIdEstado(new EstadoTramitacion(3));
+            this.tramitacion.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_RECIBIDO));
             this.tramitacion.setFechaConfirmacion(JSFutil.getFechaHoraActual());
             this.tramitacion.setHoraConfirmacion(JSFutil.getFechaHoraActual());
             this.tramitacion.setIdUsuarioConfirmacion(JSFutil.getUsuarioConectado());
@@ -236,16 +229,15 @@ public class TramitacionController implements Serializable {
     }
 
     public String confirmaMultipleSetup() {
-        if (this.selectedTramitacion.length == 0) {
+        if (this.arraySelectedTramitacion.length == 0) {
             JSFutil.addMessage("Debe seleccionar al menos un documento para tramitar", JSFutil.StatusMessage.WARNING);
             return "";
         }
-        this.listSelectedTramitacion = (List<Tramitacion>) JSFutil.arrayToList(this.selectedTramitacion);
+        this.listSelectedTramitacion = (List<Tramitacion>) JSFutil.arrayToList(this.arraySelectedTramitacion);
         for (Tramitacion t : this.listSelectedTramitacion) {
-//            this.confirmaTramite(t.getIdTramitacion());
+            this.confirmaTramite(t.getIdTramitacion());
         }
-        this.buscarPendiente("%", 1);
-        this.buscarPendiente("%", 3);
+        this.buscarAllPendienteAjax();
         return "";
     }
 
@@ -266,17 +258,17 @@ public class TramitacionController implements Serializable {
                 this.tramitacionRechazo.setHoraRegistro(JSFutil.getFechaHoraActual());
                 this.tramitacionRechazo.setIdUsuarioRemitente(JSFutil.getUsuarioConectado());
                 //Automaticamente ya confirma la recepción porque la derivación ha sido rechazada
-                this.tramitacionRechazo.setIdEstado(new EstadoTramitacion(3));
+                this.tramitacionRechazo.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_RECIBIDO));
                 this.tramitacionRechazo.setFechaConfirmacion(JSFutil.getFechaHoraActual());
                 this.tramitacionRechazo.setHoraConfirmacion(JSFutil.getFechaHoraActual());
                 this.tramitacionRechazo.setIdUsuarioConfirmacion(JSFutil.getUsuarioConectado());
 
                 tramitacionFacade.create(this.tramitacionRechazo);
                 auditaFacade.create(new Audita("TRAMITACION", "Tramitacion Rechazo creada exitosamente.", JSFutil.getFechaHoraActual(), this.tramitacionRechazo.toAudita(), JSFutil.getUsuarioConectado()));
-                this.selectedTramitacion = null;
+                this.arraySelectedTramitacion = null;
 
                 //Sacar del pendiente
-                this.tramitacion.setIdEstado(new EstadoTramitacion(2)); //Rechazado
+                this.tramitacion.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_RECHAZADO)); //Rechazado
                 this.tramitacion.setIdUsuario(JSFutil.getUsuarioConectado());
                 this.tramitacion.setFechaSalida(JSFutil.getFechaHoraActual());
                 this.tramitacion.setHoraSalida(JSFutil.getFechaHoraActual());
@@ -286,17 +278,17 @@ public class TramitacionController implements Serializable {
         } catch (Exception ex) {
             commonController.doExcepcion(ex);
         }
-        this.buscarPendiente("%", 1);
+        this.buscarAllPendienteAjax();
         return "/tramitacion/ListarDocumentoPendiente";
         //return null;
     }
 
     public String derivaMultipleSetup() {
-        if (this.selectedTramitacion.length == 0) {
+        if (this.arraySelectedTramitacion.length == 0) {
             JSFutil.addMessage("Debe seleccionar al menos un documento para tramitar", JSFutil.StatusMessage.WARNING);
             return "";
         }
-        this.listSelectedTramitacion = (List<Tramitacion>) JSFutil.arrayToList(this.selectedTramitacion);
+        this.listSelectedTramitacion = (List<Tramitacion>) JSFutil.arrayToList(this.arraySelectedTramitacion);
         this.tramitacion = new Tramitacion();
         this.selectedRol = new Rol[0];
         this.adjunto = null;
@@ -311,9 +303,9 @@ public class TramitacionController implements Serializable {
     public String create() {
         try {
             Tramitacion tramTemp;
-            for (Tramitacion tram : this.selectedTramitacion) {
+            for (Tramitacion tram : this.arraySelectedTramitacion) {
 
-                tram.setIdEstado(new EstadoTramitacion(100));
+                tram.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_TERMINADO));
                 tram.setIdUsuario(JSFutil.getUsuarioConectado());
                 tram.setFechaSalida(JSFutil.getFechaHoraActual());
                 tram.setHoraSalida(JSFutil.getFechaHoraActual());
@@ -335,7 +327,7 @@ public class TramitacionController implements Serializable {
                 tramTemp.setObservacion(this.tramitacion.getObservacion());
                 tramTemp.setProcesadoArchivo(false);
 
-                tramTemp.setIdEstado(new EstadoTramitacion(1));
+                tramTemp.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_PENDIENTE));
                 tramTemp.setRemitidoPor(JSFutil.getUsuarioConectado().getUsuario());
                 tramTemp.setIdUsuarioRemitente(JSFutil.getUsuarioConectado());
                 tramTemp.setFechaRegistro(JSFutil.getFechaHoraActual());
@@ -352,12 +344,12 @@ public class TramitacionController implements Serializable {
                 }
 //                }
             }
-            this.selectedTramitacion = null;
+            this.arraySelectedTramitacion = null;
             JSFutil.addMessage("Tramitacion creada exitosamente. ", JSFutil.StatusMessage.INFORMATION);
         } catch (Exception ex) {
             commonController.doExcepcion(ex);
         }
-        this.buscarPendiente("%", 3);
+        this.buscarAllPendienteAjax();
         return "/tramitacion/ListarDocumentoPendiente";
         //return null;
     }
@@ -429,7 +421,7 @@ public class TramitacionController implements Serializable {
                 if (t.getIdEstado().getIdEstado() != 100) { //Existe todavia pendientes
                     t.setFechaSalida(JSFutil.getFechaHoraActual());
                     t.setHoraSalida(JSFutil.getFechaHoraActual());
-                    t.setIdEstado(new EstadoTramitacion(100));
+                    t.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_TERMINADO));
                     this.tramitacionFacade.edit(t);
                 }
             }
@@ -457,7 +449,7 @@ public class TramitacionController implements Serializable {
             if (ns.getCerrado()) {
                 this.archivarSinNota();
             }
-            this.buscarAllPendiente();
+            this.buscarAllPendienteAjax();
             auditaFacade.create(new Audita("DETALLE_NOTA_SALIDA", "Enlace creado exitosamente.", JSFutil.getFechaHoraActual(), dnt.toAudita(), JSFutil.getUsuarioConectado()));
             JSFutil.addMessage("Enlace creado exitosamente. ", JSFutil.StatusMessage.INFORMATION);
             return "/tramitacion/ListarDocumentoAdjunto";
@@ -489,7 +481,7 @@ public class TramitacionController implements Serializable {
     }
 
     public void checkPendientes() {
-        List<Tramitacion> lista = this.buscarPendiente("%", 1);
+        List<Tramitacion> lista = this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_PENDIENTE);
         if (!lista.isEmpty()) {
             this.commonController.getListaAlerta().add(new Alerta(Codigo.ALERTA_DOCUMENTO_PENDIENTE, lista.size(), "documento/s pendiente/s..."));
         }
@@ -506,6 +498,23 @@ public class TramitacionController implements Serializable {
             //this.detalleProyecto(this.sesion.getIdSesion());
         } catch (Exception e) {
             this.commonController.doExcepcion(e);
+        }
+    }
+
+    public boolean globalFilterFunction(Object value, Object filter, Locale locale) {
+        String filterText = (filter == null) ? null : filter.toString().trim().toLowerCase();
+        if (LangUtils.isBlank(filterText)) {
+            return true;
+        }
+        //int filterInt = getInteger(filterText);
+
+        Tramitacion tramita = (Tramitacion) value;
+        String nuevoFilter = "*" + filterText + "*";
+        try {
+            return JSFutil.strmatch(tramita.getIdDocumento().getAsunto().toLowerCase(), nuevoFilter)
+                    || JSFutil.strmatch(tramita.getIdDocumento().getNumeroExpediente().toString().toLowerCase(), nuevoFilter);
+        } catch (Exception e) {
+            return false;
         }
     }
 }

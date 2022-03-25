@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="/includes/template.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions" >
+    <ui:define name="title">
+        <h1>Documentos Pendientes</h1>
+    </ui:define>
+
+    <ui:define name="content">
+        <f:metadata>
+            <f:event type="preRenderView" listener="#{TramitacionController.init()}"/>
+        </f:metadata>
+        <h:form id="formMain">
+            <p:toolbar>
+                <p:toolbarGroup>
+                    <p:inputText styleClass="espaciadoToolbar" size="50" id="criterio" value="#{TramitacionController.criterioBusqueda}" placeholder="Asunto, Nro. Entrada" />
+                    <p:commandButton styleClass="espaciadoToolbar" id="cmdBuscar" icon="fa fa-search" ajax="false" action="#{TramitacionController.buscarAllPendienteAjax()}" />
+                    <p:commandButton styleClass="espaciadoToolbar" value="#{bundle.ListarBoton}" icon="fa fa-th-list" ajax="false" action="#{TramitacionController.listPendientesSetup()}"/>
+                </p:toolbarGroup>
+            </p:toolbar>
+            <p:watermark for="criterio" value="Asunto, Nro. Entrada"/>
+            <p:tabView id="tabPendiente" >
+                <p:tab>
+                    <f:facet name="title">
+                        <h:outputText value="Pendiente de Confirmación [#{TramitacionController.listaTramitacionPendiente.size()}]"/>
+                    </f:facet>
+                    <p:dataTable rowIndexVar="index" id="dataTablePendiente" var="item" value="#{TramitacionController.listaTramitacionPendiente}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                                 rows="50"
+                                 paginator="true"
+                                 filterEvent="enter"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="#{bundle.Paginacion}"
+                                 selection="#{TramitacionController.arraySelectedTramitacion}"
+                                 rowKey="#{item}"
+                                 >
+                        <p:ajax event="rowSelectCheckbox" update=":formMain:tabPendiente:panelComando"/>
+                        <p:ajax event="rowUnselectCheckbox" update=":formMain:tabPendiente:panelComando"/>
+                        <p:ajax event="rowSelect" update=":formMain:tabPendiente:panelComando"/>
+                        <p:ajax event="rowUnselect" update=":formMain:tabPendiente:panelComando"/>
+                        <p:column selectionMode="multiple" width="20"/>  
+                        <p:column width="30" headerText="#">
+                            <h:outputText value="#{index+1}"/>
+                        </p:column>
+                        <p:column headerText="F. Deriv." width="80" sortBy="#{item.fechaDerivacion}" >
+                            <h:outputText value="#{item.fechaDerivacion}">
+                                <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Documento" sortBy="#{item.idDocumento.numeroExpediente}">  
+                            <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.idDocumento.numeroExpediente}">
+                                <f:convertNumber pattern="0000000000000"/>
+                            </h:outputText>
+                            <blockquote>
+                                <h:outputText styleClass="Brown fontBold" value="#{item.idDocumento.asunto}"/>
+                            </blockquote>
+                            <h:outputText styleClass="fontItalic Gray" value="#{item.observacion}"/>
+                        </p:column>
+                        <p:column headerText="Corresponsal/es" width="200" sortBy="#{item.remitidoA}">  
+                            <h:outputText value="#{item.remitidoA}"/><br/>
+                            <h:outputText styleClass="fontBold" value="[#{item.idRol.descripcionRol}]"/>
+                        </p:column>
+
+                        <p:column headerText="Adjunto" width="100">  
+                            <p:commandButton rendered="#{item.nombreArchivo!=null}" title="#{item.nombreArchivo!=null ? item.nombreArchivo:'Sin archivo'}" icon="fa fa-download" ajax="false">
+                                <p:fileDownload value="#{DownloadFile.downloadDocumentoTramite(item.idTramitacion)}" />  
+                            </p:commandButton>
+                        </p:column>   
+
+                    </p:dataTable>
+                    <p:panel id="panelComando">
+                        <p:commandButton disabled="#{fn:length(TramitacionController.arraySelectedTramitacion)==0}" styleClass="espaciadoToolbar" title="#{bundle.ConfirmarBoton}" value="#{bundle.ConfirmarBoton} [#{fn:length(TramitacionController.arraySelectedTramitacion)}]" icon="fa fa-check-square" action="#{TramitacionController.confirmaMultipleSetup()}" update="@form, panelMensajeEstado">
+                            <p:confirm escape="false" header="Confirmación" message="Está a punto de confirmar [#{fn:length(TramitacionController.arraySelectedTramitacion)}] documentos seleccionados. &lt;br/&gt;¿Estás seguro?" icon="fa fa-exclamation-triangle" />
+                        </p:commandButton>
+                        <p:commandButton disabled="#{fn:length(TramitacionController.arraySelectedTramitacion)==0}" styleClass="espaciadoToolbar" ajax="false" title="#{bundle.RechazarBoton}" value="#{bundle.RechazarBoton} [#{fn:length(TramitacionController.arraySelectedTramitacion)}]" icon="fa fa-remove" action="#{TramitacionController.rechazaMultipleSetup()}"/>     
+                    </p:panel>
+                </p:tab>
+                <p:tab>
+                    <f:facet name="title">
+                        <h:outputText value="Pendiente de Tramitación [#{TramitacionController.listaTramitacionConfirmado.size()}]"/>
+                    </f:facet>
+                    <p:dataTable rowIndexVar="index2" id="dataTablePendienteConfirmado" var="item2" value="#{TramitacionController.listaTramitacionConfirmado}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                                 rows="50"
+                                 paginator="true"
+                                 filterEvent="enter"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="#{bundle.Paginacion}"
+                                 selection="#{TramitacionController.arraySelectedTramitacion}"
+                                 rowKey="#{item2}"
+                                 >
+                        <p:column selectionMode="multiple" width="20"/>  
+                        <p:column width="30" headerText="#">
+                            <h:outputText value="#{index2+1}"/>
+                        </p:column>
+                        <p:column headerText="F. Deriv." width="80" sortBy="#{item2.fechaDerivacion}" >
+                            <h:outputText value="#{item2.fechaDerivacion}">
+                                <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Documento" sortBy="#{item2.idDocumento.numeroExpediente}">  
+                            <h:outputText value="Nro. Expediente: #{item2.idDocumento.numeroExpediente}">
+                                <f:convertNumber pattern="0000000000000"/>
+                            </h:outputText>
+                            <blockquote>
+                                <h:outputText styleClass="Brown fontBold" value="#{item2.idDocumento.asunto}"/>
+                            </blockquote>
+                            <h:outputText styleClass="fontItalic Gray" value="#{item.observacion}"/>
+                        </p:column>
+                        <p:column headerText="Corresponsal/es" width="200" sortBy="#{item2.remitidoA}">  
+                            <h:outputText value="#{item2.remitidoA}"/><br/>
+                            <h:outputText styleClass="fontBold" value="[#{item2.idRol.descripcionRol}]"/>
+                        </p:column>
+                        <p:column headerText="Adjunto" width="100">  
+                            <p:commandButton rendered="#{item2.nombreArchivo!=null}" title="#{item2.nombreArchivo!=null ? item2.nombreArchivo:'Sin archivo'}" icon="fa fa-download" ajax="false">
+                                <p:fileDownload value="#{DownloadFile.downloadDocumentoTramite(item2.idTramitacion)}" />  
+                            </p:commandButton>
+                        </p:column>   
+                    </p:dataTable>
+                    <p:panelGrid columns="1" styleClass="ui-panelgrid-blank" >
+                        <p:commandButton ajax="false" title="#{bundle.DerivarBoton}" value="#{bundle.DerivarBoton}" icon="fa fa-random" action="#{TramitacionController.derivaMultipleSetup()}"/>                        
+                    </p:panelGrid>
+                </p:tab>
+            </p:tabView>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
