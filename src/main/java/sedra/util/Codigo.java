@@ -21,7 +21,7 @@ public interface Codigo {
     public static final Integer ESTADO_TRAMITE_RECHAZADO = 2;
     public static final Integer ESTADO_TRAMITE_RECIBIDO = 3;
     public static final Integer ESTADO_TRAMITE_DERIVADO = 4;
+    public static final Integer ESTADO_TRAMITE_INGRESADO = 5;
     public static final Integer ESTADO_TRAMITE_TERMINADO = 100;
-    
 
 }

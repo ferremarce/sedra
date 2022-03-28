@@ -18,11 +18,11 @@
         <h:form id="formMain">
             <div class="p-grid">
                 <div class="p-col-2">
-                    <p:menu>
+                    <p:menu style="width: 100%">
                         <p:submenu label="Bandejas">
                             <p:separator/>
                             <p:menuitem value="Entrada [#{TramitacionController.listaTramitacionEstado.size()}]" icon="fa fa-inbox" actionListener="#{TramitacionController.buscarAllPendienteAjax()}" update="dataTablePendiente, panelMensajeEstado"/>
-                            <p:menuitem value="Recibidos" icon="fa fa-check-to-slot" actionListener="#{TramitacionController.buscarAllConfirmadoAjax()}" update="dataTablePendiente, panelMensajeEstado"/>
+                            <p:menuitem value="Recibidos/ Ingresados" icon="fa fa-check-to-slot" actionListener="#{TramitacionController.buscarAllConfirmadoAjax()}" update="dataTablePendiente, panelMensajeEstado"/>
                             <p:menuitem value="Salida" icon="fa fa-paper-plane" actionListener="#{TramitacionController.buscarAllDerivadoAjax()}" update="dataTablePendiente, panelMensajeEstado"/>                
                         </p:submenu>
                     </p:menu>
@@ -50,7 +50,8 @@
                             <p:inputText id="globalFilter" onkeyup="PF('wBandeja').filter()" style="width:300px" placeholder="Asunto, Nro. Entrada" />
                             <p:tooltip for="globalFilter" value="Puede utilizar los comodines: * (muchos caracteres) y  ? (un caracter)"/>
                         </f:facet>
-                        <p:column selectionMode="multiple" width="20"/>  
+                        <p:column visible="#{item.idEstado.idEstado!=100}" selectionMode="multiple" width="20"/>  
+                        <p:column visible="#{item.idEstado.idEstado==100}" width="20"/>  
                         <p:column width="30" headerText="#">
                             <h:outputText value="#{index+1}"/>
                         </p:column>
@@ -75,17 +76,19 @@
                             </blockquote>
                             <h:outputText styleClass="fontItalic Gray" value="#{item.observacion}"/>
                         </p:column>
-                        <p:column headerText="De" width="150" sortBy="#{item.remitidoPor}">  
-                            <h:outputText value="#{item.remitidoPor}"/><br/>
-                            <h:outputText styleClass="fontBold" value="[#{item.idRol.descripcionRol}]"/>
-                            <p:separator/>
-                            <h:outputText value="#{item.idUsuarioRemitente.toInfoString()}"/>
-                        </p:column>
-                        <p:column headerText="Para" width="150" sortBy="#{item.remitidoA}">  
-                            <h:outputText value="#{item.remitidoA}"/><br/>
-                            <h:outputText styleClass="fontBold" value="[#{item.idRol.descripcionRol}]"/>
-                            <p:separator/>
-                            <h:outputText value="#{item.idUsuarioRemitente.toInfoString()}"/>
+                        <p:column headerText="Corresponsal/es" width="150">  
+                            <p:outputPanel rendered="#{item.idEstado.esTramiteEntrada()}">
+                                <h:outputText value="De: #{item.remitidoPor}"/><br/>
+                                <h:outputText styleClass="fontBold" value="[#{item.idRol.descripcionRol}]"/>
+                                <p:separator/>
+                                <h:outputText value="#{item.idUsuarioRemitente.toInfoString()}"/>
+                            </p:outputPanel>
+                            <p:outputPanel rendered="#{!item.idEstado.esTramiteEntrada()}">
+                                <h:outputText value="Para: #{item.remitidoA}"/><br/>
+                                <h:outputText styleClass="fontBold" value="[#{item.idRol.descripcionRol}]"/>
+                                <p:separator/>
+                                <h:outputText value="#{item.idUsuarioRemitente.toInfoString()}"/>
+                            </p:outputPanel>
                         </p:column>
                         <p:column headerText="Adjunto" width="80">  
                             <p:commandButton rendered="#{item.nombreArchivo!=null}" title="#{item.nombreArchivo!=null ? item.nombreArchivo:'Sin archivo'}" icon="fa fa-download" ajax="false">

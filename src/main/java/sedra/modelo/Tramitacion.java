@@ -8,7 +8,7 @@ package sedra.modelo;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
-import javax.persistence.Basic;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,11 +19,11 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -34,7 +34,7 @@ import javax.validation.constraints.Size;
 @Table(name = "tramitacion")
 @NamedQueries({
     @NamedQuery(name = "Tramitacion.findAll", query = "SELECT t FROM Tramitacion t")})
-public class Tramitacion implements Serializable {
+public class Tramitacion implements Serializable, Comparable<Tramitacion> {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -106,6 +106,11 @@ public class Tramitacion implements Serializable {
     @JoinColumn(name = "id_usuario_remitente", referencedColumnName = "id_usuario")
     @ManyToOne
     private Usuario idUsuarioRemitente;
+    @OneToMany(mappedBy = "idTramitacionPadre")
+    private List<Tramitacion> tramitacionList;
+    @JoinColumn(name = "id_tramitacion_padre", referencedColumnName = "id_tramitacion")
+    @ManyToOne
+    private Tramitacion idTramitacionPadre;
 
     public Tramitacion() {
     }
@@ -298,6 +303,22 @@ public class Tramitacion implements Serializable {
         this.idUsuarioRemitente = idUsuarioRemitente;
     }
 
+    public List<Tramitacion> getTramitacionList() {
+        return tramitacionList;
+    }
+
+    public void setTramitacionList(List<Tramitacion> tramitacionList) {
+        this.tramitacionList = tramitacionList;
+    }
+
+    public Tramitacion getIdTramitacionPadre() {
+        return idTramitacionPadre;
+    }
+
+    public void setIdTramitacionPadre(Tramitacion idTramitacionPadre) {
+        this.idTramitacionPadre = idTramitacionPadre;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -334,4 +355,10 @@ public class Tramitacion implements Serializable {
                 + "[Rol/Oficina=" + this.idRol + "]"
                 + "[Nro.Entrada=" + this.idDocumento.getIdDocumento() + "]";
     }
+
+    @Override
+    public int compareTo(Tramitacion t) {
+        return t.getFechaDerivacion().compareTo(this.getFechaDerivacion());
+    }
+
 }

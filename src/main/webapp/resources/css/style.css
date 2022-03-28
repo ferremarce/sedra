@@ -99,22 +99,29 @@ label{
     text-transform: uppercase;
     font-weight: 700;
     font-size: 12px;
-    letter-spacing: .3px; }
-.insignia.lima {
+    letter-spacing: .3px;
+}
+.insignia.verde {
     background-color: #C8E6C9;
-    color: #256029; }
-.insignia.rosa {
+    color: #256029;
+}
+.insignia.rojo {
     background-color: #FFCDD2;
-    color: #C63737; }
+    color: #C63737;
+}
 .insignia.amarillo {
     background-color: #FEEDAF;
-    color: #8A5340; }
-.insignia.celeste {
+    color: #8A5340;
+}
+.insignia.azul {
     background-color: #B3E5FC;
-    color: #23547B; }
+    color: #23547B;
+}
 .insignia.lila {
     background-color: #ECCFFF;
-    color: #694382; }
+    color: #694382;
+}
 .insignia.naranja {
     background-color: #FFD8B2;
-    color: #805B36; }
+    color: #805B36;
+}

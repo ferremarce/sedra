@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import sedra.util.Codigo;
 
 /**
  *
@@ -107,4 +108,13 @@ public class EstadoTramitacion implements Serializable {
         return this.getDescripcionEstado();
     }
 
+    public Boolean esTramiteEntrada() {
+        if (this.idEstado.compareTo(Codigo.ESTADO_TRAMITE_PENDIENTE) == 0
+                || this.idEstado.compareTo(Codigo.ESTADO_TRAMITE_INGRESADO) == 0
+                || this.idEstado.compareTo(Codigo.ESTADO_TRAMITE_RECIBIDO) == 0) {
+            return Boolean.TRUE;
+        } else {
+            return Boolean.FALSE;
+        }
+    }
 }

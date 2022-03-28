@@ -9,18 +9,13 @@ import java.io.ByteArrayInputStream;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
-import static java.lang.Integer.getInteger;
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.file.UploadedFile;
 import org.primefaces.util.LangUtils;
@@ -35,7 +30,6 @@ import sedra.fachada.TramitacionFacade;
 import sedra.modelo.Audita;
 import sedra.modelo.DetalleNotaSalida;
 import sedra.modelo.Documento;
-import sedra.modelo.EstadoTramitacion;
 import sedra.modelo.NotaSalida;
 import sedra.modelo.Rol;
 import sedra.modelo.Tramitacion;
@@ -85,11 +79,20 @@ public class TramitacionController implements Serializable {
     private Rol rolDerivado;
     private UploadedFile adjunto;
     private Documento documento;
+    private String observaciones;
 
     /**
      * Creates a new instance of TramitacionController
      */
     public TramitacionController() {
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
     }
 
     public Rol getRolDerivado() {
@@ -201,16 +204,21 @@ public class TramitacionController implements Serializable {
     }
 
     public void buscarAllConfirmadoAjax() {
-        this.listaTramitacionEstado = this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_RECIBIDO);
+        this.listaTramitacionEstado = this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_INGRESADO);
+        this.listaTramitacionEstado.addAll(this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_RECIBIDO));
+        Collections.sort(this.listaTramitacionEstado);
         this.arraySelectedTramitacion = null;
     }
 
     public void buscarAllDerivadoAjax() {
-        this.listaTramitacionEstado = this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_TERMINADO);
+        this.listaTramitacionEstado = this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_DERIVADO);
+        this.listaTramitacionEstado.addAll(this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_TERMINADO));
+        Collections.sort(this.listaTramitacionEstado);
         this.arraySelectedTramitacion = null;
     }
 
     public String rechazaMultipleSetup() {
+        this.observaciones = null;
         this.listSelectedTramitacion = (List<Tramitacion>) JSFutil.arrayToList(this.arraySelectedTramitacion);
         return "/tramitacion/RechazarDocumento";
     }
@@ -243,36 +251,37 @@ public class TramitacionController implements Serializable {
 
     public String rechazar() {
         try {
-            for (Tramitacion t : this.listSelectedTramitacion) {
+            for (Tramitacion tramita : this.listSelectedTramitacion) {
                 this.tramitacionRechazo = new Tramitacion();
-                this.tramitacion = t;
 
                 this.tramitacionRechazo.setFechaDerivacion(JSFutil.getFechaHoraActual());
                 this.tramitacionRechazo.setIdDocumento(this.tramitacion.getIdDocumento());
                 this.tramitacionRechazo.setIdRol(this.tramitacion.getIdUsuarioRemitente().getIdRol());
                 this.tramitacionRechazo.setNotaBreve("Rechazado según observaciones ");
                 this.tramitacionRechazo.setRemitidoA(this.tramitacion.getIdUsuarioRemitente().getUsuario());
+                this.tramitacionRechazo.setObservacion(observaciones);
 
                 this.tramitacionRechazo.setRemitidoPor(JSFutil.getUsuarioConectado().getUsuario());
                 this.tramitacionRechazo.setFechaRegistro(JSFutil.getFechaHoraActual());
                 this.tramitacionRechazo.setHoraRegistro(JSFutil.getFechaHoraActual());
                 this.tramitacionRechazo.setIdUsuarioRemitente(JSFutil.getUsuarioConectado());
                 //Automaticamente ya confirma la recepción porque la derivación ha sido rechazada
-                this.tramitacionRechazo.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_RECIBIDO));
+                this.tramitacionRechazo.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_PENDIENTE));
                 this.tramitacionRechazo.setFechaConfirmacion(JSFutil.getFechaHoraActual());
                 this.tramitacionRechazo.setHoraConfirmacion(JSFutil.getFechaHoraActual());
                 this.tramitacionRechazo.setIdUsuarioConfirmacion(JSFutil.getUsuarioConectado());
+                this.tramitacionRechazo.setIdTramitacionPadre(tramita);
 
                 tramitacionFacade.create(this.tramitacionRechazo);
                 auditaFacade.create(new Audita("TRAMITACION", "Tramitacion Rechazo creada exitosamente.", JSFutil.getFechaHoraActual(), this.tramitacionRechazo.toAudita(), JSFutil.getUsuarioConectado()));
                 this.arraySelectedTramitacion = null;
 
                 //Sacar del pendiente
-                this.tramitacion.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_RECHAZADO)); //Rechazado
-                this.tramitacion.setIdUsuario(JSFutil.getUsuarioConectado());
-                this.tramitacion.setFechaSalida(JSFutil.getFechaHoraActual());
-                this.tramitacion.setHoraSalida(JSFutil.getFechaHoraActual());
-                tramitacionFacade.edit(this.tramitacion);
+                tramita.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_RECHAZADO)); //Rechazado
+                tramita.setIdUsuario(JSFutil.getUsuarioConectado());
+                tramita.setFechaSalida(JSFutil.getFechaHoraActual());
+                tramita.setHoraSalida(JSFutil.getFechaHoraActual());
+                tramitacionFacade.edit(tramita);
             }
             JSFutil.addMessage("Tramitacion rechazada exitosamente. ", JSFutil.StatusMessage.INFORMATION);
         } catch (Exception ex) {

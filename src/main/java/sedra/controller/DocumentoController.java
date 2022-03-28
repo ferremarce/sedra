@@ -267,7 +267,7 @@ public class DocumentoController implements Serializable {
                 Tramitacion t = new Tramitacion();
                 t.setIdDocumento(documento);
                 t.setFechaDerivacion(documento.getFechaIngreso());
-                t.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_PENDIENTE));
+                t.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_INGRESADO));
                 t.setFechaRegistro(documento.getFechaRegistro());
                 t.setHoraRegistro(documento.getHoraRegistro());
                 t.setIdUsuario(documento.getIdUsuario());
@@ -301,7 +301,7 @@ public class DocumentoController implements Serializable {
                     Tramitacion t = new Tramitacion();
                     t.setIdDocumento(documento);
                     t.setFechaDerivacion(documento.getFechaIngreso());
-                    t.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_PENDIENTE));
+                    t.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_INGRESADO));
                     t.setFechaRegistro(documento.getFechaRegistro());
                     t.setHoraRegistro(documento.getHoraRegistro());
                     t.setIdUsuario(documento.getIdUsuario());
