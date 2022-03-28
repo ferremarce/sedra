@@ -29,3 +29,12 @@ INSERT INTO public.permiso (id_permiso, descripcion_permiso, nivel, orden, tag_m
 
 ALTER TABLE public.documento ADD numero_expediente int4 NULL;
 ALTER TABLE public.configuracion ADD tiempo_alerta integer DEFAULT 60;
+
+
+ALTER TABLE public.estado_tramitacion ADD insignia varchar(255) NULL;
+
+UPDATE public.estado_tramitacion SET descripcion_estado='Pendiente', insignia='amarillo' WHERE id_estado=1;
+UPDATE public.estado_tramitacion SET descripcion_estado='Terminado', insignia='celeste' WHERE id_estado=100;
+UPDATE public.estado_tramitacion SET descripcion_estado='Rechazado', insignia='naranja' WHERE id_estado=2;
+UPDATE public.estado_tramitacion SET descripcion_estado='RECIBIDO', insignia='lima' WHERE id_estado=3;
+UPDATE public.estado_tramitacion SET descripcion_estado='Derivado', insignia='lila' WHERE id_estado=4;

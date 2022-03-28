@@ -34,7 +34,7 @@
                             <p:overlayPanel for="btnAlerta" style="width: 30%">
                                 <p:dataList var="alerta" value="#{CommonController.listaAlerta}">
                                     <i class="fa fa-bell"/>
-                                    <p:commandLink ajax="false" value="#{alerta.toString()}" action="#{alerta.toAction()}"/>
+                                    <p:commandLink ajax="false" value=" #{alerta.toString()}" action="#{alerta.toAction()}"/>
                                 </p:dataList>
                             </p:overlayPanel>
                         </p:outputPanel>

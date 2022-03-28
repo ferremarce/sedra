@@ -60,25 +60,39 @@
                             </h:outputText>
                         </p:column>
                         <p:column headerText="Documento" sortBy="#{item.idDocumento.numeroExpediente}" >  
-                            <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.idDocumento.numeroExpediente}">
-                                <f:convertNumber pattern="0000000000000"/>
-                            </h:outputText>
+                            <div class="p-d-flex p-jc-between">
+                                <div>
+                                    <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.idDocumento.numeroExpediente}">
+                                        <f:convertNumber pattern="0000000000000"/>
+                                    </h:outputText>
+                                </div>
+                                <div>
+                                    <h:outputText styleClass="insignia #{item.idEstado.insignia}" value="#{item.idEstado.toString()}"/>
+                                </div>
+                            </div>
                             <blockquote>
                                 <h:outputText styleClass="Brown fontBold" value="#{item.idDocumento.asunto}"/>
                             </blockquote>
                             <h:outputText styleClass="fontItalic Gray" value="#{item.observacion}"/>
                         </p:column>
-                        <p:column headerText="Corresponsal/es" width="200" sortBy="#{item.remitidoA}">  
+                        <p:column headerText="De" width="150" sortBy="#{item.remitidoPor}">  
+                            <h:outputText value="#{item.remitidoPor}"/><br/>
+                            <h:outputText styleClass="fontBold" value="[#{item.idRol.descripcionRol}]"/>
+                            <p:separator/>
+                            <h:outputText value="#{item.idUsuarioRemitente.toInfoString()}"/>
+                        </p:column>
+                        <p:column headerText="Para" width="150" sortBy="#{item.remitidoA}">  
                             <h:outputText value="#{item.remitidoA}"/><br/>
                             <h:outputText styleClass="fontBold" value="[#{item.idRol.descripcionRol}]"/>
                             <p:separator/>
                             <h:outputText value="#{item.idUsuarioRemitente.toInfoString()}"/>
                         </p:column>
-                        <p:column headerText="Adjunto" width="100">  
+                        <p:column headerText="Adjunto" width="80">  
                             <p:commandButton rendered="#{item.nombreArchivo!=null}" title="#{item.nombreArchivo!=null ? item.nombreArchivo:'Sin archivo'}" icon="fa fa-download" ajax="false">
                                 <p:fileDownload value="#{DownloadFile.downloadDocumentoTramite(item.idTramitacion)}" />  
                             </p:commandButton>
                         </p:column>   
+
                     </p:dataTable>
                 </div>
             </div>

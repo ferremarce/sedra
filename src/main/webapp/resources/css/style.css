@@ -92,3 +92,29 @@ label{
 .espaciadoToolbar{
     margin-right: .5rem !important;
 }
+
+.insignia {
+    border-radius: 2px;
+    padding: .25em .5rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .3px; }
+.insignia.lima {
+    background-color: #C8E6C9;
+    color: #256029; }
+.insignia.rosa {
+    background-color: #FFCDD2;
+    color: #C63737; }
+.insignia.amarillo {
+    background-color: #FEEDAF;
+    color: #8A5340; }
+.insignia.celeste {
+    background-color: #B3E5FC;
+    color: #23547B; }
+.insignia.lila {
+    background-color: #ECCFFF;
+    color: #694382; }
+.insignia.naranja {
+    background-color: #FFD8B2;
+    color: #805B36; }

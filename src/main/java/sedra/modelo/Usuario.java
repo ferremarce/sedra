@@ -217,6 +217,10 @@ public class Usuario implements Serializable {
     }
 
     public String toInfoString() {
-        return this.getCuenta() + "\n" + this.getIdRol().toString();
+        try {
+            return this.getCuenta() + "\n" + this.getIdRol().toString();
+        } catch (Exception e) {
+            return "";
+        }
     }
 }
