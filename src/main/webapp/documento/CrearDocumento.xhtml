@@ -101,7 +101,7 @@
                                 <p:fileDownload value="#{DownloadFile.downloadDocumentoAdjunto(expeAdj.idDocumentoAdjunto)}" />  
                             </p:commandButton>
                             <p:commandButton immediate="true" title="#{bundle.EliminarBoton}" icon="fa fa-times" styleClass="rounded-button ui-button-warning" action="#{DocumentoController.doBorrarAdjunto(expeAdj.idDocumentoAdjunto)}" update="@form, panelMensajeEstado">
-                                <p:confirm escape="false" header="Confirmación" message="Está a punto de eliminar el registro ##{item.toString()}. &lt;br/&gt;¿Estás seguro?" icon="fa fa-exclamation-triangle" />
+                                <p:confirm escape="false" header="Confirmación" message="Está a punto de eliminar el registro. &lt;br/&gt;¿Estás seguro?" icon="fa fa-exclamation-triangle" />
                             </p:commandButton>
                         </p:column>
                     </p:dataTable> 

@@ -50,4 +50,11 @@ public class RolFacade extends AbstractFacade<Rol> {
         return tr;
     }
 
+    @Override
+    public List<Rol> findAll() {
+        Query q = em.createQuery("SELECT a FROM Rol a ORDER BY a.descripcionRol");
+        List<Rol> tr = q.getResultList();
+        return tr;
+    }
+
 }

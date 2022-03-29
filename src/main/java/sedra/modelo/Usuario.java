@@ -218,7 +218,7 @@ public class Usuario implements Serializable {
 
     public String toInfoString() {
         try {
-            return this.getCuenta() + "\n" + this.getIdRol().toString();
+            return this.getCuenta() + " - " + this.getIdRol().toString();
         } catch (Exception e) {
             return "";
         }

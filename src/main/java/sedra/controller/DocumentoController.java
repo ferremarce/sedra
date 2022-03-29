@@ -273,7 +273,7 @@ public class DocumentoController implements Serializable {
                 t.setIdUsuario(documento.getIdUsuario());
                 t.setIdRol(documento.getIdUsuario().getIdRol());
                 t.setNotaBreve("Entrada del Documento");
-                t.setLeido(Boolean.FALSE);
+                t.setLeido(Boolean.TRUE);
                 tramitacionFacade.create(t);
             } else {
                 documentoFacade.edit(documento);
@@ -305,7 +305,7 @@ public class DocumentoController implements Serializable {
                     t.setIdUsuario(documento.getIdUsuario());
                     t.setIdRol(documento.getIdUsuario().getIdRol());
                     t.setNotaBreve("Entrada del Documento");
-                    t.setLeido(Boolean.FALSE);
+                    t.setLeido(Boolean.TRUE);
                     tramitacionFacade.create(t);
                 }
             }

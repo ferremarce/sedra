@@ -95,24 +95,22 @@
                             <blockquote>
                                 <h:outputText styleClass="Brown" value="#{item.idDocumento.asunto}"/>
                             </blockquote>
-                            <h:outputText styleClass="fontItalic Gray" value="#{item.observacion}"/>
                         </p:column>
                         <p:column width="200" >  
                             <f:facet name="header">
                                 <i class="fa fa-users" title="Corresponsal/es"></i>
                             </f:facet>
                             <p:outputPanel rendered="#{item.idEstado.esTramiteEntrada()}">
-                                <h:outputText value="De: #{item.remitidoPor}"/><br/>
-                                <h:outputText value="[#{item.idRol.descripcionRol}]"/>
-                                <p:separator/>
-                                <h:outputText value="#{item.idUsuarioRemitente.toInfoString()}"/>
+                                <h:outputText rendered="#{item.idTramitacionPadre!=null}" escape="false" value="#{item.idTramitacionPadre.idUsuario.toInfoString()}"/>
+                                <h:outputText rendered="#{item.idTramitacionPadre==null}" escape="false" value="Remitido por: #{item.remitidoPor}"/>
                             </p:outputPanel>
                             <p:outputPanel rendered="#{!item.idEstado.esTramiteEntrada()}">
-                                <h:outputText value="Para: #{item.remitidoA}"/><br/>
-                                <h:outputText value="[#{item.idRol.descripcionRol}]"/>
-                                <p:separator/>
-                                <h:outputText value="#{item.idUsuarioRemitente.toInfoString()}"/>
+                                <p:dataList rendered="#{not empty item.tramitacionList}" var="tramDeriva" value="#{item.tramitacionList}">
+                                    <h:outputText value="#{tramDeriva.idRol.toString()}"/>
+                                </p:dataList>
+                                <h:outputText rendered="#{empty item.tramitacionList}" escape="false" value="A: #{item.remitidoA}"/>
                             </p:outputPanel>
+
                         </p:column>
 
                     </p:dataTable>
@@ -124,16 +122,17 @@
                     <h:outputText id="fechaDerivacion" value="#{TramitacionController.tramitacion.fechaDerivacion}" title="FechaDerivacion">
                         <f:convertDateTime pattern="dd/MM/yyyy" />
                     </h:outputText>
-                    <p:outputLabel for="notaBreve" value="Nota Breve:"/>
-                    <h:outputText id="notaBreve" value="#{TramitacionController.tramitacion.notaBreve}" title="NotaBreve"/>
+
                     <p:outputLabel for="remitidoA" value="A:"/>
                     <h:outputText id="remitidoA" value="#{TramitacionController.tramitacion.remitidoA}" title="RemitidoA"/>
-                    <p:outputLabel for="remitidoPor" value="Por:"/>
+                    <p:outputLabel for="remitidoPor" value="Por [heredado]:"/>
                     <h:outputText id="remitidoPor" value="#{TramitacionController.tramitacion.remitidoPor}" title="RemitidoPor"/>
                     <p:outputLabel for="idDocumento" value="Documento Inicial:"/>
                     <h:outputText id="idDocumento" value="#{TramitacionController.tramitacion.idDocumento.toString()}" title="IdDocumento"/>
+                    <p:outputLabel for="notaBreve" value="Nota Breve:"/>
+                    <h:outputText id="notaBreve" value="#{TramitacionController.tramitacion.notaBreve}" title="NotaBreve"/>
                     <p:outputLabel for="remitente" value="Usuario Remitente:"/>                 
-                    <h:outputText id="remitente" rendered="#{TramitacionController.tramitacion.idTramitacionPadre!=null}" value="#{TramitacionController.tramitacion.idTramitacionPadre.idUsuario.toString()}" title="IdTramitacionPadre"/>
+                    <h:outputText id="remitente" rendered="#{TramitacionController.tramitacion.idTramitacionPadre!=null}" escape="false" value="#{TramitacionController.tramitacion.idTramitacionPadre.idUsuario.toInfoString()}" title="IdTramitacionPadre"/>
                     <h:outputText id="remitente2" rendered="#{TramitacionController.tramitacion.idTramitacionPadre==null}" value="#{TramitacionController.tramitacion.idUsuarioRemitente.toString()}" title="idUsuarioRemitente"/>
                     <p:outputLabel for="observacion" value="Observacion:"/>
                     <h:outputText id="observacion" value="#{TramitacionController.tramitacion.observacion}" title="Observacion"/>
