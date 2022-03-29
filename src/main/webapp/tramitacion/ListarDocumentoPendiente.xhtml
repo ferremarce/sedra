@@ -17,17 +17,20 @@
         </f:metadata>
         <h:form id="formMain">
             <div class="p-grid">
-                <div class="p-col-2">
-                    <p:menu style="width: 100%">
-                        <p:submenu label="Bandejas">
-                            <p:separator/>
-                            <p:menuitem value="Entrada [#{TramitacionController.listaTramitacionEstado.size()}]" icon="fa fa-inbox" actionListener="#{TramitacionController.buscarAllPendienteAjax()}" update="dataTablePendiente, panelMensajeEstado"/>
-                            <p:menuitem value="Recibidos/ Ingresados" icon="fa fa-check-to-slot" actionListener="#{TramitacionController.buscarAllConfirmadoAjax()}" update="dataTablePendiente, panelMensajeEstado"/>
-                            <p:menuitem value="Salida" icon="fa fa-paper-plane" actionListener="#{TramitacionController.buscarAllDerivadoAjax()}" update="dataTablePendiente, panelMensajeEstado"/>                
-                        </p:submenu>
-                    </p:menu>
+                <div class="p-col-12">
+                    <p:tabMenu activeIndex="#{param.i}">
+                        <p:menuitem value="Pendientes de Confirmación [#{TramitacionController.listaTramitacionEstado.size()}]" icon="fa fa-inbox" actionListener="#{TramitacionController.buscarAllPendienteAjax()}" update="formMain, panelMensajeEstado">
+                            <f:param name="i" value="0"/>
+                        </p:menuitem>
+                        <p:menuitem value="Pendientes de Tramitacion" icon="fa fa-check-to-slot" actionListener="#{TramitacionController.buscarAllConfirmadoAjax()}" update="formMain, panelMensajeEstado">
+                            <f:param name="i" value="1"/>
+                        </p:menuitem>
+                        <p:menuitem value="Tramitados" icon="fa fa-paper-plane" actionListener="#{TramitacionController.buscarAllDerivadoAjax()}" update="formMain, panelMensajeEstado">
+                            <f:param name="i" value="2"/>
+                        </p:menuitem>
+                    </p:tabMenu>
                 </div>
-                <div class="p-col">
+                <div class="p-col-12">
                     <p:dataTable rowIndexVar="index" id="dataTablePendiente" var="item" value="#{TramitacionController.listaTramitacionEstado}"
                                  widgetVar="wBandeja"
                                  reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
@@ -50,8 +53,8 @@
                             <p:inputText id="globalFilter" onkeyup="PF('wBandeja').filter()" style="width:300px" placeholder="Asunto, Nro. Entrada" />
                             <p:tooltip for="globalFilter" value="Puede utilizar los comodines: * (muchos caracteres) y  ? (un caracter)"/>
                         </f:facet>
-                        <p:column visible="#{item.idEstado.idEstado!=100}" selectionMode="multiple" width="20"/>  
-                        <p:column visible="#{item.idEstado.idEstado==100}" width="20"/>  
+                        <p:column visible="#{TramitacionController.tipoBandeja!=3}" selectionMode="multiple" width="20"/>  
+                        <p:column visible="#{TramitacionController.tipoBandeja==3}" width="20"/>  
                         <p:column width="30" headerText="#">
                             <h:outputText value="#{index+1}"/>
                         </p:column>
@@ -100,18 +103,18 @@
                 </div>
             </div>
             <p:panel id="panelComando">
-                <p:contextMenu for="dataTablePendiente">
-                    <p:menuitem disabled="#{fn:length(TramitacionController.arraySelectedTramitacion)==0}" title="#{bundle.ConfirmarBoton}" value="#{bundle.ConfirmarBoton} [#{fn:length(TramitacionController.arraySelectedTramitacion)}]" icon="fa fa-check-square" action="#{TramitacionController.confirmaMultipleSetup()}" update="@form, panelMensajeEstado">
+                <p:contextMenu for="dataTablePendiente" >
+                    <p:menuitem disabled="#{fn:length(TramitacionController.arraySelectedTramitacion)==0 or TramitacionController.tipoBandeja!=1}" title="#{bundle.ConfirmarBoton}" value="#{bundle.ConfirmarBoton} [#{fn:length(TramitacionController.arraySelectedTramitacion)}]" icon="fa fa-check-square" action="#{TramitacionController.confirmaMultipleSetup()}" update="@form, panelMensajeEstado">
                         <p:confirm escape="false" header="Confirmación" message="Está a punto de confirmar [#{fn:length(TramitacionController.arraySelectedTramitacion)}] documentos seleccionados. &lt;br/&gt;¿Estás seguro?" icon="fa fa-exclamation-triangle" />
                     </p:menuitem>
-                    <p:menuitem disabled="#{fn:length(TramitacionController.arraySelectedTramitacion)==0}" ajax="false" title="#{bundle.RechazarBoton}" value="#{bundle.RechazarBoton} [#{fn:length(TramitacionController.arraySelectedTramitacion)}]" icon="fa fa-remove" action="#{TramitacionController.rechazaMultipleSetup()}"/>
-
+                    <p:menuitem disabled="#{fn:length(TramitacionController.arraySelectedTramitacion)==0 or TramitacionController.tipoBandeja!=1}" ajax="false" title="#{bundle.RechazarBoton}" value="#{bundle.RechazarBoton} [#{fn:length(TramitacionController.arraySelectedTramitacion)}]" icon="fa fa-remove" action="#{TramitacionController.rechazaMultipleSetup()}"/>
+                    <p:menuitem disabled="#{fn:length(TramitacionController.arraySelectedTramitacion)==0 or TramitacionController.tipoBandeja!=2}" ajax="false" title="#{bundle.DerivarBoton}" value="#{bundle.DerivarBoton} [#{fn:length(TramitacionController.arraySelectedTramitacion)}]" icon="fa fa-random" action="#{TramitacionController.derivaMultipleSetup()}"/>
                 </p:contextMenu>
-                <p:commandButton id="btnAceptar" disabled="#{fn:length(TramitacionController.arraySelectedTramitacion)==0}" styleClass="espaciadoToolbar" title="#{bundle.ConfirmarBoton}" value="#{bundle.ConfirmarBoton} [#{fn:length(TramitacionController.arraySelectedTramitacion)}]" icon="fa fa-check-square" action="#{TramitacionController.confirmaMultipleSetup()}" update="@form, panelMensajeEstado">
+                <p:commandButton id="btnAceptar" disabled="#{fn:length(TramitacionController.arraySelectedTramitacion)==0 or TramitacionController.tipoBandeja!=1}" styleClass="espaciadoToolbar" title="#{bundle.ConfirmarBoton}" value="#{bundle.ConfirmarBoton} [#{fn:length(TramitacionController.arraySelectedTramitacion)}]" icon="fa fa-check-square" action="#{TramitacionController.confirmaMultipleSetup()}" update="@form, panelMensajeEstado">
                     <p:confirm escape="false" header="Confirmación" message="Está a punto de confirmar [#{fn:length(TramitacionController.arraySelectedTramitacion)}] documentos seleccionados. &lt;br/&gt;¿Estás seguro?" icon="fa fa-exclamation-triangle" />
                 </p:commandButton>
-                <p:commandButton disabled="#{fn:length(TramitacionController.arraySelectedTramitacion)==0}" styleClass="espaciadoToolbar" ajax="false" title="#{bundle.RechazarBoton}" value="#{bundle.RechazarBoton} [#{fn:length(TramitacionController.arraySelectedTramitacion)}]" icon="fa fa-remove" action="#{TramitacionController.rechazaMultipleSetup()}"/>     
-                <p:commandButton styleClass="espaciadoToolbar" ajax="false" title="#{bundle.DerivarBoton}" value="#{bundle.DerivarBoton}" icon="fa fa-random" action="#{TramitacionController.derivaMultipleSetup()}"/>                        
+                <p:commandButton disabled="#{fn:length(TramitacionController.arraySelectedTramitacion)==0 or TramitacionController.tipoBandeja!=1}" styleClass="espaciadoToolbar" ajax="false" title="#{bundle.RechazarBoton}" value="#{bundle.RechazarBoton} [#{fn:length(TramitacionController.arraySelectedTramitacion)}]" icon="fa fa-remove" action="#{TramitacionController.rechazaMultipleSetup()}"/>     
+                <p:commandButton disabled="#{fn:length(TramitacionController.arraySelectedTramitacion)==0 or TramitacionController.tipoBandeja!=2}" styleClass="espaciadoToolbar" ajax="false" title="#{bundle.DerivarBoton}" value="#{bundle.DerivarBoton} [#{fn:length(TramitacionController.arraySelectedTramitacion)}]" icon="fa fa-random" action="#{TramitacionController.derivaMultipleSetup()}"/>                        
             </p:panel>
             <!--esto evita que el enter en el filtrado de tabla no dispare el download del item de la tabla-->
             <p:defaultCommand target="btnAceptar"/>

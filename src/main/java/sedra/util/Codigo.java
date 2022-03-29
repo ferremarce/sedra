@@ -24,4 +24,8 @@ public interface Codigo {
     public static final Integer ESTADO_TRAMITE_INGRESADO = 5;
     public static final Integer ESTADO_TRAMITE_TERMINADO = 100;
 
+    public static final Integer BANDEJA_PEDIENTES_CONFIRMACION = 1;
+    public static final Integer BANDEJA_PENDIENTES_TRAMITACION = 2;
+    public static final Integer BANDEJA_TRAMITADOS = 3;
+
 }

@@ -80,11 +80,20 @@ public class TramitacionController implements Serializable {
     private UploadedFile adjunto;
     private Documento documento;
     private String observaciones;
+    private Integer tipoBandeja;
 
     /**
      * Creates a new instance of TramitacionController
      */
     public TramitacionController() {
+    }
+
+    public Integer getTipoBandeja() {
+        return tipoBandeja;
+    }
+
+    public void setTipoBandeja(Integer tipoBandeja) {
+        this.tipoBandeja = tipoBandeja;
     }
 
     public String getObservaciones() {
@@ -201,6 +210,7 @@ public class TramitacionController implements Serializable {
     public void buscarAllPendienteAjax() {
         this.listaTramitacionEstado = this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_PENDIENTE);
         this.arraySelectedTramitacion = null;
+        this.tipoBandeja = Codigo.BANDEJA_PEDIENTES_CONFIRMACION;
     }
 
     public void buscarAllConfirmadoAjax() {
@@ -208,6 +218,7 @@ public class TramitacionController implements Serializable {
         this.listaTramitacionEstado.addAll(this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_RECIBIDO));
         Collections.sort(this.listaTramitacionEstado);
         this.arraySelectedTramitacion = null;
+        this.tipoBandeja = Codigo.BANDEJA_PENDIENTES_TRAMITACION;
     }
 
     public void buscarAllDerivadoAjax() {
@@ -215,6 +226,7 @@ public class TramitacionController implements Serializable {
         this.listaTramitacionEstado.addAll(this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_TERMINADO));
         Collections.sort(this.listaTramitacionEstado);
         this.arraySelectedTramitacion = null;
+        this.tipoBandeja = Codigo.BANDEJA_TRAMITADOS;
     }
 
     public String rechazaMultipleSetup() {
