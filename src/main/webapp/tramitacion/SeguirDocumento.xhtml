@@ -59,18 +59,49 @@
                 </p:panelGrid>
             </p:panel>
             <p:panel header="Información de la Tramitación">
-                <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{TramitacionController.listaTramitacionSeguimiento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{TramitacionController.listaTramitacionSeguimiento}" 
+                             reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                              rows="50"
                              rowKey="#{item.idTramitacion}"
-                             paginator="true"
-                             filterEvent="enter"
-                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             rowsPerPageTemplate="#{bundle.Paginacion}"                         
                              >
                     <!-- CUANDO ES EDICION -->
                     <p:column headerText="#" style="width: 40px">
                         <h:outputText style="display: inline" value="#{index+1}"/>
                         <p:rowToggler/>
+                    </p:column>
+
+                    <p:column headerText="Despacho" width="100">
+                        <h:outputText value="#{CommonController.doDiferenciaTiempo(item.fechaRegistro, item.horaRegistro, item.fechaSalida, item.horaSalida)} "/>
+                    </p:column>
+                    <p:column headerText="Remitido a">
+                        <p:inputText title="Remitido a" value="#{item.remitidoA}"/>
+                        <p:selectOneMenu style="width: 100%"  id="idRol" value="#{item.idRol}" required="true" requiredMessage="#{bundle.Requerido}" >
+                            <f:selectItems value="#{RolController.rolSet}"/>
+                        </p:selectOneMenu>
+                    </p:column>
+                    <p:column headerText="Nota Breve" width="130">
+                        <h:outputText value=" #{item.notaBreve}"/>
+                    </p:column>
+                    <p:column headerText="Estado" width="130">
+                        <p:selectOneMenu id="idEstado" value="#{item.idEstado}" required="true" requiredMessage="#{bundle.Requerido}" >
+                            <f:selectItems value="#{EstadoTramitacionController.estadoTramitacionSet}"/>
+                        </p:selectOneMenu>
+                    </p:column>
+                    <p:column headerText="Dependencias">
+                        <p:dataList rendered="#{not empty item.tramitacionList}" var="tramDeriva" value="#{item.tramitacionList}">
+                            <h:outputText value="#{tramDeriva.idRol.toString()}"/>
+                        </p:dataList>
+                    </p:column>
+                    <p:column headerText="Observaciones" >
+                        <p:inputTextarea rows="3"  cols="20" id="observaciones" value="#{item.observacion}" title="Observaciones" />
+                    </p:column>
+                    <p:column headerText="Adjunto" width="115">  
+                        <p:commandButton rendered="#{item.nombreArchivo!=null}" title="#{item.nombreArchivo!=null ? item.nombreArchivo:'Sin archivo'}" icon="fa fa-download" ajax="false">
+                            <p:fileDownload value="#{DownloadFile.downloadDocumentoTramite(item.idTramitacion)}" />  
+                        </p:commandButton>
+                    </p:column>  
+                    <p:column width="100" headerText="Borrar?" >
+                        <p:toggleSwitch value="#{item.flagBorrado}" />
                     </p:column>
                     <p:rowExpansion>
                         <p:panelGrid columns="2" style="width: 400px" >
@@ -110,33 +141,6 @@
                             </p:outputPanel>
                         </p:panelGrid>
                     </p:rowExpansion>
-                    <p:column headerText="Despacho" width="100">
-                        <h:outputText value="#{CommonController.doDiferenciaTiempo(item.fechaRegistro, item.horaRegistro, item.fechaSalida, item.horaSalida)} "/>
-                    </p:column>
-                    <p:column headerText="Remitido a">
-                        <h:outputText styleClass="fontItalic" value="Usuario: #{item.idUsuario}"/>
-                        <p/>
-                        <p:inputText title="Remitido a" value="#{item.remitidoA}"/>
-                        <p:selectOneMenu style="width: 100%"  id="idRol" value="#{item.idRol}" required="true" requiredMessage="#{bundle.Requerido}" >
-                            <f:selectItems value="#{RolController.rolSet}"/>
-                        </p:selectOneMenu>
-                    </p:column>
-                    <p:column headerText="Nota Breve" width="130">
-                        <h:outputText value=" #{item.notaBreve}"/>
-                    </p:column>
-                    <p:column headerText="Estado" width="130">
-                        <p:selectOneMenu id="idEstado" value="#{item.idEstado}" required="true" requiredMessage="#{bundle.Requerido}" >
-                            <f:selectItems value="#{EstadoTramitacionController.estadoTramitacionSet}"/>
-                        </p:selectOneMenu>
-                    </p:column>
-                    <p:column headerText="Observaciones" >
-                        <p:inputTextarea rows="3"  cols="20" id="observaciones" value="#{item.observacion}" title="Observaciones" />
-                    </p:column>
-                    <p:column headerText="Adjunto" width="115">  
-                        <p:commandButton rendered="#{item.nombreArchivo!=null}" title="#{item.nombreArchivo!=null ? item.nombreArchivo:'Sin archivo'}" icon="fa fa-download" ajax="false">
-                            <p:fileDownload value="#{DownloadFile.downloadDocumentoTramite(item.idTramitacion)}" />  
-                        </p:commandButton>
-                    </p:column>  
                 </p:dataTable>
                 <f:facet name="footer">
                     <p:panelGrid columns="2" styleClass="ui-panelgrid-blank">

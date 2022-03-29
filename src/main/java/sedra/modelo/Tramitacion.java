@@ -24,6 +24,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
 /**
@@ -113,6 +114,8 @@ public class Tramitacion implements Serializable, Comparable<Tramitacion> {
     private Tramitacion idTramitacionPadre;
     @Column(name = "leido")
     private Boolean leido;
+    @Transient
+    private Boolean flagBorrado;
 
     public Tramitacion() {
     }
@@ -327,6 +330,18 @@ public class Tramitacion implements Serializable, Comparable<Tramitacion> {
 
     public void setLeido(Boolean leido) {
         this.leido = leido;
+    }
+
+    public Boolean getFlagBorrado() {
+        if (this.flagBorrado != null) {
+            return flagBorrado;
+        } else {
+            return Boolean.FALSE;
+        }
+    }
+
+    public void setFlagBorrado(Boolean flagBorrado) {
+        this.flagBorrado = flagBorrado;
     }
 
     @Override
