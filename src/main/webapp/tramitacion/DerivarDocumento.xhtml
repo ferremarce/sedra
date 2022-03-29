@@ -25,6 +25,10 @@
                 <div class="p-grid">
                     <div class="p-col-8">
                         <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="flex" columnClasses="p-col-2,p-col-10" contentStyleClass="ui-fluid">
+                            <p:outputLabel for="idPrioridad" value="Prioridad:"/>
+                            <p:selectOneRadio id="idPrioridad" value="#{TramitacionController.tramitacion.idPrioridad}">
+                                <f:selectItems value="#{PrioridadController.prioridadSet}"/>
+                            </p:selectOneRadio>
                             <p:outputLabel for="fechaDerivacion" value="Fecha de Derivación:"/>
                             <p:calendar navigator="true" id="fechaDerivacion" value="#{TramitacionController.tramitacion.fechaDerivacion}" pattern="dd/MM/yyyy" title="Fecha Derivación" required="true" requiredMessage="Fecha Derivación"/>
                             <p:outputLabel for="notaBreve" value="Nota Breve:"/>

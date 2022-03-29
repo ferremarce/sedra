@@ -49,3 +49,11 @@ update tramitacion set leido=false where leido is null and id_estado =1;
 update tramitacion set leido=true where leido is null and id_estado >1;
 
 ALTER TABLE public.tramitacion RENAME COLUMN id_usuario TO id_creador;
+
+ALTER TABLE public.tramitacion ADD id_prioridad integer NULL;
+ALTER TABLE public.tramitacion ADD CONSTRAINT fk_tramitacion_id_prioridad FOREIGN KEY (id_prioridad) REFERENCES public.prioridad(id_prioridad);
+
+INSERT INTO public.prioridad (id_prioridad, descripcion_prioridad, insignia, orden) VALUES(1, 'Alta', 'rojo', 1);
+INSERT INTO public.prioridad (id_prioridad, descripcion_prioridad, insignia, orden) VALUES(2, 'Normal', 'gris', 2);
+
+update public.tramitacion set id_prioridad =2 where id_prioridad is null;

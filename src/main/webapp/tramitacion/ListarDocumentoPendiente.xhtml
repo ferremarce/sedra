@@ -57,12 +57,24 @@
                         <p:column visible="#{TramitacionController.tipoBandeja!=3}" selectionMode="multiple" width="20"/>  
                         <p:column visible="#{TramitacionController.tipoBandeja==3}" width="20"/>  
 
-                        <p:column width="5" sortBy="#{item.leido}">
+                        <p:column width="10" sortBy="#{item.leido}">
                             <f:facet name="header">
                                 <i class="fa fa-glasses" title="Leído"/>
                             </f:facet>
                             <i class="fa fa-square Orange" title="No leído" style="display: #{item.leido?'none': ''}" />
                             <i class="fa fa-square-check Green" title="Leído" style="display: #{item.leido?'': 'none'}" />
+                        </p:column>
+                        <p:column width="50" sortBy="#{item.idPrioridad.orden}">
+                            <f:facet name="header">
+                                <i class="fa fa-circle-exclamation" title="Prioridad"/>
+                            </f:facet>
+                            <h:outputText styleClass="insignia #{item.idPrioridad.insignia}" value="#{item.idPrioridad.toString()}"/>
+                        </p:column>
+                        <p:column width="80" sortBy="#{item.idEstado.idEstado}">
+                            <f:facet name="header">
+                                <i class="fa fa-arrows-rotate" title="Estado"/>
+                            </f:facet>
+                            <h:outputText styleClass="insignia #{item.idEstado.insignia}" value="#{item.idEstado.toString()}"/>
                         </p:column>
                         <p:column width="80">
                             <p:commandButton value="#{bundle.VerBoton}" ajax="true" global="false" icon="fa fa-envelope-open" actionListener="#{TramitacionController.doVerMensaje(item)}"/>
@@ -82,16 +94,9 @@
                             <f:facet name="header">
                                 <i class="fa fa-file" title="Documento"></i>
                             </f:facet>
-                            <div class="p-d-flex p-jc-between">
-                                <div>
-                                    <h:outputText title="#{item.idDocumento}" styleClass="Blue" value="#{item.idDocumento.numeroExpediente}">
-                                        <f:convertNumber pattern="0000000000000"/>
-                                    </h:outputText>
-                                </div>
-                                <div>
-                                    <h:outputText styleClass="insignia #{item.idEstado.insignia}" value="#{item.idEstado.toString()}"/>
-                                </div>
-                            </div>
+                            <h:outputText title="#{item.idDocumento}" styleClass="Blue" value="#{item.idDocumento.numeroExpediente}">
+                                <f:convertNumber pattern="0000000000000"/>
+                            </h:outputText>
                             <blockquote>
                                 <h:outputText styleClass="Brown" value="#{item.idDocumento.asunto}"/>
                             </blockquote>

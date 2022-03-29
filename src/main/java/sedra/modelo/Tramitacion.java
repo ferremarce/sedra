@@ -114,6 +114,9 @@ public class Tramitacion implements Serializable, Comparable<Tramitacion> {
     private Tramitacion idTramitacionPadre;
     @Column(name = "leido")
     private Boolean leido;
+     @JoinColumn(name = "id_prioridad", referencedColumnName = "id_prioridad")
+    @ManyToOne
+    private Prioridad idPrioridad;
     @Transient
     private Boolean flagBorrado;
 
@@ -330,6 +333,14 @@ public class Tramitacion implements Serializable, Comparable<Tramitacion> {
 
     public void setLeido(Boolean leido) {
         this.leido = leido;
+    }
+
+    public Prioridad getIdPrioridad() {
+        return idPrioridad;
+    }
+
+    public void setIdPrioridad(Prioridad idPrioridad) {
+        this.idPrioridad = idPrioridad;
     }
 
     public Boolean getFlagBorrado() {

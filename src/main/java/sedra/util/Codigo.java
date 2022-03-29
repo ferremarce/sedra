@@ -27,5 +27,8 @@ public interface Codigo {
     public static final Integer BANDEJA_PEDIENTES_CONFIRMACION = 1;
     public static final Integer BANDEJA_PENDIENTES_TRAMITACION = 2;
     public static final Integer BANDEJA_TRAMITADOS = 3;
+    
+    public static final Integer PRIORIDAD_ALTA = 1;
+    public static final Integer PRIORIDAD_NORMAL = 2;
 
 }
