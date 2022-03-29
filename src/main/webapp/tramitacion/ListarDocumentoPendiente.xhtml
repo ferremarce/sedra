@@ -96,7 +96,7 @@
                                 <h:outputText styleClass="Brown" value="#{item.idDocumento.asunto}"/>
                             </blockquote>
                         </p:column>
-                        <p:column width="200" >  
+                        <p:column width="300" >  
                             <f:facet name="header">
                                 <i class="fa fa-users" title="Corresponsal/es"></i>
                             </f:facet>
@@ -107,6 +107,9 @@
                             <p:outputPanel rendered="#{!item.idEstado.esTramiteEntrada()}">
                                 <p:dataList rendered="#{not empty item.tramitacionList}" var="tramDeriva" value="#{item.tramitacionList}">
                                     <h:outputText value="#{tramDeriva.idRol.toString()}"/>
+                                    <i class="fa fa-square Orange" title="No leído" style="display: #{tramDeriva.leido?'none': ''}" />
+                                    <i class="fa fa-square-check Green" title="Leído" style="display: #{tramDeriva.leido?'': 'none'}" />
+                                    <h:outputText styleClass="insignia #{tramDeriva.idEstado.insignia}" value="#{tramDeriva.idEstado.toString()}"/>
                                 </p:dataList>
                                 <h:outputText rendered="#{empty item.tramitacionList}" escape="false" value="A: #{item.remitidoA}"/>
                             </p:outputPanel>
