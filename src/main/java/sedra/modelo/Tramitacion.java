@@ -98,9 +98,9 @@ public class Tramitacion implements Serializable, Comparable<Tramitacion> {
     @JoinColumn(name = "id_rol", referencedColumnName = "id_rol")
     @ManyToOne
     private Rol idRol;
-    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
+    @JoinColumn(name = "id_creador", referencedColumnName = "id_usuario")
     @ManyToOne
-    private Usuario idUsuario;
+    private Usuario idCreador;
     @JoinColumn(name = "id_usuario_confirmacion", referencedColumnName = "id_usuario")
     @ManyToOne
     private Usuario idUsuarioConfirmacion;
@@ -284,12 +284,12 @@ public class Tramitacion implements Serializable, Comparable<Tramitacion> {
         this.idRol = idRol;
     }
 
-    public Usuario getIdUsuario() {
-        return idUsuario;
+    public Usuario getIdCreador() {
+        return idCreador;
     }
 
-    public void setIdUsuario(Usuario idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setIdCreador(Usuario idCreador) {
+        this.idCreador = idCreador;
     }
 
     public Usuario getIdUsuarioConfirmacion() {

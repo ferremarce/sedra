@@ -10,7 +10,9 @@ import java.io.Serializable;
 import java.util.List;
 import javax.inject.Inject;
 import sedra.fachada.DocumentoFacade;
+import sedra.fachada.TramitacionFacade;
 import sedra.modelo.Documento;
+import sedra.modelo.Tramitacion;
 import sedra.util.JSFutil;
 
 /**
@@ -23,6 +25,8 @@ public class MigracionController implements Serializable {
 
     @Inject
     DocumentoFacade documentoFacade;
+    @Inject
+    TramitacionFacade tramitacionFacade;
 
     /**
      * Creates a new instance of MigracionController
@@ -32,7 +36,7 @@ public class MigracionController implements Serializable {
 
     public void doConvertirNroEntrada() {
         List<Documento> lista = documentoFacade.findAll();
-        String nroEntrada="";
+        String nroEntrada = "";
         String[] nroEntradaArray;
         Integer nroExpe = 0;
         int cantidadError = 0;
@@ -53,6 +57,25 @@ public class MigracionController implements Serializable {
             }
         }
         JSFutil.addMessage("Registros actualizados: " + cantidadUpdate + "\n Errores: " + cantidadError, JSFutil.StatusMessage.INFORMATION);
+    }
+
+    public void doProcesarTramitePadre() {
+        List<Documento> lista = documentoFacade.findAll();
+        for (Documento doc : lista) {
+            Tramitacion tramitaAnterior = null;
+            for (Tramitacion tramita : doc.getTramitacionList()) {
+                if (tramitaAnterior == null) {
+                    tramitaAnterior = tramita;
+                    continue;
+                }
+                if (tramita.getIdTramitacionPadre() == null) {
+                    tramita.setIdTramitacionPadre(tramitaAnterior);
+                    this.tramitacionFacade.edit(tramita);
+                }
+                tramitaAnterior = tramita;
+            }
+        }
+        JSFutil.addMessage("Registros actualizados", JSFutil.StatusMessage.INFORMATION);
     }
 
 }

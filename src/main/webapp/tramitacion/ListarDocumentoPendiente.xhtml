@@ -101,7 +101,7 @@
                                 <i class="fa fa-users" title="Corresponsal/es"></i>
                             </f:facet>
                             <p:outputPanel rendered="#{item.idEstado.esTramiteEntrada()}">
-                                <h:outputText rendered="#{item.idTramitacionPadre!=null}" escape="false" value="#{item.idTramitacionPadre.idUsuario.toInfoString()}"/>
+                                <h:outputText rendered="#{item.idTramitacionPadre!=null}" escape="false" value="#{item.idTramitacionPadre.idCreador.toInfoString()}"/>
                                 <h:outputText rendered="#{item.idTramitacionPadre==null}" escape="false" value="Remitido por: #{item.remitidoPor}"/>
                             </p:outputPanel>
                             <p:outputPanel rendered="#{!item.idEstado.esTramiteEntrada()}">
@@ -135,7 +135,7 @@
                     <p:outputLabel for="notaBreve" value="Nota Breve:"/>
                     <h:outputText id="notaBreve" value="#{TramitacionController.tramitacion.notaBreve}" title="NotaBreve"/>
                     <p:outputLabel for="remitente" value="Usuario Remitente:"/>                 
-                    <h:outputText id="remitente" rendered="#{TramitacionController.tramitacion.idTramitacionPadre!=null}" escape="false" value="#{TramitacionController.tramitacion.idTramitacionPadre.idUsuario.toInfoString()}" title="IdTramitacionPadre"/>
+                    <h:outputText id="remitente" rendered="#{TramitacionController.tramitacion.idTramitacionPadre!=null}" escape="false" value="#{TramitacionController.tramitacion.idTramitacionPadre.idCreador.toInfoString()}" title="IdTramitacionPadre"/>
                     <h:outputText id="remitente2" rendered="#{TramitacionController.tramitacion.idTramitacionPadre==null}" value="#{TramitacionController.tramitacion.idUsuarioRemitente.toString()}" title="idUsuarioRemitente"/>
                     <p:outputLabel for="observacion" value="Observacion:"/>
                     <h:outputText id="observacion" value="#{TramitacionController.tramitacion.observacion}" title="Observacion"/>

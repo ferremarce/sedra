@@ -62,7 +62,7 @@ public class Usuario implements Serializable {
     private List<Audita> auditaList;
     @OneToMany(mappedBy = "idUsuario")
     private List<Documento> documentoList;
-    @OneToMany(mappedBy = "idUsuario")
+    @OneToMany(mappedBy = "idCreador")
     private List<Tramitacion> tramitacionList;
     @OneToMany(mappedBy = "idUsuarioConfirmacion")
     private List<Tramitacion> tramitacionList1;

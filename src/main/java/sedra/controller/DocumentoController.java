@@ -270,7 +270,7 @@ public class DocumentoController implements Serializable {
                 t.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_INGRESADO));
                 t.setFechaRegistro(documento.getFechaRegistro());
                 t.setHoraRegistro(documento.getHoraRegistro());
-                t.setIdUsuario(documento.getIdUsuario());
+                t.setIdCreador(documento.getIdUsuario());
                 t.setIdRol(documento.getIdUsuario().getIdRol());
                 t.setNotaBreve("Entrada del Documento");
                 t.setLeido(Boolean.TRUE);
@@ -302,7 +302,7 @@ public class DocumentoController implements Serializable {
                     t.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_INGRESADO));
                     t.setFechaRegistro(documento.getFechaRegistro());
                     t.setHoraRegistro(documento.getHoraRegistro());
-                    t.setIdUsuario(documento.getIdUsuario());
+                    t.setIdCreador(documento.getIdUsuario());
                     t.setIdRol(documento.getIdUsuario().getIdRol());
                     t.setNotaBreve("Entrada del Documento");
                     t.setLeido(Boolean.TRUE);

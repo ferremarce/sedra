@@ -53,6 +53,8 @@
                         <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" contentStyleClass="ui-fluid">
                             <p:outputLabel value="Convertir Nro Entrada en NroExpediente"/>
                             <p:commandButton ajax="true" value="Aceptar" action="#{MigracionController.doConvertirNroEntrada()}" update="panelMensajeEstado"/>
+                             <p:outputLabel value="Procesar Tramite Padre"/>
+                             <p:commandButton ajax="true" value="Aceptar" action="#{MigracionController.doProcesarTramitePadre()}" update="panelMensajeEstado"/>
                         </p:panelGrid>
                     </p:panel>
                 </p:tab>

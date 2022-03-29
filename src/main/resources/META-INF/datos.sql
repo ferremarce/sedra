@@ -48,3 +48,4 @@ ALTER TABLE public.tramitacion ADD leido boolean null;
 update tramitacion set leido=false where leido is null and id_estado =1;
 update tramitacion set leido=true where leido is null and id_estado >1;
 
+ALTER TABLE public.tramitacion RENAME COLUMN id_usuario TO id_creador;
