@@ -38,6 +38,7 @@
                                  paginator="true"
                                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                  rowsPerPageTemplate="#{bundle.Paginacion}"
+                                 rowStyleClass="#{item.leido?null:'noLeidoRowStyle'}"
                                  selection="#{TramitacionController.arraySelectedTramitacion}"
                                  rowKey="#{item}"
                                  globalFilterFunction="#{TramitacionController.globalFilterFunction}"   
@@ -55,18 +56,35 @@
                         </f:facet>
                         <p:column visible="#{TramitacionController.tipoBandeja!=3}" selectionMode="multiple" width="20"/>  
                         <p:column visible="#{TramitacionController.tipoBandeja==3}" width="20"/>  
-                        <p:column width="30" headerText="#">
-                            <h:outputText value="#{index+1}"/>
+
+                        <p:column width="5" sortBy="#{item.leido}">
+                            <f:facet name="header">
+                                <i class="fa fa-glasses" title="Leído"/>
+                            </f:facet>
+                            <i class="fa fa-square Orange" title="No leído" style="display: #{item.leido?'none': ''}" />
+                            <i class="fa fa-square-check Green" title="Leído" style="display: #{item.leido?'': 'none'}" />
                         </p:column>
-                        <p:column headerText="F. Deriv." width="80" sortBy="#{item.fechaDerivacion}" >
+                        <p:column width="80">
+                            <p:commandButton value="#{bundle.VerBoton}" ajax="true" global="false" icon="fa fa-envelope-open" actionListener="#{TramitacionController.doVerMensaje(item)}"/>
+                        </p:column>
+                        <p:column width="30" headerText="#">
+                            <h:outputText value="#{index+1}"/>                          
+                        </p:column>
+                        <p:column width="80" sortBy="#{item.fechaDerivacion}" >
+                            <f:facet name="header">
+                                <i class="fa fa-calendar" title="Fecha Derivación"></i>
+                            </f:facet>
                             <h:outputText value="#{item.fechaDerivacion}">
                                 <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
                             </h:outputText>
                         </p:column>
-                        <p:column headerText="Documento" sortBy="#{item.idDocumento.numeroExpediente}" >  
+                        <p:column sortBy="#{item.idDocumento.numeroExpediente}" > 
+                            <f:facet name="header">
+                                <i class="fa fa-file" title="Documento"></i>
+                            </f:facet>
                             <div class="p-d-flex p-jc-between">
                                 <div>
-                                    <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.idDocumento.numeroExpediente}">
+                                    <h:outputText title="#{item.idDocumento}" styleClass="Blue" value="#{item.idDocumento.numeroExpediente}">
                                         <f:convertNumber pattern="0000000000000"/>
                                     </h:outputText>
                                 </div>
@@ -75,33 +93,57 @@
                                 </div>
                             </div>
                             <blockquote>
-                                <h:outputText styleClass="Brown fontBold" value="#{item.idDocumento.asunto}"/>
+                                <h:outputText styleClass="Brown" value="#{item.idDocumento.asunto}"/>
                             </blockquote>
                             <h:outputText styleClass="fontItalic Gray" value="#{item.observacion}"/>
                         </p:column>
-                        <p:column headerText="Corresponsal/es" width="150">  
+                        <p:column width="200" >  
+                            <f:facet name="header">
+                                <i class="fa fa-users" title="Corresponsal/es"></i>
+                            </f:facet>
                             <p:outputPanel rendered="#{item.idEstado.esTramiteEntrada()}">
                                 <h:outputText value="De: #{item.remitidoPor}"/><br/>
-                                <h:outputText styleClass="fontBold" value="[#{item.idRol.descripcionRol}]"/>
+                                <h:outputText value="[#{item.idRol.descripcionRol}]"/>
                                 <p:separator/>
                                 <h:outputText value="#{item.idUsuarioRemitente.toInfoString()}"/>
                             </p:outputPanel>
                             <p:outputPanel rendered="#{!item.idEstado.esTramiteEntrada()}">
                                 <h:outputText value="Para: #{item.remitidoA}"/><br/>
-                                <h:outputText styleClass="fontBold" value="[#{item.idRol.descripcionRol}]"/>
+                                <h:outputText value="[#{item.idRol.descripcionRol}]"/>
                                 <p:separator/>
                                 <h:outputText value="#{item.idUsuarioRemitente.toInfoString()}"/>
                             </p:outputPanel>
                         </p:column>
-                        <p:column headerText="Adjunto" width="80">  
-                            <p:commandButton rendered="#{item.nombreArchivo!=null}" title="#{item.nombreArchivo!=null ? item.nombreArchivo:'Sin archivo'}" icon="fa fa-download" ajax="false">
-                                <p:fileDownload value="#{DownloadFile.downloadDocumentoTramite(item.idTramitacion)}" />  
-                            </p:commandButton>
-                        </p:column>   
 
                     </p:dataTable>
                 </div>
             </div>
+            <p:dialog header="Mensaje" widgetVar="dlgMensaje" positionType="fixed" modal="true" position="top" closeOnEscape="true" width="60%" showEffect="fade">
+                <p:panelGrid id="panelMensajeTramite" columns="2" styleClass="ui-panelgrid-blank" >
+                    <p:outputLabel for="fechaDerivacion" value="Fecha Derivación:"/>
+                    <h:outputText id="fechaDerivacion" value="#{TramitacionController.tramitacion.fechaDerivacion}" title="FechaDerivacion">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                    <p:outputLabel for="notaBreve" value="Nota Breve:"/>
+                    <h:outputText id="notaBreve" value="#{TramitacionController.tramitacion.notaBreve}" title="NotaBreve"/>
+                    <p:outputLabel for="remitidoA" value="A:"/>
+                    <h:outputText id="remitidoA" value="#{TramitacionController.tramitacion.remitidoA}" title="RemitidoA"/>
+                    <p:outputLabel for="remitidoPor" value="Por:"/>
+                    <h:outputText id="remitidoPor" value="#{TramitacionController.tramitacion.remitidoPor}" title="RemitidoPor"/>
+                    <p:outputLabel for="idDocumento" value="Documento Inicial:"/>
+                    <h:outputText id="idDocumento" value="#{TramitacionController.tramitacion.idDocumento.toString()}" title="IdDocumento"/>
+                    <p:outputLabel for="remitente" value="Usuario Remitente:"/>                 
+                    <h:outputText id="remitente" rendered="#{TramitacionController.tramitacion.idTramitacionPadre!=null}" value="#{TramitacionController.tramitacion.idTramitacionPadre.idUsuario.toString()}" title="IdTramitacionPadre"/>
+                    <h:outputText id="remitente2" rendered="#{TramitacionController.tramitacion.idTramitacionPadre==null}" value="#{TramitacionController.tramitacion.idUsuarioRemitente.toString()}" title="idUsuarioRemitente"/>
+                    <p:outputLabel for="observacion" value="Observacion:"/>
+                    <h:outputText id="observacion" value="#{TramitacionController.tramitacion.observacion}" title="Observacion"/>
+                    <p:outputLabel for="cmdAdjunto" value="Adjunto:"/>
+                    <p:commandButton id="cmdAdjunto" rendered="#{TramitacionController.tramitacion.nombreArchivo!=null}" title="#{TramitacionController.tramitacion.nombreArchivo!=null ? TramitacionController.tramitacion.nombreArchivo:'Sin archivo'}" icon="fa fa-download" ajax="false">
+                        <p:fileDownload value="#{DownloadFile.downloadDocumentoTramite(TramitacionController.tramitacion.idTramitacion)}" />  
+                    </p:commandButton>
+                </p:panelGrid>
+            </p:dialog>
+
             <p:panel id="panelComando">
                 <p:contextMenu for="dataTablePendiente" >
                     <p:menuitem disabled="#{fn:length(TramitacionController.arraySelectedTramitacion)==0 or TramitacionController.tipoBandeja!=1}" title="#{bundle.ConfirmarBoton}" value="#{bundle.ConfirmarBoton} [#{fn:length(TramitacionController.arraySelectedTramitacion)}]" icon="fa fa-check-square" action="#{TramitacionController.confirmaMultipleSetup()}" update="@form, panelMensajeEstado">

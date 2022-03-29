@@ -111,6 +111,8 @@ public class Tramitacion implements Serializable, Comparable<Tramitacion> {
     @JoinColumn(name = "id_tramitacion_padre", referencedColumnName = "id_tramitacion")
     @ManyToOne
     private Tramitacion idTramitacionPadre;
+    @Column(name = "leido")
+    private Boolean leido;
 
     public Tramitacion() {
     }
@@ -317,6 +319,14 @@ public class Tramitacion implements Serializable, Comparable<Tramitacion> {
 
     public void setIdTramitacionPadre(Tramitacion idTramitacionPadre) {
         this.idTramitacionPadre = idTramitacionPadre;
+    }
+
+    public Boolean getLeido() {
+        return leido;
+    }
+
+    public void setLeido(Boolean leido) {
+        this.leido = leido;
     }
 
     @Override

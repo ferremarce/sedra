@@ -272,10 +272,8 @@ public class DocumentoController implements Serializable {
                 t.setHoraRegistro(documento.getHoraRegistro());
                 t.setIdUsuario(documento.getIdUsuario());
                 t.setIdRol(documento.getIdUsuario().getIdRol());
-                t.setRemitidoPor(documento.getIdUsuario().getUsuario());
-                t.setRemitidoA(documento.getIdUsuario().getUsuario());
                 t.setNotaBreve("Entrada del Documento");
-//                t.setIdUsuarioRemitente(documento.getIdUsuario());
+                t.setLeido(Boolean.FALSE);
                 tramitacionFacade.create(t);
             } else {
                 documentoFacade.edit(documento);
@@ -306,10 +304,8 @@ public class DocumentoController implements Serializable {
                     t.setHoraRegistro(documento.getHoraRegistro());
                     t.setIdUsuario(documento.getIdUsuario());
                     t.setIdRol(documento.getIdUsuario().getIdRol());
-                    t.setRemitidoPor(documento.getIdUsuario().getUsuario());
-                    t.setRemitidoA(documento.getIdUsuario().getUsuario());
                     t.setNotaBreve("Entrada del Documento");
-//                    t.setIdUsuarioRemitente(documento.getIdUsuario());
+                    t.setLeido(Boolean.FALSE);
                     tramitacionFacade.create(t);
                 }
             }

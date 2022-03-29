@@ -25,10 +25,6 @@
                 <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="flex" columnClasses="p-col-2,p-col-10" contentStyleClass="ui-fluid">
                     <p:outputLabel for="fechaDerivacion" value="Fecha de Derivación:"/>
                     <p:calendar navigator="true" id="fechaDerivacion" value="#{TramitacionController.tramitacion.fechaDerivacion}" pattern="dd/MM/yyyy" title="Fecha Derivación" required="true" requiredMessage="Fecha Derivación"/>
-                    <p:outputLabel for="idRol" value="Dependencia:"/>
-                    <p:selectOneMenu id="idRol" value="#{TramitacionController.rolDerivado}" required="true" requiredMessage="Rol" filter="true" filterMatchMode="contains" >
-                        <f:selectItems value="#{RolController.rolSetList}"/>
-                    </p:selectOneMenu>
                     <p:outputLabel for="notaBreve" value="Nota Breve:"/>
                     <p:inputText id="notaBreve" value="#{TramitacionController.tramitacion.notaBreve}" title="Nota Breve" />
                     <p:outputLabel for="remitidoA" value="Remitido a:"/>
@@ -50,6 +46,11 @@
                         </p:commandButton>
                     </p:panelGrid>
                 </p:panelGrid>
+                <p:outputLabel value="Destino:" for="idDestino" />
+                <p:selectManyCheckbox id="idDestino" layout="grid" columns="1" value="#{TramitacionController.arrayRol}" required="true" requiredMessage="#{bundle.Requerido}" >
+                    <f:selectItems value="#{RolController.rolCheckSet}"/>
+                </p:selectManyCheckbox>
+                <p:message for="idDestino"/>
             </p:panel>
             <p:toolbar>
                 <p:toolbarGroup>

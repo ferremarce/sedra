@@ -71,6 +71,9 @@ label{
 .White {
     color: #fff !important;
 }
+.Yellow {
+    color: #ffff00 !important;
+}
 .font1x{
     font-size: 1.1em !important;
 }
@@ -91,6 +94,11 @@ label{
 }
 .espaciadoToolbar{
     margin-right: .5rem !important;
+}
+.noLeidoRowStyle{
+    background-color: #C63737;
+    background-image:none;
+    font-weight: bold;
 }
 
 .insignia {
