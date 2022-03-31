@@ -72,7 +72,7 @@ public class TramitacionFacade extends AbstractFacade<Tramitacion> {
     }
 
     public Tramitacion findFirstTramitacion(Integer idDocumento) {
-        Query q = em.createQuery("SELECT a FROM Tramitacion a WHERE a.idTramitacionPadre IS NULL AND a.idDocumento.idDocumento=:xIdDoc");
+        Query q = em.createQuery("SELECT a FROM Tramitacion a WHERE a.idTramitacionPadre IS NULL AND a.idDocumento.idDocumento=:xIdDoc ORDER BY a.idTramitacion");
         q.setParameter("xIdDoc", idDocumento);
         List<Tramitacion> tr = q.getResultList();
         if (!tr.isEmpty()) {

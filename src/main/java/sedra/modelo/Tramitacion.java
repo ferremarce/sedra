@@ -20,6 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -107,6 +108,7 @@ public class Tramitacion implements Serializable, Comparable<Tramitacion> {
     @JoinColumn(name = "id_usuario_remitente", referencedColumnName = "id_usuario")
     @ManyToOne
     private Usuario idUsuarioRemitente;
+    @OrderBy("idTramitacion")
     @OneToMany(mappedBy = "idTramitacionPadre")
     private List<Tramitacion> tramitacionList;
     @JoinColumn(name = "id_tramitacion_padre", referencedColumnName = "id_tramitacion")
@@ -114,7 +116,7 @@ public class Tramitacion implements Serializable, Comparable<Tramitacion> {
     private Tramitacion idTramitacionPadre;
     @Column(name = "leido")
     private Boolean leido;
-     @JoinColumn(name = "id_prioridad", referencedColumnName = "id_prioridad")
+    @JoinColumn(name = "id_prioridad", referencedColumnName = "id_prioridad")
     @ManyToOne
     private Prioridad idPrioridad;
     @Transient
