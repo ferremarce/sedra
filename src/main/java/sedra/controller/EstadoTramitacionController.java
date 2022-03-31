@@ -51,6 +51,6 @@ public class EstadoTramitacionController implements Serializable {
     }
 
     public SelectItem[] getEstadoTramitacionSet() {
-        return JSFutil.getSelectItems(estadoTramitacionFacade.getAllEstadoTramitacionNoTemporal(), Boolean.FALSE);
+        return JSFutil.getSelectItems(estadoTramitacionFacade.findAll(), Boolean.FALSE);
     }
 }

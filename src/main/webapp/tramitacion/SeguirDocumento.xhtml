@@ -58,6 +58,13 @@
                     </p:dataList>
                 </p:panelGrid>
             </p:panel>
+            <p:tree id="tree1" orientation="horizontal" styleClass="fondoArbol" animate="true" value="#{TramitacionController.rootTramitacion}" var="node"   selection="#{TramitacionController.selectedNode}">
+                <p:treeNode expandedIcon="fa fa-folder-tree" collapsedIcon="fa fa-folder">
+                    <h:outputText styleClass="font-1x gray" value=" [#{node.idTramitacion}]"/><br/>
+                    <h:outputText value="#{node.idRol.toString()}"/><br/>
+                    <h:outputText styleClass="insignia #{node.idEstado.insignia}" value="#{node.idEstado.toString()}"/>
+                </p:treeNode>
+            </p:tree>
             <p:panel header="Información de la Tramitación">
                 <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{TramitacionController.listaTramitacionSeguimiento}" 
                              reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
@@ -66,7 +73,7 @@
                              >
                     <!-- CUANDO ES EDICION -->
                     <p:column headerText="#" style="width: 40px">
-                        <h:outputText style="display: inline" value="#{index+1}"/>
+                        <h:outputText style="display: inline" id="txt#{item.idTramitacion}" value="#{item.idTramitacion}"/>
                         <p:rowToggler/>
                     </p:column>
 
@@ -75,7 +82,7 @@
                     </p:column>
                     <p:column headerText="Remitido a">
                         <p:inputText title="Remitido a" value="#{item.remitidoA}"/>
-                        <p:selectOneMenu style="width: 100%"  id="idRol" value="#{item.idRol}" required="true" requiredMessage="#{bundle.Requerido}" >
+                        <p:selectOneMenu style="width: 100%"  id="idRol" value="#{item.idRol}" filter="true" filterMatchMode="contains" required="true" requiredMessage="#{bundle.Requerido}" >
                             <f:selectItems value="#{RolController.rolSet}"/>
                         </p:selectOneMenu>
                     </p:column>
@@ -83,13 +90,14 @@
                         <h:outputText value=" #{item.notaBreve}"/>
                     </p:column>
                     <p:column headerText="Estado" width="130">
-                        <p:selectOneMenu id="idEstado" value="#{item.idEstado}" required="true" requiredMessage="#{bundle.Requerido}" >
+                        <p:selectOneMenu id="idEstado" value="#{item.idEstado}" required="true" requiredMessage="#{bundle.Requerido}">
                             <f:selectItems value="#{EstadoTramitacionController.estadoTramitacionSet}"/>
                         </p:selectOneMenu>
                     </p:column>
                     <p:column headerText="Dependencias">
                         <p:dataList rendered="#{not empty item.tramitacionList}" var="tramDeriva" value="#{item.tramitacionList}">
                             <h:outputText value="#{tramDeriva.idRol.toString()}"/>
+                            <h:outputText styleClass="font-1x gray" value=" [#{tramDeriva.idTramitacion}]"/>
                         </p:dataList>
                     </p:column>
                     <p:column headerText="Observaciones" >
@@ -101,7 +109,7 @@
                         </p:commandButton>
                     </p:column>  
                     <p:column width="100" headerText="Borrar?" >
-                        <p:toggleSwitch value="#{item.flagBorrado}" />
+                        <p:toggleSwitch value="#{item.flagBorrado}"/>
                     </p:column>
                     <p:rowExpansion>
                         <p:panelGrid columns="2" style="width: 400px" >

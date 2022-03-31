@@ -30,6 +30,7 @@ import sedra.fachada.DocumentoAdjuntoFacade;
 import sedra.fachada.DocumentoFacade;
 import sedra.fachada.EstadoTramitacionFacade;
 import sedra.fachada.NotaSalidaFacade;
+import sedra.fachada.PrioridadFacade;
 import sedra.fachada.TipoDocumentoFacade;
 import sedra.fachada.TramitacionFacade;
 import sedra.modelo.Audita;
@@ -75,6 +76,8 @@ public class DocumentoController implements Serializable {
     ClasificadorFacade clasificadorFacade;
     @Inject
     EstadoTramitacionFacade estadoTramitacionFacade;
+    @Inject
+    PrioridadFacade prioridadFacade;
 
     private Documento documento;
     private List<Documento> listaDocumento;
@@ -274,6 +277,8 @@ public class DocumentoController implements Serializable {
                 t.setIdRol(documento.getIdUsuario().getIdRol());
                 t.setNotaBreve("Entrada del Documento");
                 t.setLeido(Boolean.TRUE);
+                t.setIdPrioridad(this.prioridadFacade.find(Codigo.PRIORIDAD_NORMAL));
+                t.setProcesadoArchivo(Boolean.FALSE);
                 tramitacionFacade.create(t);
             } else {
                 documentoFacade.edit(documento);
@@ -306,6 +311,8 @@ public class DocumentoController implements Serializable {
                     t.setIdRol(documento.getIdUsuario().getIdRol());
                     t.setNotaBreve("Entrada del Documento");
                     t.setLeido(Boolean.TRUE);
+                    t.setIdPrioridad(this.prioridadFacade.find(Codigo.PRIORIDAD_NORMAL));
+                    t.setProcesadoArchivo(Boolean.FALSE);
                     tramitacionFacade.create(t);
                 }
             }

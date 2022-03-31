@@ -34,7 +34,7 @@ public class TramitacionFacade extends AbstractFacade<Tramitacion> {
     }
 
     public List<Tramitacion> getAllTramitacionPendientes(String criterio, Integer estado) {
-        Query q = em.createQuery("SELECT a FROM Tramitacion a WHERE a.idRol.idRol=:xIdRol AND a.idEstado.idEstado=:xEstado AND a.idDocumento.cerrado=:xCerrado AND (UPPER(a.idDocumento.asunto) LIKE :xCriterio OR a.idDocumento.numeroExpediente=:xNroExpe) ORDER BY a.idTramitacion");
+        Query q = em.createQuery("SELECT a FROM Tramitacion a WHERE a.idRol.idRol=:xIdRol AND a.idEstado.idEstado=:xEstado AND a.idDocumento.cerrado=:xCerrado AND (UPPER(a.idDocumento.asunto) LIKE :xCriterio OR a.idDocumento.numeroExpediente=:xNroExpe) ORDER BY a.idPrioridad.orden, a.idTramitacion");
         q.setParameter("xIdRol", JSFutil.getRolSesion().getIdRol());
         q.setParameter("xCerrado", Boolean.FALSE);
         q.setParameter("xEstado", estado);
@@ -69,6 +69,16 @@ public class TramitacionFacade extends AbstractFacade<Tramitacion> {
         q.setParameter("xIdEstado", idEstado);
         List<Tramitacion> tr = q.getResultList();
         return tr;
+    }
 
+    public Tramitacion findFirstTramitacion(Integer idDocumento) {
+        Query q = em.createQuery("SELECT a FROM Tramitacion a WHERE a.idTramitacionPadre IS NULL AND a.idDocumento.idDocumento=:xIdDoc");
+        q.setParameter("xIdDoc", idDocumento);
+        List<Tramitacion> tr = q.getResultList();
+        if (!tr.isEmpty()) {
+            return tr.get(0);
+        } else {
+            return null;
+        }
     }
 }
