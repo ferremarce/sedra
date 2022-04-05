@@ -43,7 +43,6 @@
                          rowKey="#{item.idTramitacion}"
                          >
                 <f:facet name="header">
-                    Tabla de Datos
                     <p:outputPanel style="text-align: right" styleClass="ui-panelgrid-blank">
                         <p:outputLabel value="Exportar: "/>
                         <p:commandLink title="Exportar a Excel" ajax="false">
@@ -59,6 +58,9 @@
                 <p:column exportable="false" width="40">
                     <h:outputText style="display: inline" value="#{index+1}"/>
                     <p:rowToggler/>
+                </p:column>
+                <p:column width="80">
+                    <h:outputText styleClass="insignia #{item.idEstado.insignia}" value="#{item.idEstado.toString()}"/>
                 </p:column>
                 <p:column headerText="#Exp." width="110" sortBy="#{item.numeroExpediente}" style="text-align: right">  
                     <p:commandLink immediate="true" title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento.idDocumento)}">

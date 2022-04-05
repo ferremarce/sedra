@@ -106,8 +106,7 @@
                                 <i class="fa fa-users" title="Corresponsal/es"></i>
                             </f:facet>
                             <p:outputPanel rendered="#{item.idEstado.esTramiteEntrada()}">
-                                <h:outputText rendered="#{item.idTramitacionPadre!=null}" escape="false" value="#{item.idTramitacionPadre.idCreador.toInfoString()}"/>
-                                <h:outputText rendered="#{item.idTramitacionPadre==null}" escape="false" value="Remitido por: #{item.remitidoPor}"/>
+                                <h:outputText escape="false" value="#{item.doTramitadoPor()}"/>
                             </p:outputPanel>
                             <p:outputPanel rendered="#{!item.idEstado.esTramiteEntrada()}">
                                 <p:dataList rendered="#{not empty item.tramitacionList}" var="tramDeriva" value="#{item.tramitacionList}">

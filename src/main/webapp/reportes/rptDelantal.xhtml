@@ -7,22 +7,26 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
     <ui:define name="title">
-        <h1>Imprimir Delantal del Documento</h1>
+        <h1>Generar Delantal del Documento</h1>
     </ui:define>
 
     <ui:define name="content">
         <h:form id="formMain">
-            <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2">
-                <p:inputText id="criterio" value="#{DocumentoController.criterio}" placeholder="Nro. Salida, STR, asunto, Nro. Entrada"/>
-                <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{DocumentoController.doBuscarSeguimiento()}" update="@form, panelMensajeEstado"/>
-            </p:panelGrid>
-            <p:selectOneButton value="#{ReporteController.destinoReporte}">
-                <f:selectItem itemLabel="PDF" itemValue="PDF" />
-                <f:selectItem itemLabel="XLS" itemValue="XLS" />
-                <f:selectItem itemLabel="HTML" itemValue="HTML" />
-                <f:selectItem itemLabel="CSV" itemValue="CSV" />
-                <f:selectItem itemLabel="DOCX" itemValue="DOCX" />
-            </p:selectOneButton>
+            <p:toolbar>
+                <p:toolbarGroup>
+                    <p:inputText styleClass="espaciadoToolbar" size="50" id="criterio" value="#{DocumentoController.criterio}" placeholder="Nro. Salida, STR, asunto, Nro. Entrada"/>
+                    <p:commandButton styleClass="espaciadoToolbar" id="cmdBuscar" icon="fa fa-search" ajax="true" action="#{DocumentoController.doBuscarSeguimiento()}" update="@form, panelMensajeEstado"/>
+                </p:toolbarGroup>
+                <p:toolbarGroup align="right">
+                    <p:selectOneButton value="#{ReporteController.destinoReporte}">
+                        <f:selectItem itemLabel="PDF" itemValue="PDF" />
+                        <f:selectItem itemLabel="XLS" itemValue="XLS" />
+                        <f:selectItem itemLabel="HTML" itemValue="HTML" />
+                        <f:selectItem itemLabel="CSV" itemValue="CSV" />
+                        <f:selectItem itemLabel="DOCx" itemValue="DOCX" />
+                    </p:selectOneButton>
+                </p:toolbarGroup>
+            </p:toolbar>
             <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                          rows="10"
                          paginator="true"
@@ -76,7 +80,7 @@
                         <h:outputText value="Acción"/>
                     </f:facet>
                     <p:commandLink ajax="false" target="_new" action="#{ReporteController.generarReporte(item.idDocumento)}">
-                        <p:commandButton type="button" icon="fa fa-caret-square-o-down" title="#{bundle.ExportarBoton}" value="#{bundle.ExportarBoton}"/>
+                        <p:commandButton type="button" icon="fa fa-arrow-trend-up" title="#{bundle.GenerarBoton}" value="#{bundle.GenerarBoton}"/>
                     </p:commandLink>
                 </p:column>
             </p:dataTable>

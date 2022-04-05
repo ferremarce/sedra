@@ -57,5 +57,6 @@ INSERT INTO public.prioridad (id_prioridad, descripcion_prioridad, insignia, ord
 INSERT INTO public.prioridad (id_prioridad, descripcion_prioridad, insignia, orden) VALUES(2, 'Normal', 'gris', 2);
 
 update public.tramitacion set id_prioridad =2 where id_prioridad is null;
-INSERT INTO public.permiso (id_permiso, descripcion_permiso, nivel, orden, tag_menu, url_imagen) VALUES(22, 'Documentos tramitados', '4.4', NULL, '#{ReporteController.listTramitacionOficinaSetup}', 'fa fa-list-check');
+
+ALTER TABLE public.permiso ADD nivel_acceso varchar(255) NULL;
 
