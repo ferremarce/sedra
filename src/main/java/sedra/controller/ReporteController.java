@@ -165,7 +165,11 @@ public class ReporteController implements Serializable {
     }
 
     public void buscarDocumento() {
-        this.listaTramitacion = tramitacionFacade.getAllTramitacion(tmpIdRol.getIdRol(), tmpEstadoTramitacion.getIdEstado(), tmpFechaDesde, tmpFechaHasta);
+        Integer idRolTmp = null;
+        if (this.tmpIdRol != null) {
+            idRolTmp = this.tmpIdRol.getIdRol();
+        }
+        this.listaTramitacion = tramitacionFacade.getAllTramitacion(idRolTmp, tmpEstadoTramitacion.getIdEstado(), tmpFechaDesde, tmpFechaHasta);
         if (this.listaTramitacion.isEmpty()) {
             JSFutil.addMessage("No hay resultados...", JSFutil.StatusMessage.WARNING);
         } else {

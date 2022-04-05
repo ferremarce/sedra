@@ -30,7 +30,10 @@
 		</box>
 	</style>
 	<subDataset name="DSTramitacion" uuid="f60fb698-f7ab-4661-a18c-edb9c0538792">
-		<queryString>
+		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="642"/>
+		<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="350"/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+		<queryString language="EJBQL">
 			<![CDATA[]]>
 		</queryString>
 		<field name="remitidoPor" class="java.lang.String">
@@ -45,20 +48,14 @@
 		<field name="idTramitacion" class="java.lang.Integer">
 			<fieldDescription><![CDATA[idTramitacion]]></fieldDescription>
 		</field>
-		<field name="horaRegistro" class="java.util.Date">
-			<fieldDescription><![CDATA[horaRegistro]]></fieldDescription>
-		</field>
-		<field name="fechaRegistro" class="java.util.Date">
-			<fieldDescription><![CDATA[fechaRegistro]]></fieldDescription>
-		</field>
 		<field name="procesadoArchivo" class="java.lang.Boolean">
 			<fieldDescription><![CDATA[procesadoArchivo]]></fieldDescription>
 		</field>
 		<field name="fechaDerivacion" class="java.util.Date">
 			<fieldDescription><![CDATA[fechaDerivacion]]></fieldDescription>
 		</field>
-		<field name="idUsuario" class="sedra.modelo.Usuario">
-			<fieldDescription><![CDATA[idUsuario]]></fieldDescription>
+		<field name="idTramitacionPadre" class="sedra.modelo.Tramitacion">
+			<fieldDescription><![CDATA[idTramitacionPadre]]></fieldDescription>
 		</field>
 		<field name="remitidoA" class="java.lang.String">
 			<fieldDescription><![CDATA[remitidoA]]></fieldDescription>
@@ -66,7 +63,10 @@
 		<field name="horaConfirmacion" class="java.util.Date">
 			<fieldDescription><![CDATA[horaConfirmacion]]></fieldDescription>
 		</field>
-		<field name="idUsuarioConfirmacion" class="sedra.modelo.Usuario">
+		<field name="idCreador" class="sedra.modelo.Usuario">
+			<fieldDescription><![CDATA[idCreador]]></fieldDescription>
+		</field>
+		<field name="idUsuarioConfirmacion" class="java.lang.Integer">
 			<fieldDescription><![CDATA[idUsuarioConfirmacion]]></fieldDescription>
 		</field>
 		<field name="notaBreve" class="java.lang.String">
@@ -75,10 +75,34 @@
 		<field name="tipoArchivo" class="java.lang.String">
 			<fieldDescription><![CDATA[tipoArchivo]]></fieldDescription>
 		</field>
+		<field name="fechaSalida" class="java.util.Date">
+			<fieldDescription><![CDATA[fechaSalida]]></fieldDescription>
+		</field>
+		<field name="tamanhoArchivo" class="java.math.BigInteger">
+			<fieldDescription><![CDATA[tamanhoArchivo]]></fieldDescription>
+		</field>
+		<field name="idPrioridad" class="sedra.modelo.Prioridad">
+			<fieldDescription><![CDATA[idPrioridad]]></fieldDescription>
+		</field>
+		<field name="tramitacionClass" class="sedra.modelo.Tramitacion">
+			<fieldDescription><![CDATA[_THIS]]></fieldDescription>
+		</field>
+		<field name="observacion" class="java.lang.String">
+			<fieldDescription><![CDATA[observacion]]></fieldDescription>
+		</field>
+		<field name="archivo" class="byte[]">
+			<fieldDescription><![CDATA[archivo]]></fieldDescription>
+		</field>
+		<field name="horaRegistro" class="java.util.Date">
+			<fieldDescription><![CDATA[horaRegistro]]></fieldDescription>
+		</field>
+		<field name="fechaRegistro" class="java.util.Date">
+			<fieldDescription><![CDATA[fechaRegistro]]></fieldDescription>
+		</field>
 		<field name="horaSalida" class="java.util.Date">
 			<fieldDescription><![CDATA[horaSalida]]></fieldDescription>
 		</field>
-		<field name="idUsuarioRemitente" class="sedra.modelo.Usuario">
+		<field name="idUsuarioRemitente" class="java.lang.Integer">
 			<fieldDescription><![CDATA[idUsuarioRemitente]]></fieldDescription>
 		</field>
 		<field name="idEstado" class="sedra.modelo.EstadoTramitacion">
@@ -90,14 +114,11 @@
 		<field name="idDocumento" class="sedra.modelo.Documento">
 			<fieldDescription><![CDATA[idDocumento]]></fieldDescription>
 		</field>
-		<field name="fechaSalida" class="java.util.Date">
-			<fieldDescription><![CDATA[fechaSalida]]></fieldDescription>
+		<field name="tramitacionList" class="java.util.List">
+			<fieldDescription><![CDATA[tramitacionList]]></fieldDescription>
 		</field>
-		<field name="tamanhoArchivo" class="java.math.BigInteger">
-			<fieldDescription><![CDATA[tamanhoArchivo]]></fieldDescription>
-		</field>
-		<field name="observacion" class="java.lang.String">
-			<fieldDescription><![CDATA[observacion]]></fieldDescription>
+		<field name="leido" class="java.lang.Boolean">
+			<fieldDescription><![CDATA[leido]]></fieldDescription>
 		</field>
 	</subDataset>
 	<parameter name="author" class="java.lang.String"/>
@@ -150,17 +171,29 @@
 	<field name="fechaDocumento" class="java.util.Date">
 		<fieldDescription><![CDATA[fechaDocumento]]></fieldDescription>
 	</field>
+	<field name="documentoClass" class="sedra.modelo.Documento">
+		<fieldDescription><![CDATA[_THIS]]></fieldDescription>
+	</field>
 	<field name="observacion" class="java.lang.String">
 		<fieldDescription><![CDATA[observacion]]></fieldDescription>
 	</field>
 	<field name="comprobantePago" class="java.lang.String">
 		<fieldDescription><![CDATA[comprobantePago]]></fieldDescription>
 	</field>
+	<field name="archivo" class="byte[]">
+		<fieldDescription><![CDATA[archivo]]></fieldDescription>
+	</field>
 	<field name="horaRegistro" class="java.util.Date">
 		<fieldDescription><![CDATA[horaRegistro]]></fieldDescription>
 	</field>
 	<field name="fechaRegistro" class="java.util.Date">
 		<fieldDescription><![CDATA[fechaRegistro]]></fieldDescription>
+	</field>
+	<field name="nroEntrada" class="java.lang.String">
+		<fieldDescription><![CDATA[nroEntrada]]></fieldDescription>
+	</field>
+	<field name="numeroExpediente" class="java.lang.Integer">
+		<fieldDescription><![CDATA[numeroExpediente]]></fieldDescription>
 	</field>
 	<field name="fechaIngreso" class="java.util.Date">
 		<fieldDescription><![CDATA[fechaIngreso]]></fieldDescription>
@@ -173,12 +206,6 @@
 	</field>
 	<field name="referencia" class="java.lang.String">
 		<fieldDescription><![CDATA[referencia]]></fieldDescription>
-	</field>
-	<field name="documentoClass" class="sedra.modelo.Documento">
-		<fieldDescription><![CDATA[_THIS]]></fieldDescription>
-	</field>
-	<field name="numeroExpediente" class="java.lang.Integer">
-		<fieldDescription><![CDATA[numeroExpediente]]></fieldDescription>
 	</field>
 	<background>
 		<band splitType="Stretch"/>

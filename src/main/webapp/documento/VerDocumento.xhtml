@@ -112,7 +112,7 @@
                     </p:column>
                     <p:column headerText="Estado" width="100">
                         <h:outputText value="#{item.idEstado.toString()}"/><br/>
-                        <h:outputText rendered="#{item.idUsuario!=null}" styleClass="fontBold fontItalic Gray" value="por: #{item.idUsuario}"/>
+                        <h:outputText rendered="#{item.idCreador!=null}" styleClass="fontBold fontItalic Gray" value="por: #{item.idCreador.toString()}"/>
                     </p:column>
                     <p:column headerText="Observaciones">
                         <h:outputText value="#{item.observacion}"/>

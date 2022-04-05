@@ -399,4 +399,30 @@ public class Tramitacion implements Serializable, Comparable<Tramitacion> {
         return t.getFechaDerivacion().compareTo(this.getFechaDerivacion());
     }
 
+    public String doTramitadoPor() {
+        String cadena = "";
+        try {
+
+            if (idTramitacionPadre != null) {
+                cadena += idTramitacionPadre.idCreador.toInfoString();
+            }
+            cadena += this.remitidoPor == null ? "" : ("\n " + this.remitidoPor);
+        } catch (Exception ex) {
+            cadena = "Error doTramitadoPor()";
+        }
+        return cadena;
+    }
+
+    public String doTramitadoA() {
+        String cadena = "";
+        try {
+
+            cadena += this.idRol.toString();
+            cadena += this.remitidoA != null ? "" : ("\n " + this.remitidoA);
+        } catch (Exception ex) {
+            cadena = "Error doTramitadoA()";
+        }
+        return cadena;
+    }
+
 }

@@ -20,7 +20,7 @@
                     <p:outputLabel value="Documento: "/>
                     <h:outputText styleClass="Purple fontBold" value="#{item.idDocumento.toShortString()} - #{item.idDocumento.asunto}"/>
                     <p:outputLabel value="Remitente: "/>
-                    <h:outputText value="[#{item.idUsuarioRemitente.usuario}]"/> 
+                    <h:outputText value="[#{item.doTramitadoPor()}]"/> 
                     <p:outputLabel value="Fecha derivación: "/>
                     <h:outputText id="remitenteFechaDerivacion" value="#{item.fechaDerivacion}">
                         <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />

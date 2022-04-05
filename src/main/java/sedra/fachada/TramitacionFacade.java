@@ -58,14 +58,22 @@ public class TramitacionFacade extends AbstractFacade<Tramitacion> {
 
     public List<Tramitacion> getAllTramitacion(Integer idRol, Integer idEstado, Date fdesde, Date fhasta) {
         Query q;
+        String where;
+        if (idRol != null) {
+            where = "a.idRol.idRol=:xIdRol";
+        } else {
+            where = "a.idRol IS NOT NULL";
+        }
         if (idEstado.compareTo(100) == 0) { //Terminado
-            q = em.createQuery("SELECT a FROM Tramitacion a WHERE a.idRol.idRol=:xIdRol AND a.idEstado.idEstado=:xIdEstado AND a.fechaSalida BETWEEN :xFdesde AND :xFhasta  ORDER BY a.idTramitacion");
+            q = em.createQuery("SELECT a FROM Tramitacion a WHERE " + where + " AND a.idEstado.idEstado=:xIdEstado AND a.fechaSalida BETWEEN :xFdesde AND :xFhasta  ORDER BY a.idTramitacion");
         } else { //Pendiente
-            q = em.createQuery("SELECT a FROM Tramitacion a WHERE a.idRol.idRol=:xIdRol AND a.idEstado.idEstado=:xIdEstado AND a.fechaRegistro BETWEEN :xFdesde AND :xFhasta ORDER BY a.idTramitacion");
+            q = em.createQuery("SELECT a FROM Tramitacion a WHERE " + where + " AND a.idEstado.idEstado=:xIdEstado AND a.fechaRegistro BETWEEN :xFdesde AND :xFhasta ORDER BY a.idTramitacion");
         }
         q.setParameter("xFdesde", fdesde);
         q.setParameter("xFhasta", fhasta);
-        q.setParameter("xIdRol", idRol);
+        if (idRol != null) {
+            q.setParameter("xIdRol", idRol);
+        }
         q.setParameter("xIdEstado", idEstado);
         List<Tramitacion> tr = q.getResultList();
         return tr;
