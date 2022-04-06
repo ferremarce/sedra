@@ -402,7 +402,6 @@ public class Tramitacion implements Serializable, Comparable<Tramitacion> {
     public String doTramitadoPor() {
         String cadena = "";
         try {
-
             if (idTramitacionPadre != null) {
                 cadena += idTramitacionPadre.idCreador.toInfoString();
             }
@@ -416,7 +415,6 @@ public class Tramitacion implements Serializable, Comparable<Tramitacion> {
     public String doTramitadoA() {
         String cadena = "";
         try {
-
             cadena += this.idRol.toString();
             cadena += this.remitidoA != null ? "" : ("\n " + this.remitidoA);
         } catch (Exception ex) {
