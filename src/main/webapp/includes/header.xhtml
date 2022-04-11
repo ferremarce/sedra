@@ -25,7 +25,7 @@
                         </p:selectOneMenu> 
                         <h:outputText styleClass="fontBold fontItalic" rendered="#{!LoginManager.usuarioLogeado.esAdm()}" value="#{LoginManager.rolTMP.toString()}"/>
                     </div>
-                    <p:poll async="true" interval="#{ConfiguracionController.configuracion.obtenerTiempoAlerta()}" global="false" onstart="PF('barraNotifica').show()"  oncomplete="PF('barraNotifica').hide()" listener="#{CommonController.checkAlertas()}" update="panelAlerta"/>
+                    <p:poll immediate="true" async="true" interval="#{ConfiguracionController.configuracion.obtenerTiempoAlerta()}" global="false" onstart="PF('barraNotifica').show()"  oncomplete="PF('barraNotifica').hide()" listener="#{CommonController.checkAlertas()}" update="panelAlerta"/>
                     <div class="p-d-inline-flex">
                         <p:outputPanel id="panelAlerta"> 
                             <p:commandButton id="btnAlerta" icon="fa fa-bell" styleClass="ui-button-warning rounded-button" title="Hay alertas en el sistema" type="button" rendered="#{not empty CommonController.listaAlerta}" value="Alerta!" >

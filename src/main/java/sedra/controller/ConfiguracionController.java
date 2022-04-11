@@ -76,6 +76,10 @@ public class ConfiguracionController implements Serializable {
 
     public void edit() {
         try {
+            if (this.configuracion.getTiempoAlerta() < 20) {
+                JSFutil.addMessage("El tiempo de chequeo mínimo es 20seg", JSFutil.StatusMessage.ERROR);
+                return;
+            }
             configuracionFacade.edit(configuracion);
             //this.configuracion = configuracionFacade.find(this.configuracion.getIdConfiguracion());
             JSFutil.addMessage("Configuración guardada exitosamente", JSFutil.StatusMessage.INFORMATION);

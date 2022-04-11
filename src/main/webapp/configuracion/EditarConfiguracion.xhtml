@@ -38,7 +38,7 @@
                                 </p:commandLink>
                             </p:outputPanel>
                             <p:outputLabel for="tiempoAlerta" value="Tiempo de Chequeo de Alertas (seg):"/>
-                            <p:inputNumber id="tiempoAlerta" value="#{ConfiguracionController.configuracion.tiempoAlerta}" title="Tiempo de alerta" required="true" requiredMessage="#{bundle.Requerido}" />
+                            <p:inputNumber id="tiempoAlerta" decimalPlaces="0" value="#{ConfiguracionController.configuracion.tiempoAlerta}" title="Tiempo de alerta" placeholder="valor mínimo 20seg" required="true" requiredMessage="#{bundle.Requerido}" />
                             <p:message for="tiempoAlerta"/>
                         </p:panelGrid>
                         <f:facet name="footer">
@@ -52,9 +52,9 @@
                     <p:panel>
                         <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" contentStyleClass="ui-fluid">
                             <p:outputLabel value="Convertir Nro Entrada en NroExpediente"/>
-                            <p:commandButton ajax="true" value="Aceptar" action="#{MigracionController.doConvertirNroEntrada()}" update="panelMensajeEstado"/>
+                            <p:commandButton immediate="true" ajax="false" value="Aceptar" action="#{MigracionController.doConvertirNroEntrada()}" />
                              <p:outputLabel value="Procesar Tramite Padre"/>
-                             <p:commandButton ajax="true" value="Aceptar" action="#{MigracionController.doProcesarTramitePadre()}" update="panelMensajeEstado"/>
+                             <p:commandButton immediate="true" ajax="false" value="Aceptar" action="#{MigracionController.doProcesarTramitePadre()}"/>
                         </p:panelGrid>
                     </p:panel>
                 </p:tab>

@@ -42,10 +42,18 @@ public class MigracionController implements Serializable {
         int cantidadError = 0;
         int cantidadUpdate = 0;
         for (Documento doc : lista) {
-            nroEntrada = doc.getNroEntrada();
+            nroEntrada = doc.getNroEntrada().trim();
             try {
                 nroEntradaArray = nroEntrada.split("-");
                 nroExpe = Integer.parseInt(nroEntradaArray[0]);
+            } catch (Exception ex) {
+                cantidadError++;
+                nroExpe = 0;
+            }
+            try {
+                if (nroExpe == 0) {
+                    nroExpe = Integer.parseInt(nroEntrada);
+                }
             } catch (Exception ex) {
                 cantidadError++;
                 nroExpe = 0;
