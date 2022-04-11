@@ -5,28 +5,6 @@ INSERT INTO configuracion (id_configuracion, titulo_sistema, sub_titulo_sistema)
 
 ALTER TABLE public.usuario ADD secure_password varchar(255) NULL
 
-UPDATE public.permiso SET descripcion_permiso='Archivo', nivel='1', orden=NULL, tag_menu=NULL, url_imagen='fa fa-folder-open' WHERE id_permiso=1;
-UPDATE public.permiso SET descripcion_permiso='Usuarios', nivel='1.2', orden=NULL, tag_menu='#{UsuarioController.listUsuarioSetup}', url_imagen='fa fa-users' WHERE id_permiso=3;
-UPDATE public.permiso SET descripcion_permiso='Roles', nivel='1.3', orden=NULL, tag_menu='#{RolController.listRolSetup}', url_imagen='fa fa-user-circle' WHERE id_permiso=4;
-UPDATE public.permiso SET descripcion_permiso='Documentos', nivel='2.1', orden=NULL, tag_menu='#{DocumentoController.listDocumentoSetup}', url_imagen='fa fa-file' WHERE id_permiso=7;
-UPDATE public.permiso SET descripcion_permiso='Pendientes', nivel='3.1', orden=NULL, tag_menu='#{TramitacionController.listPendientesSetup}', url_imagen='fa fa-list-ul' WHERE id_permiso=9;
-UPDATE public.permiso SET descripcion_permiso='Administración', nivel='2', orden=NULL, tag_menu=NULL, url_imagen='fa fa-tools' WHERE id_permiso=6;
-UPDATE public.permiso SET descripcion_permiso='Tramitación', nivel='3', orden=NULL, tag_menu=NULL, url_imagen='fa fa-share-square' WHERE id_permiso=8;
-UPDATE public.permiso SET descripcion_permiso='Plan de Archivo', nivel='2.2', orden=NULL, tag_menu='#{ClasificadorController.listPlanArchivoSetup}', url_imagen='fa fa-folder-plus' WHERE id_permiso=10;
-UPDATE public.permiso SET descripcion_permiso='Delantal de Documento', nivel='4.1', orden=NULL, tag_menu='#{ReporteController.imprimirDelantalSetup}', url_imagen='fa fa-scroll' WHERE id_permiso=14;
-UPDATE public.permiso SET descripcion_permiso='Informes', nivel='4', orden=NULL, tag_menu=NULL, url_imagen='fa fa-list-alt' WHERE id_permiso=13;
-UPDATE public.permiso SET descripcion_permiso='Seguimiento Doc.', nivel='3.4', orden=NULL, tag_menu='#{TramitacionController.listSeguimientoSetup}', url_imagen='fa fa-file-contract' WHERE id_permiso=15;
-UPDATE public.permiso SET descripcion_permiso='Agregador Doc.', nivel='2.3', orden=NULL, tag_menu='#{DocumentoController.crearDocumentoFromClasificadorSetup}', url_imagen='fa fa-file-medical' WHERE id_permiso=12;
-UPDATE public.permiso SET descripcion_permiso='Documentos en Dependencias', nivel='4.2', orden=NULL, tag_menu='#{ReporteController.listTramitacionOficinaSetup}', url_imagen='fa fa-building' WHERE id_permiso=16;
-UPDATE public.permiso SET descripcion_permiso='Archivar Doc.', nivel='3.2', orden=NULL, tag_menu='#{DocumentoController.listAdjuntaDocumentoSetup}', url_imagen='fa fa-file-archive' WHERE id_permiso=11;
-UPDATE public.permiso SET descripcion_permiso='Operaciones Especiales', nivel='5', orden=NULL, tag_menu=NULL, url_imagen='fa fa-user-tag' WHERE id_permiso=17;
-UPDATE public.permiso SET descripcion_permiso='Desbloquear Doc.', nivel='5.1', orden=NULL, tag_menu='#{TramitacionController.listDesbloqueoSetup}', url_imagen='fa fa-unlock' WHERE id_permiso=18;
-UPDATE public.permiso SET descripcion_permiso='Localizar Doc.', nivel='4.3', orden=NULL, tag_menu='#{DocumentoController.listLocalizarDocumentoSetup}', url_imagen='fa fa-search' WHERE id_permiso=19;
-UPDATE public.permiso SET descripcion_permiso='Nota de Salida/STR', nivel='3.5', orden=NULL, tag_menu='#{NotaSalidaController.listNotaSalidaSetup}', url_imagen='fa fa-sign' WHERE id_permiso=20;
-UPDATE public.permiso SET descripcion_permiso='Cambiar Contraseña', nivel='1.1', orden=NULL, tag_menu='#{LoginManager.doCambiarContrasenhaForm}', url_imagen='fa fa-key' WHERE id_permiso=2;
-UPDATE public.permiso SET descripcion_permiso='Salir', nivel='1.4', orden=NULL, tag_menu='#{LoginManager.doLogout}', url_imagen='fa fa-sign-out' WHERE id_permiso=5;
-INSERT INTO public.permiso (id_permiso, descripcion_permiso, nivel, orden, tag_menu, url_imagen) VALUES(21, 'Registro Autoḿatico de Expedientes', '2.4', NULL, '#{DocumentoController.doCrearRegistroAutomatico()}', 'fa fa-file-contract');
-
 ALTER TABLE public.documento ADD numero_expediente int4 NULL;
 ALTER TABLE public.configuracion ADD tiempo_alerta integer DEFAULT 60;
 
@@ -59,4 +37,28 @@ INSERT INTO public.prioridad (id_prioridad, descripcion_prioridad, insignia, ord
 update public.tramitacion set id_prioridad =2 where id_prioridad is null;
 
 ALTER TABLE public.permiso ADD nivel_acceso varchar(255) NULL;
+ALTER TABLE public.permiso ADD con_separador boolean NULL;
+INSERT INTO public.permiso (id_permiso, descripcion_permiso, nivel, orden, tag_menu, url_imagen) VALUES(21, 'Registro Autoḿatico de Expedientes', '2.4', NULL, '#{DocumentoController.doCrearRegistroAutomatico()}', 'fa fa-file-contract');
+
+UPDATE public.permiso SET descripcion_permiso='Archivo', nivel='1', orden=NULL, tag_menu=NULL, url_imagen='fa fa-folder-open', nivel_acceso='general', con_separador=NULL WHERE id_permiso=1;
+UPDATE public.permiso SET descripcion_permiso='Cambiar Contraseña', nivel='1.1', orden=NULL, tag_menu='#{LoginManager.doCambiarContrasenhaForm}', url_imagen='fa fa-key', nivel_acceso='usuario', con_separador=NULL WHERE id_permiso=2;
+UPDATE public.permiso SET descripcion_permiso='Usuarios', nivel='1.2', orden=NULL, tag_menu='#{UsuarioController.listUsuarioSetup}', url_imagen='fa fa-users', nivel_acceso='admin', con_separador=NULL WHERE id_permiso=3;
+UPDATE public.permiso SET descripcion_permiso='Roles', nivel='1.3', orden=NULL, tag_menu='#{RolController.listRolSetup}', url_imagen='fa fa-user-circle', nivel_acceso='admin', con_separador=NULL WHERE id_permiso=4;
+UPDATE public.permiso SET descripcion_permiso='Salir', nivel='1.4', orden=NULL, tag_menu='#{LoginManager.doLogout}', url_imagen='fa fa-sign-out', nivel_acceso='general', con_separador=NULL WHERE id_permiso=5;
+UPDATE public.permiso SET descripcion_permiso='Administración', nivel='2', orden=NULL, tag_menu=NULL, url_imagen='fa fa-tools', nivel_acceso='general', con_separador=NULL WHERE id_permiso=6;
+UPDATE public.permiso SET descripcion_permiso='Documentos', nivel='2.1', orden=NULL, tag_menu='#{DocumentoController.listDocumentoSetup}', url_imagen='fa fa-file', nivel_acceso='usuario', con_separador=NULL WHERE id_permiso=7;
+UPDATE public.permiso SET descripcion_permiso='Plan de Archivo', nivel='2.2', orden=NULL, tag_menu='#{ClasificadorController.listPlanArchivoSetup}', url_imagen='fa fa-folder-plus', nivel_acceso='admin', con_separador=NULL WHERE id_permiso=10;
+UPDATE public.permiso SET descripcion_permiso='Agregador Doc.', nivel='2.3', orden=NULL, tag_menu='#{DocumentoController.crearDocumentoFromClasificadorSetup}', url_imagen='fa fa-file-medical', nivel_acceso='usuario', con_separador=NULL WHERE id_permiso=12;
+UPDATE public.permiso SET descripcion_permiso='Registro Autoḿatico de Expedientes', nivel='2.4', orden=NULL, tag_menu='#{DocumentoController.doCrearRegistroAutomatico()}', url_imagen='fa fa-file-contract', nivel_acceso='usuario', con_separador=NULL WHERE id_permiso=21;
+UPDATE public.permiso SET descripcion_permiso='Tramitación', nivel='3', orden=NULL, tag_menu=NULL, url_imagen='fa fa-share-square', nivel_acceso='general', con_separador=NULL WHERE id_permiso=8;
+UPDATE public.permiso SET descripcion_permiso='Pendientes', nivel='3.1', orden=NULL, tag_menu='#{TramitacionController.listPendientesSetup}', url_imagen='fa fa-list-ul', nivel_acceso='usuario', con_separador=NULL WHERE id_permiso=9;
+UPDATE public.permiso SET descripcion_permiso='Archivar Doc.', nivel='3.2', orden=NULL, tag_menu='#{DocumentoController.listAdjuntaDocumentoSetup}', url_imagen='fa fa-file-archive', nivel_acceso='admin', con_separador=NULL WHERE id_permiso=11;
+UPDATE public.permiso SET descripcion_permiso='Nota de Salida/STR', nivel='3.4', orden=NULL, tag_menu='#{NotaSalidaController.listNotaSalidaSetup}', url_imagen='fa fa-sign', nivel_acceso='admin', con_separador=NULL WHERE id_permiso=20;
+UPDATE public.permiso SET descripcion_permiso='Seguimiento Doc.', nivel='3.5', orden=NULL, tag_menu='#{TramitacionController.listSeguimientoSetup}', url_imagen='fa fa-file-contract', nivel_acceso='admin', con_separador=true WHERE id_permiso=15;
+UPDATE public.permiso SET descripcion_permiso='Informes', nivel='4', orden=NULL, tag_menu=NULL, url_imagen='fa fa-list-alt', nivel_acceso='general', con_separador=NULL WHERE id_permiso=13;
+UPDATE public.permiso SET descripcion_permiso='Delantal de Documento', nivel='4.1', orden=NULL, tag_menu='#{ReporteController.imprimirDelantalSetup}', url_imagen='fa fa-scroll', nivel_acceso='admin', con_separador=NULL WHERE id_permiso=14;
+UPDATE public.permiso SET descripcion_permiso='Documentos en Dependencias', nivel='4.2', orden=NULL, tag_menu='#{ReporteController.listTramitacionOficinaSetup}', url_imagen='fa fa-building', nivel_acceso='usuario', con_separador=NULL WHERE id_permiso=16;
+UPDATE public.permiso SET descripcion_permiso='Localizar Doc.', nivel='4.3', orden=NULL, tag_menu='#{DocumentoController.listLocalizarDocumentoSetup}', url_imagen='fa fa-search', nivel_acceso='admin', con_separador=NULL WHERE id_permiso=19;
+UPDATE public.permiso SET descripcion_permiso='Operaciones Especiales', nivel='5', orden=NULL, tag_menu=NULL, url_imagen='fa fa-user-tag', nivel_acceso='general', con_separador=NULL WHERE id_permiso=17;
+UPDATE public.permiso SET descripcion_permiso='Desbloquear Doc.', nivel='5.1', orden=NULL, tag_menu='#{TramitacionController.listDesbloqueoSetup}', url_imagen='fa fa-unlock', nivel_acceso='admin', con_separador=NULL WHERE id_permiso=18;
 

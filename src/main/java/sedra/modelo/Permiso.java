@@ -41,6 +41,9 @@ public class Permiso implements Serializable {
     @Size(max = 255)
     @Column(name = "nivel")
     private String nivel;
+    @Size(max = 255)
+    @Column(name = "nivel_acceso")
+    private String nivelAcceso;
     @Column(name = "orden")
     private BigInteger orden;
     @Size(max = 255)
@@ -49,6 +52,8 @@ public class Permiso implements Serializable {
     @Size(max = 255)
     @Column(name = "url_imagen")
     private String urlImagen;
+    @Column(name = "con_separador")
+    private Boolean conSeparador;
     @OneToMany(mappedBy = "idPermiso")
     private List<PermisoRol> permisoRolList;
 
@@ -83,6 +88,14 @@ public class Permiso implements Serializable {
         this.nivel = nivel;
     }
 
+    public String getNivelAcceso() {
+        return nivelAcceso;
+    }
+
+    public void setNivelAcceso(String nivelAcceso) {
+        this.nivelAcceso = nivelAcceso;
+    }
+
     public BigInteger getOrden() {
         return orden;
     }
@@ -105,6 +118,14 @@ public class Permiso implements Serializable {
 
     public void setUrlImagen(String urlImagen) {
         this.urlImagen = urlImagen;
+    }
+
+    public Boolean getConSeparador() {
+        return conSeparador;
+    }
+
+    public void setConSeparador(Boolean conSeparador) {
+        this.conSeparador = conSeparador;
     }
 
     public List<PermisoRol> getPermisoRolList() {
@@ -137,7 +158,7 @@ public class Permiso implements Serializable {
 
     @Override
     public String toString() {
-        return this.nivel + ". " + this.descripcionPermiso;
+        return this.nivel + ". " + this.descripcionPermiso + " [" + this.getNivelAcceso() + "]";
     }
 
 }

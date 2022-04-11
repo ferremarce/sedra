@@ -405,7 +405,7 @@ public class Tramitacion implements Serializable, Comparable<Tramitacion> {
             if (idTramitacionPadre != null) {
                 cadena += idTramitacionPadre.idCreador.toInfoString();
             }
-            cadena += this.remitidoPor == null ? "" : ("\n " + this.remitidoPor);
+            cadena += this.remitidoPor == null ? "" : ("| " + this.remitidoPor);
         } catch (Exception ex) {
             cadena = "Error doTramitadoPor()";
         }

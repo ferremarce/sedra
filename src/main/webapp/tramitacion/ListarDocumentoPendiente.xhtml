@@ -19,7 +19,7 @@
             <div class="p-grid">
                 <div class="p-col-12">
                     <p:tabMenu activeIndex="#{param.i}">
-                        <p:menuitem value="Pendientes de Confirmación [#{TramitacionController.listaTramitacionEstado.size()}]" icon="fa fa-inbox" actionListener="#{TramitacionController.buscarAllPendienteAjax()}" update="formMain, panelMensajeEstado">
+                        <p:menuitem value="Pendientes de Confirmación #{TramitacionController.cantPendiente>0?[TramitacionController.cantPendiente]:''}" icon="fa fa-inbox" actionListener="#{TramitacionController.buscarAllPendienteAjax()}" update="formMain, panelMensajeEstado">
                             <f:param name="i" value="0"/>
                         </p:menuitem>
                         <p:menuitem value="Pendientes de Tramitacion" icon="fa fa-check-to-slot" actionListener="#{TramitacionController.buscarAllConfirmadoAjax()}" update="formMain, panelMensajeEstado">
@@ -101,20 +101,26 @@
                                 <h:outputText styleClass="Brown" value="#{item.idDocumento.asunto}"/>
                             </blockquote>
                         </p:column>
-                        <p:column width="300" >  
+                        <p:column width="350">  
                             <f:facet name="header">
                                 <i class="fa fa-users" title="Corresponsal/es"></i>
                             </f:facet>
                             <p:outputPanel rendered="#{item.idEstado.esTramiteEntrada()}">
-                                <h:outputText escape="false" value="#{item.doTramitadoPor()}"/>
+                                <h:outputText styleClass="fontItalic"  escape="false" value="#{item.doTramitadoPor()}"/>
                             </p:outputPanel>
                             <p:outputPanel rendered="#{!item.idEstado.esTramiteEntrada()}">
-                                <p:dataList rendered="#{not empty item.tramitacionList}" var="tramDeriva" value="#{item.tramitacionList}">
-                                    <h:outputText value="#{tramDeriva.idRol.toString()}"/>
-                                    <i class="fa fa-square Orange" title="No leído" style="display: #{tramDeriva.leido?'none': ''}" />
-                                    <i class="fa fa-square-check Green" title="Leído" style="display: #{tramDeriva.leido?'': 'none'}" />
-                                    <h:outputText styleClass="insignia #{tramDeriva.idEstado.insignia}" value="#{tramDeriva.idEstado.toString()}"/>
-                                </p:dataList>
+                                <p:dataTable rendered="#{not empty item.tramitacionList}" var="tramDeriva" value="#{item.tramitacionList}">
+                                    <p:column>
+                                        <h:outputText value="#{tramDeriva.idRol.toString()}"/>
+                                    </p:column>
+                                    <p:column width="20">
+                                        <i class="fa fa-square Orange" title="No leído" style="display: #{tramDeriva.leido?'none': ''}" />
+                                        <i class="fa fa-square-check Green" title="Leído" style="display: #{tramDeriva.leido?'': 'none'}" />
+                                    </p:column>
+                                    <p:column width="70">
+                                        <h:outputText styleClass="insignia #{tramDeriva.idEstado.insignia}" value="#{tramDeriva.idEstado.toString()}"/>
+                                    </p:column>
+                                </p:dataTable>
                                 <h:outputText rendered="#{empty item.tramitacionList}" escape="false" value="A: #{item.remitidoA}"/>
                             </p:outputPanel>
 

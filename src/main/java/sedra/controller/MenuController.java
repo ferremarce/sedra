@@ -13,8 +13,10 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
+import org.primefaces.model.menu.DefaultSeparator;
 import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
+import org.primefaces.model.menu.Separator;
 import sedra.fachada.UsuarioFacade;
 import sedra.modelo.Permiso;
 import sedra.modelo.Usuario;
@@ -106,6 +108,9 @@ public class MenuController implements Serializable {
                 model.getElements().add(submenu);
                 //submenu.setIcon(x.getUrlImagen());
             } else {
+                if(x.getConSeparador()!=null && x.getConSeparador()){
+                    submenu.getElements().add(new DefaultSeparator());
+                }
                 /*Agregar un item*/
                 //item = new DefaultMenuItem(x.getDescripcionPermiso());
                 item = DefaultMenuItem.builder().value(x.getDescripcionPermiso()).build();

@@ -89,11 +89,20 @@ public class TramitacionController implements Serializable {
     private Documento documento;
     private String observaciones;
     private Integer tipoBandeja;
+    private Integer cantPendiente;
 
     /**
      * Creates a new instance of TramitacionController
      */
     public TramitacionController() {
+    }
+
+    public Integer getCantPendiente() {
+        return cantPendiente;
+    }
+
+    public void setCantPendiente(Integer cantPendiente) {
+        this.cantPendiente = cantPendiente;
     }
 
     public TreeNode getRootTramitacion() {
@@ -211,6 +220,7 @@ public class TramitacionController implements Serializable {
     public String listPendientesSetup() {
         //Obtenemos solo los pendientes de entrada (confirmación)
         this.buscarAllPendienteAjax();
+
         if (this.listaTramitacionEstado.isEmpty()) {
             JSFutil.addMessage("No hay pendientes de confirmación", JSFutil.StatusMessage.WARNING);
         } else {
@@ -227,6 +237,7 @@ public class TramitacionController implements Serializable {
         this.listaTramitacionEstado = this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_PENDIENTE);
         this.arraySelectedTramitacion = null;
         this.tipoBandeja = Codigo.BANDEJA_PEDIENTES_CONFIRMACION;
+        this.cantPendiente = this.listaTramitacionEstado.size();
     }
 
     public void buscarAllConfirmadoAjax() {
@@ -275,6 +286,7 @@ public class TramitacionController implements Serializable {
         for (Tramitacion t : this.listSelectedTramitacion) {
             this.confirmaTramite(t.getIdTramitacion());
         }
+        JSFutil.addMessage("Tramitacion procesada exitosamente. ", JSFutil.StatusMessage.INFORMATION);
         this.buscarAllPendienteAjax();
         return "";
     }
