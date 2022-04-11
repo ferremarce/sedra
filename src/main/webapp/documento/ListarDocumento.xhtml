@@ -44,7 +44,7 @@
                 </p:column> 
                 <p:column headerText="Fecha" width="100" sortBy="#{item.fechaDocumento}">
                     <h:outputText value="#{item.fechaDocumento}">
-                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                     </h:outputText>
                 </p:column>
                 <p:column headerText="Asunto">
@@ -56,7 +56,7 @@
                 </p:column>  
                 <p:column headerText="Ingreso" width="100" sortBy="#{item.fechaIngreso}">  
                     <h:outputText value="#{item.fechaIngreso}">
-                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                     </h:outputText>
                 </p:column>  
                  <p:column headerText="Creado por" width="100">  

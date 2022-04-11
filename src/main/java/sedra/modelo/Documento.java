@@ -230,6 +230,7 @@ public class Documento implements Serializable {
     public void setNroEntrada(String nroEntrada) {
         this.nroEntrada = nroEntrada;
     }
+
     public String getObservacion() {
         return observacion;
     }
@@ -358,6 +359,14 @@ public class Documento implements Serializable {
 
     public String toShortString() {
         return this.numeroExpediente + "/" + this.anho;
+    }
+
+    public String toShortAsunto() {
+        if (this.asunto != null && this.asunto.length() > 80) {
+            return this.asunto.substring(0, 79)+"...";
+        } else {
+            return this.asunto;
+        }
     }
 
 }

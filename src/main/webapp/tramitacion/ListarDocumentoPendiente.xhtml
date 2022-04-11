@@ -87,7 +87,7 @@
                                 <i class="fa fa-calendar" title="Fecha Derivación"></i>
                             </f:facet>
                             <h:outputText value="#{item.fechaDerivacion}">
-                                <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                                <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                             </h:outputText>
                         </p:column>
                         <p:column sortBy="#{item.idDocumento.numeroExpediente}" > 

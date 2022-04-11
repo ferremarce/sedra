@@ -67,7 +67,7 @@
                     </p:column> 
                     <p:column headerText="F. Doc." width="80" >
                         <h:outputText value="#{item.fechaDocumento}">
-                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                            <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>
                     <p:column headerText="Asunto">
@@ -79,7 +79,7 @@
                     </p:column>  
                     <p:column headerText="F. Ing." width="80" >  
                         <h:outputText value="#{item.fechaIngreso}">
-                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                            <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>   
                     <p:column headerText="Enlazado con" width="150" > 

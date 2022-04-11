@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 import org.primefaces.event.FileUploadEvent;
@@ -65,7 +66,10 @@ public class NotaSalidaController implements Serializable {
     private TipoNota tipoNota;
     private UploadedFile adjunto;
     private List<Documento> selectedDocumentos;
+    private Date fechaDesde;
+    private Date fechaHasta;
 //    private String nroEntrada;
+
     /**
      * Creates a new instance of NotaSalidaController
      */
@@ -120,13 +124,21 @@ public class NotaSalidaController implements Serializable {
         this.adjunto = adjunto;
     }
 
-//    public String getNroEntrada() {
-//        return nroEntrada;
-//    }
-//
-//    public void setNroEntrada(String nroEntrada) {
-//        this.nroEntrada = nroEntrada;
-//    }
+    public Date getFechaDesde() {
+        return fechaDesde;
+    }
+
+    public void setFechaDesde(Date fechaDesde) {
+        this.fechaDesde = fechaDesde;
+    }
+
+    public Date getFechaHasta() {
+        return fechaHasta;
+    }
+
+    public void setFechaHasta(Date fechaHasta) {
+        this.fechaHasta = fechaHasta;
+    }
 
     public List<Documento> getSelectedDocumentos() {
         return selectedDocumentos;
@@ -146,7 +158,9 @@ public class NotaSalidaController implements Serializable {
             //por defecto es el tipo Nota Salida
             this.tipoNota = tipoNotaFacade.find(1);
         }
-
+        this.criterioBusqueda = "";
+        this.fechaDesde = null;
+        this.fechaHasta = null;
         return "/notasalida/ListarNotaSalida";
     }
 
@@ -157,12 +171,28 @@ public class NotaSalidaController implements Serializable {
     }
 
     public void buscarAllNotaSalida() {
-        this.listaNotaSalida = notaSalidaFacade.getAllNotaSalida(criterioBusqueda, tipoNota.getIdTipoNota());
+        if (!checkRangoFechaValido()) {
+            JSFutil.addMessage("Debe seleccionar un rango válido de fechas", JSFutil.StatusMessage.WARNING);
+            return;
+        }
+        this.listaNotaSalida = notaSalidaFacade.getAllNotaSalida(criterioBusqueda, tipoNota.getIdTipoNota(), this.fechaDesde, this.fechaHasta);
         if (this.listaNotaSalida.isEmpty()) {
             JSFutil.addMessage("No hay resultados...", JSFutil.StatusMessage.WARNING);
         } else {
             JSFutil.addMessage(this.listaNotaSalida.size() + " registros recuperados", JSFutil.StatusMessage.INFORMATION);
         }
+    }
+
+    private Boolean checkRangoFechaValido() {
+        Boolean chequeo = Boolean.FALSE;
+        if (fechaDesde != null && fechaHasta != null) {
+            if (fechaDesde.getTime() <= fechaHasta.getTime()) {
+                chequeo = Boolean.TRUE;
+            }
+        } else if (fechaDesde == null && fechaHasta == null) {
+            chequeo = Boolean.TRUE;
+        }
+        return chequeo;
     }
 
     public void localizarAllNotaSalida() {
@@ -280,7 +310,6 @@ public class NotaSalidaController implements Serializable {
 //            JSFutil.addMessage("No es posible localizar el documento con entrada: " + this.nroEntrada, JSFutil.StatusMessage.WARNING);
 //        }
 //    }
-
     public String doGuardar() {
         try {
             //Nuevo
@@ -392,9 +421,9 @@ public class NotaSalidaController implements Serializable {
         }
         this.localizarAllNotaSalida();
     }
-    
+
     public List<Documento> autocompleteEnlaceDocumento(String query) {
         return this.documentoFacade.findAllDocumentoAutocomplete(query);
     }
-    
+
 }

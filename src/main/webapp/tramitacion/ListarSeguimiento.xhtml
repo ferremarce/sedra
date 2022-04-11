@@ -41,11 +41,11 @@
                     <p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
                         <h:outputText value="Documento: "/>
                         <h:outputText value="#{item.fechaDocumento}">
-                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                            <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                         </h:outputText>
                         <h:outputText value="Ingreso: "/>
                         <h:outputText value="#{item.fechaIngreso}">
-                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                            <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:panelGrid>
                 </p:column>

@@ -2,7 +2,7 @@
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                 template="/includes/template.xhtml"
+                template="/includes/template.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
@@ -12,18 +12,28 @@
 
     <ui:define name="content">
         <h:form id="formMain">
-            <p:outputLabel for="options" value="Filtrar por: "/>
-            <p:selectOneRadio id="options" value="#{NotaSalidaController.tipoNota}">
-                <f:selectItems value="#{TipoNotaController.tipoNotaSet}"/>
-            </p:selectOneRadio>
-            <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
-                <p:inputText id="criterio" value="#{NotaSalidaController.criterioBusqueda}" placeholder="Nro. Salida, Referencia"/>
-                <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{NotaSalidaController.buscarAllNotaSalida()}" update="@form, panelMensajeEstado"/>
-                <p:commandButton immediate="true" value="#{bundle.NuevoBoton}" icon="fa fa-plus" ajax="false" action="#{NotaSalidaController.createSetup(null)}"/>
-                <p:commandButton immediate="true" value="#{bundle.ListarBoton}" icon="fa fa-th-list" onclick="PF('statusDialog').show()" ajax="false" action="#{NotaSalidaController.doRefrescar()}"/>
-            </p:panelGrid>
-            <h:outputText value="Puede realizar la búsqueda utilizando % como caracter o palabra comodín"/>
+            <p:toolbar>
+                <p:toolbarGroup>
+                    <p:commandButton styleClass="espaciadoToolbar ui-button-success" value="#{bundle.NuevoBoton}" icon="fa fa-plus" ajax="false" action="#{NotaSalidaController.createSetup(null)}"/>
+                    <p:commandButton styleClass="espaciadoToolbar" value="#{bundle.ListarBoton}" icon="fa fa-th-list" ajax="false" action="#{NotaSalidaController.doRefrescar()}"/>
+                </p:toolbarGroup>     
+            </p:toolbar>
+            <p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+                <p:selectOneRadio id="options" value="#{NotaSalidaController.tipoNota}">
+                    <f:selectItems value="#{TipoNotaController.tipoNotaSet}"/>
+                </p:selectOneRadio>
+                <p:panelGrid columns="8" >
+                    <p:outputLabel for="fechaDesde" value="Desde:"/>
+                    <p:calendar navigator="true" id="fechaDesde" value="#{NotaSalidaController.fechaDesde}" pattern="dd/MM/yyyy" placeholder="fecha documento (opcional)" title="Fecha Desde" requiredMessage="#{bundle.Requerido}"/>
 
+                    <p:outputLabel for="fechaHasta" value="Hasta:"/>
+                    <p:calendar navigator="true" id="fechaHasta" value="#{NotaSalidaController.fechaHasta}" pattern="dd/MM/yyyy" placeholder="fecha documento (opcional)" title="Fecha Hasta" requiredMessage="#{bundle.Requerido}"/>
+
+                    <p:inputText id="criterio" value="#{NotaSalidaController.criterioBusqueda}" placeholder="Nro. Salida, Referencia"/>
+                    <p:commandButton value="#{bundle.BuscarBoton}" id="cmdBuscar" icon="fa fa-search" ajax="true" action="#{NotaSalidaController.buscarAllNotaSalida()}" update="@form, panelMensajeEstado"/>
+                </p:panelGrid>
+            </p:panelGrid>
+            <p:defaultCommand target="cmdBuscar"/>
             <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{NotaSalidaController.listaNotaSalida}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                          rows="50"
                          paginator="true"
@@ -52,7 +62,10 @@
                 <p:column headerText="Enlazado con" > 
                     <p:dataList rendered="#{item.detalleNotaSalidaList.size()>0}" value="#{item.detalleNotaSalidaList}" var="valor" itemType="circle"> 
                         <p:commandLink styleClass="Red fontBold" title="Ver Documento" value="[Entrada] #{valor.idDocumento.toShortString()}" target="_new" ajax="false" action="#{DocumentoController.doVerForm(valor.idDocumento.idDocumento)}"/>  
-                        <h:outputText value=" #{valor.idDocumento.asunto.length()>80 ? valor.idDocumento.asunto.substring(0, 79): valor.idDocumento.asunto}..." />  
+                        <h:outputText value="#{valor.idDocumento.fechaIngreso}">
+                            <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern=" [dd/MM/yyyy]" />
+                        </h:outputText>
+                        <h:outputText value=" #{valor.idDocumento.toShortAsunto()}" />  
                     </p:dataList>
                 </p:column> 
                 <p:column headerText="Acción" width="115">
@@ -61,12 +74,12 @@
                     <p:menuButton rendered="#{item.cerrado==false}" value="Opciones">
                         <p:menuitem ajax="false" onclick="if (!confirm('Desea realmente bloquear el documento y todas sus tramitaciones?...')) {
                                     return false;
-                                    }" value="#{bundle.LlavearBoton}" icon="fa fa-unlock" action="#{NotaSalidaController.llavear(item.idNota)}"/>
+                                }" value="#{bundle.LlavearBoton}" icon="fa fa-unlock" action="#{NotaSalidaController.llavear(item.idNota)}"/>
                         <p:separator/>
                         <p:menuitem ajax="false" value="#{bundle.EditarBoton}" action="#{NotaSalidaController.editSetup(item.idNota)}" icon="fa fa-pencil-square"/>
                         <p:menuitem ajax="false" onclick="if (!confirm('#{bundle.ConfirmacionMensaje}')) {
                                     return false;
-                                    }" value="#{bundle.EliminarBoton}" action="#{NotaSalidaController.delete(item.idNota)}" icon="fa fa-minus-square"/>
+                                }" value="#{bundle.EliminarBoton}" action="#{NotaSalidaController.delete(item.idNota)}" icon="fa fa-minus-square"/>
                     </p:menuButton>  
                 </p:column>  
             </p:dataTable>

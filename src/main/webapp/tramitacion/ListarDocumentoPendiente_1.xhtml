@@ -48,7 +48,7 @@
                         </p:column>
                         <p:column headerText="F. Deriv." width="80" sortBy="#{item.fechaDerivacion}" >
                             <h:outputText value="#{item.fechaDerivacion}">
-                                <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                                <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                             </h:outputText>
                         </p:column>
                         <p:column headerText="Documento" sortBy="#{item.idDocumento.numeroExpediente}">  
@@ -98,7 +98,7 @@
                         </p:column>
                         <p:column headerText="F. Deriv." width="80" sortBy="#{item2.fechaDerivacion}" >
                             <h:outputText value="#{item2.fechaDerivacion}">
-                                <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                                <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                             </h:outputText>
                         </p:column>
                         <p:column headerText="Documento" sortBy="#{item2.idDocumento.numeroExpediente}">  

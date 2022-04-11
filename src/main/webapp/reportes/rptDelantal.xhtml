@@ -49,12 +49,12 @@
                 <p:column headerText="Fechas" width="150" >
                     <h:outputText value="F. Doc: "/>
                     <h:outputText value="#{item.fechaDocumento}">
-                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                     </h:outputText>
                     <p/>
                     <h:outputText value="F. Ing: "/>
                     <h:outputText value="#{item.fechaIngreso}">
-                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                     </h:outputText>
                 </p:column>
                 <p:column headerText="Asunto" >  

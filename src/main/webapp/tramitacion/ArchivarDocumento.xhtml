@@ -23,15 +23,15 @@
                     <h:outputText id="anho" value="#{TramitacionController.documento.anho}" title="Año" />
                     <p:outputLabel for="fechaDocumento" value="Fecha del Documento:"/>
                     <h:outputText id="fechaDocumento" value="#{TramitacionController.documento.fechaDocumento}" title="Fecha Documento">
-                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                     </h:outputText>
                     <p:outputLabel for="fechaIngreso" value="Fecha del Ingreso:"/>
                     <h:outputText id="fechaIngreso" value="#{TramitacionController.documento.fechaIngreso}" title="Fecha Ingreso">
-                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                     </h:outputText>
                     <p:outputLabel for="fechaLimite" value="Fecha Límite:"/>
                     <h:outputText id="fechaLimite" value="#{TramitacionController.documento.fechaLimite}" title="Fecha Límite">
-                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                     </h:outputText>
                     <p:outputLabel for="asunto" value="Asunto "/>
                     <h:outputText id="asunto" value="#{TramitacionController.documento.asunto}" title="Asunto"/>
@@ -68,7 +68,7 @@
                     </p:column>  
                     <p:column headerText="F. Deriv." style="width:50px" >
                         <h:outputText value="#{item.fechaDerivacion}">
-                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                            <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>
                     <p:column headerText="Remitido a" style="width:70px">
@@ -107,7 +107,7 @@
                 <p:panelGrid id="panelAnexo" columns="2" styleClass="ui-panelgrid-blank">
                     <p:outputLabel for="fderiv" value="Fecha Derivación:"/>
                     <h:outputText id="fderiv" value="#{TramitacionController.tramitacion.fechaDerivacion}">
-                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                     </h:outputText>
                     <p:outputLabel for="notaB" value="Nota Breve:"/>
                     <h:outputText id="notaB" value="#{TramitacionController.tramitacion.notaBreve}" title="Nota Breve"/>

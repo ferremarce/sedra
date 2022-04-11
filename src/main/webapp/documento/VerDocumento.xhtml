@@ -30,15 +30,15 @@
                     <h:outputText id="anho" value="#{DocumentoController.documento.anho}" title="Año" />
                     <p:outputLabel for="fechaDocumento" value="Fecha del Documento:"/>
                     <h:outputText id="fechaDocumento" value="#{DocumentoController.documento.fechaDocumento}" title="Fecha Documento">
-                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                     </h:outputText>
                     <p:outputLabel for="fechaIngreso" value="Fecha del Ingreso:"/>
                     <h:outputText id="fechaIngreso" value="#{DocumentoController.documento.fechaIngreso}" title="Fecha Ingreso">
-                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                     </h:outputText>
                     <p:outputLabel for="fechaLimite" value="Fecha Límite:"/>
                     <h:outputText id="fechaLimite" value="#{DocumentoController.documento.fechaLimite}" title="Fecha Límite">
-                        <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                        <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                     </h:outputText>
                 </p:panelGrid>
                 <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="flex" columnClasses="p-col-2,p-col-10">
@@ -100,7 +100,7 @@
                     </p:column>
                     <p:column headerText="Derivado" width="110">
                         <h:outputText value="#{item.fechaDerivacion}">
-                            <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                            <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                         </h:outputText>
                     </p:column>
                     <p:column headerText="Remitido a">
@@ -127,36 +127,36 @@
                         <p:panelGrid columns="2" layout="tabular" columnClasses="p-col-2,p-col-10">
                             <p:outputLabel value="Derivado: "/>
                             <h:outputText value="#{item.fechaDerivacion}">
-                                <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                                <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                             </h:outputText>
                             <p:outputLabel value="Recibido: "/>
                             <p:outputPanel>
                                 <h:outputText value="#{item.fechaRegistro}">
-                                    <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                                    <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                                 </h:outputText>
                                 <p:spacer width="10"/>
                                 <h:outputText value="#{item.horaRegistro}">
-                                    <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="HH:mm" />
+                                    <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="HH:mm" />
                                 </h:outputText>
                             </p:outputPanel>
                             <p:outputLabel value="Confirmado: "/>
                             <p:outputPanel>
                                 <h:outputText value="#{item.fechaConfirmacion}">
-                                    <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                                    <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                                 </h:outputText>
                                 <p:spacer width="10px"/>
                                 <h:outputText value="#{item.horaConfirmacion}">
-                                    <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="HH:mm" />
+                                    <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="HH:mm" />
                                 </h:outputText>
                             </p:outputPanel>
                             <p:outputLabel value="Procesado: "/>
                             <p:outputPanel>
                                 <h:outputText value="#{item.fechaSalida}">
-                                    <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                                    <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                                 </h:outputText>
                                 <p:spacer width="10"/>
                                 <h:outputText value="#{item.horaSalida}">
-                                    <f:convertDateTime timeZone="#{UserManager.myTimeZone}" pattern="HH:mm" />
+                                    <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="HH:mm" />
                                 </h:outputText>
                             </p:outputPanel>
                         </p:panelGrid>

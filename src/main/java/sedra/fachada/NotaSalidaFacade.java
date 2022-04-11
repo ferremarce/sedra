@@ -5,6 +5,7 @@
  */
 package sedra.fachada;
 
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -41,7 +42,7 @@ public class NotaSalidaFacade extends AbstractFacade<NotaSalida> {
     public List<NotaSalida> getAllNotaSalida(String criterio) {
         Query q = em.createQuery("SELECT a FROM NotaSalida a "
                 + "WHERE (UPPER(a.numeroSalida) LIKE :xCriterio OR UPPER(a.numeroStr) LIKE :xCriterio) "
-//                + "OR a.idNota IN (SELECT d.idNota.idNota FROM DetalleNotaSalida d WHERE UPPER(d.idDocumento.asunto) LIKE :xCriterio OR UPPER(d.idDocumento.numeroExpediente) LIKE :xCriterio) "
+                //                + "OR a.idNota IN (SELECT d.idNota.idNota FROM DetalleNotaSalida d WHERE UPPER(d.idDocumento.asunto) LIKE :xCriterio OR UPPER(d.idDocumento.numeroExpediente) LIKE :xCriterio) "
                 + "OR a.referencia LIKE :xCriterio "
                 + "ORDER BY a.numeroSalida,a.numeroStr");
         if (criterio.compareTo("") != 0) {
@@ -53,15 +54,27 @@ public class NotaSalidaFacade extends AbstractFacade<NotaSalida> {
         return tr;
     }
 
-    public List<NotaSalida> getAllNotaSalida(String criterio, Integer idTipo) {
-        Query q = em.createQuery("SELECT a FROM NotaSalida a WHERE (UPPER(a.numeroSalida) LIKE :xCriterio OR UPPER(a.numeroStr) LIKE :xCriterio) AND a.idTipoNota.idTipoNota=:xIdTipo ORDER BY a.numeroSalida,a.numeroStr");
-        if (criterio.compareTo("") != 0) {
-            q.setParameter("xCriterio", "%" + criterio.toUpperCase() + "%");
-            q.setParameter("xIdTipo", idTipo);
+    public List<NotaSalida> getAllNotaSalida(String criterio, Integer idTipo, Date fechaDesde, Date fechahasta) {
+        Query q;
+        if (fechaDesde != null && fechahasta != null) {
+            q = em.createQuery("SELECT a FROM NotaSalida a WHERE a.idTipoNota.idTipoNota=:xIdTipo "
+                    + "AND (UPPER(a.numeroSalida) LIKE :xCriterio OR UPPER(a.numeroStr) LIKE :xCriterio) "
+                    + "AND a IN (SELECT DISTINCT b.idNota FROM DetalleNotaSalida b WHERE b.idDocumento.fechaDocumento BETWEEN :xFechaInicio AND :xFechaFin) "
+                    + "ORDER BY a.numeroSalida, a.numeroStr");
+            q.setParameter("xFechaInicio", fechaDesde);
+            q.setParameter("xFechaFin", fechahasta);
         } else {
-            q.setParameter("xCriterio", "123456");
-            q.setParameter("xIdTipo", idTipo);
+            q = em.createQuery("SELECT a FROM NotaSalida a WHERE a.idTipoNota.idTipoNota=:xIdTipo "
+                    + "AND (UPPER(a.numeroSalida) LIKE :xCriterio OR UPPER(a.numeroStr) LIKE :xCriterio) "
+                    + "ORDER BY a.numeroSalida, a.numeroStr");
         }
+        if (criterio.isBlank()) {
+            q.setParameter("xCriterio", "xxxxxxxxxxxxxxxxxxxxx");
+        } else {
+            q.setParameter("xCriterio", "%" + criterio.toUpperCase() + "%");
+        }
+        q.setParameter("xIdTipo", idTipo);
+
         List<NotaSalida> tr = q.getResultList();
         return tr;
 
