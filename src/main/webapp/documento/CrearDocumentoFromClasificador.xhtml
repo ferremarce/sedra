@@ -41,11 +41,9 @@
                             <f:facet name="header">
                                 Tabla de Datos
                             </f:facet> 
-                            <p:column headerText="#Exp." width="110" sortBy="#{item.numeroExpediente}" >  
+                            <p:column headerText="#Exp." width="110" sortBy="#{item.toShortString()}" >  
                                 <p:commandLink immediate="true" title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
-                                    <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.numeroExpediente}">
-                                        <f:convertNumber pattern="0000000000000"/>
-                                    </h:outputText>
+                                    <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.toShortString()}"/>                              
                                 </p:commandLink>
                             </p:column> 
                             <p:column headerText="Fecha" width="80" sortBy="#{item.fechaDocumento}">
@@ -104,7 +102,7 @@
                             </p:column>  
                             <p:column headerText="Enlazado con" > 
                                 <p:repeat rendered="#{itemSal.detalleNotaSalidaList.size()>0}" value="#{itemSal.detalleNotaSalidaList}" var="valor" > 
-                                    <p:commandLink styleClass="Red fontBold" target="_new" title="Ver Documento" value="[Entrada] #{valor.idDocumento.numeroExpediente}" ajax="false" action="#{DocumentoController.doVerForm(valor.idDocumento.idDocumento)}"/> <br/>
+                                    <p:commandLink styleClass="Red fontBold" target="_new" title="Ver Documento" value="[Entrada] #{valor.idDocumento.toShortString()}" ajax="false" action="#{DocumentoController.doVerForm(valor.idDocumento.idDocumento)}"/> <br/>
                                     <h:outputText value="#{valor.idDocumento.asunto.length()>80 ? valor.idDocumento.asunto.substring(0, 79): valor.idDocumento.asunto}..." />  
                                 </p:repeat>
                             </p:column> 

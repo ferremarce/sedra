@@ -40,7 +40,7 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
 
     public List<Documento> getAllDocumento(String criterio) {
         Query q = em.createQuery("SELECT a FROM Documento a "
-                + "WHERE (UPPER(a.asunto) LIKE :xCriterio OR a.numeroExpediente=:xNroExpe) "
+                + "WHERE (UPPER(a.asunto) LIKE :xCriterio OR CONCAT(a.numeroExpediente,'-',a.anho) LIKE :xCriterio) "
                 //+ "OR a.idDocumento IN (SELECT d.idDocumento.idDocumento FROM DetalleNotaSalida d WHERE UPPER(d.idNota.numeroSalida) LIKE :xCriterio OR UPPER(d.idNota.numeroStr) LIKE :xCriterio) "
                 + "AND a.idUsuario.idRol.idRol=:xIdRol "
                 + "ORDER BY a.idDocumento DESC");
@@ -50,14 +50,7 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
             q.setParameter("xCriterio", "123456");
         }
         q.setParameter("xIdRol", JSFutil.getRolSesion().getIdRol());
-        
-        Integer nroExpe = -1;
-        try {
-            nroExpe = Integer.parseInt(criterio);
-        } catch (NumberFormatException ex) {
 
-        }
-        q.setParameter("xNroExpe", nroExpe);
         List<Documento> tr = q.getResultList();
         this.metaDatabase();
         return tr;
@@ -77,7 +70,7 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
 
     public List<Documento> getAllDocumentoParaSeguimiento(String criterio) {
         Query q = em.createQuery("SELECT a FROM Documento a "
-                + "WHERE UPPER(a.asunto) LIKE :xCriterio OR a.numeroExpediente=:xNroExpe "
+                + "WHERE (UPPER(a.asunto) LIKE :xCriterio OR CONCAT(a.numeroExpediente,'-',a.anho) LIKE :xCriterio) "
                 + "OR a.idDocumento IN (SELECT d.idDocumento.idDocumento FROM DetalleNotaSalida d WHERE UPPER(d.idNota.numeroSalida) LIKE :xCriterio OR UPPER(d.idNota.numeroStr) LIKE :xCriterio) "
                 + "ORDER BY a.idDocumento");
         if (criterio.compareTo("") != 0) {
@@ -85,40 +78,31 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
         } else {
             q.setParameter("xCriterio", "123456");
         }
-        Integer nroExpe = -1;
-        try {
-            nroExpe = Integer.parseInt(criterio);
-        } catch (NumberFormatException ex) {
-
-        }
-        q.setParameter("xNroExpe", nroExpe);
-
         List<Documento> tr = q.getResultList();
         return tr;
 
     }
 
-    public Documento getDocumentoByNroEntradaAnho(Integer nroExpediente, Integer anho) {
-        Query q = em.createQuery("SELECT a FROM Documento a "
-                + "WHERE a.numeroExpediente=:xNroExpe "
-                + "AND a.anho=:xAnho");
-        q.setParameter("xNroExpe", nroExpediente);
-        q.setParameter("xAnho", anho);
-
-        List<Documento> tr = q.getResultList();
-        if (tr.isEmpty()) {
-            return null;
-        } else {
-            return tr.get(0);
-        }
-    }
-
+//    public Documento getDocumentoByNroEntradaAnho(Integer nroExpediente, Integer anho) {
+//        Query q = em.createQuery("SELECT a FROM Documento a "
+//                + "WHERE a.numeroExpediente=:xNroExpe "
+//                + "AND a.anho=:xAnho");
+//        q.setParameter("xNroExpe", nroExpediente);
+//        q.setParameter("xAnho", anho);
+//
+//        List<Documento> tr = q.getResultList();
+//        if (tr.isEmpty()) {
+//            return null;
+//        } else {
+//            return tr.get(0);
+//        }
+//    }
     public List<Documento> getAllDocumentoPlanArchivo(Integer clasificador) {
         Query q = em.createQuery("SELECT a FROM Documento a WHERE a.idClasificador.idClasificador=:xCriterio "
                 + "AND a.idUsuario.idRol.idRol=:xIdRol "
                 + "ORDER BY a.numeroExpediente DESC, a.fechaDocumento DESC");
         q.setParameter("xCriterio", clasificador);
-         q.setParameter("xIdRol", JSFutil.getRolSesion().getIdRol());
+        q.setParameter("xIdRol", JSFutil.getRolSesion().getIdRol());
         List<Documento> tr = q.getResultList();
         return tr;
 
@@ -126,16 +110,9 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
 
     public List<Documento> getAllDocumentoByExpediente(String criterio) {
         Query q = em.createQuery("SELECT a FROM Documento a "
-                + "WHERE a.numeroExpediente=:xNroExpe "
+                + "WHERE CONCAT(a.numeroExpediente,'-',a.anho) LIKE :xCriterio "
                 + "ORDER BY a.idDocumento");
-        Integer nroExpe = -1;
-        try {
-            nroExpe = Integer.parseInt(criterio);
-        } catch (NumberFormatException ex) {
-
-        }
-        q.setParameter("xNroExpe", nroExpe);
-
+        q.setParameter("xCriterio", "%" + criterio.toUpperCase() + "%");
         List<Documento> tr = q.getResultList();
         return tr;
 
@@ -160,6 +137,9 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
         switch (campo.charAt(0)) {
             case 'd':
                 where += " WHERE UPPER(CONCAT(" + campo + ",'')) LIKE :xCriterio ";
+                break;
+            case 'x':
+                where += " WHERE UPPER(CONCAT(d.numeroExpediente,'-',d.anho)) LIKE :xCriterio ";
                 break;
             case 'b':
                 where += " WHERE d.idDocumento IN (SELECT b.idDocumento.idDocumento FROM DetalleNotaSalida b WHERE UPPER(" + campo + ") LIKE :xCriterio) ";
@@ -216,14 +196,8 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
     }
 
     public List<Documento> findAllDocumentoAutocomplete(String query) {
-        Query q = em.createQuery("SELECT a FROM Documento a WHERE a.numeroExpediente=:xNroExpe ORDER BY a.anho DESC");
-        Integer nroExpe = -1;
-        try {
-            nroExpe = Integer.parseInt(query);
-        } catch (NumberFormatException ex) {
-
-        }
-        q.setParameter("xNroExpe", nroExpe);
+        Query q = em.createQuery("SELECT a FROM Documento a WHERE CONCAT(a.numeroExpediente,'-',a.anho) LIKE :xCriterio ORDER BY a.anho DESC");
+        q.setParameter("xCriterio", "%" + query.toUpperCase() + "%");
         List<Documento> tr = q.getResultList();
         return tr;
     }

@@ -16,9 +16,7 @@
                     <p:outputLabel for="idClasificador" value="Clasificador:"/>
                     <h:outputText id="idClasificador" rendered="#{TramitacionController.documento.idClasificador!=null}" value="#{ClasificadorController.obtenerRutaClasificador(TramitacionController.documento.idClasificador.idClasificador)}" title="Clasificador" />
                     <p:outputLabel for="nroExpediente" value="#Expediente:"/>
-                    <h:outputText id="nroExpediente" value="#{TramitacionController.documento.numeroExpediente}" title="Numero de Expediente">
-                        <f:convertNumber pattern="0000000000000"/>
-                    </h:outputText>
+                    <h:outputText id="nroExpediente" value="#{TramitacionController.documento.toShortString()}" title="Numero de Expediente"/>
                     <p:outputLabel for="anho" value="Año:"/>
                     <h:outputText id="anho" value="#{TramitacionController.documento.anho}" title="Año" />
                     <p:outputLabel for="fechaDocumento" value="Fecha del Documento:"/>

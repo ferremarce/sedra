@@ -21,7 +21,7 @@
                 </p:selectOneRadio>
             </p:panel>
             <p:panel rendered="#{DocumentoController.tmpConNota==1}" id="panelNotaSalida">
-                <p:panelGrid columns="3" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-8,ui-grid-col-2">
+                <p:panelGrid columns="3" styleClass="ui-panelgrid-blank">
                     <h:outputLabel for="criterio" value="Criterio: "/>
                     <p:inputText id="criterio" value="#{NotaSalidaController.criterioBusqueda}" title="Búsqueda" placeholder="Nro. Salida, STR, asunto, Nro. Entrada"/>
                     <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{NotaSalidaController.localizarAllNotaSalida()}" update="@form, panelMensajeEstado"/>
@@ -90,13 +90,12 @@
                                     return false;
                                 }"  icon="fa fa-lock" actionListener="#{DocumentoController.desbloquearDocumento(item.idDocumento)}"/>
                         <p:commandButton ajax="true" update="@form, panelMensajeEstado" rendered="#{item.cerrado==false}" value="#{bundle.LlavearBoton}" title="Documento abierto" onclick="if (!confirm('Desea realmente bloquear el documento y todas sus tramitaciones?...')) {
-                                    return false;}"  icon="fa fa-unlock" actionListener="#{DocumentoController.bloquearDocumento(item.idDocumento)}"/>
+                                    return false;
+                                }"  icon="fa fa-unlock" actionListener="#{DocumentoController.bloquearDocumento(item.idDocumento)}"/>
                     </p:column> 
                     <p:column headerText="#Exp." width="110" sortBy="#{item.numeroExpediente}" style="text-align: right">  
                         <p:commandLink immediate="true" title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
-                            <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.numeroExpediente}">
-                                <f:convertNumber pattern="0000000000000"/>
-                            </h:outputText>
+                            <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.toShortString()}"/>                             
                         </p:commandLink>
                     </p:column> 
                     <p:column headerText="F. Doc." width="10%" >

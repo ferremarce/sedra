@@ -32,9 +32,7 @@
                 </p:column>
                 <p:column headerText="#Exp." width="110" sortBy="#{item.numeroExpediente}" style="text-align: right">  
                     <p:commandLink immediate="true" title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
-                        <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.numeroExpediente}">
-                            <f:convertNumber pattern="0000000000000"/>
-                        </h:outputText>
+                        <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.toShortString()}"/>                       
                     </p:commandLink>
                 </p:column>  
                 <p:column headerText="Fechas" width="200" >

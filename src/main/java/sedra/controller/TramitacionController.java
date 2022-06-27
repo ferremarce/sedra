@@ -547,9 +547,9 @@ public class TramitacionController implements Serializable {
     }
 
     public void checkPendientes() {
-        List<Tramitacion> lista = this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_PENDIENTE);
+        List<Tramitacion> lista = this.tramitacionFacade.getAllTramitacionPendientesNoLeidos("%", Codigo.ESTADO_TRAMITE_PENDIENTE);
         if (!lista.isEmpty()) {
-            this.commonController.getListaAlerta().add(new Alerta(Codigo.ALERTA_DOCUMENTO_PENDIENTE, lista.size(), "documento/s pendiente/s..."));
+            this.commonController.getListaAlerta().add(new Alerta(Codigo.ALERTA_DOCUMENTO_PENDIENTE, lista.size(), "documento/s no leído/s..."));
         }
     }
 

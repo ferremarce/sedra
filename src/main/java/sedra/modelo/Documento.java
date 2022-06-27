@@ -341,7 +341,7 @@ public class Documento implements Serializable {
 
     @Override
     public String toString() {
-        return "[" + this.numeroExpediente + "] " + this.asunto;
+        return "[" + this.toShortString() + "] " + this.asunto;
     }
 
     public String toAudita() {
@@ -358,12 +358,16 @@ public class Documento implements Serializable {
     }
 
     public String toShortString() {
-        return this.numeroExpediente + "/" + this.anho;
+        try {
+            return this.numeroExpediente + "-" + this.anho;
+        } catch (Exception ex) {
+            return "Error toShortString()";
+        }
     }
 
     public String toShortAsunto() {
         if (this.asunto != null && this.asunto.length() > 80) {
-            return this.asunto.substring(0, 79)+"...";
+            return this.asunto.substring(0, 79) + "...";
         } else {
             return this.asunto;
         }

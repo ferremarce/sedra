@@ -25,7 +25,7 @@
                     <p:outputLabel for="opciones" value="Buscar en: " />
                     <p:selectOneRadio  id="opciones" value="#{DocumentoController.selectedOption}" required="true" requiredMessage="#{bundle.Requerido}">  
                         <f:selectItem itemLabel="Asunto" itemValue="d.asunto" />  
-                        <f:selectItem itemLabel="# Expediente" itemValue="d.numeroExpediente" />
+                        <f:selectItem itemLabel="# Expediente" itemValue="x.numeroExpediente" />
                         <f:selectItem itemLabel="Referencia" itemValue="d.referencia" />  
                         <f:selectItem itemLabel="Remitido a" itemValue="t.remitidoA" />  
                         <f:selectItem itemLabel="Remitido por" itemValue="t.remitidoPor" />  
@@ -58,11 +58,9 @@
                     <p:column headerText="#" width="40">
                         <h:outputText value="#{index+1}"/>
                     </p:column>
-                    <p:column headerText="#Exp." width="110" sortBy="#{item.numeroExpediente}" style="text-align: right">  
+                    <p:column headerText="#Exp." width="80" sortBy="#{item.numeroExpediente}" style="text-align: right">  
                         <p:commandLink immediate="true" title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
-                            <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.numeroExpediente}">
-                                <f:convertNumber pattern="0000000000000"/>
-                            </h:outputText>
+                            <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.toShortString()}"/>                             
                         </p:commandLink>
                     </p:column> 
                     <p:column headerText="F. Doc." width="80" >

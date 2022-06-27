@@ -34,7 +34,8 @@ public class TramitacionFacade extends AbstractFacade<Tramitacion> {
     }
 
     public List<Tramitacion> getAllTramitacionPendientes(String criterio, Integer estado) {
-        Query q = em.createQuery("SELECT a FROM Tramitacion a WHERE a.idRol.idRol=:xIdRol AND a.idEstado.idEstado=:xEstado AND a.idDocumento.cerrado=:xCerrado AND (UPPER(a.idDocumento.asunto) LIKE :xCriterio OR a.idDocumento.numeroExpediente=:xNroExpe) ORDER BY a.idPrioridad.orden, a.idTramitacion");
+        Query q = em.createQuery("SELECT a FROM Tramitacion a WHERE a.idRol.idRol=:xIdRol AND a.idEstado.idEstado=:xEstado "
+                + "AND a.idDocumento.cerrado=:xCerrado AND (UPPER(a.idDocumento.asunto) LIKE :xCriterio OR CONCAT(a.idDocumento.numeroExpediente,'-',a.idDocumento.anho) LIKE :xCriterio) ORDER BY a.idPrioridad.orden, a.idTramitacion DESC");
         q.setParameter("xIdRol", JSFutil.getRolSesion().getIdRol());
         q.setParameter("xCerrado", Boolean.FALSE);
         q.setParameter("xEstado", estado);
@@ -44,13 +45,24 @@ public class TramitacionFacade extends AbstractFacade<Tramitacion> {
         } else {
             q.setParameter("xCriterio", "123456");
         }
-        Integer nroExpe = -1;
-        try {
-            nroExpe = Integer.parseInt(criterio);
-        } catch (NumberFormatException ex) {
+        List<Tramitacion> tr = q.getResultList();
+        return tr;
 
+    }
+
+    public List<Tramitacion> getAllTramitacionPendientesNoLeidos(String criterio, Integer estado) {
+        Query q = em.createQuery("SELECT a FROM Tramitacion a WHERE a.leido=:xLeido AND a.idRol.idRol=:xIdRol AND a.idEstado.idEstado=:xEstado "
+                + "AND a.idDocumento.cerrado=:xCerrado AND (UPPER(a.idDocumento.asunto) LIKE :xCriterio OR CONCAT(a.idDocumento.numeroExpediente,'-',a.idDocumento.anho) LIKE :xCriterio) ORDER BY a.idPrioridad.orden, a.idTramitacion DESC");
+        q.setParameter("xIdRol", JSFutil.getRolSesion().getIdRol());
+        q.setParameter("xCerrado", Boolean.FALSE);
+        q.setParameter("xLeido", Boolean.FALSE);
+        q.setParameter("xEstado", estado);
+        //q.setMaxResults(100);
+        if (criterio.compareTo("") != 0) {
+            q.setParameter("xCriterio", "%" + criterio.toUpperCase() + "%");
+        } else {
+            q.setParameter("xCriterio", "123456");
         }
-        q.setParameter("xNroExpe", nroExpe);
         List<Tramitacion> tr = q.getResultList();
         return tr;
 

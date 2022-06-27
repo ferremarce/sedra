@@ -6,13 +6,30 @@
        xmlns:f="http://xmlns.jcp.org/jsf/core"
        xmlns:p="http://primefaces.org/ui">
     <ui:fragment>
-        <div class="p-d-flex">
-            <div class="p-mr-2"> <p:graphicImage value="#{MainController.serverURLDownload}/logoServlet" height="80" cache="false"/></div>
-            <div class="p-mr-2">
-                <h:outputText styleClass="font3x fontBold tresD" value="#{bundle.TituloSistema}"/><br/>
-                <h:outputText styleClass="fontBold fontItalic" value="#{ConfiguracionController.configuracion.tituloSistema}"/>
-                <br/>
-                <h:outputText styleClass="Gray" value="#{ConfiguracionController.configuracion.subTituloSistema}"/>
+        <div class="p-d-flex p-jc-between">
+            <div class="p-d-flex">
+                <div class="p-mr-2"> <p:graphicImage value="#{MainController.serverURLDownload}/logoServlet" height="80" cache="false"/></div>
+                <div class="p-mr-2">
+                    <h:outputText styleClass="font3x fontBold tresD" value="#{bundle.TituloSistema}"/><br/>
+                    <h:outputText styleClass="fontBold fontItalic" value="#{ConfiguracionController.configuracion.tituloSistema}"/>
+                    <br/>
+                    <h:outputText styleClass="Gray" value="#{ConfiguracionController.configuracion.subTituloSistema}"/>
+                </div>
+            </div>
+            <div>
+                <p:remoteCommand async="true" autoRun="true" global="false" update="formAlerta" action="#{CommonController.checkAlertas()}"/>
+                <h:form id="formAlerta">
+                    <title>#{CommonController.msgAlertaTitle()} #{bundle.TituloSistema}</title>
+                    <p:poll immediate="true" async="true" interval="#{ConfiguracionController.configuracion.obtenerTiempoAlerta()}" global="false" listener="#{CommonController.checkAlertas()}" update="@form"/>
+                    <div class="p-d-inline-flex">
+                        <p:repeat rendered="#{not empty CommonController.listaAlerta}" var="alerta" value="#{CommonController.listaAlerta}" >
+                            <p:commandLink styleClass="alertaTexto" ajax="false"  action="#{alerta.toAction()}" >
+                                <i class="fa fa-warning"/>
+                                <h:outputText value=" #{alerta.toString()}"/>
+                            </p:commandLink>
+                        </p:repeat>
+                    </div>
+                </h:form>
             </div>
         </div>
         <h:form id="formHeader">
@@ -24,20 +41,6 @@
                             <p:ajax event="change" listener="#{LoginManager.doCambioRol()}" update="panelMensajeEstado"/>
                         </p:selectOneMenu> 
                         <h:outputText styleClass="fontBold fontItalic" rendered="#{!LoginManager.usuarioLogeado.esAdm()}" value="#{LoginManager.rolTMP.toString()}"/>
-                    </div>
-                    <p:poll immediate="true" async="true" interval="#{ConfiguracionController.configuracion.obtenerTiempoAlerta()}" global="false" onstart="PF('barraNotifica').show()"  oncomplete="PF('barraNotifica').hide()" listener="#{CommonController.checkAlertas()}" update="panelAlerta"/>
-                    <div class="p-d-inline-flex">
-                        <p:outputPanel id="panelAlerta"> 
-                            <p:commandButton id="btnAlerta" icon="fa fa-bell" styleClass="ui-button-warning rounded-button" title="Hay alertas en el sistema" type="button" rendered="#{not empty CommonController.listaAlerta}" value="Alerta!" >
-                                <p:effect type="pulsate" speed="5000" event="load" delay="1000"/>
-                            </p:commandButton>
-                            <p:overlayPanel for="btnAlerta" style="width: 30%">
-                                <p:dataList var="alerta" value="#{CommonController.listaAlerta}">
-                                    <i class="fa fa-bell"/>
-                                    <p:commandLink ajax="false" value=" #{alerta.toString()}" action="#{alerta.toAction()}"/>
-                                </p:dataList>
-                            </p:overlayPanel>
-                        </p:outputPanel>
                     </div>
                     <div class="p-d-inline-flex"><p:clock timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" mode="server"/></div>
                     <div class="p-d-inline-flex"><p:commandButton ajax="false" icon="fa fa fa-cogs" rendered="#{LoginManager.usuarioLogeado.esAdm()}"  title="Configuraciones" action="#{ConfiguracionController.editSetup()}"/></div>                    

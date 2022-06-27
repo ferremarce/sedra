@@ -12,10 +12,12 @@
 
     <ui:define name="content">
         <h:form id="formMain">
-            <p:panelGrid columns="3" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-6,ui-grid-col-2,ui-grid-col-2,ui-grid-col-2">
-                <p:inputText id="criterio" value="#{DocumentoController.criterio}" placeholder="Nro. Expediente"/>
-                <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" action="#{DocumentoController.buscarDocumentoParaArchivo()}" update=":formMain:dataTable, panelMensajeEstado" />
-            </p:panelGrid>
+            <p:toolbar>
+                <p:toolbarGroup >
+                    <p:inputText styleClass="espaciadoToolbar" id="criterio" value="#{DocumentoController.criterio}" placeholder="Nro. Expediente"/>
+                    <p:commandButton styleClass="espaciadoToolbar" value="#{bundle.BuscarBoton}" icon="fa fa-search" action="#{DocumentoController.buscarDocumentoParaArchivo()}" update=":formMain:dataTable, panelMensajeEstado" />
+                </p:toolbarGroup>
+            </p:toolbar>
             <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                          rows="10"
                          paginator="true"
@@ -30,9 +32,7 @@
                 </p:column>
                 <p:column headerText="#Exp." width="110" sortBy="#{item.numeroExpediente}" style="text-align: right">  
                     <p:commandLink immediate="true" title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
-                        <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.numeroExpediente}">
-                            <f:convertNumber pattern="0000000000000"/>
-                        </h:outputText>
+                        <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.toShortString()}"/>                          
                     </p:commandLink>
                 </p:column>    
                 <p:column headerText="Fechas" width="150" >

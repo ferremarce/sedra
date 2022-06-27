@@ -149,3 +149,19 @@ label{
 .ui-tree.ui-tree-horizontal .ui-treenode-content {
     background: #eeeeee !important;
 }
+.alertaTexto {
+    border-radius: 10px;
+    border: 2px solid #FF851B;
+    padding: 10px;
+    animation: cambiaColor 2s  infinite;
+    margin: 5px;
+    color: black !important;
+}
+@keyframes cambiaColor {
+    from {
+        background-color: white;
+    }
+    to {
+        background-color: #ffcc99
+    }
+}

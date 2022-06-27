@@ -47,11 +47,20 @@ public class CommonController implements Serializable {
     TramitacionController tramitacionController;
 
     private List<Alerta> listaAlerta;
+    private int number;
 
     /**
      * Creates a new instance of CommonController
      */
     public CommonController() {
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     public List<Alerta> getListaAlerta() {
@@ -141,8 +150,17 @@ public class CommonController implements Serializable {
     }
 
     public void checkAlertas() {
+        this.number++;
         this.listaAlerta = new ArrayList<>();
         this.tramitacionController.checkPendientes();
+    }
+
+    public String msgAlertaTitle() {
+        if (this.listaAlerta==null || this.listaAlerta.isEmpty()) {
+            return "";
+        } else {
+            return "Alerta de mensajes [" + this.listaAlerta.size() + "]";
+        }
     }
 
 }

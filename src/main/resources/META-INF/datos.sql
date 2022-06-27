@@ -15,9 +15,8 @@ UPDATE public.estado_tramitacion SET descripcion_estado='Pendiente', insignia='a
 UPDATE public.estado_tramitacion SET descripcion_estado='Terminado', insignia='azul' WHERE id_estado=100;
 UPDATE public.estado_tramitacion SET descripcion_estado='Rechazado', insignia='naranja' WHERE id_estado=2;
 UPDATE public.estado_tramitacion SET descripcion_estado='Recbido', insignia='verde' WHERE id_estado=3;
-UPDATE public.estado_tramitacion SET descripcion_estado='Derivado', insignia='lila' WHERE id_estado=4;
 INSERT INTO public.estado_tramitacion (id_estado, descripcion_estado, insignia) VALUES(5, 'Ingresado', 'rojo');
-UPDATE public.estado_tramitacion SET descripcion_estado='Ingresado', insignia='rojo' WHERE id_estado=5;
+INSERT INTO public.estado_tramitacion (id_estado, descripcion_estado, insignia) VALUES(4, 'Derivado', 'lila');
 
 ALTER TABLE public.tramitacion ADD id_tramitacion_padre integer NULL;
 ALTER TABLE public.tramitacion ADD CONSTRAINT fk_tramitacion_id_padre FOREIGN KEY (id_tramitacion_padre) REFERENCES public.tramitacion(id_tramitacion);
