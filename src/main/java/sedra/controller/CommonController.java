@@ -159,7 +159,8 @@ public class CommonController implements Serializable {
         if (this.listaAlerta==null || this.listaAlerta.isEmpty()) {
             return "";
         } else {
-            return "Alerta de mensajes [" + this.listaAlerta.size() + "]";
+            Integer cantidad=this.listaAlerta.get(0).getCantidad();
+            return "Alerta de mensajes [" + cantidad + "]";
         }
     }
 
