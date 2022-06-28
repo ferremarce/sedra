@@ -17,6 +17,7 @@ import java.util.List;
 import javax.inject.Inject;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.file.UploadedFile;
 import sedra.fachada.AuditaFacade;
 import sedra.fachada.DetalleNotaSalidaFacade;
@@ -426,4 +427,10 @@ public class NotaSalidaController implements Serializable {
         return this.documentoFacade.findAllDocumentoAutocomplete(query);
     }
 
+    public void handleDateSelect(SelectEvent<Date> event) {
+        Date date = event.getObject();
+        Calendar cal=JSFutil.getCalendar();
+        cal.setTime(date);
+        this.notaSalida.setAnho(cal.get(Calendar.YEAR));
+    }
 }

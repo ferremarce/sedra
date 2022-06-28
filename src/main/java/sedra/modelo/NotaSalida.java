@@ -7,8 +7,8 @@ package sedra.modelo;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,7 +22,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
 /**
@@ -43,6 +44,12 @@ public class NotaSalida implements Serializable {
     private Integer idNota;
     @Column(name = "anho")
     private Integer anho;
+    @Size(max = 255)
+    @Column(name = "asunto")
+    private String asunto;
+    @Column(name = "fecha_documento")
+    @Temporal(TemporalType.DATE)
+    private Date fechaNota;
     @Lob
     @Column(name = "archivo")
     private byte[] archivo;
@@ -100,6 +107,22 @@ public class NotaSalida implements Serializable {
 
     public void setAnho(Integer anho) {
         this.anho = anho;
+    }
+
+    public String getAsunto() {
+        return asunto;
+    }
+
+    public void setAsunto(String asunto) {
+        this.asunto = asunto;
+    }
+
+    public Date getFechaNota() {
+        return fechaNota;
+    }
+
+    public void setFechaNota(Date fechaNota) {
+        this.fechaNota = fechaNota;
     }
 
     public byte[] getArchivo() {

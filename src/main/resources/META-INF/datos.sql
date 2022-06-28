@@ -61,3 +61,5 @@ UPDATE public.permiso SET descripcion_permiso='Localizar Doc.', nivel='4.3', ord
 UPDATE public.permiso SET descripcion_permiso='Operaciones Especiales', nivel='5', orden=NULL, tag_menu=NULL, url_imagen='fa fa-user-tag', nivel_acceso='general', con_separador=NULL WHERE id_permiso=17;
 UPDATE public.permiso SET descripcion_permiso='Desbloquear Doc.', nivel='5.1', orden=NULL, tag_menu='#{TramitacionController.listDesbloqueoSetup}', url_imagen='fa fa-unlock', nivel_acceso='admin', con_separador=NULL WHERE id_permiso=18;
 
+ALTER TABLE public.nota_salida ADD asunto varchar(255) NULL;
+ALTER TABLE public.nota_salida ADD fecha_nota date NULL;
