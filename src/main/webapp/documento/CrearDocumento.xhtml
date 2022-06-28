@@ -29,7 +29,7 @@
                     <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="flex" columnClasses="p-col-2,p-col-10" contentStyleClass="ui-fluid">
                         <p:outputLabel for="idClasificador" value="Clasificador:"/>
                         <p:outputPanel id="panelClasificador">
-                            <p:autoComplete id="idClasificador" dropdown="false" value="#{DocumentoController.documento.idClasificador}" completeMethod="#{ClasificadorController.listaAutocompleteClasificador}"
+                            <p:autoComplete id="idClasificador" maxResults="10" dropdown="false" value="#{DocumentoController.documento.idClasificador}" completeMethod="#{ClasificadorController.listaAutocompleteClasificador}"
                                             var="clasifica" itemLabel="#{clasifica.toString()}" itemValue="#{clasifica}" forceSelection="true" required="true" requiredMessage="Clasificador">
                                 <p:ajax event="itemSelect" update="formMain:panelClasificador"/>
                             </p:autoComplete>

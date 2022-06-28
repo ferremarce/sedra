@@ -47,7 +47,7 @@ public class NotaSalida implements Serializable {
     @Size(max = 255)
     @Column(name = "asunto")
     private String asunto;
-    @Column(name = "fecha_documento")
+    @Column(name = "fecha_nota")
     @Temporal(TemporalType.DATE)
     private Date fechaNota;
     @Lob
