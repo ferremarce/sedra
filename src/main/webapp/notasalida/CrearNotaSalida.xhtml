@@ -33,7 +33,7 @@
                             <h:outputText rendered="#{NotaSalidaController.notaSalida.idClasificador!=null}" styleClass="Purple" value="#{ClasificadorController.obtenerRutaClasificador(NotaSalidaController.notaSalida.idClasificador.idClasificador)}" title="Clasificador" />
                         </p:outputPanel>
                         <p:outputLabel for="asunto" value="Asunto "/>
-                        <p:inputTextarea autoResize="true" id="asunto" value="#{NotaSalidaController.notaSalida.asunto}" title="Asunto" required="true" requiredMessage="Asunto" />
+                        <p:inputTextarea autoResize="true" id="asunto" maxlength="255" value="#{NotaSalidaController.notaSalida.asunto}" title="Asunto" required="true" requiredMessage="Asunto" />
                         <p:outputLabel for="fechaNota" value="Fecha"/>
                         <p:calendar navigator="true" id="fechaNota" value="#{NotaSalidaController.notaSalida.fechaNota}" pattern="dd/MM/yyyy" title="Fecha Nota" required="true" requiredMessage="Fecha Nota">
                             <p:ajax event="dateSelect" update="anho" listener="#{NotaSalidaController.handleDateSelect}"/>

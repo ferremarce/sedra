@@ -61,7 +61,7 @@
                     </p:panelGrid>
                     <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="flex" columnClasses="p-col-2,p-col-10" contentStyleClass="ui-fluid">
                         <p:outputLabel for="asunto" value="Asunto "/>
-                        <p:inputTextarea autoResize="true" id="asunto" value="#{DocumentoController.documento.asunto}" title="Asunto" required="true" requiredMessage="Asunto" />
+                        <p:inputTextarea autoResize="true" maxlength="255" id="asunto" value="#{DocumentoController.documento.asunto}" title="Asunto" required="true" requiredMessage="Asunto" />
                         <p:outputLabel for="referencia" value="Referencia"/>
                         <p:inputText id="referencia" value="#{DocumentoController.documento.referencia}" title="Referencia" required="true" requiredMessage="Referencia" />
                         <p:outputLabel for="observaciones" value="Observaciones:"/>

@@ -90,7 +90,7 @@
                                 <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                             </h:outputText>
                         </p:column>
-                        <p:column sortBy="#{item.idDocumento.numeroExpediente}" > 
+                        <p:column sortBy="#{item.idDocumento.toShortString()}" > 
                             <f:facet name="header">
                                 <i class="fa fa-file" title="Documento"></i>
                             </f:facet>
@@ -127,31 +127,7 @@
                     </p:dataTable>
                 </div>
             </div>
-            <p:dialog header="Mensaje" widgetVar="dlgMensaje" positionType="fixed" modal="true" position="top" closeOnEscape="true" width="60%" showEffect="fade">
-                <p:panelGrid id="panelMensajeTramite" columns="2" styleClass="ui-panelgrid-blank" >
-                    <p:outputLabel for="fechaDerivacion" value="Fecha Derivación:"/>
-                    <h:outputText id="fechaDerivacion" value="#{TramitacionController.tramitacion.fechaDerivacion}" title="FechaDerivacion">
-                        <f:convertDateTime pattern="dd/MM/yyyy" />
-                    </h:outputText>
 
-                    <p:outputLabel for="remitidoA" value="A:"/>
-                    <h:outputText id="remitidoA" value="#{TramitacionController.tramitacion.remitidoA}" title="RemitidoA"/>
-                    <p:outputLabel for="remitidoPor" value="Por [heredado]:"/>
-                    <h:outputText id="remitidoPor" value="#{TramitacionController.tramitacion.remitidoPor}" title="RemitidoPor"/>
-                    <p:outputLabel for="idDocumento" value="Documento Inicial:"/>
-                    <h:outputText id="idDocumento" value="#{TramitacionController.tramitacion.idDocumento.toString()}" title="IdDocumento"/>
-                    <p:outputLabel for="notaBreve" value="Nota Breve:"/>
-                    <h:outputText id="notaBreve" value="#{TramitacionController.tramitacion.notaBreve}" title="NotaBreve"/>
-                    <p:outputLabel for="remitente" value="Remitente:"/>                 
-                    <h:outputText id="remitente" escape="false" value="#{TramitacionController.tramitacion.doTramitadoPor()}" title="Remitente"/>
-                    <p:outputLabel for="observacion" value="Observacion:"/>
-                    <h:outputText id="observacion" value="#{TramitacionController.tramitacion.observacion}" title="Observacion"/>
-                    <p:outputLabel for="cmdAdjunto" value="Adjunto:"/>
-                    <p:commandButton id="cmdAdjunto" rendered="#{TramitacionController.tramitacion.nombreArchivo!=null}" title="#{TramitacionController.tramitacion.nombreArchivo!=null ? TramitacionController.tramitacion.nombreArchivo:'Sin archivo'}" icon="fa fa-download" ajax="false">
-                        <p:fileDownload value="#{DownloadFile.downloadDocumentoTramite(TramitacionController.tramitacion.idTramitacion)}" />  
-                    </p:commandButton>
-                </p:panelGrid>
-            </p:dialog>
 
             <p:panel id="panelComando">
                 <p:contextMenu for="dataTablePendiente" >
@@ -169,6 +145,57 @@
             </p:panel>
             <!--esto evita que el enter en el filtrado de tabla no dispare el download del item de la tabla-->
             <p:defaultCommand target="btnAceptar"/>
+        </h:form>
+        <h:form id="formPopup">
+            <p:dialog header="Mensaje" widgetVar="dlgMensaje" blockScroll="true" positionType="fixed" modal="true" position="top" closeOnEscape="true" width="70%" showEffect="fade">
+                <p:scrollPanel  style="max-height: 80vh">
+                    <p:divider align="center">
+                        <span class="ui-tag">Documento inicial</span>
+                    </p:divider>
+                    <h:outputText id="idDocumento" styleClass="espaciadoToolbar" value="#{TramitacionController.tramitacion.idDocumento.toString()}" title="IdDocumento"/>
+                    <p:separator/>
+                    <p:staticMessage rendered="#{empty TramitacionController.tramitacion.idDocumento.documentoAdjuntoList and TramitacionController.tramitacion.idDocumento.nombreArchivo==null}" severity="warn" detail="No hay archivos adjuntos"/>
+
+                    <p:outputPanel rendered="#{TramitacionController.tramitacion.idDocumento.nombreArchivo!=null}">
+                        <p:commandButton title="Descargar" icon="fa fa-download" ajax="false">
+                            <p:fileDownload value="#{DownloadFile.downloadDocumento(TramitacionController.tramitacion.idDocumento.idDocumento)}" />  
+                        </p:commandButton>
+                        <h:outputText value=" #{TramitacionController.tramitacion.idDocumento.nombreArchivo}"/>
+                    </p:outputPanel>
+                    <p:repeat id="dataTableAdjunto" var="expeAdj" rendered="#{not empty TramitacionController.tramitacion.idDocumento.documentoAdjuntoList}" value="#{TramitacionController.tramitacion.idDocumento.documentoAdjuntoList}">
+                        <p:commandButton title="Descargar" icon="fa fa-download" ajax="false">
+                            <p:fileDownload value="#{DownloadFile.downloadDocumentoAdjunto(expeAdj.idDocumentoAdjunto)}" />  
+                        </p:commandButton>
+                        <h:outputText styleClass="espaciadoToolbar" value="#{expeAdj.toNameDownload()} [#{expeAdj.toTamanho()}]"/>                       
+                    </p:repeat>    
+
+                    <p:divider align="center">
+                        <span class="ui-tag">Tramitación</span>
+                    </p:divider>
+                    <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" >
+                        <p:outputLabel for="fechaDerivacion" value="Fecha Derivación:"/>
+                        <h:outputText id="fechaDerivacion" value="#{TramitacionController.tramitacion.fechaDerivacion}" title="FechaDerivacion">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+
+                        <p:outputLabel for="remitidoA" value="A:"/>
+                        <h:outputText id="remitidoA" value="#{TramitacionController.tramitacion.remitidoA}" title="RemitidoA"/>
+                        <p:outputLabel for="remitidoPor" value="Por [heredado]:"/>
+                        <h:outputText id="remitidoPor" value="#{TramitacionController.tramitacion.remitidoPor}" title="RemitidoPor"/>
+
+                        <p:outputLabel for="notaBreve" value="Nota Breve:"/>
+                        <h:outputText id="notaBreve" value="#{TramitacionController.tramitacion.notaBreve}" title="NotaBreve"/>
+                        <p:outputLabel for="remitente" value="Remitente:"/>                 
+                        <h:outputText id="remitente" escape="false" value="#{TramitacionController.tramitacion.doTramitadoPor()}" title="Remitente"/>
+                        <p:outputLabel for="observacion" value="Observacion:"/>
+                        <h:outputText id="observacion" value="#{TramitacionController.tramitacion.observacion}" title="Observacion"/>
+                        <p:outputLabel for="cmdAdjunto" value="Adjunto:"/>
+                        <p:commandButton id="cmdAdjunto" rendered="#{TramitacionController.tramitacion.nombreArchivo!=null}" title="#{TramitacionController.tramitacion.nombreArchivo!=null ? TramitacionController.tramitacion.nombreArchivo:'Sin archivo'}" icon="fa fa-download" ajax="false">
+                            <p:fileDownload value="#{DownloadFile.downloadDocumentoTramite(TramitacionController.tramitacion.idTramitacion)}" />  
+                        </p:commandButton>
+                    </p:panelGrid>
+                </p:scrollPanel>
+            </p:dialog>
         </h:form>
     </ui:define>
 

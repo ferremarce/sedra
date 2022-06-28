@@ -578,7 +578,7 @@ public class TramitacionController implements Serializable {
         String nuevoFilter = "*" + filterText + "*";
         try {
             return JSFutil.strmatch(tramita.getIdDocumento().getAsunto().toLowerCase(), nuevoFilter)
-                    || JSFutil.strmatch(tramita.getIdDocumento().getNumeroExpediente().toString().toLowerCase(), nuevoFilter);
+                    || JSFutil.strmatch(tramita.getIdDocumento().toShortString().toLowerCase(), nuevoFilter);
         } catch (Exception e) {
             return false;
         }
@@ -590,7 +590,7 @@ public class TramitacionController implements Serializable {
         this.tramitacion.setLeido(Boolean.TRUE);
         this.tramitacionFacade.edit(tramitacion);
         PrimeFaces.current().executeScript("PF('dlgMensaje').show();");
-        PrimeFaces.current().ajax().update("formMain:panelMensajeTramite");
+        PrimeFaces.current().ajax().update("formPopup");
         PrimeFaces.current().ajax().update("formMain:dataTablePendiente");
     }
 }

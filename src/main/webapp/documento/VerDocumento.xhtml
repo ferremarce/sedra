@@ -50,11 +50,20 @@
                     <h:outputText id="idTipoDocumento" value="#{DocumentoController.documento.idTipoDocumento.toString()}" />
 
                     <p:outputLabel rendered="#{DocumentoController.documento.nombreArchivo!=null}" for="downAdjunto"  value="Adjunto:"/>
-                    <p:outputPanel rendered="#{DocumentoController.documento.nombreArchivo!=null}" id="downAdjunto">
-                        <p:commandButton title="Descargar" icon="fa fa-download" ajax="false">
-                            <p:fileDownload value="#{DownloadFile.downloadDocumento(DocumentoController.documento.idDocumento)}" />  
-                        </p:commandButton>
-                        <h:outputText value=" #{DocumentoController.documento.nombreArchivo}"/>
+                    <p:outputPanel>
+                        <p:outputPanel rendered="#{DocumentoController.documento.nombreArchivo!=null}" id="downAdjunto">
+                            <p:commandButton title="Descargar" icon="fa fa-download" ajax="false">
+                                <p:fileDownload value="#{DownloadFile.downloadDocumento(DocumentoController.documento.idDocumento)}" />  
+                            </p:commandButton>
+                            <h:outputText styleClass="espaciadoToolbar"  value=" #{DocumentoController.documento.nombreArchivo}"/>
+                        </p:outputPanel>
+                        <p:repeat id="dataTableAdjunto" var="expeAdj" rendered="#{DocumentoController.documento.documentoAdjuntoList.size()>0}" value="#{DocumentoController.documento.documentoAdjuntoList}">                     
+                            <p:commandButton title="Descargar" icon="fa fa-download" ajax="false">
+                                <p:fileDownload value="#{DownloadFile.downloadDocumentoAdjunto(expeAdj.idDocumentoAdjunto)}" />  
+                            </p:commandButton>
+                            <h:outputText styleClass="espaciadoToolbar"  value="#{expeAdj.toNameDownload()} [#{expeAdj.toTamanho()}]"/>
+                           
+                        </p:repeat>
                     </p:outputPanel>
                     <p:outputLabel value="Enlazado a:"/>
                     <p:dataList value="#{DocumentoController.documento.detalleNotaSalidaList}" var="nota" emptyMessage="#{bundle.SinRegistrosMensaje}">  
@@ -66,19 +75,7 @@
                         <h:outputText value="#{nota.idNota.rubro}" />  
                     </p:dataList>
                 </p:panelGrid>
-                <p:dataTable id="dataTableAdjunto" var="expeAdj" rendered="#{DocumentoController.documento.documentoAdjuntoList.size()>0}" value="#{DocumentoController.documento.documentoAdjuntoList}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}">
-                    <f:facet name="header">
-                        <h:outputText styleClass="Purple" value="Archivos del Documento"/>
-                    </f:facet>
-                    <p:column>
-                        <h:outputText value="#{expeAdj.toNameDownload()} [#{expeAdj.toTamanho()}]"/>
-                    </p:column>
-                    <p:column>
-                        <p:commandButton style="width: 150px" title="Descargar" value="#{bundle.DescargarBoton}" icon="fa fa-download" ajax="false">
-                            <p:fileDownload value="#{DownloadFile.downloadDocumentoAdjunto(expeAdj.idDocumentoAdjunto)}" />  
-                        </p:commandButton>
-                    </p:column>
-                </p:dataTable>
+
                 <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{DocumentoController.documento.tramitacionList}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                              rows="50"
                              rowKey="#{item.idTramitacion}"
