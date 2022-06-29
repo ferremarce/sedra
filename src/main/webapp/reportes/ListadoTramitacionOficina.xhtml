@@ -7,7 +7,7 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
     <ui:define name="title">
-        <h1>Listado de Documentos en Dependencias</h1>
+        <h1>Listado de Documentos Tramitados en Dependencias</h1>
     </ui:define>
 
     <ui:define name="content">
@@ -27,12 +27,16 @@
                     </p:selectOneMenu>
                     <p:message for="idRol"/>
                     <p:outputLabel for="idEstadoTramitacion" styleClass="itemResaltado1" value="Estado:"/>
-                    <p:selectOneButton id="idEstadoTramitacion" value="#{ReporteController.tmpEstadoTramitacion}" required="true" requiredMessage="#{bundle.Requerido}"  >
-                        <f:selectItems value="#{EstadoTramitacionController.estadoTramitacionSet}"/>
-                    </p:selectOneButton>
+                    <p:outputPanel>
+                        <p:selectOneButton id="idEstadoTramitacion" value="#{ReporteController.tmpEstadoTramitacion}" required="true" requiredMessage="#{bundle.Requerido}"  >
+                            <f:selectItems value="#{EstadoTramitacionController.estadoTramitacionSet}"/>
+                            <p:ajax event="change" update="msgEstado"/>
+                        </p:selectOneButton>
+                        <p:staticMessage id="msgEstado" severity="info" summary="#{ReporteController.tmpEstadoTramitacion.descripcionEstado}" detail="#{ReporteController.tmpEstadoTramitacion.infoEstado}"/>
+                    </p:outputPanel>
                     <p:message for="idEstadoTramitacion"/>
-                    <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="false" action="#{ReporteController.buscarDocumento()}" update="@form, panelMensajeEstado"/>
                 </p:panelGrid>
+                <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="false" action="#{ReporteController.buscarDocumento()}" update="@form, panelMensajeEstado"/>
             </p:panel>
             <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{ReporteController.listaTramitacion}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                          rows="50"

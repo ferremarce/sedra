@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 import sedra.fachada.DocumentoFacade;
+import sedra.fachada.EstadoTramitacionFacade;
 import sedra.fachada.TramitacionFacade;
 import sedra.modelo.Documento;
 import sedra.modelo.EstadoTramitacion;
@@ -21,6 +22,7 @@ import sedra.modelo.Rol;
 import sedra.modelo.Tramitacion;
 import sedra.reportes.FuenteReporte;
 import sedra.reportes.JasperManager;
+import sedra.util.Codigo;
 import sedra.util.JSFutil;
 
 /**
@@ -41,6 +43,8 @@ public class ReporteController implements Serializable {
     CommonController commonController;
     @Inject
     ClasificadorController clasificadorController;
+    @Inject
+    EstadoTramitacionFacade estadoTramitacionFacade;
 
     private String destinoReporte = "PDF";
     private Date tmpFechaDesde = new Date();
@@ -121,6 +125,7 @@ public class ReporteController implements Serializable {
     public String listTramitacionOficinaSetup() {
         this.tmpIdRol = JSFutil.getUsuarioConectado().getIdRol();
         this.disabled = (this.tmpIdRol.getIdRol().compareTo(18) != 0 && this.tmpIdRol.getIdRol().compareTo(1) != 0); //Es archivo
+        this.tmpEstadoTramitacion=this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_INGRESADO);
         return "/reportes/ListadoTramitacionOficina";
     }
 

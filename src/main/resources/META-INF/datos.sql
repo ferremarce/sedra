@@ -10,13 +10,19 @@ ALTER TABLE public.configuracion ADD tiempo_alerta integer DEFAULT 60;
 
 
 ALTER TABLE public.estado_tramitacion ADD insignia varchar(255) NULL;
+ALTER TABLE public.estado_tramitacion ADD info_estado varchar(255) NULL;
+ALTER TABLE public.estado_tramitacion ADD orden integer NULL;
 
-UPDATE public.estado_tramitacion SET descripcion_estado='Pendiente', insignia='amarillo' WHERE id_estado=1;
-UPDATE public.estado_tramitacion SET descripcion_estado='Terminado', insignia='azul' WHERE id_estado=100;
-UPDATE public.estado_tramitacion SET descripcion_estado='Rechazado', insignia='naranja' WHERE id_estado=2;
-UPDATE public.estado_tramitacion SET descripcion_estado='Recbido', insignia='verde' WHERE id_estado=3;
 INSERT INTO public.estado_tramitacion (id_estado, descripcion_estado, insignia) VALUES(5, 'Ingresado', 'rojo');
 INSERT INTO public.estado_tramitacion (id_estado, descripcion_estado, insignia) VALUES(4, 'Derivado', 'lila');
+
+UPDATE public.estado_tramitacion SET orden=3, descripcion_estado='Pendiente', insignia='amarillo',info_estado='Un trámite o mensaje recibido en los pendientes de una dependencia (actualmente seleccionada) y que no ha sido confirmado aún.' WHERE id_estado=1;
+UPDATE public.estado_tramitacion SET orden=6, descripcion_estado='Terminado', insignia='azul',info_estado='Un trámite o mensaje que ha terminado en una dependencia (actualmente seleccionada) debido a que ha sido archivado con/sin nota.' WHERE id_estado=100;
+UPDATE public.estado_tramitacion SET orden=5,descripcion_estado='Rechazado', insignia='naranja',info_estado='Un trámite o mensaje que ha sido rechazado en una dependencia (actualmente seleccionada).' WHERE id_estado=2;
+UPDATE public.estado_tramitacion SET orden=4,descripcion_estado='Recibido', insignia='verde', info_estado='Un trámite o mensaje recibido en los pendientes de una dependencia (actualmente seleccionada) y que ya ha sido confirmado.' WHERE id_estado=3;
+UPDATE public.estado_tramitacion SET orden=2,info_estado='Un trámite o mensaje que ha sido derivado a otras dependencias desde una dependencia (actualmente seleccionada).' WHERE id_estado=4;
+UPDATE public.estado_tramitacion SET orden=1,info_estado='Un trámite o mensaje que ha sido ingresado en los pendientes de una dependencia (actualmente seleccionada) y que espera su proceso (derivación). El alta de un documento, automáticamente genera un trámite de INGRESADO en los pendientes de la dependencia y espera su proceso.' WHERE id_estado=5;
+
 
 ALTER TABLE public.tramitacion ADD id_tramitacion_padre integer NULL;
 ALTER TABLE public.tramitacion ADD CONSTRAINT fk_tramitacion_id_padre FOREIGN KEY (id_tramitacion_padre) REFERENCES public.tramitacion(id_tramitacion);

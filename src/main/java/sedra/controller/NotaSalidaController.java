@@ -22,6 +22,7 @@ import org.primefaces.model.file.UploadedFile;
 import sedra.fachada.AuditaFacade;
 import sedra.fachada.DetalleNotaSalidaFacade;
 import sedra.fachada.DocumentoFacade;
+import sedra.fachada.EstadoTramitacionFacade;
 import sedra.fachada.NotaSalidaFacade;
 import sedra.fachada.TipoNotaFacade;
 import sedra.fachada.TramitacionFacade;
@@ -29,10 +30,10 @@ import sedra.modelo.Audita;
 import sedra.modelo.Clasificador;
 import sedra.modelo.DetalleNotaSalida;
 import sedra.modelo.Documento;
-import sedra.modelo.EstadoTramitacion;
 import sedra.modelo.NotaSalida;
 import sedra.modelo.TipoNota;
 import sedra.modelo.Tramitacion;
+import sedra.util.Codigo;
 import sedra.util.JSFutil;
 
 /**
@@ -59,6 +60,8 @@ public class NotaSalidaController implements Serializable {
     ClasificadorController clasificadorController;
     @Inject
     TipoNotaFacade tipoNotaFacade;
+    @Inject
+    EstadoTramitacionFacade estadoTramitacionFacade;
 
     private NotaSalida notaSalida;
     private Documento documento;
@@ -262,7 +265,7 @@ public class NotaSalidaController implements Serializable {
                     if (t.getIdEstado().getIdEstado() != 100) { //Existe todavia pendientes
                         t.setFechaSalida(JSFutil.getFechaHoraActual());
                         t.setHoraSalida(JSFutil.getFechaHoraActual());
-                        t.setIdEstado(new EstadoTramitacion(100));
+                        t.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_TERMINADO));
                         this.tramitacionFacade.edit(t);
                     }
                 }

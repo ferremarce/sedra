@@ -41,6 +41,11 @@ public class EstadoTramitacion implements Serializable {
     @Size(max = 255)
     @Column(name = "insignia")
     private String insignia;
+    @Size(max = 255)
+    @Column(name = "info_estado")
+    private String infoEstado;
+    @Column(name = "orden")
+    private Integer orden;
     @OneToMany(mappedBy = "idEstado")
     private List<Tramitacion> tramitacionList;
 
@@ -73,6 +78,22 @@ public class EstadoTramitacion implements Serializable {
 
     public void setInsignia(String insignia) {
         this.insignia = insignia;
+    }
+
+    public String getInfoEstado() {
+        return infoEstado;
+    }
+
+    public void setInfoEstado(String infoEstado) {
+        this.infoEstado = infoEstado;
+    }
+
+    public Integer getOrden() {
+        return orden;
+    }
+
+    public void setOrden(Integer orden) {
+        this.orden = orden;
     }
 
     public List<Tramitacion> getTramitacionList() {

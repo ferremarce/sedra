@@ -30,10 +30,18 @@ public class EstadoTramitacionFacade extends AbstractFacade<EstadoTramitacion> {
     public EstadoTramitacionFacade() {
         super(EstadoTramitacion.class);
     }
+
     public List<EstadoTramitacion> getAllEstadoTramitacionNoTemporal() {
         Query q = em.createQuery("SELECT a FROM EstadoTramitacion a WHERE a.idEstado in (1,2,4,100) ORDER BY a.idEstado");
         List<EstadoTramitacion> tr = q.getResultList();
         return tr;
 
+    }
+
+    @Override
+    public List<EstadoTramitacion> findAll() {
+        Query q = em.createQuery("SELECT a FROM EstadoTramitacion a ORDER BY a.orden");
+        List<EstadoTramitacion> tr = q.getResultList();
+        return tr;
     }
 }
