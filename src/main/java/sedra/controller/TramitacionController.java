@@ -573,12 +573,26 @@ public class TramitacionController implements Serializable {
             return true;
         }
         //int filterInt = getInteger(filterText);
-
-        Tramitacion tramita = (Tramitacion) value;
+        String cadenaBusqueda = "";
+        if (value instanceof Tramitacion) {
+            Tramitacion tramita = (Tramitacion) value;
+            cadenaBusqueda = tramita.getIdDocumento().getAsunto() + tramita.getIdDocumento().toShortString();
+        } else if (value instanceof Documento) {
+            Documento d = (Documento) value;
+            cadenaBusqueda = d.getAsunto() + d.toShortString();
+        } else if (value instanceof NotaSalida) {
+            NotaSalida ns = (NotaSalida) value;
+            cadenaBusqueda = ns.toNumeroString() + " " + ns.getAsunto() + " " + ns.getReferencia() + " " + ns.getRubro();
+        } else {
+            return false;
+        }
+        cadenaBusqueda = cadenaBusqueda.replaceAll("null", "");
         String nuevoFilter = "*" + filterText + "*";
         try {
-            return JSFutil.strmatch(tramita.getIdDocumento().getAsunto().toLowerCase(), nuevoFilter)
-                    || JSFutil.strmatch(tramita.getIdDocumento().toShortString().toLowerCase(), nuevoFilter);
+            Boolean match = JSFutil.strmatch(cadenaBusqueda.toLowerCase(), nuevoFilter);
+            return match;
+//            return JSFutil.strmatch(documentoFilter.getAsunto().toLowerCase(), nuevoFilter)
+//                    || JSFutil.strmatch(documentoFilter.toShortString().toLowerCase(), nuevoFilter);
         } catch (Exception e) {
             return false;
         }

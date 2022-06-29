@@ -44,16 +44,29 @@
                 <f:facet name="header">
                     Tabla de Datos
                 </f:facet>  
-                <p:column headerText="#" style="width: 40px">
+                <p:column headerText="#" width="30">
                     <h:outputText value="#{index+1}"/>
                 </p:column>
-                <p:column headerText="No. Sal./STR" width="10%"> 
+                <p:column width="80" headerText="No. Sal./STR" sortBy="#{item.numeroSalida}"> 
                     <p:commandLink title="#{bundle.VerBoton} detalle de la Nota de Salida" target="_new" ajax="false" action="#{NotaSalidaController.doVerForm(item.idNota)}">
-                        <h:outputText rendered="#{item.numeroSalida!=null}" styleClass="fontBold Blue" value="Salida #: #{item.numeroSalida}"/>
-                        <br/>
-                        <h:outputText rendered="#{item.numeroStr!=null}" styleClass="fontBold Blue" value="STR #: #{item.numeroStr}"/>
+                        <h:outputText styleClass="fontBold Blue" value="#{item.toNumeroString()}"/>
                     </p:commandLink>
                 </p:column> 
+                <p:column width="80" sortBy="#{item.fechaNota}" >
+                    <f:facet name="header">
+                        <i class="fa fa-calendar" title="Fecha Derivación"></i>
+                    </f:facet>
+                    <h:outputText value="#{item.fechaNota}">
+                        <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Asunto">
+                    <i class="fa fa-folder-open"/>
+                    <h:outputText value=" #{ClasificadorController.obtenerRutaClasificador(item.idClasificador.idClasificador)}"/>
+                    <blockquote>
+                        <h:outputText styleClass="Brown fontBold" value="#{item.asunto}"/>
+                    </blockquote>
+                </p:column>  
                 <p:column headerText="Referencia/Rubro" >  
                     <h:outputText rendered="#{item.referencia!=null}" value="Ref: #{item.referencia}"/>
                     <br/>

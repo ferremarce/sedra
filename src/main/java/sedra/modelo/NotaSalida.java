@@ -265,4 +265,16 @@ public class NotaSalida implements Serializable {
                 + "[Clasificador=" + this.idClasificador + "]";
         return cadena;
     }
+
+    public String toNumeroString() {
+        String numero = "";
+        if (this.numeroSalida != null && this.numeroStr != null) {
+            numero = "#Sal/#STR" + this.numeroSalida + "/" + this.numeroStr;
+        } else if (this.numeroSalida != null) {
+            numero = "#Sal: " + this.numeroSalida;
+        } else if (this.numeroStr != null) {
+            numero = "#STR: " + this.numeroStr;
+        }
+        return numero;
+    }
 }

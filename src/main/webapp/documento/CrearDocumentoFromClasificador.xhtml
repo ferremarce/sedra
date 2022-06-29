@@ -16,7 +16,7 @@
                 <p:tree draggable="true" droppable="true" dropCopyNode="true" id="planArchivo" filterBy="#{node}" filterMatchMode="contains" animate="true" value="#{ClasificadorController.root}" var="node" dynamic="false" cache="false" selectionMode="single"  selection="#{ClasificadorController.selectedNode}">
                     <p:ajax event="select" update="formMain" listener="#{DocumentoController.verNodeSelect}" />  
                     <p:treeNode expandedIcon="fa fa-folder-open" collapsedIcon="fa fa-folder">  
-                        <h:outputText value="#{node.toString()}" />
+                        <h:outputText styleClass="font-2x" style="white-space: normal" title="#{node.toString()}" value="#{node.toString()}" />
                     </p:treeNode>  
                 </p:tree>
             </h:form>
@@ -33,14 +33,18 @@
                 <p:tabView>
                     <p:tab title="Entrada">
                         <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                                     widgetVar="wEntrada"
                                      rows="50"
                                      paginator="true"
                                      filterEvent="enter"
                                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     rowsPerPageTemplate="#{bundle.Paginacion}">
+                                     rowsPerPageTemplate="#{bundle.Paginacion}"
+                                     globalFilterFunction="#{TramitacionController.globalFilterFunction}">
+                            <p:ajax global="false" event="filter"/>
                             <f:facet name="header">
-                                Tabla de Datos
-                            </f:facet> 
+                                <p:inputText id="globalFilter" onkeyup="PF('wEntrada').filter()" style="width:100%" placeholder="Asunto, Nro. Entrada" />
+                                <p:tooltip for="globalFilter" value="Puede utilizar los comodines: * (muchos caracteres) y  ? (un caracter)"/>
+                            </f:facet>
                             <p:column headerText="#Exp." width="110" sortBy="#{item.toShortString()}" >  
                                 <p:commandLink immediate="true" title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
                                     <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.toShortString()}"/>                              
@@ -79,13 +83,17 @@
                     </p:tab>
                     <p:tab title="Salida">
                         <p:dataTable rowIndexVar="indexSal" rendered="#{DocumentoController.clasificadorSeleccionado!=null}" id="dataTableSalida" var="itemSal" value="#{DocumentoController.listaNotaSalida}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                                     widgetVar="wSalida"
                                      rows="50"
                                      paginator="true"
                                      filterEvent="enter"
                                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     rowsPerPageTemplate="#{bundle.Paginacion}">
+                                     rowsPerPageTemplate="#{bundle.Paginacion}"
+                                     globalFilterFunction="#{TramitacionController.globalFilterFunction}">>
+                             <p:ajax global="false" event="filter"/>
                             <f:facet name="header">
-                                Información de notas
+                                <p:inputText id="globalFilter" onkeyup="PF('wSalida').filter()" style="width:100%" placeholder="Asunto, Nro. Salida/STR, Referencia, Rubro" />
+                                <p:tooltip for="globalFilter" value="Puede utilizar los comodines: * (muchos caracteres) y  ? (un caracter)"/>
                             </f:facet>
                             <p:column headerText="No. Sal./STR" width="100" sortBy="#{itemSal.numeroSalida+itemSal.numeroStr}">  
                                 <h:outputText value="#{itemSal.numeroSalida}"/>

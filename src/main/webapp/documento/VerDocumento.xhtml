@@ -48,8 +48,7 @@
                     <h:outputText id="observaciones" value="#{DocumentoController.documento.observacion}" title="Observaciones"  />
                     <p:outputLabel for="idTipoDocumento" value="Tipo Documento:"/>
                     <h:outputText id="idTipoDocumento" value="#{DocumentoController.documento.idTipoDocumento.toString()}" />
-
-                    <p:outputLabel rendered="#{DocumentoController.documento.nombreArchivo!=null}" for="downAdjunto"  value="Adjunto:"/>
+                    <p:outputLabel for="downAdjunto"  value="Adjunto:"/>
                     <p:outputPanel>
                         <p:outputPanel rendered="#{DocumentoController.documento.nombreArchivo!=null}" id="downAdjunto">
                             <p:commandButton title="Descargar" icon="fa fa-download" ajax="false">
@@ -62,7 +61,7 @@
                                 <p:fileDownload value="#{DownloadFile.downloadDocumentoAdjunto(expeAdj.idDocumentoAdjunto)}" />  
                             </p:commandButton>
                             <h:outputText styleClass="espaciadoToolbar"  value="#{expeAdj.toNameDownload()} [#{expeAdj.toTamanho()}]"/>
-                           
+
                         </p:repeat>
                     </p:outputPanel>
                     <p:outputLabel value="Enlazado a:"/>

@@ -11,89 +11,84 @@
     </ui:define>
 
     <ui:define name="content">
-        <h:form id="formMain">
-            <p:panel>
-                <p:outputLabel for="filtro" value="Filtrar por: "/>
-                <p:selectOneRadio id="filtro" layout="pageDirection" value="#{DocumentoController.tmpConNota}">
-                    <f:selectItem itemLabel="Documentos con Nota/STR" itemValue="1" />  
-                    <f:selectItem itemLabel="Nota/STR independiente" itemValue="2" /> 
-                    <p:ajax event="change" update="@form"/>
-                </p:selectOneRadio>
-            </p:panel>
-            <p:panel rendered="#{DocumentoController.tmpConNota==1}" id="localizarDocumento">
-                <p:panelGrid  columns="3" styleClass="ui-panelgrid-blank">
-                    <p:outputLabel for="opciones" value="Buscar en: " />
-                    <p:selectOneRadio  id="opciones" value="#{DocumentoController.selectedOption}" required="true" requiredMessage="#{bundle.Requerido}">  
-                        <f:selectItem itemLabel="Asunto" itemValue="d.asunto" />  
-                        <f:selectItem itemLabel="# Expediente" itemValue="x.numeroExpediente" />
-                        <f:selectItem itemLabel="Referencia" itemValue="d.referencia" />  
-                        <f:selectItem itemLabel="Remitido a" itemValue="t.remitidoA" />  
-                        <f:selectItem itemLabel="Remitido por" itemValue="t.remitidoPor" />  
-                        <f:selectItem itemLabel="Nota" itemValue="t.notaBreve" />  
-                        <f:selectItem itemLabel="Nro.Salida/Memo" itemValue="b.idNota.numeroSalida" />  
-                        <f:selectItem itemLabel="STR" itemValue="b.idNota.numeroStr" />  
-                    </p:selectOneRadio> 
-                    <p:message for="opciones"/>
-                    <p:outputLabel for="criterio" value="Criterio: "/>
-                    <p:inputText id="criterio" value="#{DocumentoController.criterio}" title="Búsqueda" />                      
-                    <p:message for="criterio"/>
-                    <p:outputLabel for="fechaDesde" value="Desde:"/>
-                    <p:calendar navigator="true" id="fechaDesde" value="#{DocumentoController.tmpFechaDesde}" pattern="dd/MM/yyyy" title="Fecha Desde" required="true" requiredMessage="#{bundle.Requerido}"/>
-                    <p:message for="fechaDesde"/>
-                    <p:outputLabel for="fechaHasta" value="Hasta:"/>
-                    <p:calendar navigator="true" id="fechaHasta" value="#{DocumentoController.tmpFechaHasta}" pattern="dd/MM/yyyy" title="Fecha Hasta" required="true" requiredMessage="#{bundle.Requerido}"/>
-                    <p:message for="fechaHasta"/>
-                    <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{DocumentoController.localizarDocumento()}" update="@form, panelMensajeEstado"/>
-                </p:panelGrid>
-                <p:dataTable rowIndexVar="index" id="dataTableDoc" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
-                             rows="50"
-                             paginator="true"
-                             filterEvent="enter"
-                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             rowsPerPageTemplate="#{bundle.Paginacion}"                         
-                             >
-                    <f:facet name="header">
-                        Tabla de Datos
-                    </f:facet>
-                    <p:column headerText="#" width="40">
-                        <h:outputText value="#{index+1}"/>
-                    </p:column>
-                    <p:column headerText="#Exp." width="80" sortBy="#{item.numeroExpediente}" style="text-align: right">  
-                        <p:commandLink immediate="true" title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
-                            <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.toShortString()}"/>                             
-                        </p:commandLink>
-                    </p:column> 
-                    <p:column headerText="F. Doc." width="80" >
-                        <h:outputText value="#{item.fechaDocumento}">
-                            <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                        </h:outputText>
-                    </p:column>
-                    <p:column headerText="Asunto">
-                        <i class="fa fa-folder-open"/>
-                        <h:outputText value=" #{ClasificadorController.obtenerRutaClasificador(item.idClasificador.idClasificador)}"/>
-                        <blockquote>
-                            <h:outputText styleClass="Brown fontBold" value="#{item.asunto}"/>
-                        </blockquote>
-                    </p:column>  
-                    <p:column headerText="F. Ing." width="80" >  
-                        <h:outputText value="#{item.fechaIngreso}">
-                            <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                        </h:outputText>
-                    </p:column>   
-                    <p:column headerText="Enlazado con" width="150" > 
-                        <p:dataList rendered="#{item.detalleNotaSalidaList.size()>0}" value="#{item.detalleNotaSalidaList}" var="nota" emptyMessage="#{bundle.SinRegistrosMensaje}">  
-                            <h:outputText  value="[#{nota.idNota.idTipoNota.descripcionTipoNota}] " />  
-                            <p:commandLink styleClass="fontBold Red" rendered="#{nota.idNota.numeroSalida!=null}" title="Ver Nota" value="Nro. Salida: #{nota.idNota.numeroSalida}" ajax="false" action="#{NotaSalidaController.doVerForm(nota.idNota.idNota)}" />  
-                            <p:commandLink styleClass="fontBold Red" rendered="#{nota.idNota.numeroStr!=null}" title="Ver STR" value="Nro. STR: #{nota.idNota.numeroStr}" ajax="false" action="#{NotaSalidaController.doVerForm(nota.idNota.idNota)}" />   
-                            <p:separator/>
-                            <h:outputText value="#{nota.idNota.referencia}"/> 
-                            <h:outputText value="#{nota.idNota.rubro}" />  
-                        </p:dataList>
-                    </p:column> 
-                </p:dataTable>
-            </p:panel>
-            <p:panel rendered="#{DocumentoController.tmpConNota==2}" id="localizarNota">
-                <p:panel>
+
+        <p:tabView>
+            <p:tab title="Documentos con Nota/STR">
+                <h:form>
+                    <p:panelGrid  columns="3" styleClass="ui-panelgrid-blank">
+                        <p:outputLabel for="opciones" value="Buscar en: " />
+                        <p:selectOneRadio  id="opciones" value="#{DocumentoController.selectedOption}" required="true" requiredMessage="#{bundle.Requerido}">  
+                            <f:selectItem itemLabel="Asunto" itemValue="d.asunto" />  
+                            <f:selectItem itemLabel="# Expediente" itemValue="x.numeroExpediente" />
+                            <f:selectItem itemLabel="Referencia" itemValue="d.referencia" />  
+                            <f:selectItem itemLabel="Remitido a" itemValue="t.remitidoA" />  
+                            <f:selectItem itemLabel="Remitido por" itemValue="t.remitidoPor" />  
+                            <f:selectItem itemLabel="Nota breve" itemValue="t.notaBreve" />  
+                            <f:selectItem itemLabel="Nro.Salida/Memo" itemValue="b.idNota.numeroSalida" />  
+                            <f:selectItem itemLabel="STR" itemValue="b.idNota.numeroStr" />  
+                        </p:selectOneRadio> 
+                        <p:message for="opciones"/>
+                        <p:outputLabel for="criterio" value="Criterio: "/>
+                        <p:inputText id="criterio" value="#{DocumentoController.criterio}" title="Búsqueda" />                      
+                        <p:message for="criterio"/>
+                        <p:outputLabel for="fechaDesde" value="Desde:"/>
+                        <p:calendar navigator="true" id="fechaDesde" value="#{DocumentoController.tmpFechaDesde}" pattern="dd/MM/yyyy" title="Fecha Desde" required="true" requiredMessage="#{bundle.Requerido}"/>
+                        <p:message for="fechaDesde"/>
+                        <p:outputLabel for="fechaHasta" value="Hasta:"/>
+                        <p:calendar navigator="true" id="fechaHasta" value="#{DocumentoController.tmpFechaHasta}" pattern="dd/MM/yyyy" title="Fecha Hasta" required="true" requiredMessage="#{bundle.Requerido}"/>
+                        <p:message for="fechaHasta"/>
+                        <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{DocumentoController.localizarDocumento()}" update="@form, panelMensajeEstado"/>
+                    </p:panelGrid>
+                    <p:dataTable rowIndexVar="index" id="dataTableDoc" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                                 rows="50"
+                                 paginator="true"
+                                 filterEvent="enter"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="#{bundle.Paginacion}"                         
+                                 >
+                        <f:facet name="header">
+                            Tabla de Datos
+                        </f:facet>
+                        <p:column headerText="#" width="40">
+                            <h:outputText value="#{index+1}"/>
+                        </p:column>
+                        <p:column headerText="#Exp." width="80" sortBy="#{item.numeroExpediente}" style="text-align: right">  
+                            <p:commandLink immediate="true" title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
+                                <h:outputText title="#{item.idDocumento}" styleClass="fontBold Blue" value="#{item.toShortString()}"/>                             
+                            </p:commandLink>
+                        </p:column> 
+                        <p:column headerText="F. Doc." width="80" >
+                            <h:outputText value="#{item.fechaDocumento}">
+                                <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Asunto">
+                            <i class="fa fa-folder-open"/>
+                            <h:outputText value=" #{ClasificadorController.obtenerRutaClasificador(item.idClasificador.idClasificador)}"/>
+                            <blockquote>
+                                <h:outputText styleClass="Brown fontBold" value="#{item.asunto}"/>
+                            </blockquote>
+                        </p:column>  
+                        <p:column headerText="F. Ing." width="80" >  
+                            <h:outputText value="#{item.fechaIngreso}">
+                                <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>   
+                        <p:column headerText="Enlazado con" width="150" > 
+                            <p:dataList rendered="#{item.detalleNotaSalidaList.size()>0}" value="#{item.detalleNotaSalidaList}" var="nota" emptyMessage="#{bundle.SinRegistrosMensaje}">  
+                                <h:outputText  value="[#{nota.idNota.idTipoNota.descripcionTipoNota}] " />  
+                                <p:commandLink styleClass="fontBold Red" rendered="#{nota.idNota.numeroSalida!=null}" title="Ver Nota" value="Nro. Salida: #{nota.idNota.numeroSalida}" ajax="false" action="#{NotaSalidaController.doVerForm(nota.idNota.idNota)}" />  
+                                <p:commandLink styleClass="fontBold Red" rendered="#{nota.idNota.numeroStr!=null}" title="Ver STR" value="Nro. STR: #{nota.idNota.numeroStr}" ajax="false" action="#{NotaSalidaController.doVerForm(nota.idNota.idNota)}" />   
+                                <p:separator/>
+                                <h:outputText value="#{nota.idNota.referencia}"/> 
+                                <h:outputText value="#{nota.idNota.rubro}" />  
+                            </p:dataList>
+                        </p:column> 
+                    </p:dataTable>
+                </h:form>
+            </p:tab>
+            <p:tab title="Nota/STR independiente">
+                <h:form>
                     <p:panelGrid columns="3" styleClass="ui-panelgrid-blank">
                         <p:outputLabel for="criterio2" value="Criterio: "/>
                         <p:inputText tabindex="0" size="100" id="criterio2" value="#{NotaSalidaController.criterioBusqueda}" title="Búsqueda" placeholder="Nro. Salida, STR, Referencia" />
@@ -132,10 +127,9 @@
                             <h:outputText value=" #{ClasificadorController.obtenerRutaClasificador(item.idClasificador.idClasificador)}"/>
                         </p:column>
                     </p:dataTable>
-                </p:panel>
-            </p:panel>
+                </h:form>
+            </p:tab>
+        </p:tabView>
 
-        </h:form>
     </ui:define>
-
 </ui:composition>
