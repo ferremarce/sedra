@@ -42,8 +42,11 @@
                                      globalFilterFunction="#{TramitacionController.globalFilterFunction}">
                             <p:ajax global="false" event="filter"/>
                             <f:facet name="header">
-                                <p:inputText id="globalFilter" onkeyup="PF('wEntrada').filter()" style="width:100%" placeholder="Asunto, Nro. Entrada" />
-                                <p:tooltip for="globalFilter" value="Puede utilizar los comodines: * (muchos caracteres) y  ? (un caracter)"/>
+                                <div class="ui-inputgroup">
+                                    <p:commandButton value="Filtro"/>
+                                    <p:inputText id="globalFilter" onkeyup="PF('wEntrada').filter()" style="width:100%" placeholder="Asunto, Nro. Entrada" />
+                                </div>
+                                <p:tooltip for="globalFilter" position="bottom" value="Puede utilizar los comodines: * (muchos caracteres) y  ? (un caracter)"/>
                             </f:facet>
                             <p:column headerText="#Exp." width="110" sortBy="#{item.toShortString()}" >  
                                 <p:commandLink immediate="true" title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
@@ -90,10 +93,13 @@
                                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                      rowsPerPageTemplate="#{bundle.Paginacion}"
                                      globalFilterFunction="#{TramitacionController.globalFilterFunction}">>
-                             <p:ajax global="false" event="filter"/>
+                            <p:ajax global="false" event="filter"/>
                             <f:facet name="header">
-                                <p:inputText id="globalFilter" onkeyup="PF('wSalida').filter()" style="width:100%" placeholder="Asunto, Nro. Salida/STR, Referencia, Rubro" />
-                                <p:tooltip for="globalFilter" value="Puede utilizar los comodines: * (muchos caracteres) y  ? (un caracter)"/>
+                                <div class="ui-inputgroup">
+                                    <p:commandButton value="Filtro"/>
+                                    <p:inputText id="globalFilter" onkeyup="PF('wSalida').filter()" style="width:100%" placeholder="Asunto, Nro. Salida/STR, Referencia, Rubro" />
+                                </div>
+                                <p:tooltip for="globalFilter" position="bottom" value="Puede utilizar los comodines: * (muchos caracteres) y  ? (un caracter)"/>
                             </f:facet>
                             <p:column headerText="No. Sal./STR" width="100" sortBy="#{itemSal.numeroSalida+itemSal.numeroStr}">  
                                 <h:outputText value="#{itemSal.numeroSalida}"/>
