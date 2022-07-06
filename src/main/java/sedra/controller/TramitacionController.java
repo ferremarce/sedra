@@ -250,7 +250,7 @@ public class TramitacionController implements Serializable {
 
     public void buscarAllDerivadoAjax() {
         this.listaTramitacionEstado = this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_DERIVADO);
-        this.listaTramitacionEstado.addAll(this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_TERMINADO));
+        this.listaTramitacionEstado.addAll(this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_ARCHIVADO));
         this.listaTramitacionEstado.addAll(this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_RECHAZADO));
         Collections.sort(this.listaTramitacionEstado);
         this.arraySelectedTramitacion = null;
@@ -471,7 +471,7 @@ public class TramitacionController implements Serializable {
                 if (t.getIdEstado().getIdEstado() != 100) { //Existe todavia pendientes
                     t.setFechaSalida(JSFutil.getFechaHoraActual());
                     t.setHoraSalida(JSFutil.getFechaHoraActual());
-                    t.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_TERMINADO));
+                    t.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_ARCHIVADO));
                     this.tramitacionFacade.edit(t);
                 }
             }
@@ -526,7 +526,7 @@ public class TramitacionController implements Serializable {
             for (Tramitacion t : this.listaTramitacionSeguimiento) {
                 if (!t.getFlagBorrado()) {
                     cadena = cadena + "UPDATE: " + t.toAudita() + "\n";
-                    if (t.getIdEstado().getIdEstado().compareTo(Codigo.ESTADO_TRAMITE_TERMINADO) == 0) {
+                    if (t.getIdEstado().getIdEstado().compareTo(Codigo.ESTADO_TRAMITE_ARCHIVADO) == 0) {
                         t.setFechaSalida(JSFutil.getFechaHoraActual());
                         t.setHoraSalida(JSFutil.getFechaHoraActual());
                     }

@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import sedra.modelo.Tramitacion;
+import sedra.util.Codigo;
 import sedra.util.JSFutil;
 
 /**
@@ -69,18 +70,32 @@ public class TramitacionFacade extends AbstractFacade<Tramitacion> {
     }
 
     public List<Tramitacion> getAllTramitacion(Integer idRol, Integer idEstado, Date fdesde, Date fhasta) {
-        Query q;
         String where;
         if (idRol != null) {
             where = "a.idRol.idRol=:xIdRol";
         } else {
             where = "a.idRol IS NOT NULL";
         }
-        if (idEstado.compareTo(100) == 0) { //Terminado
-            q = em.createQuery("SELECT a FROM Tramitacion a WHERE " + where + " AND a.idEstado.idEstado=:xIdEstado AND a.fechaSalida BETWEEN :xFdesde AND :xFhasta  ORDER BY a.idTramitacion");
-        } else { //Pendiente
-            q = em.createQuery("SELECT a FROM Tramitacion a WHERE " + where + " AND a.idEstado.idEstado=:xIdEstado AND a.fechaRegistro BETWEEN :xFdesde AND :xFhasta ORDER BY a.idTramitacion");
+        String fechaConsulta = "a.fechaDerivacion";
+        switch (idEstado) {
+            case 1://Pendiente
+                break;
+            case 2: //Rechazado
+                fechaConsulta = "a.fechaSalida";
+                break;
+            case 3://Recibido
+                fechaConsulta = "a.fechaConfirmacion";
+                break;
+            case 4://Derivado
+                where = "a.idTramitacionPadre.idRol.idRol=:xIdRol"; 
+                break;
+            case 5://Ingresado
+                break;
+            case 100://Archivado
+                fechaConsulta = "a.fechaSalida";
+                break;
         }
+        Query q = em.createQuery("SELECT a FROM Tramitacion a WHERE " + where + " AND a.idEstado.idEstado=:xIdEstado AND " + fechaConsulta + " BETWEEN :xFdesde AND :xFhasta  ORDER BY a.idTramitacion");
         q.setParameter("xFdesde", fdesde);
         q.setParameter("xFhasta", fhasta);
         if (idRol != null) {

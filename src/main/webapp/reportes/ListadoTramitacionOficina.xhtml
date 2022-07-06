@@ -32,6 +32,7 @@
                             <f:selectItems value="#{EstadoTramitacionController.estadoTramitacionSet}"/>
                             <p:ajax event="change" update="msgEstado"/>
                         </p:selectOneButton>
+                        <br/>
                         <p:staticMessage id="msgEstado" severity="info" summary="#{ReporteController.tmpEstadoTramitacion.descripcionEstado}" detail="#{ReporteController.tmpEstadoTramitacion.infoEstado}"/>
                     </p:outputPanel>
                     <p:message for="idEstadoTramitacion"/>
@@ -127,16 +128,6 @@
                         <h:outputText value="#{item.fechaDerivacion}">
                             <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                         </h:outputText>
-                        <p:outputLabel value="Recibido: "/>
-                        <p:outputPanel>
-                            <h:outputText value="#{item.fechaRegistro}">
-                                <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                            </h:outputText>
-                            <p:spacer width="10px"/>
-                            <h:outputText value="#{item.horaRegistro}">
-                                <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="HH:mm" />
-                            </h:outputText>
-                        </p:outputPanel>
                         <p:outputLabel value="Confirmado: "/>
                         <p:outputPanel>
                             <h:outputText value="#{item.fechaConfirmacion}">

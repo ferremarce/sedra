@@ -267,7 +267,7 @@ public class NotaSalidaController implements Serializable {
                     if (t.getIdEstado().getIdEstado() != 100) { //Existe todavia pendientes
                         t.setFechaSalida(JSFutil.getFechaHoraActual());
                         t.setHoraSalida(JSFutil.getFechaHoraActual());
-                        t.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_TERMINADO));
+                        t.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_ARCHIVADO));
                         this.tramitacionFacade.edit(t);
                     }
                 }
