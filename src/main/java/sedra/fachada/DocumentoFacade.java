@@ -52,7 +52,7 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
         q.setParameter("xIdRol", JSFutil.getRolSesion().getIdRol());
 
         List<Documento> tr = q.getResultList();
-        this.metaDatabase();
+//        this.metaDatabase();
         return tr;
 
     }

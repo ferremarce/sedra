@@ -200,6 +200,8 @@ public class NotaSalidaController implements Serializable {
     }
 
     public void localizarAllNotaSalida() {
+//        this.criterioBusqueda = this.criterioBusqueda.replaceAll("\\*", "%");
+//        this.criterioBusqueda = this.criterioBusqueda.replaceAll("\\?", "_");
         this.listaNotaSalida = notaSalidaFacade.getAllNotaSalida(criterioBusqueda);
         if (this.listaNotaSalida.isEmpty()) {
             JSFutil.addMessage("No hay resultados...", JSFutil.StatusMessage.WARNING);
@@ -432,7 +434,7 @@ public class NotaSalidaController implements Serializable {
 
     public void handleDateSelect(SelectEvent<Date> event) {
         Date date = event.getObject();
-        Calendar cal=JSFutil.getCalendar();
+        Calendar cal = JSFutil.getCalendar();
         cal.setTime(date);
         this.notaSalida.setAnho(cal.get(Calendar.YEAR));
     }

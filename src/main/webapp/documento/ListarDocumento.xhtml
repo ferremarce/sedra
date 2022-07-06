@@ -21,6 +21,7 @@
                     <p:commandButton styleClass="espaciadoToolbar" id="cmdBuscar" icon="fa fa-search" ajax="true" action="#{DocumentoController.doBuscar()}" update="@form, panelMensajeEstado"/>
                 </p:toolbarGroup>
             </p:toolbar>
+            <p:tooltip for="criterio" position="bottom" value="Puede utilizar los comodines: % (muchos caracteres) y  _ (un caracter)"/>
             <p:defaultCommand target="cmdBuscar"/>
             <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                          rows="50"

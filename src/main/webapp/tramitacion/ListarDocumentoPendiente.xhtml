@@ -55,7 +55,7 @@
                                 <p:commandButton value="Filtro"/>
                                 <p:inputText id="globalFilter" onkeyup="PF('wBandeja').filter()"  style="width:100%" placeholder="Asunto, Nro. Entrada" />
                             </div>                            
-                            <p:tooltip for="globalFilter" position="bottom" value="Puede utilizar los comodines: * (muchos caracteres) y  ? (un caracter)"/>
+                            <p:tooltip for="globalFilter" position="bottom" value="Puede utilizar los comodines: % (muchos caracteres) y  _ (un caracter)"/>
                         </f:facet>
                         <p:column visible="#{TramitacionController.tipoBandeja!=3}" selectionMode="multiple" width="20"/>  
                         <p:column visible="#{TramitacionController.tipoBandeja==3}" width="20"/>  

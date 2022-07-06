@@ -7,7 +7,7 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
     <ui:define name="title">
-        <h1>Agregar Documento al Clasificador</h1>
+        <h1>Agregar Documento de Entrada al Clasificador</h1>
     </ui:define>
 
     <ui:define name="content">
@@ -46,7 +46,7 @@
                                     <p:commandButton value="Filtro"/>
                                     <p:inputText id="globalFilter" onkeyup="PF('wEntrada').filter()" style="width:100%" placeholder="Asunto, Nro. Entrada" />
                                 </div>
-                                <p:tooltip for="globalFilter" position="bottom" value="Puede utilizar los comodines: * (muchos caracteres) y  ? (un caracter)"/>
+                                <p:tooltip for="globalFilter" position="bottom" value="Puede utilizar los comodines: % (muchos caracteres) y  _ (un caracter)"/>
                             </f:facet>
                             <p:column headerText="#Exp." width="110" sortBy="#{item.toShortString()}" >  
                                 <p:commandLink immediate="true" title="#{bundle.VerBoton} detalle del documento" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento)}">
@@ -99,7 +99,7 @@
                                     <p:commandButton value="Filtro"/>
                                     <p:inputText id="globalFilter" onkeyup="PF('wSalida').filter()" style="width:100%" placeholder="Asunto, Nro. Salida/STR, Referencia, Rubro" />
                                 </div>
-                                <p:tooltip for="globalFilter" position="bottom" value="Puede utilizar los comodines: * (muchos caracteres) y  ? (un caracter)"/>
+                                <p:tooltip for="globalFilter" position="bottom" value="Puede utilizar los comodines: % (muchos caracteres) y  _ (un caracter)"/>
                             </f:facet>
                             <p:column headerText="No. Sal./STR" width="100" sortBy="#{itemSal.numeroSalida+itemSal.numeroStr}">  
                                 <h:outputText value="#{itemSal.numeroSalida}"/>

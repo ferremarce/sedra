@@ -573,4 +573,10 @@ public class JSFutil implements Serializable {
 
         return lookup[n][m];
     }
+
+    public static String replaceWildcardRegex(String texto) {
+        String cadena = texto.replaceAll("%", "*");
+        cadena = cadena.replaceAll("_", "?");
+        return cadena;
+    }
 }

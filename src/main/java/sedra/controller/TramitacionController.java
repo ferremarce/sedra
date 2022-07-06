@@ -569,6 +569,8 @@ public class TramitacionController implements Serializable {
 
     public boolean globalFilterFunction(Object value, Object filter, Locale locale) {
         String filterText = (filter == null) ? null : filter.toString().trim().toLowerCase();
+        filterText = JSFutil.replaceWildcardRegex(filterText); //Reemplazamos los wildcard de JPA por REGEX
+        
         if (LangUtils.isBlank(filterText)) {
             return true;
         }
@@ -588,6 +590,7 @@ public class TramitacionController implements Serializable {
         }
         cadenaBusqueda = cadenaBusqueda.replaceAll("null", "");
         String nuevoFilter = "*" + filterText + "*";
+        System.out.println("Nuevo Filter: "+nuevoFilter);
         try {
             Boolean match = JSFutil.strmatch(cadenaBusqueda.toLowerCase(), nuevoFilter);
             return match;

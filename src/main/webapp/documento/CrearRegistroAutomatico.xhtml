@@ -13,7 +13,7 @@
         <h:form id="formMain">
             <p:panel toggleable="true" collapsed="true" toggleSpeed="500" widgetVar="panelNuevo">
                 <f:facet name="header">
-                    <p:commandButton immediate="true" global="true" styleClass="espaciadoToolbar ui-button-success" value="#{bundle.NuevoBoton}" 
+                    <p:commandButton immediate="true" global="false" styleClass="espaciadoToolbar ui-button-success" value="#{bundle.NuevoBoton}" 
                                      icon="fa fa-plus" action="#{DocumentoController.doCrearRegistroAutomatico()}" oncomplete="PF('panelNuevo').toggle()" update="@form"/>
                 </f:facet>
                 <p:panelGrid columns="4" layout="flex" columnClasses="p-col-2,p-col-4,p-col-2,p-col-4" contentStyleClass="ui-fluid">

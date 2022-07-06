@@ -29,7 +29,7 @@ import sedra.util.JSFutil;
 @Named(value = "MenuController")
 @SessionScoped
 public class MenuController implements Serializable {
-    
+
     @Inject
     UsuarioFacade usuarioFacade;
     private DefaultMenuModel model;
@@ -39,11 +39,11 @@ public class MenuController implements Serializable {
      */
     public MenuController() {
     }
-    
+
     public MenuModel getModel() {
         return model;
     }
-    
+
     @PostConstruct
     public void init() {
         this.montarMenu();
@@ -82,10 +82,10 @@ public class MenuController implements Serializable {
 //    }
     public void montarMenu() {
         Usuario user = JSFutil.getUsuarioConectado();
-        
+
         String nivel;
         model = new DefaultMenuModel();
-        
+
         DefaultSubMenu submenu;
         DefaultMenuItem item;
 
@@ -96,7 +96,7 @@ public class MenuController implements Serializable {
         item.setIcon("fa fa-home");
         model.getElements().add(item);
         submenu = DefaultSubMenu.builder().label("solo inicial").build();
-        
+
         List<Permiso> tr = usuarioFacade.getPermisoUsuario(user);
         for (Permiso x : tr) {
             nivel = x.getNivel();
@@ -108,7 +108,7 @@ public class MenuController implements Serializable {
                 model.getElements().add(submenu);
                 //submenu.setIcon(x.getUrlImagen());
             } else {
-                if(x.getConSeparador()!=null && x.getConSeparador()){
+                if (x.getConSeparador() != null && x.getConSeparador()) {
                     submenu.getElements().add(new DefaultSeparator());
                 }
                 /*Agregar un item*/
@@ -121,10 +121,17 @@ public class MenuController implements Serializable {
                 submenu.getElements().add(item);
             }
         }
+        item = DefaultMenuItem.builder().value("Ayuda").build();
+        item.setUrl(JSFutil.getAbsoluteApplicationUrl() + "/help/workflow-sedra.pdf");
+        item.setAjax(Boolean.FALSE);
+        item.setTarget("_blank");
+        item.setIcon("fa fa-info-circle");
+        item.setTitle("Obtenga la información del manejo de flujo en el SEDRA");
+        model.getElements().add(item);
 //        if (submenu.getLabel() != null) {
 //            model.getElements().add(submenu);
 //        }
 
     }
-    
+
 }
