@@ -91,6 +91,7 @@
                     </p:column>
                     <p:column headerText="Estado" width="130">
                         <p:selectOneMenu id="idEstado" value="#{item.idEstado}" required="true" requiredMessage="#{bundle.Requerido}">
+                            <f:selectItem itemLabel="-- Opciones --" itemValue="#{null}" noSelectionOption="true"/>
                             <f:selectItems value="#{EstadoTramitacionController.estadoTramitacionSet}"/>
                         </p:selectOneMenu>
                     </p:column>
