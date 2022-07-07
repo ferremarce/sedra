@@ -41,7 +41,7 @@ public class NotaSalidaFacade extends AbstractFacade<NotaSalida> {
 
     public List<NotaSalida> getAllNotaSalida(String criterio) {
         Query q = em.createQuery("SELECT a FROM NotaSalida a "
-                + "WHERE (UPPER(a.asunto) LIKE :xCriterio "
+                + "WHERE UPPER(a.asunto) LIKE :xCriterio "
                 + "OR (UPPER(a.numeroSalida) LIKE :xCriterio "
                 + "OR UPPER(a.numeroStr) LIKE :xCriterio) "
                 + "OR a.referencia LIKE :xCriterio "
