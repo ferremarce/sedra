@@ -136,7 +136,7 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
         String consultaSQL;
         switch (campo.charAt(0)) {
             case 'd':
-                where += " WHERE UPPER(CONCAT(" + campo + ",'')) LIKE :xCriterio ";
+                where += " WHERE UPPER(" + campo + ") LIKE :xCriterio ";
                 break;
             case 'x':
                 where += " WHERE UPPER(CONCAT(d.numeroExpediente,'-',d.anho)) LIKE :xCriterio ";

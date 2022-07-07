@@ -306,6 +306,7 @@ public class TramitacionController implements Serializable {
                 this.tramitacionRechazo.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_PENDIENTE));
                 this.tramitacionRechazo.setIdTramitacionPadre(tramita);
                 this.tramitacionRechazo.setIdPrioridad(this.prioridadFacade.find(Codigo.PRIORIDAD_NORMAL));
+                this.tramitacionRechazo.setLeido(Boolean.TRUE);
                 tramitacionFacade.create(this.tramitacionRechazo);
                 auditaFacade.create(new Audita("TRAMITACION", "Tramitacion Rechazo creada exitosamente.", JSFutil.getFechaHoraActual(), this.tramitacionRechazo.toAudita(), JSFutil.getUsuarioConectado()));
                 this.arraySelectedTramitacion = null;
@@ -382,7 +383,7 @@ public class TramitacionController implements Serializable {
                     tramTemp.setHoraRegistro(JSFutil.getFechaHoraActual());
                     tramTemp.setIdPrioridad(this.tramitacion.getIdPrioridad());
                     tramTemp.setIdTramitacionPadre(tram);
-
+                    tramTemp.setLeido(Boolean.FALSE);
                     tramitacionFacade.create(tramTemp);
                     auditaFacade.create(new Audita("TRAMITACION", "Tramitacion creada exitosamente.", JSFutil.getFechaHoraActual(), tramTemp.toAudita(), JSFutil.getUsuarioConectado()));
                     //Grabar el archivo a disco

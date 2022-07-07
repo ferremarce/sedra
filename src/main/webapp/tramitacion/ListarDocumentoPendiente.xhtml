@@ -193,9 +193,12 @@
                         <p:outputLabel for="observacion" value="Observacion:"/>
                         <h:outputText id="observacion" value="#{TramitacionController.tramitacion.observacion}" title="Observacion"/>
                         <p:outputLabel for="cmdAdjunto" value="Adjunto:"/>
-                        <p:commandButton id="cmdAdjunto" rendered="#{TramitacionController.tramitacion.nombreArchivo!=null}" title="#{TramitacionController.tramitacion.nombreArchivo!=null ? TramitacionController.tramitacion.nombreArchivo:'Sin archivo'}" icon="fa fa-download" ajax="false">
-                            <p:fileDownload value="#{DownloadFile.downloadDocumentoTramite(TramitacionController.tramitacion.idTramitacion)}" />  
-                        </p:commandButton>
+                        <p:outputPanel rendered="#{TramitacionController.tramitacion.nombreArchivo!=null}">
+                            <p:commandButton id="cmdAdjunto" rendered="#{TramitacionController.tramitacion.nombreArchivo!=null}" title="#{TramitacionController.tramitacion.nombreArchivo!=null ? TramitacionController.tramitacion.nombreArchivo:'Sin archivo'}" icon="fa fa-download" ajax="false">
+                                <p:fileDownload value="#{DownloadFile.downloadDocumentoTramite(TramitacionController.tramitacion.idTramitacion)}" />  
+                            </p:commandButton>
+                            <h:outputText value=" #{TramitacionController.tramitacion.nombreArchivo}"/>
+                        </p:outputPanel>
                     </p:panelGrid>
                 </p:scrollPanel>
             </p:dialog>

@@ -70,3 +70,10 @@ UPDATE public.permiso SET descripcion_permiso='Desbloquear Doc.', nivel='5.1', o
 
 ALTER TABLE public.nota_salida ADD asunto varchar(255) NULL;
 ALTER TABLE public.nota_salida ADD fecha_nota date NULL;
+
+-- Auto-generated SQL script #202207071606
+UPDATE public.permiso	SET descripcion_permiso='Agregador de Documentos' WHERE id_permiso=12;
+UPDATE public.permiso	SET descripcion_permiso='Archivar Documento' WHERE id_permiso=11;
+UPDATE public.permiso	SET descripcion_permiso='Localizar Documento' WHERE id_permiso=19;
+UPDATE public.permiso	SET descripcion_permiso='Desbloquear Documento'	WHERE id_permiso=18;
+UPDATE public.permiso	SET descripcion_permiso='Seguimiento de Documento'	WHERE id_permiso=15;

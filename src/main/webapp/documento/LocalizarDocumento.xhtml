@@ -29,16 +29,28 @@
                         </p:selectOneRadio> 
                         <p:message for="opciones"/>
                         <p:outputLabel for="criterio" value="Criterio: "/>
-                        <p:inputText id="criterio" value="#{DocumentoController.criterio}" title="Búsqueda" />                      
+                        <p:inputText id="criterio" size="50" value="#{DocumentoController.criterio}" title="Búsqueda" />                      
                         <p:message for="criterio"/>
-                        <p:outputLabel for="fechaDesde" value="Desde:"/>
-                        <p:calendar navigator="true" id="fechaDesde" value="#{DocumentoController.tmpFechaDesde}" pattern="dd/MM/yyyy" title="Fecha Desde" required="true" requiredMessage="#{bundle.Requerido}"/>
-                        <p:message for="fechaDesde"/>
-                        <p:outputLabel for="fechaHasta" value="Hasta:"/>
-                        <p:calendar navigator="true" id="fechaHasta" value="#{DocumentoController.tmpFechaHasta}" pattern="dd/MM/yyyy" title="Fecha Hasta" required="true" requiredMessage="#{bundle.Requerido}"/>
-                        <p:message for="fechaHasta"/>
-                        <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{DocumentoController.localizarDocumento()}" update="@form, panelMensajeEstado"/>
+                        <p:outputLabel value="Fecha del documento: "/>
+                        <p:outputPanel>
+                            <div class="p-grid ui-fluid">                               
+                                <div class="p-col-12 p-md-4">
+                                    <div class="ui-inputgroup">
+                                        <p:commandButton value="Desde"/>
+                                        <p:calendar navigator="true" id="fechaDesde" value="#{DocumentoController.tmpFechaDesde}" pattern="dd/MM/yyyy" title="Fecha Desde" required="true" requiredMessage="#{bundle.Requerido}"/>
+                                    </div>   
+                                </div>
+                                <div class="p-col-12 p-md-4">
+                                    <div class="ui-inputgroup">
+                                        <p:commandButton value="Hasta"/>
+                                        <p:calendar navigator="true" id="fechaHasta" value="#{DocumentoController.tmpFechaHasta}" pattern="dd/MM/yyyy" title="Fecha Hasta" required="true" requiredMessage="#{bundle.Requerido}"/>
+                                    </div> 
+                                </div>
+                            </div>
+                        </p:outputPanel>
                     </p:panelGrid>
+                    <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{DocumentoController.localizarDocumento()}" update="@form, panelMensajeEstado"/>
+                    <p/>
                     <p:dataTable rowIndexVar="index" id="dataTableDoc" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                                  rows="50"
                                  paginator="true"
@@ -94,7 +106,7 @@
                         <p:inputText tabindex="0" size="100" id="criterio2" value="#{NotaSalidaController.criterioBusqueda}" title="Búsqueda" placeholder="Nro. Salida, STR, Referencia" />
                         <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{NotaSalidaController.localizarAllNotaSalida()}" update="@form, panelMensajeEstado"/>
                     </p:panelGrid>
-                                     
+
                     <p:tooltip for="criterio2" position="bottom" value="Puede utilizar los comodines: % (muchos caracteres) y  _ (un caracter)"/>
                     <p:dataTable rowIndexVar="index" id="dataTableNota" var="item" value="#{NotaSalidaController.listaNotaSalida}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                                  rows="50"
