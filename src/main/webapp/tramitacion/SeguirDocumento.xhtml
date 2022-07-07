@@ -138,7 +138,7 @@
                                     <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="HH:mm" />
                                 </h:outputText>
                             </p:outputPanel>
-                            <p:outputLabel value="Procesado: "/>
+                            <p:outputLabel value="Procesado (Salida): "/>
                             <p:outputPanel>
                                 <h:outputText value="#{item.fechaSalida}">
                                     <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
@@ -152,8 +152,9 @@
                     </p:rowExpansion>
                 </p:dataTable>
                 <f:facet name="footer">
+                    <p:staticMessage rendered="#{TramitacionController.documento.cerrado}" severity="warn" summary="No se admite actualización de un documento que ya ha sido cerrado"/>
                     <p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
-                        <p:commandButton rendered="#{!TramitacionController.documento.cerrado}" ajax="false" icon="fa fa-check" value="#{bundle.GuardarBoton}" action="#{TramitacionController.updateAll()}"/>
+                        <p:commandButton disabled="#{TramitacionController.documento.cerrado}" ajax="false" icon="fa fa-check" value="#{bundle.GuardarBoton}" action="#{TramitacionController.updateAll()}"/>
                         <p:commandButton immediate="true" ajax="false" icon="fa fa-sign-out" value="#{bundle.RegresarBoton}" action="/tramitacion/ListarSeguimiento"/>
                     </p:panelGrid>
                 </f:facet>   

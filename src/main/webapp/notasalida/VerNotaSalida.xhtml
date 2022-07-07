@@ -17,7 +17,7 @@
                     <p:outputLabel for="clasificador"  value="Clasificador:"/>
                     <h:outputText id="clasificador" value="#{ClasificadorController.obtenerRutaClasificador(NotaSalidaController.notaSalida.idClasificador.idClasificador)}" title="Clasificador" />
                     <p:outputLabel for="idTipoNota"  value="Tipo Nota:"/>
-                    <h:outputText id="idTipoNota" value="#{NotaSalidaController.notaSalida.idTipoNota}"/>  
+                    <h:outputText id="idTipoNota" value="#{NotaSalidaController.notaSalida.idTipoNota.toString()}"/>  
                     <p:outputLabel rendered="#{NotaSalidaController.notaSalida.idTipoNota.idTipoNota!=2}" for="nroSalida"  value=" Nro. de Salida:"/>
                     <h:outputText rendered="#{NotaSalidaController.notaSalida.idTipoNota.idTipoNota!=2}" id="nroSalida" value="#{NotaSalidaController.notaSalida.numeroSalida}" title="Numero Salida"/>
                     <p:outputLabel rendered="#{NotaSalidaController.notaSalida.idTipoNota.idTipoNota!=2}" for="referencia"  value=" Referencia:"/>
