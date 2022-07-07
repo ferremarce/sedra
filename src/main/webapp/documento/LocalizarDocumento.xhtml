@@ -18,7 +18,7 @@
                     <p:panelGrid  columns="3" styleClass="ui-panelgrid-blank">
                         <p:outputLabel for="opciones" value="Buscar en: " />
                         <p:selectOneRadio  id="opciones" value="#{DocumentoController.selectedOption}" required="true" requiredMessage="#{bundle.Requerido}">  
-                            <f:selectItem itemLabel="Asunto" itemValue="d.asunto" />  
+                            <f:selectItem itemLabel="Asunto (Documento)" itemValue="d.asunto" />  
                             <f:selectItem itemLabel="# Expediente" itemValue="x.numeroExpediente" />
                             <f:selectItem itemLabel="Referencia" itemValue="d.referencia" />  
                             <f:selectItem itemLabel="Remitido a" itemValue="t.remitidoA" />  
@@ -26,6 +26,7 @@
                             <f:selectItem itemLabel="Nota breve" itemValue="t.notaBreve" />  
                             <f:selectItem itemLabel="Nro.Salida/Memo" itemValue="b.idNota.numeroSalida" />  
                             <f:selectItem itemLabel="STR" itemValue="b.idNota.numeroStr" />  
+                            <f:selectItem itemLabel="Asunto (Nota Salida)" itemValue="b.idNota.asunto" />  
                         </p:selectOneRadio> 
                         <p:message for="opciones"/>
                         <p:outputLabel for="criterio" value="Criterio: "/>
@@ -49,6 +50,7 @@
                             </div>
                         </p:outputPanel>
                     </p:panelGrid>
+                    <p:tooltip for="criterio" position="bottom" value="Puede utilizar los comodines: % (muchos caracteres) y  _ (un caracter)"/>
                     <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{DocumentoController.localizarDocumento()}" update="@form, panelMensajeEstado"/>
                     <p/>
                     <p:dataTable rowIndexVar="index" id="dataTableDoc" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
@@ -86,7 +88,7 @@
                                 <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                             </h:outputText>
                         </p:column>   
-                        <p:column headerText="Enlazado con" width="150" > 
+                        <p:column headerText="Enlazado con" width="20%" > 
                             <p:dataList rendered="#{item.detalleNotaSalidaList.size()>0}" value="#{item.detalleNotaSalidaList}" var="nota" emptyMessage="#{bundle.SinRegistrosMensaje}">  
                                 <h:outputText  value="[#{nota.idNota.idTipoNota.descripcionTipoNota}] " />  
                                 <p:commandLink styleClass="fontBold Red" rendered="#{nota.idNota.numeroSalida!=null}" title="Ver Nota" value="Nro. Salida: #{nota.idNota.numeroSalida}" ajax="false" action="#{NotaSalidaController.doVerForm(nota.idNota.idNota)}" />  
@@ -103,7 +105,7 @@
                 <h:form>
                     <p:panelGrid columns="3" styleClass="ui-panelgrid-blank">
                         <p:outputLabel for="criterio2" value="Criterio: "/>
-                        <p:inputText tabindex="0" size="100" id="criterio2" value="#{NotaSalidaController.criterioBusqueda}" title="Búsqueda" placeholder="Nro. Salida, STR, Referencia" />
+                        <p:inputText tabindex="0" size="100" id="criterio2" value="#{NotaSalidaController.criterioBusqueda}" title="Búsqueda" placeholder="Nro. Salida, Asunto, STR, Referencia" />
                         <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="true" action="#{NotaSalidaController.localizarAllNotaSalida()}" update="@form, panelMensajeEstado"/>
                     </p:panelGrid>
 
@@ -125,6 +127,9 @@
                                 <h:outputText rendered="#{item.numeroStr!=null}" styleClass="fontBold Blue" value="STR #: #{item.numeroStr}"/>
                             </p:commandLink>
                         </p:column> 
+                        <p:column headerText="Asunto">  
+                            <h:outputText value="#{item.asunto}"/>
+                        </p:column>
                         <p:column headerText="Referencia/Rubro" >  
                             <h:outputText value="#{item.referencia}"/>
                             <p:separator/>

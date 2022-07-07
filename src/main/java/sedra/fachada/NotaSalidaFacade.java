@@ -41,9 +41,11 @@ public class NotaSalidaFacade extends AbstractFacade<NotaSalida> {
 
     public List<NotaSalida> getAllNotaSalida(String criterio) {
         Query q = em.createQuery("SELECT a FROM NotaSalida a "
-                + "WHERE (UPPER(a.numeroSalida) LIKE :xCriterio OR UPPER(a.numeroStr) LIKE :xCriterio) "
-//                                + "OR a.idNota IN (SELECT d.idNota.idNota FROM DetalleNotaSalida d WHERE UPPER(d.idDocumento.asunto) LIKE :xCriterio OR CONCAT(d.idDocumento.numeroExpediente,'-',d.idDocumento.anho) LIKE :xCriterio) "
+                + "WHERE (UPPER(a.asunto) LIKE :xCriterio "
+                + "OR (UPPER(a.numeroSalida) LIKE :xCriterio "
+                + "OR UPPER(a.numeroStr) LIKE :xCriterio) "
                 + "OR a.referencia LIKE :xCriterio "
+                //+ "OR a.idNota IN (SELECT d.idNota.idNota FROM DetalleNotaSalida d WHERE UPPER(d.idDocumento.asunto) LIKE :xCriterio OR CONCAT(d.idDocumento.numeroExpediente,'-',d.idDocumento.anho) LIKE :xCriterio) "
                 + "ORDER BY a.numeroSalida,a.numeroStr");
         if (criterio.compareTo("") != 0) {
             q.setParameter("xCriterio", "%" + criterio.toUpperCase() + "%");
