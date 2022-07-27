@@ -164,7 +164,7 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
 
     public List<Documento> getAllDocumentoSinNota(String criterio) {
         Query q = em.createQuery("SELECT a FROM Documento a "
-                + "WHERE (UPPER(a.asunto) LIKE :xCriterio OR UPPER(a.nroEntrada) LIKE :xCriterio) "
+                + "WHERE (UPPER(a.asunto) LIKE :xCriterio OR CONCAT(a.numeroExpediente,'-',a.anho) LIKE :xCriterio) "
                 + "AND a.idDocumento NOT IN (SELECT DISTINCT d.idDocumento.idDocumento FROM DetalleNotaSalida d) "
                 + "ORDER BY a.idDocumento");
         if (criterio.compareTo("") != 0) {

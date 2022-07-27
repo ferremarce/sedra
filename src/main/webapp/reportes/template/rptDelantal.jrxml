@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.19.0.final using JasperReports Library version 6.19.0-646c68931cebf1a58bc65c4359d1f0ca223c5e94  -->
+<!-- Created with Jaspersoft Studio version 6.16.0.final using JasperReports Library version 6.16.0-48579d909b7943b64690c65c71e07e0b80981928  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptDelantal" pageWidth="612" pageHeight="792" columnWidth="528" leftMargin="56" rightMargin="28" topMargin="28" bottomMargin="28" uuid="5458e021-a38f-4365-b119-eb7d740077b7">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
@@ -434,8 +434,16 @@
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight">
-								<reportElement x="0" y="0" width="88" height="30" uuid="0a479e21-7231-4c9b-84ed-d4e2301c289f"/>
+							<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+								<reportElement positionType="Float" x="0" y="0" width="88" height="15" isRemoveLineWhenBlank="true" uuid="0a479e21-7231-4c9b-84ed-d4e2301c289f"/>
+								<textElement verticalAlignment="Middle">
+									<paragraph leftIndent="5" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{idTramitacionPadre}.getIdCreador().toString()+" ["+$F{idTramitacionPadre}.getIdRol().toString()+"]"]]></textFieldExpression>
+							</textField>
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+								<reportElement positionType="Float" x="0" y="15" width="88" height="15" uuid="9e39f3e6-5593-417f-b09a-6fa076320a6b"/>
 								<textElement verticalAlignment="Middle">
 									<paragraph leftIndent="5" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
 								</textElement>
@@ -443,10 +451,10 @@
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="88" uuid="6e0fa9b9-e5c2-4ccf-b321-50c36f2d4952">
+					<jr:column width="87" uuid="6e0fa9b9-e5c2-4ccf-b321-50c36f2d4952">
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
-								<reportElement x="0" y="0" width="88" height="30" uuid="9710bb5c-e285-4208-8899-7dfcda584116"/>
+								<reportElement x="0" y="0" width="87" height="30" uuid="9710bb5c-e285-4208-8899-7dfcda584116"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font isBold="true"/>
 								</textElement>
@@ -454,8 +462,8 @@
 							</staticText>
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
-							<textField textAdjust="StretchHeight">
-								<reportElement x="0" y="0" width="88" height="30" uuid="b43019b4-ea11-4773-8cb9-bb860311479c"/>
+							<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+								<reportElement x="0" y="0" width="87" height="30" uuid="b43019b4-ea11-4773-8cb9-bb860311479c"/>
 								<textElement verticalAlignment="Middle">
 									<paragraph leftIndent="5" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
 								</textElement>
@@ -463,10 +471,10 @@
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="88" uuid="da9450d1-9228-4a57-9bcf-1a8f03dea710">
+					<jr:column width="74" uuid="da9450d1-9228-4a57-9bcf-1a8f03dea710">
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
-								<reportElement x="0" y="0" width="88" height="30" uuid="9c6890ca-4662-44a5-bed7-d200bc82bdc5"/>
+								<reportElement x="0" y="0" width="74" height="30" uuid="9c6890ca-4662-44a5-bed7-d200bc82bdc5"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font isBold="true"/>
 								</textElement>
@@ -475,7 +483,7 @@
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField textAdjust="StretchHeight" pattern="dd/MM/yyyy">
-								<reportElement x="0" y="0" width="88" height="30" uuid="dea25479-26fb-42e3-b71a-244246dd21cf"/>
+								<reportElement x="0" y="0" width="74" height="30" uuid="dea25479-26fb-42e3-b71a-244246dd21cf"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<paragraph leftIndent="5" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
 								</textElement>
@@ -483,10 +491,10 @@
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="88" uuid="f3c4b681-77d0-4cfb-a6b2-1f6bf1915c02">
+					<jr:column width="91" uuid="f3c4b681-77d0-4cfb-a6b2-1f6bf1915c02">
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
-								<reportElement x="0" y="0" width="88" height="30" uuid="c4be9e6f-77e4-4b9f-ab5e-038fd10a90d3"/>
+								<reportElement x="0" y="0" width="91" height="30" uuid="c4be9e6f-77e4-4b9f-ab5e-038fd10a90d3"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font isBold="true"/>
 								</textElement>
@@ -495,7 +503,7 @@
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField textAdjust="StretchHeight">
-								<reportElement x="0" y="0" width="88" height="30" uuid="305373c4-e08e-4686-b507-4422ddd4e030"/>
+								<reportElement x="0" y="0" width="91" height="30" uuid="305373c4-e08e-4686-b507-4422ddd4e030"/>
 								<textElement verticalAlignment="Middle">
 									<paragraph leftIndent="5" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
 								</textElement>
@@ -503,10 +511,10 @@
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="88" uuid="a04172cf-1b5a-4f50-a120-a26d2487c2a8">
+					<jr:column width="70" uuid="a04172cf-1b5a-4f50-a120-a26d2487c2a8">
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
-								<reportElement x="0" y="0" width="88" height="30" uuid="6fc730f0-88b3-43e5-b450-6e0ce96400f8"/>
+								<reportElement x="0" y="0" width="70" height="30" uuid="6fc730f0-88b3-43e5-b450-6e0ce96400f8"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font isBold="true"/>
 								</textElement>
@@ -515,7 +523,7 @@
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField textAdjust="StretchHeight">
-								<reportElement x="0" y="0" width="88" height="30" uuid="19b432e5-3c44-482c-9a5f-1eb210305648"/>
+								<reportElement x="0" y="0" width="70" height="30" uuid="19b432e5-3c44-482c-9a5f-1eb210305648"/>
 								<textElement verticalAlignment="Middle">
 									<paragraph leftIndent="5" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
 								</textElement>
@@ -523,10 +531,10 @@
 							</textField>
 						</jr:detailCell>
 					</jr:column>
-					<jr:column width="88" uuid="6e6b541d-0b1a-49d1-9037-08cad34020cf">
+					<jr:column width="118" uuid="6e6b541d-0b1a-49d1-9037-08cad34020cf">
 						<jr:columnHeader style="Table_CH" height="30">
 							<staticText>
-								<reportElement x="0" y="0" width="88" height="30" uuid="dea88d2a-f548-4960-b667-071dcc9ff585"/>
+								<reportElement x="0" y="0" width="118" height="30" uuid="dea88d2a-f548-4960-b667-071dcc9ff585"/>
 								<textElement textAlignment="Center" verticalAlignment="Middle">
 									<font isBold="true"/>
 								</textElement>
@@ -535,7 +543,7 @@
 						</jr:columnHeader>
 						<jr:detailCell style="Table_TD" height="30">
 							<textField textAdjust="StretchHeight">
-								<reportElement x="0" y="0" width="88" height="30" uuid="9030ecca-cc53-41f8-95c0-fd74e930e81b"/>
+								<reportElement x="0" y="0" width="118" height="30" uuid="9030ecca-cc53-41f8-95c0-fd74e930e81b"/>
 								<textElement verticalAlignment="Middle">
 									<paragraph leftIndent="5" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
 								</textElement>
