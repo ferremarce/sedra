@@ -78,3 +78,6 @@ UPDATE public.permiso	SET descripcion_permiso='Archivar Documento' WHERE id_perm
 UPDATE public.permiso	SET descripcion_permiso='Localizar Documento' WHERE id_permiso=19;
 UPDATE public.permiso	SET descripcion_permiso='Desbloquear Documento'	WHERE id_permiso=18;
 UPDATE public.permiso	SET descripcion_permiso='Seguimiento de Documento'	WHERE id_permiso=15;
+
+ALTER TABLE public.tramitacion ADD fecha_hora_archivo timestamp NULL;
+ALTER TABLE public.tramitacion ADD id_usuario_archivo integer NULL;

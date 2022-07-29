@@ -90,6 +90,9 @@ public class Tramitacion implements Serializable, Comparable<Tramitacion> {
     @Column(name = "hora_confirmacion")
     @Temporal(TemporalType.TIME)
     private Date horaConfirmacion;
+    @Column(name = "fecha_hora_archivo")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaHoraArchivo;
     @JoinColumn(name = "id_documento", referencedColumnName = "id_documento")
     @ManyToOne
     private Documento idDocumento;
@@ -108,6 +111,9 @@ public class Tramitacion implements Serializable, Comparable<Tramitacion> {
     @JoinColumn(name = "id_usuario_remitente", referencedColumnName = "id_usuario")
     @ManyToOne
     private Usuario idUsuarioRemitente;
+    @JoinColumn(name = "id_usuario_archivo", referencedColumnName = "id_usuario")
+    @ManyToOne
+    private Usuario idUsuarioArchivo;
     @OrderBy("idTramitacion")
     @OneToMany(mappedBy = "idTramitacionPadre")
     private List<Tramitacion> tramitacionList;
@@ -355,6 +361,22 @@ public class Tramitacion implements Serializable, Comparable<Tramitacion> {
 
     public void setFlagBorrado(Boolean flagBorrado) {
         this.flagBorrado = flagBorrado;
+    }
+
+    public Date getFechaHoraArchivo() {
+        return fechaHoraArchivo;
+    }
+
+    public void setFechaHoraArchivo(Date fechaHoraArchivo) {
+        this.fechaHoraArchivo = fechaHoraArchivo;
+    }
+
+    public Usuario getIdUsuarioArchivo() {
+        return idUsuarioArchivo;
+    }
+
+    public void setIdUsuarioArchivo(Usuario idUsuarioArchivo) {
+        this.idUsuarioArchivo = idUsuarioArchivo;
     }
 
     @Override

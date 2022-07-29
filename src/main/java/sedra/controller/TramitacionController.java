@@ -571,7 +571,7 @@ public class TramitacionController implements Serializable {
     public boolean globalFilterFunction(Object value, Object filter, Locale locale) {
         String filterText = (filter == null) ? null : filter.toString().trim().toLowerCase();
         filterText = JSFutil.replaceWildcardRegex(filterText); //Reemplazamos los wildcard de JPA por REGEX
-        
+
         if (LangUtils.isBlank(filterText)) {
             return true;
         }
@@ -591,7 +591,7 @@ public class TramitacionController implements Serializable {
         }
         cadenaBusqueda = cadenaBusqueda.replaceAll("null", "");
         String nuevoFilter = "*" + filterText + "*";
-        System.out.println("Nuevo Filter: "+nuevoFilter);
+        System.out.println("Nuevo Filter: " + nuevoFilter);
         try {
             Boolean match = JSFutil.strmatch(cadenaBusqueda.toLowerCase(), nuevoFilter);
             return match;
@@ -611,4 +611,31 @@ public class TramitacionController implements Serializable {
         PrimeFaces.current().ajax().update("formPopup");
         PrimeFaces.current().ajax().update("formMain:dataTablePendiente");
     }
+
+    public String archivarMultipleSetup() {
+        if (this.arraySelectedTramitacion.length == 0) {
+            JSFutil.addMessage("Debe seleccionar al menos un documento para tramitar", JSFutil.StatusMessage.WARNING);
+            return "";
+        }
+        this.listSelectedTramitacion = (List<Tramitacion>) JSFutil.arrayToList(this.arraySelectedTramitacion);
+        for (Tramitacion t : this.listSelectedTramitacion) {
+            this.archivarTramite(t.getIdTramitacion());
+        }
+        JSFutil.addMessage("Tramitacion procesada exitosamente. ", JSFutil.StatusMessage.INFORMATION);
+        this.buscarAllPendienteAjax();
+        return "";
+    }
+
+    private void archivarTramite(Integer idTramitacion) {
+        try {
+            this.tramitacion = tramitacionFacade.find(idTramitacion);
+            this.tramitacion.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_ARCHIVADO));
+            this.tramitacion.setFechaHoraArchivo(JSFutil.getFechaHoraActual());            
+            this.tramitacion.setIdUsuarioArchivo(JSFutil.getUsuarioConectado());
+            tramitacionFacade.edit(tramitacion);
+        } catch (Exception ex) {
+            this.commonController.doExcepcion(ex);
+        }
+    }
+
 }

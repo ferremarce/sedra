@@ -148,6 +148,11 @@
                                     <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="HH:mm" />
                                 </h:outputText>
                             </p:outputPanel>
+                            <p:outputLabel value="Archivado: "/>
+                            <h:outputText value="#{item.fechaHoraArchivo}">
+                                <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy HH:mm" />
+                            </h:outputText>
+
                         </p:panelGrid>
                     </p:rowExpansion>
                 </p:dataTable>

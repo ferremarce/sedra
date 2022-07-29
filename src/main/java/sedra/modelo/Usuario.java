@@ -66,6 +66,8 @@ public class Usuario implements Serializable {
     private List<Tramitacion> tramitacionList1;
     @OneToMany(mappedBy = "idUsuarioRemitente")
     private List<Tramitacion> tramitacionList2;
+    @OneToMany(mappedBy = "idUsuarioArchivo")
+    private List<Tramitacion> tramitacionList3;
     @JoinColumn(name = "id_rol", referencedColumnName = "id_rol")
     @ManyToOne
     private Rol idRol;
@@ -179,6 +181,14 @@ public class Usuario implements Serializable {
 
     public void setIdRol(Rol idRol) {
         this.idRol = idRol;
+    }
+
+    public List<Tramitacion> getTramitacionList3() {
+        return tramitacionList3;
+    }
+
+    public void setTramitacionList3(List<Tramitacion> tramitacionList3) {
+        this.tramitacionList3 = tramitacionList3;
     }
 
     @Override

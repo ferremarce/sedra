@@ -145,6 +145,9 @@
                 </p:commandButton>
                 <p:commandButton disabled="#{fn:length(TramitacionController.arraySelectedTramitacion)==0 or TramitacionController.tipoBandeja!=1}" styleClass="espaciadoToolbar" ajax="false" title="#{bundle.RechazarBoton}" value="#{bundle.RechazarBoton} [#{fn:length(TramitacionController.arraySelectedTramitacion)}]" icon="fa fa-remove" action="#{TramitacionController.rechazaMultipleSetup()}"/>     
                 <p:commandButton disabled="#{fn:length(TramitacionController.arraySelectedTramitacion)==0 or TramitacionController.tipoBandeja!=2}" styleClass="espaciadoToolbar" ajax="false" title="#{bundle.DerivarBoton}" value="#{bundle.DerivarBoton} [#{fn:length(TramitacionController.arraySelectedTramitacion)}]" icon="fa fa-random" action="#{TramitacionController.derivaMultipleSetup()}"/>                        
+                <p:commandButton disabled="#{fn:length(TramitacionController.arraySelectedTramitacion)==0 or TramitacionController.tipoBandeja!=2}" styleClass="espaciadoToolbar" title="#{bundle.ArchivarBoton}" value="#{bundle.ArchivarBoton} [#{fn:length(TramitacionController.arraySelectedTramitacion)}]" icon="fa fa-file" action="#{TramitacionController.archivarMultipleSetup()}" update="@form, panelMensajeEstado">                        
+                    <p:confirm escape="false" header="Confirmación" message="Está a punto de archivar [#{fn:length(TramitacionController.arraySelectedTramitacion)}] documentos seleccionados. &lt;br/&gt;¿Estás seguro?" icon="fa fa-exclamation-triangle" />
+                </p:commandButton>
             </p:panel>
             <!--esto evita que el enter en el filtrado de tabla no dispare el download del item de la tabla-->
             <p:defaultCommand target="btnAceptar"/>
