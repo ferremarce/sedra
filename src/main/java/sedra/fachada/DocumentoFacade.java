@@ -17,6 +17,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import sedra.modelo.Documento;
+import sedra.util.Codigo;
 import sedra.util.JSFutil;
 
 /**
@@ -39,17 +40,23 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
     }
 
     public List<Documento> getAllDocumento(String criterio) {
+        String whereAdmin = "";
+        if (JSFutil.getRolSesion().getIdRol().compareTo(Codigo.ADMINISTRADOR) != 0) {
+            whereAdmin = "AND a.idUsuario.idRol.idRol=:xIdRol ";
+        }
         Query q = em.createQuery("SELECT a FROM Documento a "
                 + "WHERE (UPPER(a.asunto) LIKE :xCriterio OR CONCAT(a.numeroExpediente,'-',a.anho) LIKE :xCriterio) "
                 //+ "OR a.idDocumento IN (SELECT d.idDocumento.idDocumento FROM DetalleNotaSalida d WHERE UPPER(d.idNota.numeroSalida) LIKE :xCriterio OR UPPER(d.idNota.numeroStr) LIKE :xCriterio) "
-                + "AND a.idUsuario.idRol.idRol=:xIdRol "
+                + whereAdmin
                 + "ORDER BY a.idDocumento DESC");
         if (criterio.compareTo("") != 0) {
             q.setParameter("xCriterio", "%" + criterio.toUpperCase() + "%");
         } else {
             q.setParameter("xCriterio", "123456");
         }
-        q.setParameter("xIdRol", JSFutil.getRolSesion().getIdRol());
+        if (JSFutil.getRolSesion().getIdRol().compareTo(Codigo.ADMINISTRADOR) != 0) {
+            q.setParameter("xIdRol", JSFutil.getRolSesion().getIdRol());
+        }
 
         List<Documento> tr = q.getResultList();
 //        this.metaDatabase();

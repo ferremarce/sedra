@@ -468,14 +468,14 @@ public class TramitacionController implements Serializable {
 
     public String archivarSinNota() {
         try {
-            for (Tramitacion t : this.documento.getTramitacionList()) {
-                if (t.getIdEstado().getIdEstado() != 100) { //Existe todavia pendientes
-                    t.setFechaSalida(JSFutil.getFechaHoraActual());
-                    t.setHoraSalida(JSFutil.getFechaHoraActual());
-                    t.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_ARCHIVADO));
-                    this.tramitacionFacade.edit(t);
-                }
-            }
+//            for (Tramitacion t : this.documento.getTramitacionList()) {
+//                if (t.getIdEstado().getIdEstado() != 100) { //Existe todavia pendientes
+//                    t.setFechaSalida(JSFutil.getFechaHoraActual());
+//                    t.setHoraSalida(JSFutil.getFechaHoraActual());
+//                    t.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_ARCHIVADO));
+//                    this.tramitacionFacade.edit(t);
+//                }
+//            }
             this.documento.setCerrado(Boolean.TRUE);
             documentoFacade.edit(this.documento);
             this.documentoController.buscarDocumentoParaArchivo();
