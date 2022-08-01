@@ -97,7 +97,8 @@
                             <f:facet name="header">
                                 <i class="fa fa-file" title="Documento"></i>
                             </f:facet>
-                            <h:outputText title="#{item.idDocumento}" styleClass="Blue" value="#{item.idDocumento.toShortString()}"/>                               
+                            <i style="display: #{item.idDocumento.cerrado?'inline':'none'}" title="Llaveado" class="fa fa-lock"/>
+                            <h:outputText title="#{item.idDocumento}" styleClass="Blue" value=" #{item.idDocumento.toShortString()}"/>                             
                             <blockquote>
                                 <h:outputText styleClass="Brown" value="#{item.idDocumento.asunto}"/>
                             </blockquote>

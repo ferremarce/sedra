@@ -252,6 +252,7 @@ public class TramitacionController implements Serializable {
         this.listaTramitacionEstado = this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_DERIVADO);
         this.listaTramitacionEstado.addAll(this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_ARCHIVADO));
         this.listaTramitacionEstado.addAll(this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_RECHAZADO));
+        this.listaTramitacionEstado.addAll(this.tramitacionFacade.getAllTramitacionLlaveado("%"));
         Collections.sort(this.listaTramitacionEstado);
         this.arraySelectedTramitacion = null;
         this.tipoBandeja = Codigo.BANDEJA_TRAMITADOS;
@@ -630,7 +631,7 @@ public class TramitacionController implements Serializable {
         try {
             this.tramitacion = tramitacionFacade.find(idTramitacion);
             this.tramitacion.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_ARCHIVADO));
-            this.tramitacion.setFechaHoraArchivo(JSFutil.getFechaHoraActual());            
+            this.tramitacion.setFechaHoraArchivo(JSFutil.getFechaHoraActual());
             this.tramitacion.setIdUsuarioArchivo(JSFutil.getUsuarioConectado());
             tramitacionFacade.edit(tramitacion);
         } catch (Exception ex) {

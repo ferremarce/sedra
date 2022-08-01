@@ -35,11 +35,27 @@ public class TramitacionFacade extends AbstractFacade<Tramitacion> {
     }
 
     public List<Tramitacion> getAllTramitacionPendientes(String criterio, Integer estado) {
-        Query q = em.createQuery("SELECT a FROM Tramitacion a WHERE a.idRol.idRol=:xIdRol AND a.idEstado.idEstado=:xEstado "
+        Query q = em.createQuery("SELECT a FROM Tramitacion a WHERE a.idDocumento.cerrado=:xCerrado AND a.idRol.idRol=:xIdRol AND a.idEstado.idEstado=:xEstado "
                 + "AND (UPPER(a.idDocumento.asunto) LIKE :xCriterio OR CONCAT(a.idDocumento.numeroExpediente,'-',a.idDocumento.anho) LIKE :xCriterio) ORDER BY a.idPrioridad.orden, a.idTramitacion DESC");
         q.setParameter("xIdRol", JSFutil.getRolSesion().getIdRol());
-        //q.setParameter("xCerrado", Boolean.FALSE);
+        q.setParameter("xCerrado", Boolean.FALSE);
         q.setParameter("xEstado", estado);
+        //q.setMaxResults(100);
+        if (criterio.compareTo("") != 0) {
+            q.setParameter("xCriterio", "%" + criterio.toUpperCase() + "%");
+        } else {
+            q.setParameter("xCriterio", "123456");
+        }
+        List<Tramitacion> tr = q.getResultList();
+        return tr;
+
+    }
+     public List<Tramitacion> getAllTramitacionLlaveado(String criterio) {
+        Query q = em.createQuery("SELECT a FROM Tramitacion a WHERE a.idDocumento.cerrado=:xCerrado AND a.idRol.idRol=:xIdRol "
+                + "AND (UPPER(a.idDocumento.asunto) LIKE :xCriterio OR CONCAT(a.idDocumento.numeroExpediente,'-',a.idDocumento.anho) LIKE :xCriterio) ORDER BY a.idPrioridad.orden, a.idTramitacion DESC");
+        q.setParameter("xIdRol", JSFutil.getRolSesion().getIdRol());
+        q.setParameter("xCerrado", Boolean.TRUE);
+      
         //q.setMaxResults(100);
         if (criterio.compareTo("") != 0) {
             q.setParameter("xCriterio", "%" + criterio.toUpperCase() + "%");
