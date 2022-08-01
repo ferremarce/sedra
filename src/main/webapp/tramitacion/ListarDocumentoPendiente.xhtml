@@ -80,7 +80,7 @@
                             <h:outputText styleClass="insignia #{item.idEstado.insignia}" value="#{item.idEstado.toString()}"/>
                         </p:column>
                         <p:column width="80">
-                            <p:commandButton value="#{bundle.VerBoton}" ajax="true" global="false" icon="fa fa-envelope-open" actionListener="#{TramitacionController.doVerMensaje(item)}"/>
+                            <p:commandButton disabled="#{item.idDocumento.cerrado}" value="#{bundle.VerBoton}" ajax="true" global="false" icon="fa fa-envelope-open" actionListener="#{TramitacionController.doVerMensaje(item)}"/>
                         </p:column>
                         <p:column width="30" headerText="#">
                             <h:outputText value="#{index+1}"/>                          
