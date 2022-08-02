@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -125,6 +126,8 @@ public class Tramitacion implements Serializable, Comparable<Tramitacion> {
     @JoinColumn(name = "id_prioridad", referencedColumnName = "id_prioridad")
     @ManyToOne
     private Prioridad idPrioridad;
+    @OneToMany(mappedBy = "idTramitacion", cascade = CascadeType.REMOVE)
+    private List<TramitacionAdjunto> tramitacionAdjuntoList;
     @Transient
     private Boolean flagBorrado;
 
@@ -377,6 +380,14 @@ public class Tramitacion implements Serializable, Comparable<Tramitacion> {
 
     public void setIdUsuarioArchivo(Usuario idUsuarioArchivo) {
         this.idUsuarioArchivo = idUsuarioArchivo;
+    }
+
+    public List<TramitacionAdjunto> getTramitacionAdjuntoList() {
+        return tramitacionAdjuntoList;
+    }
+
+    public void setTramitacionAdjuntoList(List<TramitacionAdjunto> tramitacionAdjuntoList) {
+        this.tramitacionAdjuntoList = tramitacionAdjuntoList;
     }
 
     @Override

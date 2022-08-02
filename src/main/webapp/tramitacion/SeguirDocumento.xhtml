@@ -68,20 +68,18 @@
             <p:panel header="Información de la Tramitación">
                 <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{TramitacionController.listaTramitacionSeguimiento}" 
                              reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
-                             rows="50"
-                             rowKey="#{item.idTramitacion}"
-                             >
+                             rows="50" size="small"
+                             rowKey="#{item.idTramitacion}">
                     <!-- CUANDO ES EDICION -->
                     <p:column headerText="ID" style="width: 40px">
-                        <h:outputText style="display: inline" id="txt#{item.idTramitacion}" value="#{item.idTramitacion}"/>
-                        <p:rowToggler/>
+                        <h:outputText styleClass="font-2x gray" style="display: inline" id="txt#{item.idTramitacion}" value="#{item.idTramitacion}"/>
+                        <p:rowToggler class="font3x"/>
                     </p:column>
-
                     <p:column headerText="Despacho" width="100">
                         <h:outputText value="#{CommonController.doDiferenciaTiempo(item.fechaRegistro, item.horaRegistro, item.fechaSalida, item.horaSalida)} "/>
                     </p:column>
                     <p:column headerText="Remitido a">
-                        <p:inputText title="Remitido a" value="#{item.remitidoA}"/>
+                        <p:inputText style="width: 100%" title="Remitido a" value="#{item.remitidoA}"/>
                         <p:selectOneMenu style="width: 100%"  id="idRol" value="#{item.idRol}" filter="true" filterMatchMode="contains" required="true" requiredMessage="#{bundle.Requerido}" >
                             <f:selectItems value="#{RolController.rolSet}"/>
                         </p:selectOneMenu>
@@ -96,64 +94,81 @@
                         </p:selectOneMenu>
                     </p:column>
                     <p:column headerText="Dependencias">
-                        <p:dataList rendered="#{not empty item.tramitacionList}" var="tramDeriva" value="#{item.tramitacionList}">
-                            <h:outputText value="#{tramDeriva.idRol.toString()}"/>
-                            <h:outputText styleClass="font-1x gray" value=" [#{tramDeriva.idTramitacion}]"/>
-                        </p:dataList>
+                        <ul>
+                            <p:repeat rendered="#{not empty item.tramitacionList}" var="tramDeriva" value="#{item.tramitacionList}">
+                                <li>
+                                    <h:outputText value="#{tramDeriva.idRol.toString()}"/>
+                                    <h:outputText styleClass="font-2x gray" value=" [#{tramDeriva.idTramitacion}]"/>
+                                </li>
+                            </p:repeat>
+                        </ul>
                     </p:column>
                     <p:column headerText="Observaciones" >
-                        <p:inputTextarea rows="3"  cols="20" id="observaciones" value="#{item.observacion}" title="Observaciones" />
+                        <p:inputTextarea rows="3" style="width: 100%" id="observaciones" value="#{item.observacion}" title="Observaciones" />
                     </p:column>
-                    <p:column headerText="Adjunto" width="115">  
-                        <p:commandButton rendered="#{item.nombreArchivo!=null}" title="#{item.nombreArchivo!=null ? item.nombreArchivo:'Sin archivo'}" icon="fa fa-download" ajax="false">
-                            <p:fileDownload value="#{DownloadFile.downloadDocumentoTramite(item.idTramitacion)}" />  
-                        </p:commandButton>
-                    </p:column>  
-                    <p:column width="100" headerText="Borrar?" >
+                    <p:column width="60" headerText="Adjuntos">
+                        <i style="display: #{item.tramitacionAdjuntoList.size()>0?'inline':'none'}" title="Para ver los adjuntos debe expandir el trámite" class="fa fa-copy font2x"/>
+                    </p:column>
+                    <p:column width="60" headerText="Borrar?" >
                         <p:toggleSwitch value="#{item.flagBorrado}"/>
                     </p:column>
                     <p:rowExpansion>
-                        <p:panelGrid columns="2" style="width: 400px" >
-                            <p:outputLabel value="Derivado: "/>
-                            <h:outputText value="#{item.fechaDerivacion}">
-                                <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                            </h:outputText>
-                            <p:outputLabel value="Recibido: "/>
-                            <p:outputPanel>
-                                <h:outputText value="#{item.fechaRegistro}">
-                                    <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                                </h:outputText>
-                                <p:spacer width="10px"/>
-                                <h:outputText value="#{item.horaRegistro}">
-                                    <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="HH:mm" />
-                                </h:outputText>
-                            </p:outputPanel>
-                            <p:outputLabel value="Confirmado: "/>
-                            <p:outputPanel>
-                                <h:outputText value="#{item.fechaConfirmacion}">
-                                    <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                                </h:outputText>
-                                <p:spacer width="10px"/>
-                                <h:outputText value="#{item.horaConfirmacion}">
-                                    <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="HH:mm" />
-                                </h:outputText>
-                            </p:outputPanel>
-                            <p:outputLabel value="Procesado (Salida): "/>
-                            <p:outputPanel>
-                                <h:outputText value="#{item.fechaSalida}">
-                                    <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                                </h:outputText>
-                                <p:spacer width="10px"/>
-                                <h:outputText value="#{item.horaSalida}">
-                                    <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="HH:mm" />
-                                </h:outputText>
-                            </p:outputPanel>
-                            <p:outputLabel value="Archivado: "/>
-                            <h:outputText value="#{item.fechaHoraArchivo}">
-                                <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy HH:mm" />
-                            </h:outputText>
-
-                        </p:panelGrid>
+                        <div class="p-grid ui-fluid">
+                            <div class="p-col-4">
+                                <p:panelGrid columns="2">
+                                    <p:outputLabel value="Derivado: "/>
+                                    <h:outputText value="#{item.fechaDerivacion}">
+                                        <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                    <p:outputLabel value="Recibido: "/>
+                                    <p:outputPanel>
+                                        <h:outputText value="#{item.fechaRegistro}">
+                                            <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                                        </h:outputText>
+                                        <p:spacer width="10px"/>
+                                        <h:outputText value="#{item.horaRegistro}">
+                                            <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="HH:mm" />
+                                        </h:outputText>
+                                    </p:outputPanel>
+                                    <p:outputLabel value="Confirmado: "/>
+                                    <p:outputPanel>
+                                        <h:outputText value="#{item.fechaConfirmacion}">
+                                            <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                                        </h:outputText>
+                                        <p:spacer width="10px"/>
+                                        <h:outputText value="#{item.horaConfirmacion}">
+                                            <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="HH:mm" />
+                                        </h:outputText>
+                                    </p:outputPanel>
+                                    <p:outputLabel value="Procesado (Salida): "/>
+                                    <p:outputPanel>
+                                        <h:outputText value="#{item.fechaSalida}">
+                                            <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                                        </h:outputText>
+                                        <p:spacer width="10px"/>
+                                        <h:outputText value="#{item.horaSalida}">
+                                            <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="HH:mm" />
+                                        </h:outputText>
+                                    </p:outputPanel>
+                                    <p:outputLabel value="Archivado: "/>
+                                    <h:outputText value="#{item.fechaHoraArchivo}">
+                                        <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy HH:mm" />
+                                    </h:outputText>
+                                </p:panelGrid>
+                            </div>
+                            <div class="p-col-8">
+                                <div class="p-grid">
+                                    <p:repeat id="cmdAdjunto" var="tramiteAdj" rendered="#{not empty item.tramitacionAdjuntoList}" value="#{item.tramitacionAdjuntoList}">
+                                        <div class="p-col-6 p-md-6 p-lg-6">
+                                            <p:commandButton title="Descargar" icon="fa fa-download" ajax="false">
+                                                <p:fileDownload value="#{DownloadFile.downloadTramite(tramiteAdj.idTramitacionAdjunto)}" />  
+                                            </p:commandButton>
+                                            <h:outputText styleClass="espaciadoToolbar" value="#{tramiteAdj.toNameDownload()} [#{tramiteAdj.toTamanho()}]"/> 
+                                        </div>
+                                    </p:repeat>  
+                                </div>
+                            </div>
+                        </div>
                     </p:rowExpansion>
                 </p:dataTable>
                 <f:facet name="footer">

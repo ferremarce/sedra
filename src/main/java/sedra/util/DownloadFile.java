@@ -21,12 +21,14 @@ import sedra.fachada.ConfiguracionFacade;
 import sedra.fachada.DocumentoAdjuntoFacade;
 import sedra.fachada.DocumentoFacade;
 import sedra.fachada.NotaSalidaFacade;
+import sedra.fachada.TramitacionAdjuntoFacade;
 import sedra.fachada.TramitacionFacade;
 import sedra.modelo.Configuracion;
 import sedra.modelo.Documento;
 import sedra.modelo.DocumentoAdjunto;
 import sedra.modelo.NotaSalida;
 import sedra.modelo.Tramitacion;
+import sedra.modelo.TramitacionAdjunto;
 
 /**
  *
@@ -48,6 +50,8 @@ public class DownloadFile implements Serializable {
     TramitacionFacade tramitacionFacade;
     @Inject
     ConfiguracionFacade configuracionFacade;
+    @Inject
+    TramitacionAdjuntoFacade tramitacionAdjuntoFacade;
 
     private String pagina;
     private Integer id;
@@ -102,13 +106,13 @@ public class DownloadFile implements Serializable {
         return DefaultStreamedContent.builder().name(pa.getNombreArchivo()).contentType(pa.getTipoArchivo()).stream(() -> input).build();
     }
 
-    public StreamedContent downloadDocumentoTramite(Integer id) throws FileNotFoundException {
-        Tramitacion pa = tramitacionFacade.find(id);
-        File archivo = new File(JSFutil.folderDocumento + pa.getIdTramitacion() + "-" + pa.getNombreArchivo());
+    public StreamedContent downloadTramite(Integer id) throws FileNotFoundException {
+        TramitacionAdjunto pa = tramitacionAdjuntoFacade.find(id);
+        File archivo = new File(pa.toPathFileSystem());
         System.out.println("ARCHIVO: " + pa.getClass() + " con ID " + id + pa.getNombreArchivo());
         //if (archivo.exists()) {
         FileInputStream input = new FileInputStream(archivo);
-        return DefaultStreamedContent.builder().name(pa.getNombreArchivo()).contentType(pa.getTipoArchivo()).stream(() -> input).build();
+        return DefaultStreamedContent.builder().name(pa.getNombreArchivo()).contentType(pa.getTipoArchivoMime()).stream(() -> input).build();
 
     }
 

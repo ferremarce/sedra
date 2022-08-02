@@ -37,20 +37,27 @@
                             <p:inputText id="remitidoA" value="#{TramitacionController.tramitacion.remitidoA}" title="RemitidoA" />
                             <p:outputLabel for="observaciones"  value="Observaciones:"/>
                             <p:inputTextarea rows="3"  id="observaciones" value="#{TramitacionController.tramitacion.observacion}" title="Observaciones" />
-                            <p:outputLabel for="downAdjunto" value="Adjunto:"/>
-                            <p:panelGrid id="downAdjunto" columns="1" layout="flex" contentStyleClass="ui-fluid">
-                                <p:fileUpload id="adjunto" label="#{bundle.SeleccionarBoton}" cancelLabel="#{bundle.EliminarBoton}" uploadLabel="#{bundle.AgregarBoton}" 
+                            <p:outputLabel for="archivo" value="Adjunto:"/>
+                            <p:panel id="panelUpload" header="Haga click en #{bundle.SeleccionarBoton} o Arrastre hasta aquí los archivos">
+                                <p:fileUpload id="archivo" label="#{bundle.SeleccionarBoton}" cancelLabel="#{bundle.EliminarBoton}" uploadLabel="#{bundle.AgregarBoton}" 
                                               listener="#{TramitacionController.handleFileUpload}"
                                               mode="advanced"
-                                              required="true"
-                                              requiredMessage="Adjunto"
-                                              update="downAdjunto"
-                                              />
-                                <h:outputText value="Archivo Adjuntado: #{TramitacionController.adjunto.fileName}  "/>
-                                <p:commandButton immediate="true" rendered="#{TramitacionController.adjunto!=null}" title="Ver Adjunto" icon="fa fa-download"  ajax="false">
-                                    <p:fileDownload value="#{CommonController.downloadAdjuntoTMP(TramitacionController.adjunto)}"/>  
-                                </p:commandButton>
-                            </p:panelGrid>
+                                              multiple="true"
+                                              update="formMain:panelUpload">
+                                </p:fileUpload>
+                                <p:dataTable value="#{TramitacionController.adjuntoTramite}" rowIndexVar="index" var="item" emptyMessage="#{bundle.SinRegistrosMensaje}" >
+                                    <p:column headerText="Archivo">
+                                        <h:outputText value="#{index+1}. #{item.fileName}"/>
+                                    </p:column>
+                                    <p:column headerText="Acción" width="150">
+                                        <p:commandButton title="#{bundle.DescargarBoton}" styleClass="rounded-button, espaciadoToolbar" icon="fa fa-download" immediate="true" ajax="false">
+                                            <p:fileDownload value="#{CommonController.downloadAdjuntoTMP(item)}"/>
+                                        </p:commandButton>
+                                        <p:commandButton title="#{bundle.EliminarBoton}" icon="fa fa-times" styleClass="rounded-button ui-button-warning" immediate="true" global="false" ajax="true" 
+                                                         action="#{TramitacionController.quitarAdjuntoTramite(index)}" update="formMain:panelUpload"/>                                          
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panel>
                         </p:panelGrid>
                     </div>
                     <div class="p-col-1">

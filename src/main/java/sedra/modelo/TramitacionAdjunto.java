@@ -19,6 +19,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -30,19 +31,20 @@ import sedra.util.JSFutil;
  * @author jmferreira
  */
 @Entity
-@Table(name = "documento_adjunto")
+@Table(name = "tramitacion_adjunto")
 @NamedQueries({
-    @NamedQuery(name = "DocumentoAdjunto.findAll", query = "SELECT e FROM DocumentoAdjunto e")})
-public class DocumentoAdjunto implements Serializable {
+    @NamedQuery(name = "TramitacionAdjunto.findAll", query = "SELECT e FROM TramitacionAdjunto e")})
+public class TramitacionAdjunto implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "idtramitacionadjunto_seq")
+    @SequenceGenerator(allocationSize = 1, name = "idtramitacionadjunto_seq", sequenceName = "idtramitacionadjunto_seq")
     @Basic(optional = false)
-    @Column(name = "id_documento_adjunto")
-    private Integer idDocumentoAdjunto;
+    @Column(name = "id_tramitacion_adjunto")
+    private Integer idTramitacionAdjunto;
     @Column(name = "fecha_registro")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaRegistro;
     @Size(max = 255)
     @Column(name = "nombre_archivo")
@@ -61,23 +63,23 @@ public class DocumentoAdjunto implements Serializable {
     @Size(max = 255)
     @Column(name = "tipo_archivo_mime")
     private String tipoArchivoMime;
-    @JoinColumn(name = "id_documento", referencedColumnName = "id_documento")
+    @JoinColumn(name = "id_tramitacion", referencedColumnName = "id_tramitacion")
     @ManyToOne
-    private Documento idDocumento;
+    private Tramitacion idTramitacion;
 
-    public DocumentoAdjunto() {
+    public TramitacionAdjunto() {
     }
 
-    public DocumentoAdjunto(Integer idDocumentoAdjunto) {
-        this.idDocumentoAdjunto = idDocumentoAdjunto;
+    public TramitacionAdjunto(Integer idTramitacionAdjunto) {
+        this.idTramitacionAdjunto = idTramitacionAdjunto;
     }
 
-    public Integer getIdDocumentoAdjunto() {
-        return idDocumentoAdjunto;
+    public Integer getIdTramitacionAdjunto() {
+        return idTramitacionAdjunto;
     }
 
-    public void setIdDocumentoAdjunto(Integer idDocumentoAdjunto) {
-        this.idDocumentoAdjunto = idDocumentoAdjunto;
+    public void setIdTramitacionAdjunto(Integer idTramitacionAdjunto) {
+        this.idTramitacionAdjunto = idTramitacionAdjunto;
     }
 
     public Date getFechaRegistro() {
@@ -120,12 +122,12 @@ public class DocumentoAdjunto implements Serializable {
         this.tipoArchivoMime = tipoArchivoMime;
     }
 
-    public Documento getIdDocumento() {
-        return idDocumento;
+    public Tramitacion getIdTramitacion() {
+        return idTramitacion;
     }
 
-    public void setIdDocumento(Documento idDocumento) {
-        this.idDocumento = idDocumento;
+    public void setIdTramitacion(Tramitacion idTramitacion) {
+        this.idTramitacion = idTramitacion;
     }
 
     public String getDescripcion() {
@@ -139,18 +141,18 @@ public class DocumentoAdjunto implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idDocumentoAdjunto != null ? idDocumentoAdjunto.hashCode() : 0);
+        hash += (idTramitacionAdjunto != null ? idTramitacionAdjunto.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof DocumentoAdjunto)) {
+        if (!(object instanceof TramitacionAdjunto)) {
             return false;
         }
-        DocumentoAdjunto other = (DocumentoAdjunto) object;
-        if ((this.idDocumentoAdjunto == null && other.idDocumentoAdjunto != null) || (this.idDocumentoAdjunto != null && !this.idDocumentoAdjunto.equals(other.idDocumentoAdjunto))) {
+        TramitacionAdjunto other = (TramitacionAdjunto) object;
+        if ((this.idTramitacionAdjunto == null && other.idTramitacionAdjunto != null) || (this.idTramitacionAdjunto != null && !this.idTramitacionAdjunto.equals(other.idTramitacionAdjunto))) {
             return false;
         }
         return true;
@@ -158,7 +160,7 @@ public class DocumentoAdjunto implements Serializable {
 
     @Override
     public String toString() {
-        return "segment.modelo.DocumentoAdjunto[ idDocumentoAdjunto=" + idDocumentoAdjunto + " ]";
+        return "segment.modelo.TramitacionAdjunto[ idTramitacionAdjunto=" + idTramitacionAdjunto + " ]";
     }
 
     public String toNameDownload() {
@@ -175,7 +177,7 @@ public class DocumentoAdjunto implements Serializable {
     }
 
     public String toURLDownload() {
-        return "documento-" + this.idDocumentoAdjunto;
+        return "tramitacion-" + this.idTramitacionAdjunto;
     }
 
     public String toTamanho() {
@@ -197,6 +199,6 @@ public class DocumentoAdjunto implements Serializable {
     }
 
     public String toPathFileSystem() {
-        return JSFutil.folderDocumento + this.getIdDocumentoAdjunto() + "-" + this.getNombreArchivo();
+        return JSFutil.folderTramite + this.getIdTramitacionAdjunto() + "-" + this.getNombreArchivo();
     }
 }

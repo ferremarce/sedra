@@ -12,6 +12,8 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,6 +46,7 @@ public class JSFutil implements Serializable {
     ResourceBundle bundle = ResourceBundle.getBundle("propiedades.bundle", JSFutil.getmyLocale());
     public static final String folderRoot = "/upload/";
     public static String folderDocumento = folderRoot;
+    public static String folderTramite = folderRoot + "tramite/";
 
     private Integer tiempoDespacho = 15;
 
@@ -375,6 +378,7 @@ public class JSFutil implements Serializable {
      * @return Un indicador de si el archivo ha sido escrito en el disco
      */
     public static Integer fileToDisk(InputStream is2, String nombreArchivo) {
+        checkFolders();
         File file;
         InputStream is = is2;
         file = new File(nombreArchivo);
@@ -399,6 +403,15 @@ public class JSFutil implements Serializable {
                 Logger.getLogger(JSFutil.class.getName()).log(Level.SEVERE, null, ex);
                 return -1;
             }
+        }
+    }
+
+    private static void checkFolders() {
+        try {
+            Files.createDirectories(Paths.get(folderDocumento));
+            Files.createDirectories(Paths.get(folderTramite));
+        } catch (IOException ex) {
+            System.out.println("The directory already exist");
         }
     }
 

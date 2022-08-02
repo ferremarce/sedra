@@ -71,12 +71,12 @@
                             <f:selectItems value="#{TipoDocumentoController.tipoDocumentoSet}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="Adjunto:"/>
-                        <p:panel header="Haga click en #{bundle.SeleccionarBoton} o Arrastre hasta aquí los archivos">
+                        <p:panel id="panelUpload" header="Haga click en #{bundle.SeleccionarBoton} o Arrastre hasta aquí los archivos">
                             <p:fileUpload id="archivo" label="#{bundle.SeleccionarBoton}" cancelLabel="#{bundle.EliminarBoton}" uploadLabel="#{bundle.AgregarBoton}" 
                                           listener="#{DocumentoController.handleFileUpload}"
                                           mode="advanced"
                                           multiple="true"
-                                          update="dtAdjuntoDocumento">
+                                          update="formMain:panelUpload">
                             </p:fileUpload>
                             <p:dataTable id="dtAdjuntoDocumento" value="#{DocumentoController.adjuntoDocumento}" rowIndexVar="index" var="item" emptyMessage="#{bundle.SinRegistrosMensaje}" >
                                 <p:column headerText="Archivo">

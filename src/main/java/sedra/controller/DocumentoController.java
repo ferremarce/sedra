@@ -260,7 +260,7 @@ public class DocumentoController implements Serializable {
                         //ap.setTipoAdjunto("PROYECTO");
                         ap.setFechaRegistro(JSFutil.getFechaHoraActual());
                         documentoAdjuntoFacade.create(ap);
-                        int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(uf.getContent()), JSFutil.folderDocumento + ap.getIdDocumentoAdjunto() + "-" + JSFutil.sanitizeFilename(uf.getFileName()));
+                        int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(uf.getContent()), ap.toPathFileSystem());
                         if (resultado != 0) {
                             JSFutil.addMessage("No se ha podido guardar el adjunto debido a un error interno en el procesamiento del archivo. Se deshace el guardado del archivo.", JSFutil.StatusMessage.ERROR);
                             documentoAdjuntoFacade.remove(ap);
@@ -293,7 +293,7 @@ public class DocumentoController implements Serializable {
                         //ap.setTipoAdjunto("PROYECTO");
                         ap.setFechaRegistro(JSFutil.getFechaHoraActual());
                         documentoAdjuntoFacade.create(ap);
-                        int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(uf.getContent()), JSFutil.folderDocumento + ap.getIdDocumentoAdjunto() + "-" + JSFutil.sanitizeFilename(uf.getFileName()));
+                        int resultado = JSFutil.fileToDisk(new ByteArrayInputStream(uf.getContent()), ap.toPathFileSystem());
                         if (resultado != 0) {
                             JSFutil.addMessage("No se ha podido guardar el adjunto debido a un error interno en el procesamiento del archivo. Se deshace el guardado del archivo.", JSFutil.StatusMessage.ERROR);
                             documentoAdjuntoFacade.remove(ap);
@@ -367,7 +367,7 @@ public class DocumentoController implements Serializable {
         try {
             DocumentoAdjunto ea = documentoAdjuntoFacade.find(id);
             String name = ea.getNombreArchivo();
-            Boolean resultado = JSFutil.deleteFileFromDisk(JSFutil.folderDocumento + ea.getIdDocumentoAdjunto() + "-" + ea.getNombreArchivo());
+            Boolean resultado = JSFutil.deleteFileFromDisk(ea.toPathFileSystem());
             if (!resultado) {
                 JSFutil.addMessage("Pero no se ha podido procesar el adjunto debido a un error interno en el procesamiento", JSFutil.StatusMessage.WARNING);
             }
