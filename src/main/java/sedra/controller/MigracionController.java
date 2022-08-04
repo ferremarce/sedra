@@ -90,6 +90,7 @@ public class MigracionController implements Serializable {
                 }
                 tramitaAnterior = tramita;
             }
+            System.out.println("--Documento y tramite procesado: " + doc.toString());
         }
         JSFutil.addMessage("Registros actualizados", JSFutil.StatusMessage.INFORMATION);
     }
@@ -110,6 +111,8 @@ public class MigracionController implements Serializable {
         da.setIdDocumento(doc);
         da.setDescripcion("Migrado");
         this.documentoAdjuntoFacade.create(da);
+        doc.setNombreArchivo(null);
+        this.documentoFacade.edit(doc);
         System.out.println("Documento adjunto creado: " + da.toPathFileSystem());
     }
 
@@ -129,6 +132,8 @@ public class MigracionController implements Serializable {
         ta.setIdTramitacion(t);
         ta.setDescripcion("Migrado");
         this.tramitacionAdjuntoFacade.create(ta);
+        t.setNombreArchivo(null);
+        this.tramitacionFacade.edit(t);
         System.out.println("--Tramitacion adjunto creado: " + ta.toPathFileSystem());
     }
 
