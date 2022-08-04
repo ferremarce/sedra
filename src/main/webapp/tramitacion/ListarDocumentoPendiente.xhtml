@@ -83,7 +83,7 @@
                             <p:commandButton disabled="#{item.idDocumento.cerrado}" value="#{bundle.VerBoton}" ajax="true" global="false" icon="fa fa-envelope-open" actionListener="#{TramitacionController.doVerMensaje(item)}"/>
                         </p:column>
                         <p:column width="30" headerText="#">
-                            <h:outputText value="#{index+1}"/>                          
+                            <h:outputText title="#{item.idTramitacion}" value="#{index+1}"/>                          
                         </p:column>
                         <p:column width="80" sortBy="#{item.fechaDerivacion}" >
                             <f:facet name="header">
@@ -163,7 +163,7 @@
                     <p:separator/>
                     <p:staticMessage rendered="#{empty TramitacionController.tramitacion.idDocumento.documentoAdjuntoList and TramitacionController.tramitacion.idDocumento.nombreArchivo==null}" severity="warn" detail="No hay archivos adjuntos"/>
 
-                    <p:outputPanel rendered="#{TramitacionController.tramitacion.idDocumento.nombreArchivo!=null}">
+                    <p:outputPanel rendered="false">
                         <p:commandButton title="Descargar" icon="fa fa-download" ajax="false">
                             <p:fileDownload value="#{DownloadFile.downloadDocumento(TramitacionController.tramitacion.idDocumento.idDocumento)}" />  
                         </p:commandButton>

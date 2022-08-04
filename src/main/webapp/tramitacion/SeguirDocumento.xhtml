@@ -11,53 +11,8 @@
     </ui:define>
 
     <ui:define name="content">
+        <ui:include src="/includes/documentoHeader.xhtml"/>
         <h:form id="formMain">
-            <p:panel header="Información del Documento">
-                <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="grid" columnClasses="ui-grid-col-2,ui-grid-col-10">
-                    <p:outputLabel for="idClasificador" value="Clasificador:"/>
-                    <h:outputText id="idClasificador" rendered="#{TramitacionController.documento.idClasificador!=null}" value="#{ClasificadorController.obtenerRutaClasificador(TramitacionController.documento.idClasificador.idClasificador)}" title="Clasificador" />
-                    <p:outputLabel for="nroExpediente" value="Nro. Expediente:"/>
-                    <h:outputText id="nroExpediente" value="#{TramitacionController.documento.numeroExpediente}" title="Numero Expediente" />
-                    <p:outputLabel for="anho" value="Año:"/>
-                    <h:outputText id="anho" value="#{TramitacionController.documento.anho}" title="Año" />
-                    <p:outputLabel for="fechaDocumento" value="Fecha del Documento:"/>
-                    <h:outputText id="fechaDocumento" value="#{TramitacionController.documento.fechaDocumento}" title="Fecha Documento">
-                        <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                    </h:outputText>
-                    <p:outputLabel for="fechaIngreso" value="Fecha del Ingreso:"/>
-                    <h:outputText id="fechaIngreso" value="#{TramitacionController.documento.fechaIngreso}" title="Fecha Ingreso">
-                        <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                    </h:outputText>
-                    <p:outputLabel for="fechaLimite" value="Fecha Límite:"/>
-                    <h:outputText id="fechaLimite" value="#{TramitacionController.documento.fechaLimite}" title="Fecha Límite">
-                        <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                    </h:outputText>
-                    <p:outputLabel for="asunto" value="Asunto "/>
-                    <h:outputText id="asunto" value="#{TramitacionController.documento.asunto}" title="Asunto"/>
-                    <p:outputLabel for="referencia" value="Referencia"/>
-                    <h:outputText id="referencia" value="#{TramitacionController.documento.referencia}" title="Referencia" />
-                    <p:outputLabel for="observaciones" value="Observaciones:"/>
-                    <h:outputText id="observaciones" value="#{TramitacionController.documento.observacion}" title="Observaciones"  />
-                    <p:outputLabel for="idTipoDocumento" value="Tipo Documento:"/>
-                    <h:outputText id="idTipoDocumento" value="#{TramitacionController.documento.idTipoDocumento.toString()}" />
-                    <p:outputLabel rendered="#{TramitacionController.documento.nombreArchivo!=null}" for="downAdjunto"  value="Adjunto:"/>
-                    <p:outputPanel rendered="#{TramitacionController.documento.nombreArchivo!=null}" id="downAdjunto">
-                        <p:commandButton  style="width: 150px" title="Descargar" value="#{bundle.DescargarBoton}" icon="fa fa-download" ajax="false">
-                            <p:fileDownload value="#{DownloadFile.downloadDocumento(TramitacionController.documento.idDocumento)}" />  
-                        </p:commandButton>
-                        <h:outputText value="#{TramitacionController.documento.nombreArchivo}"/>
-                    </p:outputPanel>
-                    <p:outputLabel value="Enlazado a:"/>
-                    <p:dataList value="#{TramitacionController.documento.detalleNotaSalidaList}" var="nota" emptyMessage="#{bundle.SinRegistrosMensaje}">  
-                        <h:outputText  value="[#{nota.idNota.idTipoNota.descripcionTipoNota}] " />  
-                        <p:commandLink styleClass="fontBold Red" rendered="#{nota.idNota.numeroSalida!=null}" title="Ver Nota" value="Nro. Salida: #{nota.idNota.numeroSalida}" ajax="false" action="#{NotaSalidaController.doVerForm(nota.idNota.idNota)}" />  
-                        <p:commandLink styleClass="fontBold Red" rendered="#{nota.idNota.numeroStr!=null}" title="Ver STR" value="Nro. STR: #{nota.idNota.numeroStr}" ajax="false" action="#{NotaSalidaController.doVerForm(nota.idNota.idNota)}" />   
-                        <p:separator/>
-                        <h:outputText value="#{nota.idNota.referencia}"/> 
-                        <h:outputText value="#{nota.idNota.rubro}" />  
-                    </p:dataList>
-                </p:panelGrid>
-            </p:panel>
             <p:tree id="tree1" orientation="horizontal" styleClass="fondoArbol" animate="true" value="#{TramitacionController.rootTramitacion}" var="node"   selection="#{TramitacionController.selectedNode}">
                 <p:treeNode expandedIcon="fa fa-folder-tree" collapsedIcon="fa fa-folder">
                     <h:outputText styleClass="font-1x gray" value=" [#{node.idTramitacion}]"/><br/>
@@ -71,9 +26,11 @@
                              rows="50" 
                              rowKey="#{item.idTramitacion}">
                     <!-- CUANDO ES EDICION -->
-                    <p:column headerText="ID" style="width: 40px">
+                    <p:column width="20">
+                        <p:rowToggler/>
+                    </p:column>
+                    <p:column headerText="ID" width="40">
                         <h:outputText styleClass="font-2x gray" style="display: inline" id="txt#{item.idTramitacion}" value="#{item.idTramitacion}"/>
-                        <p:rowToggler class="font3x"/>
                     </p:column>
                     <p:column headerText="Despacho" width="100">
                         <h:outputText value="#{CommonController.doDiferenciaTiempo(item.fechaRegistro, item.horaRegistro, item.fechaSalida, item.horaSalida)} "/>

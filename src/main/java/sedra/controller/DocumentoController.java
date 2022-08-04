@@ -78,6 +78,8 @@ public class DocumentoController implements Serializable {
     EstadoTramitacionFacade estadoTramitacionFacade;
     @Inject
     PrioridadFacade prioridadFacade;
+    @Inject
+    DocumentoHeader documentoHeader;
     
     private Documento documento;
     private List<Documento> listaDocumento;
@@ -558,6 +560,7 @@ public class DocumentoController implements Serializable {
                 HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
                 LOG.log(Level.INFO, "DOCUMENTO:  {0} desde la IP: {1}", new Object[]{id, JSFutil.getClientIpAddr(request)});
                 this.documento = documentoFacade.find(Integer.parseInt(id));
+                this.documentoHeader.setDocumento(this.documento);
             }
         } catch (Exception e) {
             this.commonController.doExcepcion(e);
@@ -609,7 +612,7 @@ public class DocumentoController implements Serializable {
     
     public void handleDateSelect(SelectEvent<Date> event) {
         Date date = event.getObject();
-        Calendar cal=JSFutil.getCalendar();
+        Calendar cal = JSFutil.getCalendar();
         cal.setTime(date);
         this.documento.setAnho(cal.get(Calendar.YEAR));
     }

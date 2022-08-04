@@ -67,7 +67,7 @@
                                         <p:fileDownload value="#{DownloadFile.downloadDocumentoAdjunto(adjunto.idDocumentoAdjunto)}" />  
                                     </p:commandButton>
                                 </p:repeat> 
-                                <p:commandButton ajax="false" rendered="#{item.nombreArchivo!=null}" title="Descargar" icon="fa fa-download" >
+                                <p:commandButton ajax="false" rendered="false" title="Descargar" icon="fa fa-download" >
                                     <p:fileDownload value="#{DownloadFile.downloadDocumento(item.idDocumento)}" />  
                                 </p:commandButton>
                             </p:column>

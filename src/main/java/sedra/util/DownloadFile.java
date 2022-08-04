@@ -80,7 +80,12 @@ public class DownloadFile implements Serializable {
 
     public StreamedContent downloadDocumentoAdjunto(Integer id) throws FileNotFoundException {
         DocumentoAdjunto pa = documentoAdjuntoFacade.find(id);
-        File archivo = new File(JSFutil.folderDocumento + pa.getIdDocumentoAdjunto() + "-" + pa.getNombreArchivo());
+        String realPath = pa.toPathFileSystem();
+        //Solo para recuperar los adjuntos que se perdieron al romper la tramitacion en tramitesAdjuntos
+        if (pa.getIdDocumentoAnterior() != null) {
+            realPath = JSFutil.folderDocumento + pa.getIdDocumentoAnterior() + "-" + pa.getNombreArchivo();
+        }
+        File archivo = new File(realPath);
         System.out.println("ARCHIVO: " + pa.getClass() + " con ID " + id + pa.getNombreArchivo());
         //if (archivo.exists()) {
         FileInputStream input = new FileInputStream(archivo);
@@ -88,18 +93,17 @@ public class DownloadFile implements Serializable {
 
     }
 
-    public StreamedContent downloadDocumento(Integer id) throws FileNotFoundException {
-        Documento pa = documentoFacade.find(id);
-        File archivo = new File(JSFutil.folderDocumento + pa.getIdDocumento() + "-" + pa.getNombreArchivo());
-        System.out.println("ARCHIVO: " + pa.getClass() + " con ID " + id + pa.getNombreArchivo());
-        //if (archivo.exists()) {
-        FileInputStream input = new FileInputStream(archivo);
-        return DefaultStreamedContent.builder().name(pa.getNombreArchivo()).contentType(pa.getTipoArchivo()).stream(() -> input).build();
-    }
-
+//    public StreamedContent downloadDocumento(Integer id) throws FileNotFoundException {
+//        Documento pa = documentoFacade.find(id);
+//        File archivo = new File(JSFutil.folderDocumento + pa.getIdDocumento() + "-" + pa.getNombreArchivo());
+//        System.out.println("ARCHIVO: " + pa.getClass() + " con ID " + id + pa.getNombreArchivo());
+//        //if (archivo.exists()) {
+//        FileInputStream input = new FileInputStream(archivo);
+//        return DefaultStreamedContent.builder().name(pa.getNombreArchivo()).contentType(pa.getTipoArchivo()).stream(() -> input).build();
+//    }
     public StreamedContent downloadNotaSalida(Integer id) throws FileNotFoundException {
         NotaSalida pa = notaSalidaFacade.find(id);
-        File archivo = new File(JSFutil.folderDocumento + pa.getIdNota() + "-" + pa.getNombreArchivo());
+        File archivo = new File(pa.toPathFileSystem());
         System.out.println("ARCHIVO: " + pa.getClass() + " con ID " + id + pa.getNombreArchivo());
         //if (archivo.exists()) {
         FileInputStream input = new FileInputStream(archivo);
@@ -108,7 +112,12 @@ public class DownloadFile implements Serializable {
 
     public StreamedContent downloadTramite(Integer id) throws FileNotFoundException {
         TramitacionAdjunto pa = tramitacionAdjuntoFacade.find(id);
-        File archivo = new File(pa.toPathFileSystem());
+        String realPath = pa.toPathFileSystem();
+        //Solo para recuperar los adjuntos que se perdieron al romper la tramitacion en tramitesAdjuntos
+        if (pa.getIdTramitacionAnterior() != null) {
+            realPath = JSFutil.folderDocumento + pa.getIdTramitacionAnterior() + "-" + pa.getNombreArchivo();
+        }
+        File archivo = new File(realPath);
         System.out.println("ARCHIVO: " + pa.getClass() + " con ID " + id + pa.getNombreArchivo());
         //if (archivo.exists()) {
         FileInputStream input = new FileInputStream(archivo);

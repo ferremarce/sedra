@@ -28,6 +28,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
+import sedra.util.Codigo;
 
 /**
  *
@@ -437,6 +438,8 @@ public class Tramitacion implements Serializable, Comparable<Tramitacion> {
         try {
             if (idTramitacionPadre != null) {
                 cadena += idTramitacionPadre.idCreador.toInfoString();
+            } else if (this.idEstado.getIdEstado().compareTo(Codigo.ESTADO_TRAMITE_INGRESADO) == 0) {
+                cadena += this.idCreador.toInfoString();
             }
             cadena += this.remitidoPor == null ? "" : ("| " + this.remitidoPor);
         } catch (Exception ex) {

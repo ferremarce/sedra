@@ -63,6 +63,8 @@ public class TramitacionAdjunto implements Serializable {
     @Size(max = 255)
     @Column(name = "tipo_archivo_mime")
     private String tipoArchivoMime;
+    @Column(name = "id_tramitacion_anterior")
+    private Integer idTramitacionAnterior;
     @JoinColumn(name = "id_tramitacion", referencedColumnName = "id_tramitacion")
     @ManyToOne
     private Tramitacion idTramitacion;
@@ -136,6 +138,14 @@ public class TramitacionAdjunto implements Serializable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public Integer getIdTramitacionAnterior() {
+        return idTramitacionAnterior;
+    }
+
+    public void setIdTramitacionAnterior(Integer idTramitacionAnterior) {
+        this.idTramitacionAnterior = idTramitacionAnterior;
     }
 
     @Override

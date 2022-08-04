@@ -61,6 +61,8 @@ public class DocumentoAdjunto implements Serializable {
     @Size(max = 255)
     @Column(name = "tipo_archivo_mime")
     private String tipoArchivoMime;
+    @Column(name = "id_documento_anterior")
+    private Integer idDocumentoAnterior;
     @JoinColumn(name = "id_documento", referencedColumnName = "id_documento")
     @ManyToOne
     private Documento idDocumento;
@@ -134,6 +136,14 @@ public class DocumentoAdjunto implements Serializable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public Integer getIdDocumentoAnterior() {
+        return idDocumentoAnterior;
+    }
+
+    public void setIdDocumentoAnterior(Integer idDocumentoAnterior) {
+        this.idDocumentoAnterior = idDocumentoAnterior;
     }
 
     @Override

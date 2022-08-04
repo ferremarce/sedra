@@ -25,6 +25,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
+import sedra.util.JSFutil;
 
 /**
  *
@@ -277,4 +278,9 @@ public class NotaSalida implements Serializable {
         }
         return numero;
     }
+
+    public String toPathFileSystem() {
+        return JSFutil.folderDocumento + this.getIdNota() + "-" + this.getNombreArchivo();
+    }
+
 }

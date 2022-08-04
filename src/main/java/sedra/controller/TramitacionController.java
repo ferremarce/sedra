@@ -52,10 +52,10 @@ import sedra.util.JSFutil;
 @Named(value = "TramitacionController")
 @SessionScoped
 public class TramitacionController implements Serializable {
-
+    
     private static final Logger LOG = Logger.getLogger(TramitacionController.class.getName());
     ResourceBundle bundle = ResourceBundle.getBundle("propiedades.bundle", JSFutil.getmyLocale());
-
+    
     @Inject
     ClasificadorController clasificadorController;
     @Inject
@@ -80,7 +80,9 @@ public class TramitacionController implements Serializable {
     PrioridadFacade prioridadFacade;
     @Inject
     TramitacionAdjuntoFacade tramitacionAdjuntoFacade;
-
+    @Inject
+    DocumentoHeader documentoHeader;
+    
     private Tramitacion tramitacion;
     private Tramitacion tramitacionRechazo;
     private List<Tramitacion> listaTramitacionEstado;
@@ -91,7 +93,7 @@ public class TramitacionController implements Serializable {
     private Rol[] arrayRol;
     private TreeNode rootTramitacion;
     private TreeNode selectedNode;
-
+    
     private UploadedFile adjunto;
     private Documento documento;
     private String observaciones;
@@ -106,131 +108,131 @@ public class TramitacionController implements Serializable {
      */
     public TramitacionController() {
     }
-
+    
     public Integer getCantPendiente() {
         return cantPendiente;
     }
-
+    
     public void setCantPendiente(Integer cantPendiente) {
         this.cantPendiente = cantPendiente;
     }
-
+    
     public TreeNode getRootTramitacion() {
         return rootTramitacion;
     }
-
+    
     public void setRootTramitacion(TreeNode rootTramitacion) {
         this.rootTramitacion = rootTramitacion;
     }
-
+    
     public TreeNode getSelectedNode() {
         return selectedNode;
     }
-
+    
     public void setSelectedNode(TreeNode selectedNode) {
         this.selectedNode = selectedNode;
     }
-
+    
     public Integer getTipoBandeja() {
         return tipoBandeja;
     }
-
+    
     public void setTipoBandeja(Integer tipoBandeja) {
         this.tipoBandeja = tipoBandeja;
     }
-
+    
     public String getObservaciones() {
         return observaciones;
     }
-
+    
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
-
+    
     public Rol[] getArrayRol() {
         return arrayRol;
     }
-
+    
     public void setArrayRol(Rol[] arrayRol) {
         this.arrayRol = arrayRol;
     }
-
+    
     public UploadedFile getAdjunto() {
         return adjunto;
     }
-
+    
     public void setAdjunto(UploadedFile adjunto) {
         this.adjunto = adjunto;
     }
-
+    
     public List<Tramitacion> getListaTramitacionEstado() {
         return listaTramitacionEstado;
     }
-
+    
     public void setListaTramitacionEstado(List<Tramitacion> listaTramitacionEstado) {
         this.listaTramitacionEstado = listaTramitacionEstado;
     }
-
+    
     public List<Tramitacion> getListSelectedTramitacion() {
         return listSelectedTramitacion;
     }
-
+    
     public void setListSelectedTramitacion(List<Tramitacion> listSelectedTramitacion) {
         this.listSelectedTramitacion = listSelectedTramitacion;
     }
-
+    
     public Tramitacion[] getArraySelectedTramitacion() {
         return arraySelectedTramitacion;
     }
-
+    
     public void setArraySelectedTramitacion(Tramitacion[] arraySelectedTramitacion) {
         this.arraySelectedTramitacion = arraySelectedTramitacion;
     }
-
+    
     public String getCriterioBusqueda() {
         return criterioBusqueda;
     }
-
+    
     public void setCriterioBusqueda(String criterioBusqueda) {
         this.criterioBusqueda = criterioBusqueda;
     }
-
+    
     public Tramitacion getTramitacion() {
         return tramitacion;
     }
-
+    
     public void setTramitacion(Tramitacion tramitacion) {
         this.tramitacion = tramitacion;
     }
-
+    
     public Tramitacion getTramitacionRechazo() {
         return tramitacionRechazo;
     }
-
+    
     public void setTramitacionRechazo(Tramitacion tramitacionRechazo) {
         this.tramitacionRechazo = tramitacionRechazo;
     }
-
+    
     public Documento getDocumento() {
         return documento;
     }
-
+    
     public void setDocumento(Documento documento) {
         this.documento = documento;
     }
-
+    
     public List<Tramitacion> getListaTramitacionSeguimiento() {
         return listaTramitacionSeguimiento;
     }
-
+    
     public void setListaTramitacionSeguimiento(List<Tramitacion> listaTramitacionSeguimiento) {
         this.listaTramitacionSeguimiento = listaTramitacionSeguimiento;
     }
-
+    
     public String listPendientesSetup() {
         //Obtenemos solo los pendientes de entrada (confirmación)
         this.buscarAllPendienteAjax();
-
+        
         if (this.listaTramitacionEstado.isEmpty()) {
             JSFutil.addMessage("No hay pendientes de confirmación", JSFutil.StatusMessage.WARNING);
         } else {
@@ -238,18 +240,18 @@ public class TramitacionController implements Serializable {
         }
         return "/tramitacion/ListarDocumentoPendiente";
     }
-
+    
     private List<Tramitacion> buscarPendienteEstado(Integer estado) {
         return tramitacionFacade.getAllTramitacionPendientes("%", estado);
     }
-
+    
     public void buscarAllPendienteAjax() {
         this.listaTramitacionEstado = this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_PENDIENTE);
         this.arraySelectedTramitacion = null;
         this.tipoBandeja = Codigo.BANDEJA_PEDIENTES_CONFIRMACION;
         this.cantPendiente = this.listaTramitacionEstado.size();
     }
-
+    
     public void buscarAllConfirmadoAjax() {
         this.listaTramitacionEstado = this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_INGRESADO);
         this.listaTramitacionEstado.addAll(this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_RECIBIDO));
@@ -257,7 +259,7 @@ public class TramitacionController implements Serializable {
         this.arraySelectedTramitacion = null;
         this.tipoBandeja = Codigo.BANDEJA_PENDIENTES_TRAMITACION;
     }
-
+    
     public void buscarAllDerivadoAjax() {
         this.listaTramitacionEstado = this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_DERIVADO);
         this.listaTramitacionEstado.addAll(this.buscarPendienteEstado(Codigo.ESTADO_TRAMITE_ARCHIVADO));
@@ -267,13 +269,13 @@ public class TramitacionController implements Serializable {
         this.arraySelectedTramitacion = null;
         this.tipoBandeja = Codigo.BANDEJA_TRAMITADOS;
     }
-
+    
     public String rechazaMultipleSetup() {
         this.observaciones = null;
         this.listSelectedTramitacion = (List<Tramitacion>) JSFutil.arrayToList(this.arraySelectedTramitacion);
         return "/tramitacion/RechazarDocumento";
     }
-
+    
     private void confirmaTramite(Integer idTramitacion) {
         try {
             this.tramitacion = tramitacionFacade.find(idTramitacion);
@@ -287,7 +289,7 @@ public class TramitacionController implements Serializable {
             this.commonController.doExcepcion(ex);
         }
     }
-
+    
     public String confirmaMultipleSetup() {
         if (this.arraySelectedTramitacion.length == 0) {
             JSFutil.addMessage("Debe seleccionar al menos un documento para tramitar", JSFutil.StatusMessage.WARNING);
@@ -301,7 +303,7 @@ public class TramitacionController implements Serializable {
         this.buscarAllPendienteAjax();
         return "";
     }
-
+    
     public String rechazar() {
         try {
             for (Tramitacion tramita : this.listSelectedTramitacion) {
@@ -338,7 +340,7 @@ public class TramitacionController implements Serializable {
         return "/tramitacion/ListarDocumentoPendiente";
         //return null;
     }
-
+    
     public String derivaMultipleSetup() {
         if (this.arraySelectedTramitacion.length == 0) {
             JSFutil.addMessage("Debe seleccionar al menos un documento para tramitar", JSFutil.StatusMessage.WARNING);
@@ -353,12 +355,12 @@ public class TramitacionController implements Serializable {
         this.adjuntoTramite = new ArrayList<>();
         return "/tramitacion/DerivarDocumento";
     }
-
+    
     public void handleFileUpload(FileUploadEvent event) {
         this.adjuntoTramite.add(event.getFile());
         LOG.info("Upload: " + event.getFile().getFileName());
     }
-
+    
     public String create() {
         try {
             if (this.arrayRol.length == 0) {
@@ -367,13 +369,13 @@ public class TramitacionController implements Serializable {
             }
             Tramitacion tramTemp;
             for (Tramitacion tram : this.arraySelectedTramitacion) {
-
+                
                 tram.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_DERIVADO));
                 tram.setIdCreador(JSFutil.getUsuarioConectado());
                 tram.setFechaSalida(JSFutil.getFechaHoraActual());
                 tram.setHoraSalida(JSFutil.getFechaHoraActual());
                 tramitacionFacade.edit(tram);
-
+                
                 for (Rol rolDerivado : arrayRol) {
                     tramTemp = new Tramitacion();
                     tramTemp.setFechaDerivacion(this.tramitacion.getFechaDerivacion());
@@ -383,7 +385,7 @@ public class TramitacionController implements Serializable {
                     tramTemp.setRemitidoA(this.tramitacion.getRemitidoA());
                     tramTemp.setObservacion(this.tramitacion.getObservacion());
                     tramTemp.setProcesadoArchivo(false);
-
+                    
                     tramTemp.setIdEstado(this.estadoTramitacionFacade.find(Codigo.ESTADO_TRAMITE_PENDIENTE));
                     tramTemp.setIdUsuarioRemitente(JSFutil.getUsuarioConectado());
                     tramTemp.setFechaRegistro(JSFutil.getFechaHoraActual());
@@ -421,21 +423,21 @@ public class TramitacionController implements Serializable {
         return "/tramitacion/ListarDocumentoPendiente";
         //return null;
     }
-
+    
     public String listSeguimientoSetup() {
 //        this.model = null;
 //        this.modelDocumento = null;
         this.criterioBusqueda = "";
         return "/tramitacion/ListarSeguimiento";
     }
-
+    
     public String listDesbloqueoSetup() {
 //        this.model = null;
 //        this.modelDocumento = null;
 //        this.criterioBusqueda = "";
         return "/tramitacion/ListarDesbloqueoDocumento";
     }
-
+    
     public void updateCP() {
         try {
             if (this.documento.getComprobantePago().isEmpty()) {
@@ -451,17 +453,18 @@ public class TramitacionController implements Serializable {
             //JSFutil.addMessage("Ocurrió un error de persistencia.", JSFutil.StatusMessage.ERROR);
         }
     }
-
+    
     public String adjuntaSetup(Integer id) {
         this.documento = documentoFacade.find(id);
+        this.documentoHeader.setDocumento(this.documento);
         return "/tramitacion/ArchivarDocumento";
     }
-
+    
     public void tramitacionAnexo(Integer idTramitacion) {
         this.tramitacion = tramitacionFacade.find(idTramitacion);
         JSFutil.addMessage("Tramitación recuperada para Anexo...", JSFutil.StatusMessage.INFORMATION);
     }
-
+    
     public void handleAnexoDocumento(FileUploadEvent event) {
         UploadedFile uf = event.getFile();
         try {
@@ -484,7 +487,7 @@ public class TramitacionController implements Serializable {
             this.commonController.doExcepcion(e);
         }
     }
-
+    
     public String archivarSinNota() {
         try {
 //            for (Tramitacion t : this.documento.getTramitacionList()) {
@@ -507,7 +510,7 @@ public class TramitacionController implements Serializable {
         }
         return "/tramitacion/ListarDocumentoAdjunto";
     }
-
+    
     public String enlazarAnotaSalida(Integer idNota) {
         NotaSalida ns = notaSalidaFacade.find(idNota);
         try {
@@ -528,9 +531,10 @@ public class TramitacionController implements Serializable {
             return "";
         }
     }
-
+    
     public String seguirSetup(Integer id) {
         this.documento = documentoFacade.find(id);
+        this.documentoHeader.setDocumento(this.documento);
         this.listaTramitacionSeguimiento = this.documento.getTramitacionList();
         TreeTramitacion tt = new TreeTramitacion();
         this.rootTramitacion = tt.init(tramitacionFacade.findFirstTramitacion(this.documento.getIdDocumento()));
@@ -539,7 +543,7 @@ public class TramitacionController implements Serializable {
         }
         return "/tramitacion/SeguirDocumento";
     }
-
+    
     public String updateAll() {
         try {
             String cadena = "";
@@ -568,18 +572,18 @@ public class TramitacionController implements Serializable {
         }
         return "";
     }
-
+    
     public void checkPendientes() {
         List<Tramitacion> lista = this.tramitacionFacade.getAllTramitacionPendientesNoLeidos("%", Codigo.ESTADO_TRAMITE_PENDIENTE);
         if (!lista.isEmpty()) {
             this.commonController.getListaAlerta().add(new Alerta(Codigo.ALERTA_DOCUMENTO_PENDIENTE, lista.size(), "documento/s no leído/s..."));
         }
     }
-
+    
     public void init() {
         try {
             String id = JSFutil.getRequestParameter("alerta");
-
+            
             if (id != null) {
                 this.listPendientesSetup();
             }
@@ -589,7 +593,7 @@ public class TramitacionController implements Serializable {
             this.commonController.doExcepcion(e);
         }
     }
-
+    
     public boolean globalFilterFunction(Object value, Object filter, Locale locale) {
         String filterText = (filter == null) ? null : filter.toString().trim().toLowerCase();
         filterText = JSFutil.replaceWildcardRegex(filterText); //Reemplazamos los wildcard de JPA por REGEX
@@ -623,7 +627,7 @@ public class TramitacionController implements Serializable {
             return false;
         }
     }
-
+    
     public void doVerMensaje(Tramitacion tram) {
         tram.setLeido(Boolean.TRUE);
         this.tramitacion = this.tramitacionFacade.find(tram.getIdTramitacion());
@@ -633,7 +637,7 @@ public class TramitacionController implements Serializable {
         PrimeFaces.current().ajax().update("formPopup");
         PrimeFaces.current().ajax().update("formMain:dataTablePendiente");
     }
-
+    
     public String archivarMultipleSetup() {
         if (this.arraySelectedTramitacion.length == 0) {
             JSFutil.addMessage("Debe seleccionar al menos un documento para tramitar", JSFutil.StatusMessage.WARNING);
@@ -647,7 +651,7 @@ public class TramitacionController implements Serializable {
         this.buscarAllPendienteAjax();
         return "";
     }
-
+    
     private void archivarTramite(Integer idTramitacion) {
         try {
             this.tramitacion = tramitacionFacade.find(idTramitacion);
@@ -659,12 +663,12 @@ public class TramitacionController implements Serializable {
             this.commonController.doExcepcion(ex);
         }
     }
-
+    
     public void quitarAdjuntoTramite(int index) {
         this.adjuntoTramite.remove(index);
         LOG.info("Lista: " + this.adjuntoTramite.size());
     }
-
+    
     public void borrarAdjunto(Integer idTramitacionAdjunto) {
         try {
             TramitacionAdjunto ta = this.tramitacionAdjuntoFacade.find(idTramitacionAdjunto);
@@ -676,5 +680,5 @@ public class TramitacionController implements Serializable {
             this.commonController.doExcepcion(ex);
         }
     }
-
+    
 }
