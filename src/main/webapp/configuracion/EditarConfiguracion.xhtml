@@ -52,9 +52,14 @@
                     <p:panel>
                         <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" contentStyleClass="ui-fluid">
                             <p:outputLabel value="Convertir Nro Entrada en NroExpediente"/>
-                            <p:commandButton immediate="true" ajax="false" value="Aceptar" action="#{MigracionController.doConvertirNroEntrada()}" />
-                             <p:outputLabel value="Procesar Tramite Padre"/>
-                             <p:commandButton immediate="true" ajax="false" value="Aceptar" action="#{MigracionController.doProcesarTramitePadre()}"/>
+                            <p:commandButton immediate="true" onclick="PF('statusAjax').show();" ajax="false" value="Aceptar" action="#{MigracionController.doConvertirNroEntrada()}" />
+                            <p:outputLabel value="Procesar Tramite Padre"/>
+                            <p:commandButton immediate="true" onclick="PF('statusAjax').show();" ajax="false" value="Aceptar" action="#{MigracionController.doProcesarTramitePadre()}"/>
+                            <p:outputLabel value="Procesar Documentos Adjuntos"/>
+                            <p:commandButton immediate="true" onclick="PF('statusAjax').show();" ajax="false" value="Aceptar" action="#{MigracionController.doProcesarDocumentoAdjunto()}"/>
+                            <p:outputLabel value="Procesar Trámite Adjuntos"/>
+                            <p:commandButton immediate="true" onclick="PF('statusAjax').show();" ajax="false" value="Aceptar" action="#{MigracionController.doProcesarTramiteAdjunto()}"/>
+
                         </p:panelGrid>
                     </p:panel>
                 </p:tab>

@@ -25,11 +25,10 @@
                     <h:outputText id="remitenteFechaDerivacion" value="#{item.fechaDerivacion}">
                         <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
                     </h:outputText> 
-
                 </p:panelGrid>
                 <p:divider/>
             </p:dataList> 
-            <p:panelGrid columns="3" styleClass="ui-panelgrid-blank" layout="flex" columnClasses="p-col-1,p-col-10,p-col-1" contentStyleClass="ui-fluid">
+            <p:panelGrid columns="3" styleClass="ui-panelgrid-blank" layout="flex" columnClasses="p-col-2,p-col-9,p-col-1" contentStyleClass="ui-fluid">
                 <p:outputLabel for="observaciones"  value="Observaciones:"/>
                 <p:inputTextarea rows="3" id="observaciones" value="#{TramitacionController.observaciones}" title="Observaciones" required="true" requiredMessage="#{bundle.Requerido}" />
                 <p:message for="observaciones"/>

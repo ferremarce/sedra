@@ -9,10 +9,14 @@ import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.List;
 import javax.inject.Inject;
+import sedra.fachada.DocumentoAdjuntoFacade;
 import sedra.fachada.DocumentoFacade;
+import sedra.fachada.TramitacionAdjuntoFacade;
 import sedra.fachada.TramitacionFacade;
 import sedra.modelo.Documento;
+import sedra.modelo.DocumentoAdjunto;
 import sedra.modelo.Tramitacion;
+import sedra.modelo.TramitacionAdjunto;
 import sedra.util.JSFutil;
 
 /**
@@ -27,6 +31,10 @@ public class MigracionController implements Serializable {
     DocumentoFacade documentoFacade;
     @Inject
     TramitacionFacade tramitacionFacade;
+    @Inject
+    DocumentoAdjuntoFacade documentoAdjuntoFacade;
+    @Inject
+    TramitacionAdjuntoFacade tramitacionAdjuntoFacade;
 
     /**
      * Creates a new instance of MigracionController
@@ -84,6 +92,44 @@ public class MigracionController implements Serializable {
             }
         }
         JSFutil.addMessage("Registros actualizados", JSFutil.StatusMessage.INFORMATION);
+    }
+
+    public void doProcesarDocumentoAdjunto() {
+        List<Documento> lista = documentoFacade.findAll();
+        lista.stream()
+                .filter(doc -> doc.getNombreArchivo() != null)
+                .forEach(doc -> this.saveDocumentoAdjunto(doc));
+    }
+
+    private void saveDocumentoAdjunto(Documento doc) {
+        DocumentoAdjunto da = new DocumentoAdjunto();
+        da.setTamanhoArchivo(doc.getTamanhoArchivo());
+        da.setNombreArchivo(doc.getNombreArchivo());
+        da.setIdDocumentoAnterior(doc.getIdDocumento());
+        da.setTipoArchivoMime(doc.getTipoArchivo());
+        da.setIdDocumento(doc);
+        da.setDescripcion("Migrado");
+        this.documentoAdjuntoFacade.create(da);
+        System.out.println("Documento adjunto creado: " + da.toPathFileSystem());
+    }
+
+    public void doProcesarTramiteAdjunto() {
+        List<Tramitacion> lista = this.tramitacionFacade.findAll();
+        lista.stream()
+                .filter(tram -> tram.getNombreArchivo() != null)
+                .forEach(tram -> this.saveTramiteAdjunto(tram));
+    }
+
+    private void saveTramiteAdjunto(Tramitacion t) {
+        TramitacionAdjunto ta = new TramitacionAdjunto();
+        ta.setTamanhoArchivo(t.getTamanhoArchivo());
+        ta.setNombreArchivo(t.getNombreArchivo());
+        ta.setIdTramitacionAnterior(t.getIdTramitacion());
+        ta.setTipoArchivoMime(t.getTipoArchivo());
+        ta.setIdTramitacion(t);
+        ta.setDescripcion("Migrado");
+        this.tramitacionAdjuntoFacade.create(ta);
+        System.out.println("--Tramitacion adjunto creado: " + ta.toPathFileSystem());
     }
 
 }
