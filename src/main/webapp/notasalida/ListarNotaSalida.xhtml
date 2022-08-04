@@ -34,7 +34,7 @@
                 </p:panelGrid>
             </p:panelGrid>
             <p:defaultCommand target="cmdBuscar"/>
-            <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{NotaSalidaController.listaNotaSalida}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+            <p:dataTable size="small" rowIndexVar="index" id="dataTable" var="item" value="#{NotaSalidaController.listaNotaSalida}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                          rows="50"
                          paginator="true"
                          filterEvent="enter"

@@ -20,7 +20,7 @@
             </p:panelGrid>
             <p:tooltip for="criterio" position="bottom" value="Puede utilizar los comodines: % (muchos caracteres) y  _ (un caracter)"/>
             <p:watermark for="criterio" value="cuenta, nombre de usuario"/>
-            <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{UsuarioController.listaUsuario}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+            <p:dataTable size="small" rowIndexVar="index" id="dataTable" var="item" value="#{UsuarioController.listaUsuario}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                          rows="50"
                          paginator="true"
                          filterEvent="enter"

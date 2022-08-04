@@ -78,7 +78,7 @@
                                           multiple="true"
                                           update="formMain:panelUpload">
                             </p:fileUpload>
-                            <p:dataTable id="dtAdjuntoDocumento" value="#{DocumentoController.adjuntoDocumento}" rowIndexVar="index" var="item" emptyMessage="#{bundle.SinRegistrosMensaje}" >
+                            <p:dataTable size="small" id="dtAdjuntoDocumento" value="#{DocumentoController.adjuntoDocumento}" rowIndexVar="index" var="item" emptyMessage="#{bundle.SinRegistrosMensaje}" >
                                 <p:column headerText="Archivo">
                                     <h:outputText value="#{index+1}. #{item.fileName}"/>
                                 </p:column>
@@ -90,7 +90,7 @@
                             </p:dataTable>
                         </p:panel>
                     </p:panelGrid>
-                    <p:dataTable id="dataTableAdjunto" var="expeAdj" value="#{DocumentoController.documento.documentoAdjuntoList}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}">
+                    <p:dataTable size="small" id="dataTableAdjunto" var="expeAdj" value="#{DocumentoController.documento.documentoAdjuntoList}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}">
                         <f:facet name="header">
                             <h:outputText styleClass="Purple" value="Archivos del Documento"/>
                         </f:facet>

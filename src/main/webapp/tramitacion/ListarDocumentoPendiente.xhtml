@@ -31,7 +31,7 @@
                     </p:tabMenu>
                 </div>
                 <div class="p-col-12">
-                    <p:dataTable rowIndexVar="index" id="dataTablePendiente" var="item" value="#{TramitacionController.listaTramitacionEstado}"
+                    <p:dataTable size="small" rowIndexVar="index" id="dataTablePendiente" var="item" value="#{TramitacionController.listaTramitacionEstado}"
                                  widgetVar="wBandeja"
                                  reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                                  rows="10"
@@ -111,7 +111,7 @@
                                 <h:outputText styleClass="fontItalic"  escape="false" value="#{item.doTramitadoPor()}"/>
                             </p:outputPanel>
                             <p:outputPanel rendered="#{!item.idEstado.esTramiteEntrada()}">
-                                <p:dataTable rendered="#{not empty item.tramitacionList}" var="tramDeriva" value="#{item.tramitacionList}">
+                                <p:dataTable size="small" rendered="#{not empty item.tramitacionList}" var="tramDeriva" value="#{item.tramitacionList}">
                                     <p:column>
                                         <h:outputText value="#{tramDeriva.idRol.toString()}"/>
                                     </p:column>

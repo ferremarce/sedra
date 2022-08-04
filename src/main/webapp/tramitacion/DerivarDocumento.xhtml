@@ -45,7 +45,7 @@
                                               multiple="true"
                                               update="formMain:panelUpload">
                                 </p:fileUpload>
-                                <p:dataTable value="#{TramitacionController.adjuntoTramite}" rowIndexVar="index" var="item" emptyMessage="#{bundle.SinRegistrosMensaje}" >
+                                <p:dataTable size="small" value="#{TramitacionController.adjuntoTramite}" rowIndexVar="index" var="item" emptyMessage="#{bundle.SinRegistrosMensaje}" >
                                     <p:column headerText="Archivo">
                                         <h:outputText value="#{index+1}. #{item.fileName}"/>
                                     </p:column>

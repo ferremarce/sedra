@@ -39,7 +39,7 @@
                 </p:panelGrid>
                 <p:commandButton value="#{bundle.BuscarBoton}" icon="fa fa-search" ajax="false" action="#{ReporteController.buscarDocumento()}" update="@form, panelMensajeEstado"/>
             </p:panel>
-            <p:dataTable rowIndexVar="index" id="dataTable" var="item" value="#{ReporteController.listaTramitacion}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+            <p:dataTable size="small" rowIndexVar="index" id="dataTable" var="item" value="#{ReporteController.listaTramitacion}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                          rows="50"
                          paginator="true"
                          filterEvent="enter"
@@ -60,9 +60,11 @@
                         </p:commandLink>
                     </p:outputPanel>
                 </f:facet> 
-                <p:column exportable="false" width="40">
-                    <h:outputText style="display: inline" value="#{index+1}"/>
+                <p:column exportable="false" width="40">                    
                     <p:rowToggler/>
+                </p:column>
+                <p:column width="30">
+                    <h:outputText style="display: inline" value="#{index+1}"/>
                 </p:column>
                 <p:column width="80">
                     <h:outputText styleClass="insignia #{item.idEstado.insignia}" value="#{item.idEstado.toString()}"/>
@@ -113,42 +115,69 @@
                 <p:column headerText="Usuario" width="80"> 
                     <h:outputText value="#{item.idCreador}"/>
                 </p:column>
-                <p:column exportable="false" headerText="Adjunto" width="115">  
-                    <p:commandButton rendered="#{item.nombreArchivo!=null}" title="Descargar" icon="fa fa-download" ajax="false">
-                        <p:fileDownload value="#{DownloadFile.downloadTramite(item.idTramitacion)}" />  
-                    </p:commandButton>
-                    <h:outputText value="#{item.nombreArchivo!=null ? item.nombreArchivo:'Sin archivo'}"/>
-                </p:column>  
+                <p:column width="60" headerText="Adjuntos">
+                    <i style="display: #{item.tramitacionAdjuntoList.size()>0?'inline':'none'}" title="Para ver los adjuntos debe expandir el trámite" class="fa fa-copy font2x"/>
+                </p:column>
                 <p:column headerText="Adjunto" visible="false" width="115">  
                     <h:outputText value="#{item.nombreArchivo!=null ? item.nombreArchivo:'Sin archivo'}"/>
                 </p:column>  
                 <p:rowExpansion>
-                    <p:panelGrid columns="2" style="width: 400px" >
-                        <p:outputLabel value="Derivado: "/>
-                        <h:outputText value="#{item.fechaDerivacion}">
-                            <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                        </h:outputText>
-                        <p:outputLabel value="Confirmado: "/>
-                        <p:outputPanel>
-                            <h:outputText value="#{item.fechaConfirmacion}">
-                                <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                            </h:outputText>
-                            <p:spacer width="10px"/>
-                            <h:outputText value="#{item.horaConfirmacion}">
-                                <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="HH:mm" />
-                            </h:outputText>
-                        </p:outputPanel>
-                        <p:outputLabel value="Procesado (Salida): "/>
-                        <p:outputPanel>
-                            <h:outputText value="#{item.fechaSalida}">
-                                <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
-                            </h:outputText>
-                            <p:spacer width="10px"/>
-                            <h:outputText value="#{item.horaSalida}">
-                                <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="HH:mm" />
-                            </h:outputText>
-                        </p:outputPanel>
-                    </p:panelGrid>
+                    <div class="p-grid ui-fluid bg-lightblue">
+                        <div class="p-col-4">
+                            <p:panelGrid columns="2">
+                                <p:outputLabel value="Derivado: "/>
+                                <h:outputText value="#{item.fechaDerivacion}">
+                                    <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                                <p:outputLabel value="Recibido: "/>
+                                <p:outputPanel>
+                                    <h:outputText value="#{item.fechaRegistro}">
+                                        <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                    <p:spacer width="10px"/>
+                                    <h:outputText value="#{item.horaRegistro}">
+                                        <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="HH:mm" />
+                                    </h:outputText>
+                                </p:outputPanel>
+                                <p:outputLabel value="Confirmado: "/>
+                                <p:outputPanel>
+                                    <h:outputText value="#{item.fechaConfirmacion}">
+                                        <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                    <p:spacer width="10px"/>
+                                    <h:outputText value="#{item.horaConfirmacion}">
+                                        <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="HH:mm" />
+                                    </h:outputText>
+                                </p:outputPanel>
+                                <p:outputLabel value="Procesado (Salida): "/>
+                                <p:outputPanel>
+                                    <h:outputText value="#{item.fechaSalida}">
+                                        <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                    <p:spacer width="10px"/>
+                                    <h:outputText value="#{item.horaSalida}">
+                                        <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="HH:mm" />
+                                    </h:outputText>
+                                </p:outputPanel>
+                                <p:outputLabel value="Archivado: "/>
+                                <h:outputText value="#{item.fechaHoraArchivo}">
+                                    <f:convertDateTime timeZone="#{LoginManager.myTimeZone}" pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText>
+                            </p:panelGrid>
+                        </div>
+                        <div class="p-col-8">
+                            <div class="p-grid">
+                                <p:repeat id="cmdAdjunto" var="tramiteAdj" rendered="#{not empty item.tramitacionAdjuntoList}" value="#{item.tramitacionAdjuntoList}">
+                                    <div class="p-col-6 p-md-6 p-lg-6">
+                                        <p:commandButton title="Descargar" icon="fa fa-download" ajax="false">
+                                            <p:fileDownload value="#{DownloadFile.downloadTramite(tramiteAdj.idTramitacionAdjunto)}" />  
+                                        </p:commandButton>
+                                        <h:outputText styleClass="espaciadoToolbar" value="#{tramiteAdj.toNameDownload()} [#{tramiteAdj.toTamanho()}]"/> 
+                                    </div>
+                                </p:repeat>  
+                            </div>
+                        </div>
+                    </div>
                 </p:rowExpansion>
             </p:dataTable>
         </h:form>

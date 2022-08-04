@@ -160,7 +160,7 @@ public class TramitacionAdjunto implements Serializable {
 
     @Override
     public String toString() {
-        return "segment.modelo.TramitacionAdjunto[ idTramitacionAdjunto=" + idTramitacionAdjunto + " ]";
+        return this.getNombreArchivo();
     }
 
     public String toNameDownload() {

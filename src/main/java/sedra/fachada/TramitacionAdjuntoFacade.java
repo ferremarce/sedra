@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import sedra.modelo.TramitacionAdjunto;
+import sedra.util.JSFutil;
 
 /**
  *
@@ -27,5 +28,10 @@ public class TramitacionAdjuntoFacade extends AbstractFacade<TramitacionAdjunto>
     public TramitacionAdjuntoFacade() {
         super(TramitacionAdjunto.class);
     }
-    
+
+    public void remove(TramitacionAdjunto ta) {
+        String file = ta.toPathFileSystem();
+        this.em.remove(this.em.merge(ta));
+        JSFutil.deleteFileFromDisk(file);
+    }
 }

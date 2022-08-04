@@ -21,7 +21,7 @@
                         </p:toolbarGroup>
                     </p:toolbar>
                     <p:tooltip for="criterio" position="bottom" value="Puede utilizar los comodines: % (muchos caracteres) y  _ (un caracter)"/>
-                    <p:dataTable rowIndexVar="index" id="dataTableNota" var="item" value="#{NotaSalidaController.listaNotaSalida}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                    <p:dataTable size="small" rowIndexVar="index" id="dataTableNota" var="item" value="#{NotaSalidaController.listaNotaSalida}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                                  rows="50"
                                  paginator="true"
                                  filterEvent="enter"
@@ -72,7 +72,7 @@
                         </p:toolbarGroup>
                     </p:toolbar>
                     <p:tooltip for="criterio" position="bottom" value="Puede utilizar los comodines: % (muchos caracteres) y  _ (un caracter)"/>
-                    <p:dataTable rowIndexVar="index" id="dataTableDoc" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                    <p:dataTable size="small" rowIndexVar="index" id="dataTableDoc" var="item" value="#{DocumentoController.listaDocumento}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                                  rows="50"
                                  paginator="true"
                                  filterEvent="enter"

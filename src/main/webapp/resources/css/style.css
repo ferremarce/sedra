@@ -31,6 +31,9 @@ h1{
 label{
     font-weight: bolder;
 }
+.bg-lightblue {
+    background-color: #f3f3ff;
+}
 /* text colors */
 .Orange {
     color: #EF6C00 !important;

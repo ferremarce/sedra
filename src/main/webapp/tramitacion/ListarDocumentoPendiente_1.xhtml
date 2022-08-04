@@ -29,7 +29,7 @@
                     <f:facet name="title">
                         <h:outputText value="Pendiente de Confirmación [#{TramitacionController.listaTramitacionPendiente.size()}]"/>
                     </f:facet>
-                    <p:dataTable rowIndexVar="index" id="dataTablePendiente" var="item" value="#{TramitacionController.listaTramitacionPendiente}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                    <p:dataTable size="small" rowIndexVar="index" id="dataTablePendiente" var="item" value="#{TramitacionController.listaTramitacionPendiente}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                                  rows="50"
                                  paginator="true"
                                  filterEvent="enter"
@@ -83,7 +83,7 @@
                     <f:facet name="title">
                         <h:outputText value="Pendiente de Tramitación [#{TramitacionController.listaTramitacionConfirmado.size()}]"/>
                     </f:facet>
-                    <p:dataTable rowIndexVar="index2" id="dataTablePendienteConfirmado" var="item2" value="#{TramitacionController.listaTramitacionConfirmado}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
+                    <p:dataTable size="small" rowIndexVar="index2" id="dataTablePendienteConfirmado" var="item2" value="#{TramitacionController.listaTramitacionConfirmado}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
                                  rows="50"
                                  paginator="true"
                                  filterEvent="enter"
