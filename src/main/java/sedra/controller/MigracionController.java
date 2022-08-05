@@ -26,7 +26,7 @@ import sedra.util.JSFutil;
 @Named(value = "MigracionController")
 @SessionScoped
 public class MigracionController implements Serializable {
-
+    
     @Inject
     DocumentoFacade documentoFacade;
     @Inject
@@ -41,7 +41,7 @@ public class MigracionController implements Serializable {
      */
     public MigracionController() {
     }
-
+    
     public void doConvertirNroEntrada() {
         List<Documento> lista = documentoFacade.findAll();
         String nroEntrada = "";
@@ -71,12 +71,13 @@ public class MigracionController implements Serializable {
                 documentoFacade.edit(doc);
                 cantidadUpdate++;
             }
+            System.out.println("--Convirtiendo nroexpediente: " + doc.getIdDocumento());
         }
         JSFutil.addMessage("Registros actualizados: " + cantidadUpdate + "\n Errores: " + cantidadError, JSFutil.StatusMessage.INFORMATION);
     }
-
+    
     public void doProcesarTramitePadre() {
-        List<Documento> lista = documentoFacade.findAll();
+        List<Documento> lista = documentoFacade.findAllOrdered();
         for (Documento doc : lista) {
             Tramitacion tramitaAnterior = null;
             for (Tramitacion tramita : doc.getTramitacionList()) {
@@ -90,18 +91,18 @@ public class MigracionController implements Serializable {
                 }
                 tramitaAnterior = tramita;
             }
-            System.out.println("--Documento y tramite procesado: " + doc.toString());
+            System.out.println("--Documento y tramite procesado: " + doc.getIdDocumento());
         }
         JSFutil.addMessage("Registros actualizados", JSFutil.StatusMessage.INFORMATION);
     }
-
+    
     public void doProcesarDocumentoAdjunto() {
-        List<Documento> lista = documentoFacade.findAll();
+        List<Documento> lista = documentoFacade.findAllOrdered();
         lista.stream()
                 .filter(doc -> doc.getNombreArchivo() != null)
                 .forEach(doc -> this.saveDocumentoAdjunto(doc));
     }
-
+    
     private void saveDocumentoAdjunto(Documento doc) {
         DocumentoAdjunto da = new DocumentoAdjunto();
         da.setTamanhoArchivo(doc.getTamanhoArchivo());
@@ -115,14 +116,23 @@ public class MigracionController implements Serializable {
         this.documentoFacade.edit(doc);
         System.out.println("Documento adjunto creado: " + da.toPathFileSystem());
     }
-
+    
     public void doProcesarTramiteAdjunto() {
-        List<Tramitacion> lista = this.tramitacionFacade.findAll();
-        lista.stream()
-                .filter(tram -> tram.getNombreArchivo() != null)
-                .forEach(tram -> this.saveTramiteAdjunto(tram));
+        List<Tramitacion> lista = this.tramitacionFacade.findAllOrdered();
+//        lista.stream()
+//                .filter(tram -> tram.getNombreArchivo() != null)
+//                .forEach(tram -> {
+//                    this.saveTramiteAdjunto(tram);
+//                    System.out.println("--Tramitacion para adjunto procesada: " + tram.getIdTramitacion());
+//                }
+//                );
+        for (Tramitacion t : lista) {
+            if (t.getNombreArchivo() != null) {
+                this.saveTramiteAdjunto(t);
+            }
+        }
     }
-
+    
     private void saveTramiteAdjunto(Tramitacion t) {
         TramitacionAdjunto ta = new TramitacionAdjunto();
         ta.setTamanhoArchivo(t.getTamanhoArchivo());
@@ -136,5 +146,5 @@ public class MigracionController implements Serializable {
         this.tramitacionFacade.edit(t);
         System.out.println("--Tramitacion adjunto creado: " + ta.toPathFileSystem());
     }
-
+    
 }

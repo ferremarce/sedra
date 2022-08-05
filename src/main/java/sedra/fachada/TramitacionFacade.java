@@ -50,12 +50,13 @@ public class TramitacionFacade extends AbstractFacade<Tramitacion> {
         return tr;
 
     }
-     public List<Tramitacion> getAllTramitacionLlaveado(String criterio) {
+
+    public List<Tramitacion> getAllTramitacionLlaveado(String criterio) {
         Query q = em.createQuery("SELECT a FROM Tramitacion a WHERE a.idDocumento.cerrado=:xCerrado AND a.idRol.idRol=:xIdRol "
                 + "AND (UPPER(a.idDocumento.asunto) LIKE :xCriterio OR CONCAT(a.idDocumento.numeroExpediente,'-',a.idDocumento.anho) LIKE :xCriterio) ORDER BY a.idPrioridad.orden, a.idTramitacion DESC");
         q.setParameter("xIdRol", JSFutil.getRolSesion().getIdRol());
         q.setParameter("xCerrado", Boolean.TRUE);
-      
+
         //q.setMaxResults(100);
         if (criterio.compareTo("") != 0) {
             q.setParameter("xCriterio", "%" + criterio.toUpperCase() + "%");
@@ -103,7 +104,7 @@ public class TramitacionFacade extends AbstractFacade<Tramitacion> {
                 fechaConsulta = "a.fechaConfirmacion";
                 break;
             case 4://Derivado
-                where = "a.idTramitacionPadre.idRol.idRol=:xIdRol"; 
+                where = "a.idTramitacionPadre.idRol.idRol=:xIdRol";
                 break;
             case 5://Ingresado
                 break;
@@ -131,5 +132,11 @@ public class TramitacionFacade extends AbstractFacade<Tramitacion> {
         } else {
             return null;
         }
+    }
+
+    public List<Tramitacion> findAllOrdered() {
+        Query q = em.createQuery("SELECT a FROM Tramitacion a ORDER BY a.idTramitacion");
+        List<Tramitacion> tr = q.getResultList();
+        return tr;
     }
 }

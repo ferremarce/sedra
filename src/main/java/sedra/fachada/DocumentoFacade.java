@@ -208,4 +208,10 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
         List<Documento> tr = q.getResultList();
         return tr;
     }
+
+    public List<Documento> findAllOrdered() {
+        Query q = em.createQuery("SELECT a FROM Documento a ORDER BY a.idDocumento");
+        List<Documento> tr = q.getResultList();
+        return tr;
+    }
 }
