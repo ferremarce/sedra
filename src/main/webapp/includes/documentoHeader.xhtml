@@ -12,11 +12,11 @@
                     <p:outputLabel for="nroExpediente" value="#Expediente: "/>
                     <h:outputText id="nroExpediente" styleClass="fontBold Purple" value="#{documentoHeader.documento.toShortString()}" title="Numero de Expediente"/>                       
                 </f:facet>
-                <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" layout="flex" columnClasses="p-col-2,p-col-4,p-col-2,p-col-4">
+                <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="flex" columnClasses="p-col-2,p-col-10">
                     <p:outputLabel for="idClasificador" value="Clasificador:"/>
                     <h:outputText id="idClasificador" value="#{ClasificadorController.obtenerRutaClasificador(documentoHeader.documento.idClasificador.idClasificador)}" title="Clasificador" />
-                    <h:outputText value=""/>
-                    <h:outputText value=""/>
+                </p:panelGrid>
+                <p:panelGrid columns="4" styleClass="ui-panelgrid-blank" layout="flex" columnClasses="p-col-2,p-col-4,p-col-2,p-col-4">
                     <p:outputLabel for="anho" value="Año:"/>
                     <h:outputText id="anho" value="#{documentoHeader.documento.anho}" title="Año" />
                     <p:outputLabel for="fechaDocumento" value="Fecha del Documento:"/>
