@@ -81,3 +81,5 @@ UPDATE public.permiso	SET descripcion_permiso='Seguimiento de Documento'	WHERE i
 
 ALTER TABLE public.tramitacion ADD fecha_hora_archivo timestamp NULL;
 ALTER TABLE public.tramitacion ADD id_usuario_archivo integer NULL;
+
+ALTER TABLE public.documento_adjunto ADD id_documento_anterior int4 NULL;
