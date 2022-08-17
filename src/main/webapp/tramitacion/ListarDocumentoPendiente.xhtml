@@ -97,8 +97,14 @@
                             <f:facet name="header">
                                 <i class="fa fa-file" title="Documento"></i>
                             </f:facet>
-                            <i style="display: #{item.idDocumento.cerrado?'inline':'none'}" title="Llaveado" class="fa fa-lock"/>
-                            <h:outputText title="#{item.idDocumento}" styleClass="Blue" value=" #{item.idDocumento.toShortString()}"/>                             
+                            
+                            <h:outputText rendered="#{!item.esConfidencial()}" title="#{item.idDocumento}" value=" #{item.idDocumento.toShortString()}"/>    
+                            <p:commandLink rendered="#{item.esConfidencial()}" immediate="true" title="#{bundle.VerBoton} Flujo" target="_new" ajax="false" action="#{DocumentoController.doVerForm(item.idDocumento.idDocumento)}">
+                                <h:outputText title="#{item.idDocumento.idDocumento}" styleClass="fontBold Blue" value=" #{item.idDocumento.toShortString()}"/>  
+                                <i class="fa fa-link fa-beat"/>
+                            </p:commandLink>
+                            <p:spacer width="30"/>
+                            <i style="display: #{item.idDocumento.cerrado?'inline':'none'}" title="Llaveado" class="fa fa-lock Orange"/>
                             <blockquote>
                                 <h:outputText styleClass="Brown" value="#{item.idDocumento.asunto}"/>
                             </blockquote>
@@ -131,8 +137,6 @@
                     </p:dataTable>
                 </div>
             </div>
-
-
             <p:panel id="panelComando">
                 <p:contextMenu for="dataTablePendiente" >
                     <p:menuitem disabled="#{fn:length(TramitacionController.arraySelectedTramitacion)==0 or TramitacionController.tipoBandeja!=1}" title="#{bundle.ConfirmarBoton}" value="#{bundle.ConfirmarBoton} [#{fn:length(TramitacionController.arraySelectedTramitacion)}]" icon="fa fa-check-square" action="#{TramitacionController.confirmaMultipleSetup()}" update="@form, panelMensajeEstado">

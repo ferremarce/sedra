@@ -29,6 +29,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import sedra.util.Codigo;
+import sedra.util.JSFutil;
 
 /**
  *
@@ -459,4 +460,7 @@ public class Tramitacion implements Serializable, Comparable<Tramitacion> {
         return cadena;
     }
 
+    public Boolean esConfidencial() {
+        return !(this.idEstado.getIdEstado().equals(Codigo.ESTADO_TRAMITE_PENDIENTE) || this.idEstado.getIdEstado().equals(Codigo.ESTADO_TRAMITE_RECHAZADO));
+    }
 }
