@@ -60,14 +60,15 @@ public class NotaSalidaFacade extends AbstractFacade<NotaSalida> {
         Query q;
         if (fechaDesde != null && fechahasta != null) {
             q = em.createQuery("SELECT a FROM NotaSalida a WHERE a.idTipoNota.idTipoNota=:xIdTipo "
-                    + "AND (UPPER(a.numeroSalida) LIKE :xCriterio OR UPPER(a.numeroStr) LIKE :xCriterio) "
-                    + "AND a IN (SELECT DISTINCT b.idNota FROM DetalleNotaSalida b WHERE b.idDocumento.fechaDocumento BETWEEN :xFechaInicio AND :xFechaFin) "
+                    + "AND (UPPER(a.numeroSalida) LIKE :xCriterio OR UPPER(a.numeroStr) LIKE :xCriterio OR UPPER(a.referencia) LIKE :xCriterio OR UPPER(a.asunto) LIKE :xCriterio)  "
+                    + "AND a.fechaNota IS NOT NULL AND a.fechaNota BETWEEN :xFechaInicio AND :xFechaFin "
+                    //+ "AND a IN (SELECT DISTINCT b.idNota FROM DetalleNotaSalida b WHERE b.idDocumento.fechaDocumento BETWEEN :xFechaInicio AND :xFechaFin) "
                     + "ORDER BY a.numeroSalida, a.numeroStr");
             q.setParameter("xFechaInicio", fechaDesde);
             q.setParameter("xFechaFin", fechahasta);
         } else {
             q = em.createQuery("SELECT a FROM NotaSalida a WHERE a.idTipoNota.idTipoNota=:xIdTipo "
-                    + "AND (UPPER(a.numeroSalida) LIKE :xCriterio OR UPPER(a.numeroStr) LIKE :xCriterio) "
+                    + "AND (UPPER(a.numeroSalida) LIKE :xCriterio OR UPPER(a.numeroStr) LIKE :xCriterio OR UPPER(a.referencia) LIKE :xCriterio OR UPPER(a.asunto) LIKE :xCriterio) "
                     + "ORDER BY a.numeroSalida, a.numeroStr");
         }
         if (criterio.isBlank()) {

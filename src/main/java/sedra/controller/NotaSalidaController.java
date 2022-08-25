@@ -179,6 +179,10 @@ public class NotaSalidaController implements Serializable {
             JSFutil.addMessage("Debe seleccionar un rango válido de fechas", JSFutil.StatusMessage.WARNING);
             return;
         }
+         if (this.criterioBusqueda.isEmpty()) {
+            JSFutil.addMessage("No hay criterios para buscar...", JSFutil.StatusMessage.WARNING);
+            return ;
+        }
         this.listaNotaSalida = notaSalidaFacade.getAllNotaSalida(criterioBusqueda, tipoNota.getIdTipoNota(), this.fechaDesde, this.fechaHasta);
         if (this.listaNotaSalida.isEmpty()) {
             JSFutil.addMessage("No hay resultados...", JSFutil.StatusMessage.WARNING);

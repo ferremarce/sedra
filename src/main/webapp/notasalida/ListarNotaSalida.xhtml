@@ -24,14 +24,15 @@
                 </p:selectOneRadio>
                 <p:panelGrid columns="8" >
                     <p:outputLabel for="fechaDesde" value="Desde:"/>
-                    <p:calendar navigator="true" id="fechaDesde" value="#{NotaSalidaController.fechaDesde}" pattern="dd/MM/yyyy" placeholder="fecha documento (opcional)" title="Fecha Desde" requiredMessage="#{bundle.Requerido}"/>
+                    <p:calendar navigator="true" id="fechaDesde" value="#{NotaSalidaController.fechaDesde}" pattern="dd/MM/yyyy" placeholder="fecha nota (opcional)" title="Fecha Desde" requiredMessage="#{bundle.Requerido}"/>
 
                     <p:outputLabel for="fechaHasta" value="Hasta:"/>
-                    <p:calendar navigator="true" id="fechaHasta" value="#{NotaSalidaController.fechaHasta}" pattern="dd/MM/yyyy" placeholder="fecha documento (opcional)" title="Fecha Hasta" requiredMessage="#{bundle.Requerido}"/>
+                    <p:calendar navigator="true" id="fechaHasta" value="#{NotaSalidaController.fechaHasta}" pattern="dd/MM/yyyy" placeholder="fecha nota (opcional)" title="Fecha Hasta" requiredMessage="#{bundle.Requerido}"/>
 
-                    <p:inputText id="criterio" value="#{NotaSalidaController.criterioBusqueda}" placeholder="Nro. Salida, Referencia"/>
+                    <p:inputText id="criterio" value="#{NotaSalidaController.criterioBusqueda}" placeholder="Nro. Salida, STR, Referencia, Asunto"/>
                     <p:commandButton value="#{bundle.BuscarBoton}" id="cmdBuscar" icon="fa fa-search" ajax="true" action="#{NotaSalidaController.buscarAllNotaSalida()}" update="@form, panelMensajeEstado"/>
                 </p:panelGrid>
+                <p:tooltip for="criterio" position="bottom" value="Puede utilizar los comodines: % (muchos caracteres) y  _ (un caracter)"/>
             </p:panelGrid>
             <p:defaultCommand target="cmdBuscar"/>
             <p:dataTable size="small" rowIndexVar="index" id="dataTable" var="item" value="#{NotaSalidaController.listaNotaSalida}" reflow="true" emptyMessage="#{bundle.SinRegistrosMensaje}"
@@ -47,7 +48,9 @@
                 <p:column headerText="#" width="30">
                     <h:outputText value="#{index+1}"/>
                 </p:column>
-                <p:column width="80" headerText="No. Sal./STR" sortBy="#{item.numeroSalida}"> 
+                <p:column width="120" headerText="No. Sal./STR" sortBy="#{item.numeroSalida}"> 
+                    <h:outputText styleClass="font-1x fontItalic" value="#{item.idTipoNota.toString()}"/>
+                    <br/>
                     <p:commandLink title="#{bundle.VerBoton} detalle de la Nota de Salida" target="_new" ajax="false" action="#{NotaSalidaController.doVerForm(item.idNota)}">
                         <h:outputText styleClass="fontBold Blue" value="#{item.toNumeroString()}"/>
                     </p:commandLink>
