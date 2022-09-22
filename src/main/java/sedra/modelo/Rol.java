@@ -8,6 +8,7 @@ package sedra.modelo;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,13 +35,13 @@ public class Rol implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "idrol_seq")
-    @SequenceGenerator(initialValue=10,allocationSize = 1, name = "idrol_seq", sequenceName = "idrol_seq")
+    @SequenceGenerator(initialValue = 10, allocationSize = 1, name = "idrol_seq", sequenceName = "idrol_seq")
     @Column(name = "id_rol")
     private Integer idRol;
     @Size(max = 255)
     @Column(name = "descripcion_rol")
     private String descripcionRol;
-    @OneToMany(mappedBy = "idRol")
+    @OneToMany(mappedBy = "idRol", cascade = CascadeType.REMOVE)
     private List<PermisoRol> permisoRolList;
     @OneToMany(mappedBy = "idRol")
     private List<Tramitacion> tramitacionList;
@@ -118,5 +119,5 @@ public class Rol implements Serializable {
     public String toString() {
         return this.descripcionRol;
     }
-    
+
 }

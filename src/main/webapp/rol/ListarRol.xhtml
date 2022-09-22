@@ -38,9 +38,21 @@
                 </p:column>
                 <p:column>
                     <f:facet name="header">
-                        <h:outputText value="DescripcionRol"/>
+                        <h:outputText value="Descripcion"/>
                     </f:facet>
                     <h:outputText value="#{item.descripcionRol}"/>
+                </p:column>
+                 <p:column width="100">
+                    <f:facet name="header">
+                        <h:outputText value="Usuarios"/>
+                    </f:facet>
+                     <h:outputText styleClass="#{not empty item.usuarioList?'Green fontBold':''}" title="#{item.usuarioList}" value="#{item.usuarioList.size()}"/>
+                </p:column>
+                <p:column width="100">
+                    <f:facet name="header">
+                        <h:outputText value="Trámites"/>
+                    </f:facet>
+                    <h:outputText value="#{item.tramitacionList.size()}"/>
                 </p:column>
                 <p:column width="200">
                     <f:facet name="header">
