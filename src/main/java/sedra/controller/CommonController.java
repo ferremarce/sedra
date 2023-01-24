@@ -6,6 +6,8 @@
 package sedra.controller;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.inject.Named;
@@ -29,6 +31,7 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.file.UploadedFile;
 import sedra.aditional.Alerta;
+import sedra.aditional.ArchivoUpload;
 import sedra.util.JSFutil;
 
 /**
@@ -117,11 +120,16 @@ public class CommonController implements Serializable {
         LOG.log(Level.SEVERE, null, e);
     }
 
-    public StreamedContent downloadAdjuntoTMP(UploadedFile adjunto) throws IOException {
-        //System.out.println("Invocado...");
-        if (adjunto != null) {
-            InputStream input = new ByteArrayInputStream(adjunto.getContent());
-            return DefaultStreamedContent.builder().name(adjunto.getFileName()).contentType(adjunto.getContentType()).stream(() -> input).build();
+    public StreamedContent downloadAdjuntoTMP(ArchivoUpload adjunto) throws IOException {
+        if (adjunto.getData() != null) {
+            InputStream input = new ByteArrayInputStream(adjunto.getData());
+            return DefaultStreamedContent.builder().name(adjunto.getFileName()).contentType(adjunto.getMimeType()).stream(() -> input).build();
+        } else if (!adjunto.getFolder().isEmpty()) { //Si se trata de adjuntos ya guardados en el filesystem
+            File archivo = new File(adjunto.toNameFileSystem());
+            if (archivo.exists()) {
+                FileInputStream input = new FileInputStream(archivo);
+                return DefaultStreamedContent.builder().name(adjunto.getFileName()).contentType(adjunto.getMimeType()).stream(() -> input).build();
+            }
         }
         return null;
     }

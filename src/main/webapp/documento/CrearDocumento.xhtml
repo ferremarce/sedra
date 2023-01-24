@@ -82,6 +82,9 @@
                                 <p:column headerText="Archivo">
                                     <h:outputText value="#{index+1}. #{item.fileName}"/>
                                 </p:column>
+                                <p:column headerText="checksum">
+                                    <h:outputText value="#{item.checksum}"/>
+                                </p:column>
                                 <p:column headerText="Acción" width="150">
                                     <p:commandButton title="#{bundle.DescargarBoton}" styleClass="rounded-button, espaciadoToolbar" icon="fa fa-download" immediate="true" ajax="false">
                                         <p:fileDownload value="#{CommonController.downloadAdjuntoTMP(item)}"/>
@@ -97,7 +100,16 @@
                         <p:column>
                             <h:outputText value="#{expeAdj.toNameDownload()} [#{expeAdj.toTamanho()}]"/>
                         </p:column>
-                        <p:column>
+                        <p:column headerText="checksum">
+                            <p:panelGrid columns="1">
+                                <h:outputText value="Chk1: #{expeAdj.checksumEsperado}"/>
+                                <h:outputText value="Chk2: #{expeAdj.checksumCalculado}"/>
+                            </p:panelGrid>
+                        </p:column>
+                        <p:column headerText="Estado" width="50">
+                            <i title="#{expeAdj.validFile()?'Archivo válido':'Archivo con problemas'}" class="fas #{expeAdj.validFile()?'fa-check-circle Green':'fa-exclamation-triangle Red'}"/>                               
+                        </p:column>
+                        <p:column width="100">
                             <p:commandButton title="Descargar" styleClass="rounded-button, espaciadoToolbar" icon="fa fa-download" ajax="false">
                                 <p:fileDownload value="#{DownloadFile.downloadDocumentoAdjunto(expeAdj.idDocumentoAdjunto)}" />  
                             </p:commandButton>

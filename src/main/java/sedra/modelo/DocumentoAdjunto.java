@@ -66,6 +66,12 @@ public class DocumentoAdjunto implements Serializable {
     @JoinColumn(name = "id_documento", referencedColumnName = "id_documento")
     @ManyToOne
     private Documento idDocumento;
+    @Size(max = 255)
+    @Column(name = "checksum_esperado")
+    private String checksumEsperado;
+    @Size(max = 255)
+    @Column(name = "checksum_calculado")
+    private String checksumCalculado;
 
     public DocumentoAdjunto() {
     }
@@ -146,6 +152,22 @@ public class DocumentoAdjunto implements Serializable {
         this.idDocumentoAnterior = idDocumentoAnterior;
     }
 
+    public String getChecksumEsperado() {
+        return checksumEsperado;
+    }
+
+    public void setChecksumEsperado(String checksumEsperado) {
+        this.checksumEsperado = checksumEsperado;
+    }
+
+    public String getChecksumCalculado() {
+        return checksumCalculado;
+    }
+
+    public void setChecksumCalculado(String checksumCalculado) {
+        this.checksumCalculado = checksumCalculado;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -208,5 +230,13 @@ public class DocumentoAdjunto implements Serializable {
 
     public String toPathFileSystem() {
         return JSFutil.folderDocumento + this.getIdDocumentoAdjunto() + "-" + this.getNombreArchivo();
+    }
+
+    public Boolean validFile() {
+        try {
+            return this.checksumEsperado.equals(this.checksumCalculado);
+        } catch (Exception e) {
+            return Boolean.FALSE;
+        }
     }
 }
