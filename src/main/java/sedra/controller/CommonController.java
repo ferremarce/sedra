@@ -134,6 +134,15 @@ public class CommonController implements Serializable {
         return null;
     }
 
+    public StreamedContent downloadAdjuntoTMP(UploadedFile adjunto) throws IOException {
+        //System.out.println("Invocado...");
+        if (adjunto != null) {
+            InputStream input = new ByteArrayInputStream(adjunto.getContent());
+            return DefaultStreamedContent.builder().name(adjunto.getFileName()).contentType(adjunto.getContentType()).stream(() -> input).build();
+        }
+        return null;
+    }
+
     public String getServerURL() {
         //System.out.print("Web: "+JSFutil.getAbsoluteApplicationUrl());
         return JSFutil.getAbsoluteApplicationUrl();
@@ -164,10 +173,10 @@ public class CommonController implements Serializable {
     }
 
     public String msgAlertaTitle() {
-        if (this.listaAlerta==null || this.listaAlerta.isEmpty()) {
+        if (this.listaAlerta == null || this.listaAlerta.isEmpty()) {
             return "";
         } else {
-            Integer cantidad=this.listaAlerta.get(0).getCantidad();
+            Integer cantidad = this.listaAlerta.get(0).getCantidad();
             return "Alerta de mensajes [" + cantidad + "]";
         }
     }
