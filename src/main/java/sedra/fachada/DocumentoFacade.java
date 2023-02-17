@@ -26,19 +26,19 @@ import sedra.util.JSFutil;
  */
 @Stateless
 public class DocumentoFacade extends AbstractFacade<Documento> {
-
+    
     @PersistenceContext(unitName = "sedra-3.0-SNAPSHOTPU")
     private EntityManager em;
-
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-
+    
     public DocumentoFacade() {
         super(Documento.class);
     }
-
+    
     public List<Documento> getAllDocumento(String criterio) {
         String whereAdmin = "";
         if (JSFutil.getRolSesion().getIdRol().compareTo(Codigo.ADMINISTRADOR) != 0) {
@@ -57,13 +57,13 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
         if (JSFutil.getRolSesion().getIdRol().compareTo(Codigo.ADMINISTRADOR) != 0) {
             q.setParameter("xIdRol", JSFutil.getRolSesion().getIdRol());
         }
-
+        
         List<Documento> tr = q.getResultList();
 //        this.metaDatabase();
         return tr;
-
+        
     }
-
+    
     private String metaDatabase() {
         try {
             Connection con = this.getEntityManager().unwrap(Connection.class);
@@ -74,7 +74,7 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
         }
         return "";
     }
-
+    
     public List<Documento> getAllDocumentoParaSeguimiento(String criterio) {
         Query q = em.createQuery("SELECT a FROM Documento a "
                 + "WHERE (UPPER(a.asunto) LIKE :xCriterio OR CONCAT(a.numeroExpediente,'-',a.anho) LIKE :xCriterio) "
@@ -87,7 +87,7 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
         }
         List<Documento> tr = q.getResultList();
         return tr;
-
+        
     }
 
 //    public Documento getDocumentoByNroEntradaAnho(Integer nroExpediente, Integer anho) {
@@ -112,9 +112,9 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
         q.setParameter("xIdRol", JSFutil.getRolSesion().getIdRol());
         List<Documento> tr = q.getResultList();
         return tr;
-
+        
     }
-
+    
     public List<Documento> getAllDocumentoByExpediente(String criterio) {
         Query q = em.createQuery("SELECT a FROM Documento a "
                 + "WHERE CONCAT(a.numeroExpediente,'-',a.anho) LIKE :xCriterio "
@@ -122,9 +122,9 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
         q.setParameter("xCriterio", "%" + criterio.toUpperCase() + "%");
         List<Documento> tr = q.getResultList();
         return tr;
-
+        
     }
-
+    
     public List<Documento> getDocumentoByNroEntrada(String criterio) {
         Query q = em.createQuery("SELECT a FROM Documento a WHERE UPPER(a.nroEntrada) LIKE :xCriterio ORDER BY a.idDocumento");
         if (criterio.compareTo("") != 0) {
@@ -133,10 +133,10 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
             q.setParameter("xCriterio", "123456");
         }
         List<Documento> tr = q.getResultList();
-
+        
         return tr;
     }
-
+    
     public List<Documento> getAllDocumento(String criterio, String campo, Date f1, Date f2) {
         String select = "SELECT d FROM Documento d ";
         String where = "";
@@ -168,7 +168,7 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
         List<Documento> tr = q.getResultList();
         return tr;
     }
-
+    
     public List<Documento> getAllDocumentoSinNota(String criterio) {
         Query q = em.createQuery("SELECT a FROM Documento a "
                 + "WHERE (UPPER(a.asunto) LIKE :xCriterio OR CONCAT(a.numeroExpediente,'-',a.anho) LIKE :xCriterio) "
@@ -182,7 +182,7 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
         List<Documento> tr = q.getResultList();
         return tr;
     }
-
+    
     public Integer findNextNroExpediente() {
         Query q = em.createQuery("SELECT a FROM Documento a WHERE a.numeroExpediente IS NOT NULL AND a.anho=:xAnho ORDER BY a.numeroExpediente DESC");
         q.setMaxResults(1);
@@ -195,23 +195,29 @@ public class DocumentoFacade extends AbstractFacade<Documento> {
             return 1;
         }
     }
-
+    
     public List<Documento> findAllRegistroAutomatico() {
         Query q = em.createQuery("SELECT a FROM Documento a WHERE a.idClasificador IS NULL AND a.numeroExpediente IS NOT NULL ORDER BY a.numeroExpediente DESC");
         List<Documento> tr = q.getResultList();
         return tr;
     }
-
+    
     public List<Documento> findAllDocumentoAutocomplete(String query) {
         Query q = em.createQuery("SELECT a FROM Documento a WHERE CONCAT(a.numeroExpediente,'-',a.anho) LIKE :xCriterio ORDER BY a.anho DESC");
         q.setParameter("xCriterio", "%" + query.toUpperCase() + "%");
         List<Documento> tr = q.getResultList();
         return tr;
     }
-
+    
     public List<Documento> findAllOrdered() {
         Query q = em.createQuery("SELECT a FROM Documento a ORDER BY a.idDocumento");
         List<Documento> tr = q.getResultList();
         return tr;
+    }
+    
+    @Override
+    public void create(Documento documento) {
+        documento.setNumeroExpediente(this.findNextNroExpediente());
+        this.getEntityManager().persist(documento);        
     }
 }

@@ -252,6 +252,7 @@ public class DocumentoController implements Serializable {
 //                }
                 this.documento.setIdUsuario(JSFutil.getUsuarioConectado());
                 this.documento.setCerrado(false);
+                //El numero de expediente autonumerado se asigna en el create del documentoFacade
                 documentoFacade.create(documento);
                 auditaFacade.create(new Audita("DOCUMENTO", "Documento creado exitosamente. ", JSFutil.getFechaHoraActual(), documento.toAudita(), JSFutil.getUsuarioConectado()));
                 //Grabar el archivo a disco
@@ -642,4 +643,6 @@ public class DocumentoController implements Serializable {
         cal.setTime(date);
         this.documento.setAnho(cal.get(Calendar.YEAR));
     }
+    
+    
 }
