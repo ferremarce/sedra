@@ -25,6 +25,7 @@
                         <p:outputLabel for="nroExpediente" value="#Expediente: "/>
                         <h:outputText id="nroExpediente" styleClass="fontBold Purple" value="#{DocumentoController.documento.toShortString()}" title="Numero de Expediente"/>
                         <h:outputText styleClass="fontBold Purple" rendered="#{DocumentoController.documento.numeroExpediente==null}" value="S/N" title="Numero de Expediente"/>
+                        <p:commandButton style="margin-left: 10px" rendered="#{not empty DocumentoController.documento.idDocumento}" icon="fa-solid fa-hashtag" title="Reasignar Nro de Documento" action="#{DocumentoController.doAsignarSiguienteNroExpediente()}" update="nroExpediente, panelMensajeEstado"/>
                     </f:facet>
                     <p:panelGrid columns="2" styleClass="ui-panelgrid-blank" layout="flex" columnClasses="p-col-2,p-col-10" contentStyleClass="ui-fluid">
                         <p:outputLabel for="idClasificador" value="Clasificador:"/>

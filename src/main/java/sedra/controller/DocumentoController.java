@@ -643,6 +643,9 @@ public class DocumentoController implements Serializable {
         cal.setTime(date);
         this.documento.setAnho(cal.get(Calendar.YEAR));
     }
-    
-    
+
+    public void doAsignarSiguienteNroExpediente() {
+        this.documento.setNumeroExpediente(this.documentoFacade.findNextNroExpediente());
+        JSFutil.addMessage("Se ha reasignado temporalmente el siguiente número de expediente: " + this.documento.getNumeroExpediente(), JSFutil.StatusMessage.INFORMATION);
+    }
 }
